@@ -614,14 +614,11 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 ### Basic
 In your controller, simply call the package like the following example to generate your table :
 ```php
-$table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)
-    ->routes(['index' => ['name' => 'news.index']]);
-$table->column('title')
-    ->sortable()
-    ->searchable();
+$table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)->routes(['index' => ['name' => 'news.index']]);
+$table->column('title')->sortable()->searchable();
 ```
 Then, send your `$table` object in your view and render your table like this :
-```php
+```blade
 {{ $table }}
 ```
 That's it !
@@ -629,7 +626,6 @@ That's it !
 ### Advanced
 If you need your table for a more advanced usage, with a multilingual project for example, here is an example of what you can do in your controller :
 ```php
-// create your table instance
 $table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)
     ->request($request)
     ->routes([
@@ -656,37 +652,20 @@ $table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)
         $query->addSelect('users.name as author');
         $query->join('users', 'users.id', '=', 'news.author_id');
     })
-    // display some lines as disabled
     ->disableRows(function($model){
         return $model->id === 1 || $model->id === 2;
     }, ['disabled', 'bg-secondary'])
-    // display some line as highlighted
     ->rowsConditionalClasses(function($model){
         return $model->id === 3;
     }, ['highlighted', 'bg-success']);
-// you can now join some columns to your table.
-// display the news image from a custom HTML element.
 $table->column('image')->html(function ($model, $column) {
-        return $model->{$column->attribute}
-            ? '<img src="' . $model->{$column->attribute} . '" alt="' .  $model->title . '">'
-            : null;
-    });
-// display the news title that is contained in the news table and use this field in the destroy confirmation modal.
-// this field will also be searchable in the search field.
-$table->column('title')
-    ->sortable()
-    ->searchable();
-// display an abbreviated content from a text with the number of characters you want.
-$table->column('content')
-    ->stringLimit(30);
-// display a value from a sql alias
-// in this case, you will target the `users` table and the `author` field, and make this sortable and searchable.
-// this way, you tell the table to manipulate the `name` attribute in the sql queries but to display the aliased `author` model attribute.
-$table->column('author')
-    ->table('users', 'name')
-    ->sortable()
-    ->searchable();
-// display the category with a custom column title, as a button, prefixed with an icon and with a value contained in config.
+    return $model->{$column->attribute}
+        ? '<img src="' . $model->{$column->attribute} . '" alt="' .  $model->title . '">'
+        : null;
+});
+$table->column('title')->sortable()->searchable();
+$table->column('content')->stringLimit(30);
+$table->column('author')->sortable()->searchable('user', ['name']);
 $table->column('category_id')
     ->title('Category custom name')
     ->icon('your-icon')
@@ -694,16 +673,10 @@ $table->column('category_id')
     ->value(function ($model, $column) {
         return config('news.category.' . $model->{$column->attribute});
     });
-// display a button to preview the news
-$table->column()
-    ->link(function($model, $column){
-        return route('news.show', ['id' => $model->id]);
-    })
-    ->button(['btn', 'btn-sm', 'btn-primary']);
-// display the formatted release date of the news and choose to sort the list by this field by default.
-$table->column('released_at')
-    ->sortable()
-    ->dateTimeFormat('d/m/Y H:i:s');
+$table->column()->link(function($model){
+    return route('news.show', ['id' => $model->id]);
+})->button(['btn', 'btn-sm', 'btn-primary']);
+$table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
