@@ -1,0 +1,39 @@
+filter:
+    paths: [src/*]
+    excluded_paths: [test/*]
+checks:
+    php: true
+tools:
+    php_mess_detector: true
+    php_pdepend: true
+    php_code_coverage: true
+    php_code_sniffer:
+        config:
+            standard: PSR4
+        filter:
+            paths: ['src']
+    sensiolabs_security_checker: true
+    php_loc:
+        enabled: true
+        excluded_dirs: [vendor, test]
+    php_cpd: false # Must be disabled to use php_sim instead
+    php_sim:
+        enabled: true
+        filter:
+            paths: ['config', 'lang', 'src']
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override:
+                    - php-scrutinizer-run --enable-security-analysis
+                    -
+                        command: 'vendor/bin/phpunit --coverage-clover=code-coverage'
+                        coverage:
+                            file: 'code-coverage'
+                            format: 'clover'
+    environment:
+        php:
+            version: "7.1"

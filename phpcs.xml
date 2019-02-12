@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="PSR2">
+	<description>PSR-2 validation</description>
+	<file>./config</file>
+	<file>./src</file>
+	<file>./tests</file>
+	<arg name="colors"></arg>
+	<rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+		<exclude-pattern>./tests/*</exclude-pattern>
+	</rule>
+	<rule ref="PSR2"/>
+</ruleset>
