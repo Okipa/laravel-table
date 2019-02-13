@@ -373,4 +373,30 @@ class SearchTest extends LaravelTableTestCase
         $table->render();
         $this->assertEmpty($table->list->toArray()['data']);
     }
+
+    public function testCaseInsensitiveTestHtml()
+    {
+        $users = $this->createMultipleUsers(10);
+        $users->each(function($user, $key){
+            if($key === 0) {
+                $user->update(['name' => 'alpha']);
+            } else if($key === 1) {
+                $user->update(['name' => 'ALPHA']);
+            } else {
+                $user->update(['name' => 'omega']);
+            }
+        });
+        $searchedValue = 'alpha';
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->request($customRequest);
+        $table->column('name')->title('Name')->searchable();
+        $table->column('email')->title('Email')->searchable();
+        $table->render();
+        $this->assertEquals($users->filter(function($user){
+            return in_array($user->name, ['alpha', 'ALPHA']);
+        })->toArray(), $table->list->toArray()['data']);
+    }
 }
