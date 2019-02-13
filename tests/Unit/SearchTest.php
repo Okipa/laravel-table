@@ -4,6 +4,7 @@ namespace Okipa\LaravelTable\Tests\Unit;
 
 use ErrorException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\Company;
@@ -48,9 +49,8 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchAccurateRequest()
     {
         $users = $this->createMultipleUsers(5);
-        $customRequest = app(Request::class);
         $searchedValue = $users->sortBy('name')->values()->first()->name;
-        $customRequest->merge(['rows'   => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -67,9 +67,8 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchInaccurateRequest()
     {
         $this->createMultipleUsers(10);
-        $customRequest = app(Request::class);
         $searchedValue = 'al';
-        $customRequest->merge(['rows'   => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -188,8 +187,7 @@ class SearchTest extends LaravelTableTestCase
         $companies = $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
         $searchedValue = $companies->first()->owner->name;
-        $customRequest = app(Request::class);
-        $customRequest->merge(['rows'   => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index'],])
             ->query(function ($query) {
@@ -216,8 +214,7 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = $users->first()->name;
-        $customRequest = app(Request::class);
-        $customRequest->merge(['rows'   => 5, 'search' => $searchedValue, 'page'   => 2]);
+        $customRequest = (new Request)->merge(['rows' => 5, 'search' => $searchedValue, 'page' => 2]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function ($query) {
@@ -238,9 +235,8 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
-        $customRequest = app(Request::class);
         $searchedValue = '@';
-        $customRequest->merge(['rows'   => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
@@ -263,9 +259,8 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
-        $customRequest = app(Request::class);
         $searchedValue = '@';
-        $customRequest->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
@@ -314,7 +309,7 @@ class SearchTest extends LaravelTableTestCase
     public function testNoSearchableHtml()
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
         $table->render();
@@ -330,5 +325,52 @@ class SearchTest extends LaravelTableTestCase
             . $table->searchableTitles() . '"',
             $html
         );
+    }
+
+    public function testSearchWithCustomQueryConstraint()
+    {
+        $userAlpha = (new User)->create([
+            'name'     => 'User Alpha',
+            'email'    => 'alpha@test.fr',
+            'password' => Hash::make('secret'),
+        ]);
+        $userBeta = (new User)->create([
+            'name'     => 'User Beta',
+            'email'    => 'beta@test.fr',
+            'password' => Hash::make('secret'),
+        ]);
+        $userCharlie = (new User)->create([
+            'name'     => 'User Charlie',
+            'email'    => 'charlie@test.fr',
+            'password' => Hash::make('secret'),
+        ]);
+        $companyAlpha = (new Company)->create([
+            'name'     => 'Company Alpha',
+            'owner_id' => $userAlpha->id,
+        ]);
+        $companyBeta = (new Company)->create([
+            'name'     => 'Company Beta',
+            'owner_id' => $userBeta->id,
+        ]);
+        $companyCharlie = (new Company)->create([
+            'name'     => 'Company Charlie',
+            'owner_id' => $userCharlie->id,
+        ]);
+        $this->createMultipleCompanies(3);
+        $this->routes(['users'], ['index']);
+        $searchedValue = $userAlpha->email;
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->request($customRequest)
+            ->query(function ($query) use ($companyBeta) {
+                $query->select('users_test.*');
+                $query->join('companies_test', 'companies_test.owner_id', '=', 'users_test.id');
+                $query->where('companies_test.id', $companyBeta->id);
+            });
+        $table->column('name')->title('Name')->searchable();
+        $table->column('email')->title('Email')->searchable();
+        $table->render();
+        $this->assertEmpty($table->list->toArray()['data']);
     }
 }

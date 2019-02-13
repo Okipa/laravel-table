@@ -94,8 +94,7 @@ class SortTest extends LaravelTableTestCase
     public function testSortByColumn()
     {
         $users = $this->createMultipleUsers(3);
-        $customRequest = app(Request::class);
-        $customRequest->merge(['rows' => 20, 'sortBy' => 'email', 'sortDir' => 'desc']);
+        $customRequest = (new Request)->merge(['rows' => 20, 'sortBy' => 'email', 'sortDir' => 'desc']);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -113,12 +112,7 @@ class SortTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $companies = $this->createMultipleCompanies(5);
         $this->routes(['companies'], ['index']);
-        $customRequest = app(Request::class);
-        $customRequest->merge([
-            'rows'    => 20,
-            'sortBy'  => 'owner',
-            'sortDir' => 'desc',
-        ]);
+        $customRequest = (new Request)->merge(['rows'    => 20, 'sortBy'  => 'owner', 'sortDir' => 'desc']);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function ($query) {
@@ -139,8 +133,7 @@ class SortTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
-        $customRequest = app(Request::class);
-        $customRequest->merge(['rows' => 5, 'sortBy' => 'owner', 'sortDir' => 'desc']);
+        $customRequest = (new Request)->merge(['rows' => 5, 'sortBy' => 'owner', 'sortDir' => 'desc']);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function ($query) {

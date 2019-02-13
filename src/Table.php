@@ -359,18 +359,18 @@ class Table implements Htmlable
     protected function applySearchClauses(Builder $query): void
     {
         if ($searched = $this->request->search) {
-            $query->where(function ($q) use ($searched) {
-                $this->searchableColumns->map(function (Column $column, int $columnKey) use (&$q, $searched) {
+            $query->where(function ($subQuery) use ($searched) {
+                $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
                     $searchedDatabaseTable = $column->searchedDatabaseTable
-                    ? $column->searchedDatabaseTable
-                    : $column->databaseDefaultTable;
+                        ? $column->searchedDatabaseTable
+                        : $column->databaseDefaultTable;
                     $operator = $columnKey > 0 ? 'orWhere' : 'where';
                     $searchedDatabaseColumns = $column->searchedDatabaseColumns
-                    ? $column->searchedDatabaseColumns
-                    : [$column->attribute];
+                        ? $column->searchedDatabaseColumns
+                        : [$column->attribute];
                     foreach ($searchedDatabaseColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
                         $operator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $operator;
-                        $q->{$operator}(
+                        $subQuery->{$operator}(
                             $searchedDatabaseTable . '.' . $searchedDatabaseColumn,
                             'like',
                             '%' . $searched . '%'
