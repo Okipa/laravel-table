@@ -359,22 +359,24 @@ class Table implements Htmlable
     protected function applySearchClauses(Builder $query): void
     {
         if ($searched = $this->request->search) {
-            $this->searchableColumns->map(function (Column $column, int $columnKey) use (&$query, $searched) {
-                $searchedDatabaseTable = $column->searchedDatabaseTable
+            $query->where(function ($q) use ($searched) {
+                $this->searchableColumns->map(function (Column $column, int $columnKey) use (&$q, $searched) {
+                    $searchedDatabaseTable = $column->searchedDatabaseTable
                     ? $column->searchedDatabaseTable
                     : $column->databaseDefaultTable;
-                $operator = $columnKey > 0 ? 'orWhere' : 'where';
-                $searchedDatabaseColumns = $column->searchedDatabaseColumns
+                    $operator = $columnKey > 0 ? 'orWhere' : 'where';
+                    $searchedDatabaseColumns = $column->searchedDatabaseColumns
                     ? $column->searchedDatabaseColumns
                     : [$column->attribute];
-                foreach ($searchedDatabaseColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
-                    $operator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $operator;
-                    $query->{$operator}(
-                        $searchedDatabaseTable . '.' . $searchedDatabaseColumn,
-                        'like',
-                        '%' . $searched . '%'
-                    );
-                }
+                    foreach ($searchedDatabaseColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
+                        $operator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $operator;
+                        $q->{$operator}(
+                            $searchedDatabaseTable . '.' . $searchedDatabaseColumn,
+                            'like',
+                            '%' . $searched . '%'
+                        );
+                    }
+                });
             });
         }
     }
