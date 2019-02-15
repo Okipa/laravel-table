@@ -105,14 +105,11 @@ trait ColumnsValidationChecks
     {
         $searchedDatabaseColumns = $column->databaseSearchedColumns ?: [$column->databaseDefaultColumn];
         $tableData = $this->tableData($column, $query);
-        $table = array_get($tableData, 'table');
-        $tableAlias = array_get($tableData, 'alias');
-        $tableColumns = array_get($tableData, 'columns');
         foreach ($searchedDatabaseColumns as $searchedDatabaseColumn) {
-            if (! in_array($searchedDatabaseColumn, $tableColumns)) {
-                $dynamicMessagePart = !empty($tableAlias)
-                    ? '« ' . $table . ' » (aliased as « ' . $tableAlias . ' ») table'
-                    : '« ' . $table . ' » table';
+            if (! in_array($searchedDatabaseColumn, $tableData['columns'])) {
+                $dynamicMessagePart = ($tableAlias = array_get($tableData, 'alias'))
+                    ? '« ' . $tableData['table'] . ' » (aliased as « ' . $tableAlias . ' ») table'
+                    : '« ' . $tableData['table'] . ' » table';
                 $errorMessage = 'The table column with related « ' . $searchedDatabaseColumn . ' » database column is '
                                 . 'searchable and does not exist in the ' . $dynamicMessagePart
                                 . '. Set the database searched table and (optionally) columns with the « sortable() » '
