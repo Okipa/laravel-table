@@ -80,7 +80,7 @@ trait ClassesCustomizations
      *
      * @param array $tdClasses
      *
-     * @return void
+     * @return \Okipa\LaravelTable\Table
      */
     public function tdClasses(array $tdClasses): Table
     {
