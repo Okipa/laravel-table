@@ -21,7 +21,10 @@ class AppendsTest extends LaravelTableTestCase
         $this->createMultipleUsers(20);
         $this->routes(['users'], ['index']);
         $appended = ['test' => 'testValue'];
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']])->rowsNumber(10)->appends($appended);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->rowsNumber(10)
+            ->appends($appended);
         $table->column('name');
         $table->render();
         $html = $table->list->links()->toHtml();

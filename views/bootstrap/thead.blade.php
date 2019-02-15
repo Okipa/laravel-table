@@ -86,13 +86,13 @@
         @foreach($table->columns as $column)
             <th {{ classTag('border-0', $table->thClasses) }} scope="col">
                 @if($column->isSortable)
-                    <a href="{{ $table->route('index', ['sortBy' => $column->attribute, 'sortDir' => $table->request->sortDir === 'desc' ? 'asc' : 'desc', 'search'   => $table->request->search, 'rows'    => $table->request->rows]) }}"
+                    <a href="{{ $table->route('index', ['sortBy' => $column->databaseDefaultColumn, 'sortDir' => $table->request->sortDir === 'desc' ? 'asc' : 'desc', 'search'   => $table->request->search, 'rows'    => $table->request->rows]) }}"
                        title="{{ $column->title }}">
-                        @if($table->request->sortBy === $column->attribute && $table->request->sortDir === 'asc')
+                        @if($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'asc')
                             <span class="sort">
                                 {!! config('laravel-table.icon.sortAsc') !!}
                             </span>
-                        @elseif($table->request->sortBy === $column->attribute && $table->request->sortDir === 'desc')
+                        @elseif($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'desc')
                             <span class="sort">
                                 {!! config('laravel-table.icon.sortDesc') !!}
                             </span>

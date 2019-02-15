@@ -14,7 +14,7 @@
             <tr {{ classTag($table->trClasses, $model->conditionnalClasses, $model->disabledClasses) }}>
                 @foreach($table->columns as $column)
                     @php
-                        $value = $model->{$column->attribute};
+                        $value = $model->{$column->databaseDefaultColumn};
                         $customValue = $column->valueClosure ? ($column->valueClosure)($model, $column) : null;
                         $html = $column->htmlClosure ? ($column->htmlClosure)($model, $column) : null;
                         $link = $column->url instanceof Closure 

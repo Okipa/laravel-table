@@ -17,7 +17,7 @@ class ColumnDeclarationTest extends LaravelTableTestCase
         $this->assertEquals($table->columns->count(), 1);
         $this->assertEquals($table->columns->first()->table, $table);
         $this->assertEquals($table->columns->first()->databaseDefaultTable, app(User::class)->getTable());
-        $this->assertEquals($table->columns->first()->attribute, $columnAttribute);
+        $this->assertEquals($table->columns->first()->databaseDefaultColumn, $columnAttribute);
     }
 
     public function testAddColumnWithAttributeAndNoTitleHtml()

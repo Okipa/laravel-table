@@ -44,7 +44,7 @@ trait TemplatesCustomizations
     /**
      * Set a custom template path for the tbody component.
      * The default tbody template path is defined in the config('laravel-table.template.tbody') config value.
-     * 
+     *
      * @param string $tbodyComponentPath
      *
      * @return \Okipa\LaravelTable\Table

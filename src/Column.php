@@ -10,9 +10,9 @@ class Column
 {
     public $table;
     public $databaseDefaultTable;
-    public $searchedDatabaseTable;
-    public $searchedDatabaseColumns;
-    public $attribute;
+    public $databaseSearchedTable;
+    public $databaseDefaultColumn;
+    public $databaseSearchedColumns;
     public $isSortable;
     public $title;
     public $dateTimeFormat;
@@ -28,15 +28,15 @@ class Column
     /**
      * \Okipa\LaravelTable\Column constructor.
      *
-     * @param Table       $table
-     * @param string|null $attribute
+     * @param Table $table
+     * @param string|null $databaseColumn
      */
-    public function __construct(Table $table, string $attribute = null)
+    public function __construct(Table $table, string $databaseColumn = null)
     {
         $this->table = $table;
         $this->databaseDefaultTable = $table->model->getTable();
-        $this->attribute = $attribute;
-        $this->title = $attribute ? __('validation.attributes.' . $attribute) : null;
+        $this->databaseDefaultColumn = $databaseColumn;
+        $this->title = $databaseColumn ? __('validation.attributes.' . $databaseColumn) : null;
     }
 
     /**
@@ -59,7 +59,7 @@ class Column
      * You also can choose to set the column sorted by default.
      * If no column is sorted by default, the first one will be automatically sorted.
      *
-     * @param bool   $sortByDefault
+     * @param bool $sortByDefault
      * @param string $sortDirection
      *
      * @return \Okipa\LaravelTable\Column
@@ -87,10 +87,10 @@ class Column
     {
         if ($this->table->sortBy || $this->table->sortDir) {
             $errorMessage = 'The table is already sorted by the « ' . $this->table->sortBy
-                            . ' » attribute. You only can sort a column by default once.';
+                            . ' » database column. You only can sort a table column by default once.';
             throw new ErrorException($errorMessage);
         }
-        $this->table->sortBy = $this->attribute;
+        $this->table->sortBy = $this->databaseDefaultColumn;
         $acceptedDirections = ['asc', 'desc'];
         $errorMessage = 'Invalid « $sortDirection » second argument for « sortable() » method. Has to be « asc » or '
                         . '« desc ». « ' . $sortDirection . ' » given.';
@@ -101,28 +101,28 @@ class Column
     }
 
     /**
-     * Make the column searchable.
-     * The first param allows you to precise the searched table (can be a table alias).
-     * The second param allows you to precise the searched attributes (if not precised, the column attribute is
-     * searched).
+     * Make the table column searchable.
+     * The first param allows you to precise the searched database table (can references a database table alias).
+     * The second param allows you to precise the searched database attributes (if not precised, the table database
+     * column is searched).
      *
-     * @param string $searchedDatabaseTable
-     * @param array  $searchedDatabaseColumns
+     * @param string $databaseSearchedTable
+     * @param array $databaseSearchedColumns
      *
      * @return \Okipa\LaravelTable\Column
      */
-    public function searchable(string $searchedDatabaseTable = null, array $searchedDatabaseColumns = []): Column
+    public function searchable(string $databaseSearchedTable = null, array $databaseSearchedColumns = []): Column
     {
         $this->table->searchableColumns->push($this);
-        $this->searchedDatabaseTable = $searchedDatabaseTable;
-        $this->searchedDatabaseColumns = $searchedDatabaseColumns;
+        $this->databaseSearchedTable = $databaseSearchedTable;
+        $this->databaseSearchedColumns = $databaseSearchedColumns;
 
         return $this;
     }
 
     /**
-     * Set the format for a datetime, date or time attribute (optional).
-     * (Carbon::parse($value)->format($format) method is used under the hood).
+     * Set the format for a datetime, date or time database column (optional).
+     * Carbon::parse($value)->format($format) method is used under the hood.
      *
      * @param string $dateTimeFormat
      *
@@ -169,7 +169,7 @@ class Column
      * Set the second param as true if you want the icon to be displayed even if the column has no value.
      *
      * @param string $icon
-     * @param bool   $displayIconWhenNoValue
+     * @param bool $displayIconWhenNoValue
      *
      * @return \Okipa\LaravelTable\Column
      */

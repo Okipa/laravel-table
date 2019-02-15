@@ -11,6 +11,15 @@ use Okipa\LaravelTable\Column;
 trait ColumnsValidationChecks
 {
     /**
+     * Check if a route is defined from its key.
+     *
+     * @param string $routeKey
+     *
+     * @return bool
+     */
+    abstract public function isRouteDefined(string $routeKey): bool;
+
+    /**
      * Check column model is defined.
      *
      * @return void
@@ -37,8 +46,8 @@ trait ColumnsValidationChecks
         $this->columns->map(function (Column $column) use ($query) {
             $this->checkSortableColumnHasAttribute($column);
             $isSearchable = in_array(
-                $column->attribute,
-                $this->searchableColumns->pluck('attribute')->toArray()
+                $column->databaseDefaultColumn,
+                $this->searchableColumns->pluck('databaseDefaultColumn')->toArray()
             );
             if ($isSearchable) {
                 $this->checkSearchableColumnHasAttribute($column);
@@ -48,7 +57,7 @@ trait ColumnsValidationChecks
     }
 
     /**
-     * Check if the sortable column has an attribute.
+     * Check if the sortable table column has an database column defined.
      *
      * @param \Okipa\LaravelTable\Column $column
      *
@@ -57,16 +66,16 @@ trait ColumnsValidationChecks
      */
     protected function checkSortableColumnHasAttribute(Column $column): void
     {
-        if (! $column->attribute && $column->isSortable) {
-            $errorMessage = 'One of the sortable columns has no defined attribute. You have to define a column '
-                            . 'attribute for each sortable columns by setting a string parameter in the '
+        if (! $column->databaseDefaultColumn && $column->isSortable) {
+            $errorMessage = 'One of the sortable table columns has no defined database column. You have to define a '
+                            . 'database column for each sortable table columns by setting a string parameter in the '
                             . '« column() » method.';
             throw new ErrorException($errorMessage);
         }
     }
 
     /**
-     * Check if the searchable column has an attribute.
+     * Check if the searchable table column has a defined database column.
      *
      * @param \Okipa\LaravelTable\Column $column
      *
@@ -75,18 +84,18 @@ trait ColumnsValidationChecks
      */
     protected function checkSearchableColumnHasAttribute(Column $column): void
     {
-        if (! $column->attribute) {
-            $errorMessage = 'One of the searchable columns has no defined attribute. You have to define a column '
-                            . 'attribute for each searchable columns by setting a string parameter in the '
-                            . '« column() » method.';
+        if (! $column->databaseDefaultColumn) {
+            $errorMessage = 'One of the searchable table columns has no defined database column. You have to define '
+                            . 'a database column for each searchable table columns by setting a string parameter in '
+                            . 'the « column() » method.';
             throw new ErrorException($errorMessage);
         }
     }
 
     /**
-     * Check that the given attribute or alias exist in the column related table.
+     * Check that the given database column does exist in the (aliased or not) column database table.
      *
-     * @param \Okipa\LaravelTable\Column            $column
+     * @param \Okipa\LaravelTable\Column $column
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return void
@@ -94,39 +103,53 @@ trait ColumnsValidationChecks
      */
     protected function checkSearchedAttributeDoesExistInRelatedTable(Column $column, Builder $query): void
     {
-        $attributes = $column->searchedDatabaseColumns ? $column->searchedDatabaseColumns : [$column->attribute];
-        $searchedDatabaseTable = $column->searchedDatabaseTable
-            ? $column->searchedDatabaseTable
-            : $column->databaseDefaultTable;
-        $fromSqlStatement = last(explode('from', $query->toSql()));
-        preg_match_all(
-            '/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/',
-            $fromSqlStatement,
-            $aliases
-        );
-        if (! empty(array_filter($aliases))) {
-            $position = array_keys(array_where(
-                array_shift($aliases),
-                function ($alias) use ($searchedDatabaseTable) {
-                    return str_contains($alias, $searchedDatabaseTable);
-                }
-            ));
-            $aliasedTable = head($aliases)[head($position)];
-            $searchedDatabaseTableColumns = Schema::getColumnListing($aliasedTable);
-        } else {
-            $searchedDatabaseTableColumns = Schema::getColumnListing($searchedDatabaseTable);
-        }
-        foreach ($attributes as $attribute) {
-            if (! in_array($attribute, $searchedDatabaseTableColumns)) {
-                $dynamicMessagePart = isset($aliasedTable)
-                    ? '« ' . $aliasedTable . ' » (aliased as « ' . $searchedDatabaseTable . ' ») table'
-                    : '« ' . $searchedDatabaseTable . ' » table';
-                $errorMessage = 'The given attribute « ' . $attribute . ' » has not been found in the searchable-'
-                                . 'column ' . $dynamicMessagePart . '. Set the searched table and attributes '
-                                . 'with the « sortable() » method.';
+        $searchedDatabaseColumns = $column->databaseSearchedColumns ?: [$column->databaseDefaultColumn];
+        $tableData = $this->tableData($column, $query);
+        $table = array_get($tableData, 'table');
+        $tableAlias = array_get($tableData, 'alias');
+        $tableColumns = array_get($tableData, 'columns');
+        foreach ($searchedDatabaseColumns as $searchedDatabaseColumn) {
+            if (! in_array($searchedDatabaseColumn, $tableColumns)) {
+                $dynamicMessagePart = !empty($tableAlias)
+                    ? '« ' . $table . ' » (aliased as « ' . $tableAlias . ' ») table'
+                    : '« ' . $table . ' » table';
+                $errorMessage = 'The table column with related « ' . $searchedDatabaseColumn . ' » database column is '
+                                . 'searchable and does not exist in the ' . $dynamicMessagePart
+                                . '. Set the database searched table and (optionally) columns with the « sortable() » '
+                                . 'method arguments.';
                 throw new ErrorException($errorMessage);
             }
         }
+    }
+
+    /**
+     * Get data (alias, columns) from database table.
+     *
+     * @param \Okipa\LaravelTable\Column $column
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return array
+     */
+    protected function tableData(Column $column, Builder $query): array
+    {
+        $table = $column->databaseSearchedTable ?: $column->databaseDefaultTable;
+        if ($column->databaseSearchedTable) {
+            $fromSqlStatement = last(explode(' from ', $query->toSql()));
+            preg_match_all('/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/', $fromSqlStatement, $aliases);
+            if (! empty(array_filter($aliases))) {
+                $position = array_keys(array_where(array_shift($aliases), function ($alias) use ($table) {
+                    return str_contains($alias, $table);
+                }));
+                $alias = head($aliases)[head($position)];
+                $columns = Schema::getColumnListing($alias);
+
+                return compact('table', 'columns', 'alias');
+            }
+        }
+        $alias = null;
+        $columns = Schema::getColumnListing($table);
+
+        return compact('table', 'alias', 'columns');
     }
 
     /**
@@ -143,13 +166,4 @@ trait ColumnsValidationChecks
             throw new ErrorException($errorMessage);
         }
     }
-
-    /**
-     * Check if a route is defined from its key.
-     *
-     * @param string $routeKey
-     *
-     * @return bool
-     */
-    abstract public function isRouteDefined(string $routeKey): bool;
 }

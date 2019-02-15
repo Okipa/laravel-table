@@ -167,15 +167,15 @@ class Table implements Htmlable
     /**
      * Add a column that will be displayed in the table.
      *
-     * @param string|null $attribute
+     * @param string|null $databaseColumn
      *
      * @return \Okipa\LaravelTable\Column
      * @throws ErrorException
      */
-    public function column(string $attribute = null): Column
+    public function column(string $databaseColumn = null): Column
     {
         $this->checkModelIsDefined();
-        $column = new Column($this, $attribute);
+        $column = new Column($this, $databaseColumn);
         $this->columns[] = $column;
 
         return $column;
@@ -302,7 +302,7 @@ class Table implements Htmlable
             [
                 'rows'    => 'required|numeric',
                 'search'  => 'nullable|string',
-                'sortBy'  => 'nullable|string|in:' . $this->columns->implode('attribute', ','),
+                'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
                 'sortDir' => 'nullable|string|in:asc,desc',
             ]
         );
@@ -361,17 +361,17 @@ class Table implements Htmlable
         if ($searched = $this->request->search) {
             $query->where(function ($subQuery) use ($searched) {
                 $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
-                    $searchedDatabaseTable = $column->searchedDatabaseTable
-                        ? $column->searchedDatabaseTable
+                    $databaseSearchedTable = $column->databaseSearchedTable
+                        ? $column->databaseSearchedTable
                         : $column->databaseDefaultTable;
                     $operator = $columnKey > 0 ? 'orWhere' : 'where';
-                    $searchedDatabaseColumns = $column->searchedDatabaseColumns
-                        ? $column->searchedDatabaseColumns
-                        : [$column->attribute];
-                    foreach ($searchedDatabaseColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
+                    $databaseSearchedColumns = $column->databaseSearchedColumns
+                        ? $column->databaseSearchedColumns
+                        : [$column->databaseDefaultColumn];
+                    foreach ($databaseSearchedColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
                         $operator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $operator;
                         $subQuery->{$operator}(
-                            $searchedDatabaseTable . '.' . $searchedDatabaseColumn,
+                            $databaseSearchedTable . '.' . $searchedDatabaseColumn,
                             'like',
                             '%' . $searched . '%'
                         );
@@ -392,7 +392,7 @@ class Table implements Htmlable
     {
         $this->sortBy = $this->request->sortBy
             ? $this->request->sortBy
-            : ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->attribute);
+            : ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->databaseDefaultColumn);
         $this->sortDir = $this->request->sortDir
             ? $this->request->sortDir
             : ($this->sortDir ? $this->sortDir : 'asc');

@@ -17,7 +17,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->sortable();
         $this->assertTrue($table->columns->first()->isSortable);
         $this->assertEquals(1, $table->sortableColumns->count());
-        $this->assertEquals('name', $table->sortableColumns->first()->attribute);
+        $this->assertEquals('name', $table->sortableColumns->first()->databaseDefaultColumn);
     }
 
     public function testSetSortByDefaultAttribute()
@@ -47,8 +47,8 @@ class SortTest extends LaravelTableTestCase
     public function testSortByDefaultCalledMultiple()
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table is already sorted by the « name » attribute. You only can sort a '
-                                      . 'column by default once');
+        $this->expectExceptionMessage('The table is already sorted by the « name » database column. You only can sort '
+                                      . 'a table column by default once');
         $table = (new Table)->model(User::class);
         $table->column('name')->sortable(true);
         $table->column('email')->sortable(true);
@@ -74,16 +74,16 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->sortable();
         $table->column('email')->sortable();
         $table->render();
-        $this->assertEquals($table->sortBy, $table->columns->first()->attribute);
+        $this->assertEquals($table->sortBy, $table->columns->first()->databaseDefaultColumn);
         $this->assertEquals($table->sortDir, 'asc');
     }
 
     public function testSortByColumnWithoutAttribute()
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('One of the sortable columns has no defined attribute. '
-                                      . 'You have to define a column attribute for each sortable columns by setting a '
-                                      . 'string parameter in the « column() » method.');
+        $this->expectExceptionMessage('One of the sortable table columns has no defined database column. '
+                                      . 'You have to define a database column for each sortable table columns by '
+                                      . 'setting a string parameter in the « column() » method.');
         $this->createMultipleUsers(5);
         $this->routes(['companies'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'companies.index']])->model(User::class);

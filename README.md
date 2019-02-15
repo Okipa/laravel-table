@@ -412,7 +412,7 @@ destroyButton.click(function(e){
 > The column key is optional if the column is not declared as sortable or searchable.
 
 **Note :**
-- Signature : `column(string $attribute = null): \Okipa\LaravelTable\Column`
+- Signature : `column(string $databaseColumn = null): \Okipa\LaravelTable\Column`
 - Required
 - **Warning : ** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Column` object. See the use case examples to check how to use this method.
 
@@ -425,7 +425,7 @@ destroyButton.click(function(e){
 :warning: All the column methods are chainable with `\Okipa\LaravelTable\Column` object.
 
 ### `->classes()`
-> Set the custom classes that will be applied only on this column.
+> Set the custom classes that will be applied on this column only.
 
 **Note :**
 - Signature : `classes(array $classes): \Okipa\LaravelTable\Column`
@@ -466,11 +466,11 @@ destroyButton.click(function(e){
 
 ### `->searchable()`
 > Make the column searchable.  
-> The first param allows you to precise the searched table (can be a table alias).  
-> The second param allows you to precise the searched attributes (if not precised, the column attribute is searched). 
+> The first param allows you to precise the searched database table (can references a database table alias).  
+> The second param allows you to precise the searched database attributes (if not precised, the table database column is searched).
 
 **Note :**
-- Signature : `public function searchable(string $searchedDatabaseTable = null, array $searchedDatabaseColumns = []): \Okipa\LaravelTable\Column`
+- Signature : `public function searchable(string $databaseSearchedTable = null, array $databaseSearchedColumns = []): \Okipa\LaravelTable\Column`
 - Optional
 
 **Use case example :**
@@ -494,7 +494,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 ```
 
 ### `->dateTimeFormat()`
-> Set the format for a datetime, date or time attribute (optional).  
+> Set the format for a datetime, date or time database column (optional).  
 > (Carbon::parse($value)->format($format) method is used under the hood).
 
 **Note :**
@@ -599,8 +599,8 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 
 ## Tips
 - **Request :** No need to transmit the request to the table : it systematically uses the current request given by the `request()` helper to get the number of lines to show and the searching, sorting or pagination data. However, if you need to pass a particular request to the table, you can do it with the `->request()` method.
-- **Column titles :** By default, the columns titles take the following value : `__('validation.attributes.[attribute])`. You can set a custom title using the `title()` method, especially when a a column is not related to a table attribute.
-- **Methods combination :** The following column methods can be combined. If you can't get the wanted result, you should use the `->html()` method to display what you want.
+- **Column titles :** By default, the table columns titles take the following value : `__('validation.attributes.[databaseColumn])`. You can set a custom title using the `title()` method.
+- **Columns displaying combination :** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
   - `->button()`
   - `->link()`
   - `->icon()`
@@ -659,8 +659,8 @@ $table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)
         return $model->id === 3;
     }, ['highlighted', 'bg-success']);
 $table->column('image')->html(function ($model, $column) {
-    return $model->{$column->attribute}
-        ? '<img src="' . $model->{$column->attribute} . '" alt="' .  $model->title . '">'
+    return $model->{$column->databaseDefaultColumn}
+        ? '<img src="' . $model->{$column->databaseDefaultColumn} . '" alt="' .  $model->title . '">'
         : null;
 });
 $table->column('title')->sortable()->searchable();
@@ -671,7 +671,7 @@ $table->column('category_id')
     ->icon('your-icon')
     ->button(['btn', 'btn-sm', 'btn-outline-primary'])
     ->value(function ($model, $column) {
-        return config('news.category.' . $model->{$column->attribute});
+        return config('news.category.' . $model->{$column->databaseDefaultColumn});
     });
 $table->column()->link(function($model){
     return route('news.show', ['id' => $model->id]);

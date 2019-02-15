@@ -4,6 +4,7 @@
 	<file>./config</file>
 	<file>./src</file>
 	<file>./tests</file>
+	<exclude-pattern>./tests/views/*</exclude-pattern>
 	<arg name="colors"></arg>
 	<rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
 		<exclude-pattern>./tests/*</exclude-pattern>
