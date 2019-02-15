@@ -35,7 +35,8 @@ class Table implements Htmlable
     public $disableRows;
     public $list;
     public $destroyConfirmationClosure;
-    public $appendsToPagination = [];
+    public $appendedValues = [];
+    public $appendedHiddenFields = [];
 
     /**
      * Table constructor.
@@ -220,17 +221,37 @@ class Table implements Htmlable
     }
 
     /**
-     * Add an array of keys values to the paginator.
+     * Add an array of keys values to append to the table treatments (number of rows, search, paginator).
      *
-     * @param array $appendsToPagination
+     * @param array $appendedValues
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function appends(array $appendsToPagination): Table
+    public function appends(array $appendedValues): Table
     {
-        $this->appendsToPagination = $appendsToPagination;
+        $this->appendedValues = $appendedValues;
+        $this->appendedHiddenFields = $this->extractHiddenFieldsToGenerate($appendedValues);
 
         return $this;
+    }
+
+    /**
+     * Extract hidden fields to generate from appended values.
+     *
+     * @param array $appendedValues
+     *
+     * @return array
+     */
+    public function extractHiddenFieldsToGenerate(array $appendedValues): array
+    {
+        $httpArguments = explode('&', http_build_query($appendedValues));
+        $appendedHiddenFields = [];
+        foreach ($httpArguments as $httpArgument) {
+            $argument = explode('=', $httpArgument);
+            $appendedHiddenFields[urldecode(head($argument))] = last($argument);
+        }
+
+        return $appendedHiddenFields;
     }
 
     /**
@@ -414,7 +435,7 @@ class Table implements Htmlable
             'search'  => $this->search,
             'sortBy'  => $this->sortBy,
             'sortDir' => $this->sortDir,
-        ], $this->appendsToPagination));
+        ], $this->appendedValues));
     }
 
     /**

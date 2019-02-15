@@ -13,10 +13,10 @@ class AppendsTest extends LaravelTableTestCase
         $appended = ['test' => 'testValue'];
         $table = (new Table)->model(User::class)->appends($appended);
         $table->column();
-        $this->assertEquals($appended, $table->appendsToPagination);
+        $this->assertEquals($appended, $table->appendedValues);
     }
 
-    public function testSetAppendsHtml()
+    public function testSetAppendedToRequest()
     {
         $this->createMultipleUsers(20);
         $this->routes(['users'], ['index']);
@@ -29,5 +29,25 @@ class AppendsTest extends LaravelTableTestCase
         $table->render();
         $html = $table->list->links()->toHtml();
         $this->assertContains('test=testValue', $html);
+    }
+
+    public function testSetAppendedToFiltersHtml()
+    {
+        $this->createMultipleUsers(20);
+        $this->routes(['users'], ['index']);
+        $appended = [
+            'test'  => 'testValue',
+            'array' => ['value1', 'value2'],
+        ];
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->rowsNumber(10)
+            ->appends($appended);
+        $table->column('name')->searchable();
+        $table->render();
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertEquals(2, substr_count($html, '<input type="hidden" name="test" value="testValue">'));
+        $this->assertEquals(2, substr_count($html, '<input type="hidden" name="array[0]" value="value1">'));
+        $this->assertEquals(2, substr_count($html, '<input type="hidden" name="array[1]" value="value2">'));
     }
 }

@@ -12,6 +12,9 @@
                                 <input type="hidden" name="search" value="{{ $table->request->search }}">
                                 <input type="hidden" name="sortBy" value="{{ $table->request->sortBy }}">
                                 <input type="hidden" name="sortDir" value="{{ $table->request->sortDir }}">
+                                @foreach($table->appendedHiddenFields as $appendedKey => $appendedValue)
+                                    <input type="hidden" name="{{ $appendedKey }}" value="{{ $appendedValue }}">
+                                @endforeach
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -44,6 +47,9 @@
                                 <input type="hidden" name="rows" value="{{ $table->request->rows }}">
                                 <input type="hidden" name="sortBy" value="{{ $table->request->sortBy }}">
                                 <input type="hidden" name="sortDir" value="{{ $table->request->sortDir }}">
+                                @foreach($table->appendedHiddenFields as $appendedKey => $appendedValue)
+                                    <input type="hidden" name="{{ $appendedKey }}" value="{{ $appendedValue }}">
+                                @endforeach
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
