@@ -3,7 +3,7 @@
         <tr {{ classTag($table->trClasses) }}>
             <td {{ classTag($table->tdClasses, 'text-center') }}
                 colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') ? 1 : 0) }}">
-                <span class="text-info">
+                <span class="text-info p-4">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </span>
                 @lang('laravel-table::laravel-table.emptyTable')
