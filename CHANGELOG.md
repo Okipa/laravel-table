@@ -3,7 +3,8 @@
 ## [1.0.4](https://github.com/Okipa/laravel-table/releases/tag/1.0.4)
 2019-02-17
 - `->appends()` does now also merge appended keys values to request attributes, in order to use the appended to the pagination, but also to the rows number selection, searching and sorting actions.
-- Replaced `col-[breakpoint]` filter bar templating by `flex`. 
+- Replaced `col-[breakpoint]` thead templating by `flex`. 
+- Replaced `col-[breakpoint]` tfoot templating by `flex`. 
 
 ## [1.0.3](https://github.com/Okipa/laravel-table/releases/tag/1.0.3)
 2019-02-15
