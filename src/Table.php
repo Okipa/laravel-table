@@ -151,7 +151,7 @@ class Table implements Htmlable
      * The closure let you manipulate the following attribute : $model.
      *
      * @param \Closure $rowDisableClosure
-     * @param array $classes
+     * @param array    $classes
      *
      * @return \Okipa\LaravelTable\Table
      */
@@ -206,7 +206,7 @@ class Table implements Htmlable
      * Get the route from its key.
      *
      * @param string $routeKey
-     * @param array $params
+     * @param array  $params
      *
      * @return string
      */
@@ -318,15 +318,12 @@ class Table implements Htmlable
      */
     protected function handleRequest(): void
     {
-        $validator = Validator::make(
-            $this->request->only('rows', 'search', 'sortBy', 'sortDir'),
-            [
-                'rows'    => 'required|numeric',
-                'search'  => 'nullable|string',
-                'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
-                'sortDir' => 'nullable|string|in:asc,desc',
-            ]
-        );
+        $validator = Validator::make($this->request->only('rows', 'search', 'sortBy', 'sortDir'), [
+            'rows'    => 'required|numeric',
+            'search'  => 'nullable|string',
+            'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
+            'sortDir' => 'nullable|string|in:asc,desc',
+        ]);
         if ($validator->fails()) {
             $this->request->merge([
                 'rows'    => $this->rows ? $this->rows : config('laravel-table.value.rows'),
@@ -380,8 +377,8 @@ class Table implements Htmlable
     protected function applySearchClauses(Builder $query): void
     {
         if ($searched = $this->request->search) {
-            $query->where(function ($subQuery) use ($searched) {
-                $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
+            $query->where(function($subQuery) use ($searched) {
+                $this->searchableColumns->map(function(Column $column, int $columnKey) use ($subQuery, $searched) {
                     $databaseSearchedTable = $column->databaseSearchedTable
                         ? $column->databaseSearchedTable
                         : $column->databaseDefaultTable;
@@ -445,11 +442,11 @@ class Table implements Htmlable
      */
     protected function applyClosuresOnPaginatedList(): void
     {
-        $this->list->getCollection()->transform(function ($model) {
-            $this->rowsConditionalClasses->each(function ($row) use ($model) {
+        $this->list->getCollection()->transform(function($model) {
+            $this->rowsConditionalClasses->each(function($row) use ($model) {
                 $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
-            $this->disableRows->each(function ($row) use ($model) {
+            $this->disableRows->each(function($row) use ($model) {
                 $model->disabledClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
             if ($this->destroyConfirmationClosure) {

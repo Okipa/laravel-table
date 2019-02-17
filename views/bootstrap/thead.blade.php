@@ -92,7 +92,12 @@
         @foreach($table->columns as $column)
             <th {{ classTag('border-0', $table->thClasses) }} scope="col">
                 @if($column->isSortable)
-                    <a href="{{ $table->route('index', ['sortBy' => $column->databaseDefaultColumn, 'sortDir' => $table->request->sortDir === 'desc' ? 'asc' : 'desc', 'search'   => $table->request->search, 'rows'    => $table->request->rows]) }}"
+                    <a href="{{ $table->route('index', array_merge([
+                            'sortBy' => $column->databaseDefaultColumn,
+                            'sortDir' => $table->request->sortDir === 'desc' ? 'asc' : 'desc',
+                            'search'   => $table->request->search,
+                            'rows'    => $table->request->rows
+                        ], $table->appendedValues)) }}"
                        title="{{ $column->title }}">
                         @if($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'asc')
                             <span class="sort">
