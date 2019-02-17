@@ -1,9 +1,9 @@
 <tbody>
     @if($table->list->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
-            <td {{ classTag($table->tdClasses, 'text-center') }}
+            <td {{ classTag($table->tdClasses, 'text-center', 'p-4') }}
                 colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') ? 1 : 0) }}">
-                <span class="text-info p-4">
+                <span class="text-info">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </span>
                 @lang('laravel-table::laravel-table.emptyTable')
