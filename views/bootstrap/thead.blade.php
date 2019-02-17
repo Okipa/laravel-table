@@ -44,7 +44,7 @@
                     <div class="px-5 spacer"></div>
                     {{-- search --}}
                     @if(! $table->searchableColumns->isEmpty())
-                        <div class="flex-grow-1 pb-2 search-bar">
+                        <div class="flex-grow-1 pb-2 mw-50 search-bar">
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="rows" value="{{ $table->request->rows }}">
                                 <input type="hidden" name="sortBy" value="{{ $table->request->sortBy }}">
