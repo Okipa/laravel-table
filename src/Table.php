@@ -377,8 +377,8 @@ class Table implements Htmlable
     protected function applySearchClauses(Builder $query): void
     {
         if ($searched = $this->request->search) {
-            $query->where(function($subQuery) use ($searched) {
-                $this->searchableColumns->map(function(Column $column, int $columnKey) use ($subQuery, $searched) {
+            $query->where(function ($subQuery) use ($searched) {
+                $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
                     $databaseSearchedTable = $column->databaseSearchedTable
                         ? $column->databaseSearchedTable
                         : $column->databaseDefaultTable;
@@ -442,11 +442,11 @@ class Table implements Htmlable
      */
     protected function applyClosuresOnPaginatedList(): void
     {
-        $this->list->getCollection()->transform(function($model) {
-            $this->rowsConditionalClasses->each(function($row) use ($model) {
+        $this->list->getCollection()->transform(function ($model) {
+            $this->rowsConditionalClasses->each(function ($row) use ($model) {
                 $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
-            $this->disableRows->each(function($row) use ($model) {
+            $this->disableRows->each(function ($row) use ($model) {
                 $model->disabledClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
             if ($this->destroyConfirmationClosure) {
