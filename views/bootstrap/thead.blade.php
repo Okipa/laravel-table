@@ -41,7 +41,9 @@
                         </div>
                     @endif
                     {{-- spacer --}}
-                    <div class="px-5 spacer"></div>
+                    @if($table->rowsNumberSelectionActivation && ! $table->searchableColumns->isEmpty())
+                        <div class="px-5 spacer"></div>
+                    @endif
                     {{-- search --}}
                     @if(! $table->searchableColumns->isEmpty())
                         <div class="flex-grow-1 pb-2 w-50 search-bar">
