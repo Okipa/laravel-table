@@ -5,8 +5,8 @@
             <td {{ classTag('border-0', 'py-4', $table->tdClasses) }}
                 colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') ? 1 : 0) }}">
                 <div class="row">
-                    {{-- rows number selector --}}
-                    <div class="col-sm-12 col-lg-4 rows-number-selector">
+                    {{-- rows number selection --}}
+                    <div class="col-sm-12 col-lg-4 rows-number-selection">
                         @if($table->rowsNumberSelectionActivation)
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="search" value="{{ $table->request->search }}">
@@ -40,8 +40,8 @@
                     </div>
                     {{-- spacer --}}
                     <div class="spacer col-sm-2"></div>
-                    {{-- search bar --}}
-                    <div class="col-sm-12 col-lg-6 search-bar">
+                    {{-- searching --}}
+                    <div class="col-sm-12 col-lg-6 searching">
                         @if(count($table->searchableColumns))
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="rows" value="{{ $table->request->rows }}">
@@ -64,8 +64,13 @@
                                            aria-label="@lang('laravel-table::laravel-table.search') {{ $table->searchableTitles() }}">
                                     @if($table->request->search)
                                         <div class="input-group-append">
-                                            <a class="input-group-text btn btn-link text-danger"
-                                               href="{{ $table->route('index', ['search' => null, 'rows' => $table->request->rows, 'sortBy' => $table->request->sortBy, 'sortDir' => $table->request->sortDir]) }}"
+                                            <a class="input-group-text btn btn-link text-danger cancel-search"
+                                               href="{{ $table->route('index', array_merge([
+                                                    'search'    => null,
+                                                    'rows'      => $table->request->rows,
+                                                    'sortBy'    => $table->request->sortBy,
+                                                    'sortDir'   => $table->request->sortDir
+                                                ], $table->appendedValues)) }}"
                                                title="@lang('laravel-table::laravel-table.cancelSearch')">
                                                 <span>{!! config('laravel-table.icon.cancel') !!}</span>
                                             </a>
@@ -92,14 +97,19 @@
         @foreach($table->columns as $column)
             <th {{ classTag('border-0', $table->thClasses) }} scope="col">
                 @if($column->isSortable)
-                    <a href="{{ $table->route('index', ['sortBy' => $column->databaseDefaultColumn, 'sortDir' => $table->request->sortDir === 'desc' ? 'asc' : 'desc', 'search'   => $table->request->search, 'rows'    => $table->request->rows]) }}"
+                    <a href="{{ $table->route('index', array_merge([
+                            'sortBy'    => $column->databaseDefaultColumn,
+                            'sortDir'   => $table->request->sortDir === 'desc' ? 'asc' : 'desc',
+                            'search'    => $table->request->search,
+                            'rows'      => $table->request->rows
+                        ], $table->appendedValues)) }}"
                        title="{{ $column->title }}">
                         @if($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'asc')
-                            <span class="sort">
+                            <span class="sort asc">
                                 {!! config('laravel-table.icon.sortAsc') !!}
                             </span>
                         @elseif($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'desc')
-                            <span class="sort">
+                            <span class="sort desc">
                                 {!! config('laravel-table.icon.sortDesc') !!}
                             </span>
                         @else

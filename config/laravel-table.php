@@ -4,7 +4,7 @@ return [
 
     'classes' => [
         'container' => ['table-responsive'],
-        'table'     => ['table-striped', 'table-hover'],
+        'table'     => ['table-striped', 'table-hover', 'mt-4'],
         'tr'        => [],
         'th'        => ['align-middle'],
         'td'        => ['align-middle'],

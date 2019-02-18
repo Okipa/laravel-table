@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4](https://github.com/Okipa/laravel-table/releases/tag/1.0.4)
+2019-02-17
+- `->appends()` does now also add appended attributes to search canceling and sorting actions.
+
 ## [1.0.3](https://github.com/Okipa/laravel-table/releases/tag/1.0.3)
 2019-02-15
 - `->appends()` method does now add appended key values to rows number selection form and to searching form as hidden fields.

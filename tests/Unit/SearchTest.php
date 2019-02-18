@@ -320,7 +320,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('email')->title('Email')->searchable();
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('search-bar', $html);
+        $this->assertContains('searching', $html);
         $this->assertContains('name="search"', $html);
         $this->assertContains(
             'placeholder="' . __('laravel-table::laravel-table.search') . ' '
@@ -342,7 +342,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertNotContains('<div class="search-bar', $html);
+        $this->assertNotContains('<div class="searching', $html);
         $this->assertNotContains(
             'placeholder="' . __('laravel-table::laravel-table.thead.search') . ' '
             . $table->searchableTitles() . '"',

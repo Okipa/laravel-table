@@ -221,7 +221,8 @@ class Table implements Htmlable
     }
 
     /**
-     * Add an array of keys values to append to the table treatments (number of rows, search, paginator).
+     * Add an array of arguments to append to the paginator and to the following table actions : row number selection,
+     * searching, search canceling, sorting.
      *
      * @param array $appendedValues
      *
@@ -318,15 +319,12 @@ class Table implements Htmlable
      */
     protected function handleRequest(): void
     {
-        $validator = Validator::make(
-            $this->request->only('rows', 'search', 'sortBy', 'sortDir'),
-            [
-                'rows'    => 'required|numeric',
-                'search'  => 'nullable|string',
-                'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
-                'sortDir' => 'nullable|string|in:asc,desc',
-            ]
-        );
+        $validator = Validator::make($this->request->only('rows', 'search', 'sortBy', 'sortDir'), [
+            'rows'    => 'required|numeric',
+            'search'  => 'nullable|string',
+            'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
+            'sortDir' => 'nullable|string|in:asc,desc',
+        ]);
         if ($validator->fails()) {
             $this->request->merge([
                 'rows'    => $this->rows ? $this->rows : config('laravel-table.value.rows'),
