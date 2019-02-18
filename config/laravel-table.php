@@ -3,8 +3,8 @@
 return [
 
     'classes' => [
-        'container' => ['table-responsive'],
-        'table'     => ['table-striped', 'table-hover', 'mt-4'],
+        'container' => ['table-responsive', 'pt-3'],
+        'table'     => ['table-striped', 'table-hover', 'mt-3'],
         'tr'        => [],
         'th'        => ['align-middle'],
         'td'        => ['align-middle'],

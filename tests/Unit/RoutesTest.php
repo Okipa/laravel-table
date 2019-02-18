@@ -114,10 +114,10 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $tfoot = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
-        $this->assertContains('create-container', $tfoot);
-        $this->assertContains('href="http://localhost/users/create"', $tfoot);
-        $this->assertContains('title="Create"', $tfoot);
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $this->assertContains('creation-container', $html);
+        $this->assertContains('href="http://localhost/users/create"', $html);
+        $this->assertContains('title="Create"', $html);
     }
 
     public function testSetNoCreateRouteHtml()
@@ -126,10 +126,10 @@ class RoutesTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $tfoot = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
-        $this->assertNotContains('<div class="create-container', $tfoot);
-        $this->assertNotContains('href="http://localhost/users/create"', $tfoot);
-        $this->assertNotContains('title="Add"', $tfoot);
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $this->assertNotContains('<div class="creation-container', $html);
+        $this->assertNotContains('href="http://localhost/users/create"', $html);
+        $this->assertNotContains('title="Add"', $html);
     }
 
     public function testSetEditRouteHtml()

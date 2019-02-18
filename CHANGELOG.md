@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.5](https://github.com/Okipa/laravel-table/releases/tag/1.0.5)
+2019-02-18
+- Updated `thead` and `tfoot` components in order to improve the responsive behavior.
+
 ## [1.0.4](https://github.com/Okipa/laravel-table/releases/tag/1.0.4)
 2019-02-17
 - `->appends()` does now also add appended attributes to search canceling and sorting actions.
