@@ -213,7 +213,11 @@ public function index(Request $request) {
 ```
 
 ### `->appends()`
-> Add an array of keys values to append to the table treatments (number of rows, search, paginator).
+> Add an array of arguments to append to the paginator and to the following table actions :
+> - row number selection
+> - searching
+> - search canceling
+> - sorting.
 
 **Note :**
 - Signature : `appends(array $appendedValues): \Okipa\LaravelTable\Table`

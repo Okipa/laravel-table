@@ -151,7 +151,7 @@ class Table implements Htmlable
      * The closure let you manipulate the following attribute : $model.
      *
      * @param \Closure $rowDisableClosure
-     * @param array    $classes
+     * @param array $classes
      *
      * @return \Okipa\LaravelTable\Table
      */
@@ -206,7 +206,7 @@ class Table implements Htmlable
      * Get the route from its key.
      *
      * @param string $routeKey
-     * @param array  $params
+     * @param array $params
      *
      * @return string
      */
@@ -221,7 +221,8 @@ class Table implements Htmlable
     }
 
     /**
-     * Add an array of keys values to append to the table treatments (number of rows, search, paginator).
+     * Add an array of arguments to append to the paginator and to the following table actions : row number selection,
+     * searching, search canceling, sorting.
      *
      * @param array $appendedValues
      *

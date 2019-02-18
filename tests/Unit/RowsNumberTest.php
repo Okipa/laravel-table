@@ -31,7 +31,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertNotContains('rows-number-selector', $thead);
+        $this->assertNotContains('rows-number-selection', $thead);
         $this->assertNotContains('type="number"', $thead);
         $this->assertNotContains('name="rows"', $thead);
         $this->assertNotContains('value="20"', $thead);
@@ -52,7 +52,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertNotContains('rows-number-selector', $thead);
+        $this->assertNotContains('rows-number-selection', $thead);
         $this->assertNotContains('type="number"', $thead);
         $this->assertNotContains('name="rows"', $thead);
         $this->assertNotContains('value="20"', $thead);
@@ -73,7 +73,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('rows-number-selector', $thead);
+        $this->assertContains('rows-number-selection', $thead);
         $this->assertContains('type="number"', $thead);
         $this->assertContains('name="rows"', $thead);
         $this->assertContains('value="20"', $thead);
@@ -93,7 +93,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('rows-number-selector', $thead);
+        $this->assertContains('rows-number-selection', $thead);
         $this->assertContains('type="number"', $thead);
         $this->assertContains('name="rows"', $thead);
         $this->assertContains('value="15"', $thead);

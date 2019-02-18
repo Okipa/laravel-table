@@ -51,14 +51,20 @@ class AppendsTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $sortHttpArguments = htmlspecialchars(http_build_query(array_merge([
+        $sortingHttpArguments = htmlspecialchars(http_build_query(array_merge([
             'sortBy'  => 'name',
             'sortDir' => 'asc',
             'search'  => 'test',
             'rows'    => 20,
         ], $appended)));
-        $this->assertContains($sortHttpArguments, $html);
-        $this->assertEquals(1, substr_count($html, $sortHttpArguments));
+        $searchCancelingHttpArguments = htmlspecialchars(http_build_query(array_merge([
+            'rows'    => 20,
+            'sortBy'  => 'name',
+            'sortDir' => 'desc',
+            'search'  => null,
+        ], $appended)));
+        $this->assertEquals(1, substr_count($html, $sortingHttpArguments));
+        $this->assertEquals(1, substr_count($html, $searchCancelingHttpArguments));
         $this->assertEquals(2, substr_count($html, '<input type="hidden" name="test" value="testValue">'));
         $this->assertEquals(2, substr_count($html, '<input type="hidden" name="array[0]" value="value1">'));
         $this->assertEquals(2, substr_count($html, '<input type="hidden" name="array[1]" value="value2">'));
