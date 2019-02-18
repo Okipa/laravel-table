@@ -1,11 +1,12 @@
 <tfoot>
     <tr {{ classTag($table->trClasses) }}>
-        <td {{ classTag('py-4', $table->tdClasses) }}
-            colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') ? 1 : 0) }}">
-            <div class="row">
+        <td {{ classTag('bg-light', $table->tdClasses) }}
+            colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') 
+                || $table->isRouteDefined('destroy') ? 1 : 0) }}">
+            <div class="d-flex justify-content-between flex-wrap py-3">
                 {{-- create button --}}
                 @if($table->isRouteDefined('create'))
-                    <div class="d-flex col-sm-4 create-container">
+                    <div class="d-flex px-4 py-2 creation-container">
                         <a href="{{ $table->route('create') }}"
                            class="btn btn-success"
                            title="{{ __('laravel-table::laravel-table.create') }}">
@@ -15,11 +16,11 @@
                     </div>
                 @endif
                 {{-- navigation --}}
-                <div {{ classTag('d-flex', 'align-items-center', $table->isRouteDefined('create') ? ['col-sm-4', 'justify-content-center'] : ['col-sm-6', 'text-left'], 'navigation-container') }}>
+                <div class="d-flex align-items-center px-4 py-2 navigation-container">
                     <div>{!! $table->navigationStatus() !!}</div>
                 </div>
                 {{-- pagination --}}
-                <div {{ classTag('d-flex', 'justify-content-end', $table->isRouteDefined('create') ? 'col-sm-4' : 'col-sm-6 text-right', 'pagination-container') }}>
+                <div class="d-flex px-4 py-2 pagination-container">
                     {!! $table->list->links() !!}
                 </div>
             </div>

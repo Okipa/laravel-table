@@ -28,7 +28,7 @@ class NavigationStatusTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $tfoot = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
-        $this->assertContains($table->navigationStatus(), $tfoot);
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $this->assertContains($table->navigationStatus(), $html);
     }
 }

@@ -1,12 +1,13 @@
 <thead class="table-header">
     {{-- rows number / search --}}
-    @if(count($table->sortableColumns) || count($table->searchableColumns) || $table->rowsNumberSelectionActivation)
+    @if($table->rowsNumberSelectionActivation || ! $table->searchableColumns->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
-            <td {{ classTag('border-0', 'py-4', $table->tdClasses) }}
-                colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') ? 1 : 0) }}">
-                <div class="row">
+            <td {{ classTag('border-0', 'bg-light', $table->tdClasses) }}
+                colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') 
+                    || $table->isRouteDefined('destroy') ? 1 : 0) }}">
+                <div class="d-flex flex-wrap justify-content-between py-3">
                     {{-- rows number selection --}}
-                    <div class="col-sm-12 col-lg-4 rows-number-selection">
+                    <div class="px-4 py-2 rows-number-selection">
                         @if($table->rowsNumberSelectionActivation)
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="search" value="{{ $table->request->search }}">
@@ -38,10 +39,8 @@
                             </form>
                         @endif
                     </div>
-                    {{-- spacer --}}
-                    <div class="spacer col-sm-2"></div>
                     {{-- searching --}}
-                    <div class="col-sm-12 col-lg-6 searching">
+                    <div class="flex-fill px-4 py-2 searching">
                         @if(count($table->searchableColumns))
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="rows" value="{{ $table->request->rows }}">
@@ -52,9 +51,7 @@
                                 @endforeach
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            {!! config('laravel-table.icon.search') !!}
-                                        </span>
+                                        <span class="input-group-text">{!! config('laravel-table.icon.search') !!}</span>
                                     </div>
                                     <input class="form-control"
                                            type="text"
@@ -104,18 +101,14 @@
                             'rows'      => $table->request->rows
                         ], $table->appendedValues)) }}"
                        title="{{ $column->title }}">
-                        @if($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'asc')
-                            <span class="sort asc">
-                                {!! config('laravel-table.icon.sortAsc') !!}
-                            </span>
-                        @elseif($table->request->sortBy === $column->databaseDefaultColumn && $table->request->sortDir === 'desc')
-                            <span class="sort desc">
-                                {!! config('laravel-table.icon.sortDesc') !!}
-                            </span>
+                        @if($table->request->sortBy === $column->databaseDefaultColumn 
+                            && $table->request->sortDir === 'asc')
+                            <span class="sort asc">{!! config('laravel-table.icon.sortAsc') !!}</span>
+                        @elseif($table->request->sortBy === $column->databaseDefaultColumn 
+                            && $table->request->sortDir === 'desc')
+                            <span class="sort desc">{!! config('laravel-table.icon.sortDesc') !!}</span>
                         @else
-                            <span class="sort">
-                                {!! config('laravel-table.icon.sort') !!}
-                            </span>
+                            <span class="sort">{!! config('laravel-table.icon.sort') !!}</span>
                         @endif
                         <span>
                             {!! str_replace(' ', '&nbsp;', $column->title) !!}

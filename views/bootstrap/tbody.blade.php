@@ -2,7 +2,8 @@
     @if($table->list->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
             <td {{ classTag($table->tdClasses, 'text-center', 'p-4') }}
-                colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') ? 1 : 0) }}">
+                colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') 
+                    || $table->isRouteDefined('destroy') ? 1 : 0) }}">
                 <span class="text-info">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </span>
@@ -86,10 +87,14 @@
                                           method="GET"
                                           action="{{ $table->route('edit', ['id' => $model->id]) }}">
                                 @endif
-                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }}
+                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses 
+                                        ? 'disabled' 
+                                        : null) }}
                                             type="submit"
                                             title="@lang('laravel-table::laravel-table.edit')"
-                                            @if($model->disabledClasses)disabled="disabled" @endisset>
+                                            {{ htmlAttributes($model->disabledClasses 
+                                                ? ['disabled' => 'disabled'] 
+                                                : null) }}>
                                         {!! config('laravel-table.icon.edit') !!}
                                     </button>
                                 @if(! $model->disabledClasses)
@@ -107,11 +112,13 @@
                                         @csrf()
                                         @method('DELETE')
                                 @endif
-                                    <button type="submit"
-                                            {{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses ? 'disabled' : null) }}
-                                            {{ htmlAttributes($model->destroyConfirmationAttributes) }}
+                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses 
+                                                ? 'disabled' 
+                                                : null) }}
+                                            type="submit"
                                             title="@lang('laravel-table::laravel-table.destroy')"
-                                            @if($model->disabledClasses)disabled="disabled" @endif>
+                                            {{ htmlAttributes($model->destroyConfirmationAttributes,
+                                                $model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                         {!! config('laravel-table.icon.destroy') !!}
                                     </button>
                                 @if(! $model->disabledClasses)
