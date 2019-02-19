@@ -42,6 +42,7 @@ Give it a try !
   - [->tbodyTemplate()](#-tbodytemplate)
   - [->tfootTemplate()](#-tfoottemplate)
   - [->column()](#-column)
+  - [->result()](#-result)
 - [Column API](#column-api)
   - [->classes()](#-classes)
   - [->title()](#-title)
@@ -54,7 +55,7 @@ Give it a try !
   - [->stringLimit()](#-stringlimit)
   - [->value()](#-value)
   - [->html()](#-html)
-  - [->result()](#-result)
+- [Result API](#result-api)
 - [Tips](#tips)
 - [Usage examples](#usage-examples)
   - [Basic](#basic)
@@ -104,7 +105,7 @@ Then, play with the templates in your `resources/views/vendor/laravel-table` dir
 ------------------------------------------------------------------------------------------------------------------------
 
 ## Table API
-:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#-column) method** (returns a `\Okipa\LaravelTable\Column` object).
+:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#-column) and the  [->result()](#-result)method** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
 
 ### `->model()`
 > Set the model used during the table generation.
@@ -294,19 +295,6 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->tdClasses(['set', 'your', 'classes']);
 ```
 
-### `->resultClasses()`
-> Override default table result cells classes.  
-> The default result cells classes are defined in the `config('laravel-table.classes.result')` config value.
-
-**Note :**
-- Signature : `resultClasses(array $resultClasses): \Okipa\LaravelTable\Table`
-- Optional
-
-**Use case example :**
-```php
-(new \Okipa\LaravelTable\Table)->resultClasses(['set', 'your', 'classes']);
-```
-
 ### `->rowsConditionalClasses()`
 > Set rows classes when the given conditions are respected.  
 > The closure let you manipulate the following attribute : `$model`.
@@ -437,6 +425,19 @@ destroyButton.click(function(e){
 **Use case example :**
 ```php
 (new \Okipa\LaravelTable\Table)->column('email');
+```
+
+### `->result()`
+> Add a result row that will be displayed at the bottom of the table.  
+
+**Note :**
+- Signature : `result(): Result`
+- Optional
+- **Warning : ** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Result` object. See the use case examples to check how to use this method.
+
+**Use case example :**
+```php
+(new \Okipa\LaravelTable\Table)->result();
 ```
 
 ## Column API
@@ -613,25 +614,47 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 });
 ```
 
-### `->result()`
-> Set a result output that will be displayed under the column (html accepted).  
-> The closure let you manipulate the following attributes : `$displayedList`.  
-> Each call of this method will append a results rows on the table.
+## Result API
+:warning: All the result methods are chainable with `\Okipa\LaravelTable\Result` object.
+
+### `->title()`
+> Set the result row title.
 
 **Note :**
-- Signature : `result(Closure $resultClosure): \Okipa\LaravelTable\Column`
+- Signature : `title(string $title): \Okipa\LaravelTable\Result`
 - Optional
 
 **Use case example :**
 ```php
-$table = (new \Okipa\LaravelTable\Table)->model(App\Company::class)->rowsNumber(2);
-$table->column()->result(function($displayedList) {
-    // display the turnover of the 2 displayed companies
-    return 'Selected : ' . $displayedList->sum('turnover') . '$';
-})->result(function() {
-    // display the turnover of all companies
-    return 'Total : ' . (new App\Company)->all()->sum('turnover') . '$';
-};
+(new \Okipa\LaravelTable\Table)->result()->title('Turnover total');
+```
+
+### `->html()`
+> Display a HTML output for the result row.  
+> The closure let you manipulate the following attributes : `$displayedList`.
+
+**Note :**
+- Signature : `html(Closure $htmlClosure): \Okipa\LaravelTable\Result`
+- Optional
+
+**Use case example :**
+```php
+(new \Okipa\LaravelTable\Table)->result()->html(function($displayedList) {
+    return $displayedList->sum('turnover');
+});
+```
+
+### `->classes()`
+> Override the default results classes and apply the given classes only on this result row.  
+> The default result classes are managed by the `config('laravel-table.classes.results')` value.
+
+**Note :**
+- Signature : `classes(array $classes): \Okipa\LaravelTable\Result`
+- Optional
+
+**Use case example :**
+```php
+(new \Okipa\LaravelTable\Table)->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -716,6 +739,9 @@ $table->column()->link(function($model){
     return route('news.show', ['id' => $model->id]);
 })->button(['btn', 'btn-sm', 'btn-primary']);
 $table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
+$table->result()->title('Total of comments')->html(function($displayedList){
+    return $displayedList->sum('comments_count');
+});
 ```
 
 ------------------------------------------------------------------------------------------------------------------------

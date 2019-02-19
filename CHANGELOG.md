@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.7](https://github.com/Okipa/laravel-table/releases/tag/1.0.7)
+2019-02-19
+- **Breaking change : ** Removed the capacity to add some result outputs with the `->result()` method the Column objects.
+- **Breaking change : ** Removed the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
+- Added the capacity to append some results objects to the table with the `->result()` method.
+
 ## [1.0.6](https://github.com/Okipa/laravel-table/releases/tag/1.0.6)
 2019-02-19
 - Added the capacity to add some result outputs with the `->result()` method the Column objects.

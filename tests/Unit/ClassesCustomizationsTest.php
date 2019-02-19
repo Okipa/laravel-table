@@ -48,20 +48,20 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->assertEquals($classes, $table->tdClasses);
     }
 
-    public function testResultClassesAttribute()
-    {
-        $classes = ['test-custom-class'];
-        $table = (new Table)->model(User::class)->resultClasses($classes);
-        $table->column();
-        $this->assertEquals($classes, $table->resultClasses);
-    }
-
     public function testColumnClassesAttribute()
     {
         $classes = ['test-custom-class'];
         $table = (new Table)->model(User::class);
         $table->column()->classes($classes);
-        $this->assertEquals($classes, $table->columns->first()->columnClasses);
+        $this->assertEquals($classes, $table->columns->first()->classes);
+    }
+
+    public function testResultClassesAttribute()
+    {
+        $classes = ['test-custom-class'];
+        $table = (new Table)->model(User::class);
+        $table->result()->classes($classes);
+        $this->assertEquals($classes, $table->results->first()->classes);
     }
 
     public function testRowConditionalClassesAttribute()
@@ -145,20 +145,6 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->assertEquals(substr_count($html, '<td '), substr_count($html, implode(' ', $classes)));
     }
 
-    public function testResultClassesHtml()
-    {
-        $this->createMultipleUsers(2);
-        $classes = ['test-custom-class'];
-        $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)
-            ->routes(['index' => ['name' => 'users.index']])
-            ->resultClasses($classes);
-        $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
-        $this->assertEquals(substr_count($html, 'result"'), substr_count($html, implode(' ', $classes)));
-    }
-
     public function testColumnClassesHtml()
     {
         $this->createMultipleUsers(2);
@@ -166,6 +152,19 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->classes($classes);
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
+    }
+
+    public function testResultClassesHtml()
+    {
+        $this->createMultipleUsers(2);
+        $classes = ['test-custom-class'];
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name');
+        $table->result()->classes($classes);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));

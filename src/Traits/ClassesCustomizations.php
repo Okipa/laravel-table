@@ -13,7 +13,6 @@ trait ClassesCustomizations
     public $trClasses;
     public $thClasses;
     public $tdClasses;
-    public $resultClasses;
     public $rowsConditionalClasses;
 
     /**
@@ -91,20 +90,6 @@ trait ClassesCustomizations
     }
 
     /**
-     * Override default table result cells classes.
-     *
-     * @param array $resultClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
-    public function resultClasses(array $resultClasses): Table
-    {
-        $this->resultClasses = $resultClasses;
-
-        return $this;
-    }
-
-    /**
      * Set rows classes when the given conditions are respected.
      * The closure let you manipulate the following attribute : $model.
      *
@@ -135,7 +120,6 @@ trait ClassesCustomizations
         $this->trClasses = config('laravel-table.classes.tr');
         $this->thClasses = config('laravel-table.classes.th');
         $this->tdClasses = config('laravel-table.classes.td');
-        $this->resultClasses = config('laravel-table.classes.result');
         $this->rowsConditionalClasses = new Collection();
     }
 }

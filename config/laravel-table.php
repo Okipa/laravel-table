@@ -8,7 +8,7 @@ return [
         'tr'        => [],
         'th'        => ['align-middle'],
         'td'        => ['align-middle'],
-        'result'    => ['table-secondary'],
+        'results'    => ['table-secondary'],
     ],
 
     'icon' => [
