@@ -121,7 +121,7 @@ class SearchTest extends LaravelTableTestCase
         $this->routes(['companies'], ['index']);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
@@ -155,7 +155,7 @@ class SearchTest extends LaravelTableTestCase
         $this->routes(['companies'], ['index']);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
@@ -176,7 +176,7 @@ class SearchTest extends LaravelTableTestCase
         $this->routes(['companies'], ['index']);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->join('users_test as aliasesUserTable', 'aliasesUserTable.id', '=', 'companies_test.owner_id');
             });
@@ -193,7 +193,7 @@ class SearchTest extends LaravelTableTestCase
         $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index'],])
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
@@ -220,7 +220,7 @@ class SearchTest extends LaravelTableTestCase
         $customRequest = (new Request)->merge(['rows' => 5, 'search' => $searchedValue, 'page' => 2]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
@@ -243,7 +243,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect(\DB::raw('users_test.name || " "|| users_test.email as owner'));
                 $query->leftJoin('users_test', 'users_test.id', '=', 'companies_test.owner_id');
@@ -267,7 +267,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect(\DB::raw('userAliasedTable.name || " "|| userAliasedTable.email as owner'));
                 $query->leftJoin('users_test as unusedAlias', 'unusedAlias.id', '=', 'companies_test.owner_id');
@@ -294,7 +294,7 @@ class SearchTest extends LaravelTableTestCase
         $this->routes(['companies'], ['index']);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function($query) {
                 $query->select('companies_test.*');
                 $query->addSelect(\DB::raw('userAliasedTable.name || " "|| userAliasedTable.email as owner'));
                 $query->leftJoin('users_test as unusedAlias', 'unusedAlias.id', '=', 'companies_test.owner_id');
@@ -373,16 +373,19 @@ class SearchTest extends LaravelTableTestCase
             'password' => Hash::make('secret'),
         ]);
         $companyAlpha = (new Company)->create([
-            'name'     => 'Company Alpha',
             'owner_id' => $userAlpha->id,
+            'name'     => 'Company Alpha',
+            'turnover' => rand(1000, 99999),
         ]);
         $companyBeta = (new Company)->create([
-            'name'     => 'Company Beta',
             'owner_id' => $userBeta->id,
+            'name'     => 'Company Beta',
+            'turnover' => rand(1000, 99999),
         ]);
         $companyCharlie = (new Company)->create([
-            'name'     => 'Company Charlie',
             'owner_id' => $userCharlie->id,
+            'name'     => 'Company Charlie',
+            'turnover' => rand(1000, 99999),
         ]);
         $this->createMultipleCompanies(3);
         $this->routes(['users'], ['index']);
@@ -391,7 +394,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest)
-            ->query(function ($query) use ($companyBeta) {
+            ->query(function($query) use ($companyBeta) {
                 $query->select('users_test.*');
                 $query->join('companies_test', 'companies_test.owner_id', '=', 'users_test.id');
                 $query->where('companies_test.id', $companyBeta->id);
@@ -405,7 +408,7 @@ class SearchTest extends LaravelTableTestCase
     public function testCaseInsensitiveTestHtml()
     {
         $users = $this->createMultipleUsers(10);
-        $users->each(function ($user, $key) {
+        $users->each(function($user, $key) {
             if ($key === 0) {
                 $user->update(['name' => 'alpha']);
             } elseif ($key === 1) {
@@ -423,7 +426,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->searchable();
         $table->column('email')->title('Email')->searchable();
         $table->render();
-        $this->assertEquals($users->filter(function ($user) {
+        $this->assertEquals($users->filter(function($user) {
             return in_array($user->name, ['alpha', 'ALPHA']);
         })->toArray(), $table->list->toArray()['data']);
     }

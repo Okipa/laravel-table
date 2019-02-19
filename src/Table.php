@@ -37,6 +37,7 @@ class Table implements Htmlable
     public $destroyConfirmationClosure;
     public $appendedValues = [];
     public $appendedHiddenFields = [];
+    public $results;
 
     /**
      * Table constructor.
@@ -52,6 +53,7 @@ class Table implements Htmlable
         $this->request = request();
         $this->columns = new Collection();
         $this->disableRows = new Collection();
+        $this->results = new Collection();
     }
 
     /**
@@ -151,7 +153,7 @@ class Table implements Htmlable
      * The closure let you manipulate the following attribute : $model.
      *
      * @param \Closure $rowDisableClosure
-     * @param array $classes
+     * @param array    $classes
      *
      * @return \Okipa\LaravelTable\Table
      */
@@ -206,7 +208,7 @@ class Table implements Htmlable
      * Get the route from its key.
      *
      * @param string $routeKey
-     * @param array $params
+     * @param array  $params
      *
      * @return string
      */
@@ -352,6 +354,7 @@ class Table implements Htmlable
         $this->applySortClauses($query);
         $this->paginateList($query);
         $this->applyClosuresOnPaginatedList();
+        $this->applyResultsClauses();
     }
 
     /**
@@ -378,8 +381,8 @@ class Table implements Htmlable
     protected function applySearchClauses(Builder $query): void
     {
         if ($searched = $this->request->search) {
-            $query->where(function ($subQuery) use ($searched) {
-                $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
+            $query->where(function($subQuery) use ($searched) {
+                $this->searchableColumns->map(function(Column $column, int $columnKey) use ($subQuery, $searched) {
                     $databaseSearchedTable = $column->databaseSearchedTable
                         ? $column->databaseSearchedTable
                         : $column->databaseDefaultTable;
@@ -443,11 +446,11 @@ class Table implements Htmlable
      */
     protected function applyClosuresOnPaginatedList(): void
     {
-        $this->list->getCollection()->transform(function ($model) {
-            $this->rowsConditionalClasses->each(function ($row) use ($model) {
+        $this->list->getCollection()->transform(function($model) {
+            $this->rowsConditionalClasses->each(function($row) use ($model) {
                 $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
-            $this->disableRows->each(function ($row) use ($model) {
+            $this->disableRows->each(function($row) use ($model) {
                 $model->disabledClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
             if ($this->destroyConfirmationClosure) {
@@ -456,6 +459,20 @@ class Table implements Htmlable
 
             return $model;
         });
+    }
+
+    protected function applyResultsClauses()
+    {
+        $displayedList = $this->list->getCollection();
+        $resultsRowsCount = $this->columns->max('resultClosures')->count();
+        for($ii = 0; $ii < $resultsRowsCount; $ii++) {
+            $resultRow = new Collection();
+            foreach ($this->columns as $column) {
+                $result = $column->resultClosures->get($ii) ? $column->resultClosures->get($ii)($displayedList) : null;
+                $resultRow->push($result);
+            }
+            $this->results->push($resultRow);
+        };
     }
 
     /**

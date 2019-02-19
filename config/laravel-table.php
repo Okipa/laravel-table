@@ -8,6 +8,7 @@ return [
         'tr'        => [],
         'th'        => ['align-middle'],
         'td'        => ['align-middle'],
+        'result'    => ['bg-dark'],
     ],
 
     'icon' => [
@@ -34,10 +35,10 @@ return [
     ],
 
     'template' => [
-        'table'                 => 'bootstrap.table',
-        'thead'                 => 'bootstrap.thead',
-        'tbody'                 => 'bootstrap.tbody',
-        'tfoot'                 => 'bootstrap.tfoot',
+        'table' => 'bootstrap.table',
+        'thead' => 'bootstrap.thead',
+        'tbody' => 'bootstrap.tbody',
+        'tfoot' => 'bootstrap.tfoot',
     ],
 
 ];

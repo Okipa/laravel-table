@@ -130,6 +130,15 @@
                 @endif
             </tr>
         @endforeach
+        @foreach($table->results as $resultRow)
+            <tr {{ classTag($table->trClasses, 'results') }}>
+                @foreach($resultRow as $result)
+                    <td {{ classTag($table->tdClasses, $table->resultClasses, 'result') }}>
+                        {!! $result !!}
+                    </td>
+                @endforeach
+            </tr>
+        @endforeach
     @endif
 </tbody>
 

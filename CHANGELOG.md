@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6](https://github.com/Okipa/laravel-table/releases/tag/1.0.6)
+2019-02-19
+- Added the capacity to add some result outputs with the `->result()` method the Column objects.
+- Added the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
+
 ## [1.0.5](https://github.com/Okipa/laravel-table/releases/tag/1.0.5)
 2019-02-18
 - Updated `thead` and `tfoot` components in order to improve the responsive behavior.

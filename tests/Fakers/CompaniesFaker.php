@@ -32,6 +32,7 @@ trait CompaniesFaker
         return [
             'name'     => $this->faker->company,
             'owner_id' => rand(1, $max),
+            'turnover' => rand(1000, 99999),
         ];
     }
 }

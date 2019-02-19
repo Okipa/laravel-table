@@ -15,8 +15,9 @@ class CreateCompaniesTestTable extends Migration
     {
         Schema::create('companies_test', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->unsignedInteger('owner_id')->nullable();
+            $table->string('name');
+            $table->integer('turnover');
             $table->timestamps();
         });
     }
