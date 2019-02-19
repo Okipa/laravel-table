@@ -626,7 +626,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 ```php
 $table = (new \Okipa\LaravelTable\Table)->model(App\Company::class)->rowsNumber(2);
 $table->column()->result(function($displayedList) {
-    // display the amount of the 2 displayed companies
+    // display the turnover of the 2 displayed companies
     return 'Selected : ' . $displayedList->sum('turnover') . '$';
 })->result(function() {
     // display the turnover of all companies
