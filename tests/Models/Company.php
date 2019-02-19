@@ -20,6 +20,7 @@ class Company extends Model
     protected $fillable = [
         'name',
         'owner_id',
+        'turnover'
     ];
     
     public function owner()

@@ -48,6 +48,14 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->assertEquals($classes, $table->tdClasses);
     }
 
+    public function testResultClassesAttribute()
+    {
+        $classes = ['test-custom-class'];
+        $table = (new Table)->model(User::class)->resultClasses($classes);
+        $table->column();
+        $this->assertEquals($classes, $table->resultClasses);
+    }
+
     public function testColumnClassesAttribute()
     {
         $classes = ['test-custom-class'];
@@ -56,7 +64,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->assertEquals($classes, $table->columns->first()->columnClasses);
     }
 
-    public function testRowClassesAttribute()
+    public function testRowConditionalClassesAttribute()
     {
         $closure = function ($model) {
             return $model->id === 1;
@@ -137,6 +145,20 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->assertEquals(substr_count($html, '<td '), substr_count($html, implode(' ', $classes)));
     }
 
+    public function testResultClassesHtml()
+    {
+        $this->createMultipleUsers(2);
+        $classes = ['test-custom-class'];
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->resultClasses($classes);
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $this->assertEquals(substr_count($html, 'result"'), substr_count($html, implode(' ', $classes)));
+    }
+
     public function testColumnClassesHtml()
     {
         $this->createMultipleUsers(2);
@@ -149,7 +171,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
 
-    public function testRowClassesHtml()
+    public function testRowConditionalClassesHtml()
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $users = $this->createMultipleUsers(5);

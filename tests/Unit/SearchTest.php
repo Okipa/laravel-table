@@ -373,16 +373,19 @@ class SearchTest extends LaravelTableTestCase
             'password' => Hash::make('secret'),
         ]);
         $companyAlpha = (new Company)->create([
-            'name'     => 'Company Alpha',
             'owner_id' => $userAlpha->id,
+            'name'     => 'Company Alpha',
+            'turnover' => rand(1000, 99999),
         ]);
         $companyBeta = (new Company)->create([
-            'name'     => 'Company Beta',
             'owner_id' => $userBeta->id,
+            'name'     => 'Company Beta',
+            'turnover' => rand(1000, 99999),
         ]);
         $companyCharlie = (new Company)->create([
-            'name'     => 'Company Charlie',
             'owner_id' => $userCharlie->id,
+            'name'     => 'Company Charlie',
+            'turnover' => rand(1000, 99999),
         ]);
         $this->createMultipleCompanies(3);
         $this->routes(['users'], ['index']);

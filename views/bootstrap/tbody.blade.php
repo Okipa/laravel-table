@@ -3,7 +3,8 @@
         <tr {{ classTag($table->trClasses) }}>
             <td {{ classTag($table->tdClasses, 'text-center', 'p-4') }}
                 colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') 
-                    || $table->isRouteDefined('destroy') ? 1 : 0) }}">
+                    || $table->isRouteDefined('destroy') ? 1 : 0) }}"
+                scope="row">
                 <span class="text-info">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>
                 </span>
@@ -13,7 +14,7 @@
     @else
         @foreach($table->list as $model)
             <tr {{ classTag($table->trClasses, $model->conditionnalClasses, $model->disabledClasses) }}>
-                @foreach($table->columns as $column)
+                @foreach($table->columns as $columnKey => $column)
                     @php
                         $value = $model->{$column->databaseDefaultColumn};
                         $customValue = $column->valueClosure ? ($column->valueClosure)($model, $column) : null;
@@ -27,7 +28,8 @@
                         $showLink = $link && ($customValue || $value || $showIcon);
                         $showButton = $column->buttonClasses && ($value || $customValue || $showIcon);
                     @endphp
-                    <td {{ classTag($table->tdClasses, $column->columnClasses) }}>
+                    <td {{ classTag($table->tdClasses, $column->columnClasses) }}
+                        {{ htmlAttributes($columnKey === 0 ? ['scope' => 'row'] : null) }}>
                         {{-- custom html element --}}
                         @if($html)
                             {!! $html !!}
@@ -128,6 +130,16 @@
                         </div>
                     </td>
                 @endif
+            </tr>
+        @endforeach
+        @foreach($table->results as $resultRow)
+            <tr {{ classTag($table->trClasses, 'results') }}>
+                @foreach($resultRow as $resultKey => $result)
+                    <td {{ classTag($table->tdClasses, $table->resultClasses, 'result') }}
+                        {{ htmlAttributes($resultKey === 0 ? ['scope' => 'row'] : null) }}>
+                        {!! $result !!}
+                    </td>
+                @endforeach
             </tr>
         @endforeach
     @endif

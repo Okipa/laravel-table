@@ -4,6 +4,7 @@ namespace Okipa\LaravelTable;
 
 use Closure;
 use ErrorException;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class Column
@@ -24,6 +25,7 @@ class Column
     public $icon;
     public $displayIconWhenNoValue;
     public $columnClasses;
+    public $resultClosures;
 
     /**
      * \Okipa\LaravelTable\Column constructor.
@@ -37,6 +39,7 @@ class Column
         $this->databaseDefaultTable = $table->model->getTable();
         $this->databaseDefaultColumn = $databaseColumn;
         $this->title = $databaseColumn ? __('validation.attributes.' . $databaseColumn) : null;
+        $this->resultClosures = new Collection();
     }
 
     /**
@@ -239,6 +242,22 @@ class Column
     {
         $this->columnClasses = $classes;
 
+        return $this;
+    }
+
+    /**
+     * Set a result output that will be displayed under the column (html accepted).
+     * The closure let you manipulate the following attributes : $displayedList.
+     * You can call this method as much time as you need on a column to append the wished number of results.
+     *
+     * @param \Closure $resultClosure
+     *
+     * @return \Okipa\LaravelTable\Column
+     */
+    public function result(Closure $resultClosure): Column
+    {
+        $this->resultClosures->push($resultClosure);
+        
         return $this;
     }
 }

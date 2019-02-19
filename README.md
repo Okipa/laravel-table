@@ -54,6 +54,7 @@ Give it a try !
   - [->stringLimit()](#-stringlimit)
   - [->value()](#-value)
   - [->html()](#-html)
+  - [->result()](#-result)
 - [Tips](#tips)
 - [Usage examples](#usage-examples)
   - [Basic](#basic)
@@ -281,16 +282,29 @@ public function index(Request $request) {
 ```
 
 ### `->tdClasses()`
-> Override default table tr classes.  
-> The default th classes are defined in the `config('laravel-table.classes.th')` config value.
+> Override default table td classes.  
+> The default td classes are defined in the `config('laravel-table.classes.td')` config value.
 
 **Note :**
-- Signature : `thClasses(array $thClasses): \Okipa\LaravelTable\Table`
+- Signature : `tdClasses(array $tdClasses): \Okipa\LaravelTable\Table`
 - Optional
 
 **Use case example :**
 ```php
-(new \Okipa\LaravelTable\Table)->thClasses(['set', 'your', 'classes']);
+(new \Okipa\LaravelTable\Table)->tdClasses(['set', 'your', 'classes']);
+```
+
+### `->resultClasses()`
+> Override default table result cells classes.  
+> The default result cells classes are defined in the `config('laravel-table.classes.result')` config value.
+
+**Note :**
+- Signature : `resultClasses(array $resultClasses): \Okipa\LaravelTable\Table`
+- Optional
+
+**Use case example :**
+```php
+(new \Okipa\LaravelTable\Table)->resultClasses(['set', 'your', 'classes']);
 ```
 
 ### `->rowsConditionalClasses()`
@@ -482,14 +496,14 @@ destroyButton.click(function(e){
 // example 1
 (new \Okipa\LaravelTable\Table)->column('email')->searchable();
 // example 2
-$table = (new \Okipa\LaravelTable\Table)->model(\App\User::class)->query(function($query){
+$table = (new \Okipa\LaravelTable\Table)->model(\App\User::class)->query(function($query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('companies', 'companies.owner_id', '=', 'users.id');
 });
 $table->column('company')->searchable('companies', ['name']);
 // example 3
-$table = (new \Okipa\LaravelTable\Table)->model(\App\User::class)->query(function($query){
+$table = (new \Okipa\LaravelTable\Table)->model(\App\User::class)->query(function($query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
     $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');
@@ -538,7 +552,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 // example 2
 (new \Okipa\LaravelTable\Table)->column()->link(route('news.index'));
 // example 3
-(new \Okipa\LaravelTable\Table)->column()->link(function($news){
+(new \Okipa\LaravelTable\Table)->column()->link(function($news) {
     return route('news.show', $news);
 });
 ```
@@ -579,7 +593,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 
 **Use case example :**
 ```php
-(new \Okipa\LaravelTable\Table)->column()->value(function($user){
+(new \Okipa\LaravelTable\Table)->column()->value(function($user) {
     return config('users.type.' . $user->type_id);
 });
 ```
@@ -594,9 +608,30 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 
 **Use case example :**
 ```php
-(new \Okipa\LaravelTable\Table)->column()->html(function($user){
+(new \Okipa\LaravelTable\Table)->column()->html(function($user) {
     return '<div>' . $user->first_name . '</div>';
 });
+```
+
+### `->result()`
+> Set a result output that will be displayed under the column (html accepted).  
+> The closure let you manipulate the following attributes : `$displayedList`.  
+> Each call of this method will append a results rows on the table.
+
+**Note :**
+- Signature : `result(Closure $resultClosure): \Okipa\LaravelTable\Column`
+- Optional
+
+**Use case example :**
+```php
+$table = (new \Okipa\LaravelTable\Table)->model(App\Company::class)->rowsNumber(2);
+$table->column()->result(function($displayedList) {
+    // display the turnover of the 2 displayed companies
+    return 'Selected : ' . $displayedList->sum('turnover') . '$';
+})->result(function() {
+    // display the turnover of all companies
+    return 'Total : ' . (new App\Company)->all()->sum('turnover') . '$';
+};
 ```
 
 ------------------------------------------------------------------------------------------------------------------------
