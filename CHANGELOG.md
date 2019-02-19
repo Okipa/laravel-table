@@ -4,6 +4,7 @@
 2019-02-19
 - Added the capacity to add some result outputs with the `->result()` method the Column objects.
 - Added the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
+- Improved accessibility by adding `scope` attributes to correct td html tags.
 
 ## [1.0.5](https://github.com/Okipa/laravel-table/releases/tag/1.0.5)
 2019-02-18
