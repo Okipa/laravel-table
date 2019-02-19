@@ -249,7 +249,7 @@ class Column
      * Set a result output that will be displayed under the column (html accepted).
      * The closure let you manipulate the following attributes : $displayedList.
      * You can call this method as much time as you need on a column to append the wished number of results.
-     * 
+     *
      * @param \Closure $resultClosure
      *
      * @return \Okipa\LaravelTable\Column

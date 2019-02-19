@@ -11,7 +11,7 @@ class ResultsTest extends LaravelTableTestCase
 {
     public function testSetResultsAttribute()
     {
-        $closure = function($displayedList) {
+        $closure = function ($displayedList) {
             $displayedList->test = 'hello';
         };
         $table = (new Table)->model(User::class);
@@ -27,7 +27,7 @@ class ResultsTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->column('turnover')->result(function($displayedList) {
+        $table->column('turnover')->result(function ($displayedList) {
             return $displayedList->sum('turnover');
         });
         $table->render();
@@ -45,9 +45,9 @@ class ResultsTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(2);
         $table->column('name');
-        $table->column('turnover')->result(function($displayedList) {
+        $table->column('turnover')->result(function ($displayedList) {
             return $displayedList->sum('turnover');
-        })->result(function() {
+        })->result(function () {
             return (new Company)->all()->sum('turnover');
         });
         $table->render();
