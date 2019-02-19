@@ -367,6 +367,7 @@ class Table implements Htmlable
         $this->applySortClauses($query);
         $this->paginateList($query);
         $this->applyClosuresOnPaginatedList();
+        $this->applyResultsClauses();
     }
 
     /**
@@ -471,6 +472,20 @@ class Table implements Htmlable
 
             return $model;
         });
+    }
+
+    protected function applyResultsClauses()
+    {
+        $displayedList = $this->list->getCollection();
+        $resultsRowsCount = $this->columns->max('resultClosures')->count();
+        for ($ii = 0; $ii < $resultsRowsCount; $ii++) {
+            $resultRow = new Collection();
+            foreach ($this->columns as $column) {
+                $result = $column->resultClosures->get($ii) ? $column->resultClosures->get($ii)($displayedList) : null;
+                $resultRow->push($result);
+            }
+            $this->results->push($resultRow);
+        };
     }
 
     /**

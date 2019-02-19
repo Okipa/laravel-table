@@ -4,7 +4,6 @@ namespace Okipa\LaravelTable;
 
 use Closure;
 use ErrorException;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class Column
