@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.7](https://github.com/Okipa/laravel-table/releases/tag/1.0.7)
+2019-02-19
+- **Breaking change :** reverted last tag features => removed the capacity to add some result outputs with the `->result()` method the Column objects.
+- **Breaking change :** reverted last tag features => removed the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
+- Added the capacity to append some results objects to the table with the `->result()` method with the following methods :
+  - `->title()` : Set the result row title.
+  - `->html()` : Display a HTML output for the result row. The closure let you manipulate the following attributes : $displayedList.
+  - `->classes()` : Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the config('laravel-table.classes.results') value.
+- Added the capacity to manage a custom results template path in the config and with the `->$resultsComponentPath()` method.
+
 ## [1.0.6](https://github.com/Okipa/laravel-table/releases/tag/1.0.6)
 2019-02-19
 - Added the capacity to add some result outputs with the `->result()` method the Column objects.
