@@ -111,7 +111,7 @@ Then, play with the templates in your `resources/views/vendor/laravel-table` dir
 ## Table API
 :warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#table-column) and the  [->result()](#table-result)method** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
 
-<h3 id="table-model">`->model()`</h3>  
+<h3 id="table-model">->model()</h3>  
 > Set the model used during the table generation.
 
 **Notes:**
