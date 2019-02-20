@@ -11,7 +11,7 @@
             <td {{ classTag($table->tdClasses, $result->classes) }} scope="row">
                 {{ $result->title }}
             </td>
-            <td {{ classTag($table->tdClasses, $result->classes) }} {{ htmlAttributes($table->columnsCount() > 2 ? ['colspan' => $table->columnsCount() - 1] : null) }}>
+            <td {{ classTag($table->tdClasses, $result->classes, 'text-right') }} {{ htmlAttributes($table->columnsCount() > 2 ? ['colspan' => $table->columnsCount() - 1] : null) }}>
                 {!! $result->htmlClosure ? ($result->htmlClosure)($table->list->getCollection()) : null !!}
             </td>
         @endif
