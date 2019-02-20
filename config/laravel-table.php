@@ -35,10 +35,11 @@ return [
     ],
 
     'template' => [
-        'table' => 'bootstrap.table',
-        'thead' => 'bootstrap.thead',
-        'tbody' => 'bootstrap.tbody',
-        'tfoot' => 'bootstrap.tfoot',
+        'table'   => 'bootstrap.table',
+        'thead'   => 'bootstrap.thead',
+        'tbody'   => 'bootstrap.tbody',
+        'results' => 'bootstrap.results',
+        'tfoot'   => 'bootstrap.tfoot',
     ],
 
 ];

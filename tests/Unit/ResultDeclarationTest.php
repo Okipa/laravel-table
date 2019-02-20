@@ -71,4 +71,54 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertNotContains('result', $html);
     }
+    
+    public function testOneColumnResultColspanTest()
+    {
+        $this->createMultipleUsers(10);
+        $this->createMultipleCompanies(5);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name');
+        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+            return $displayedList->sum('turnover');
+        });
+        $table->render();
+        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
+        $this->assertEquals(1, substr_count($html, '<td'));
+    }
+
+    public function testTwoColumnResultColspanTest()
+    {
+        $this->createMultipleUsers(10);
+        $this->createMultipleCompanies(5);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name');
+        $table->column('turnover');
+        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+            return $displayedList->sum('turnover');
+        });
+        $table->render();
+        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
+        $this->assertEquals(2, substr_count($html, '<td'));
+        $this->assertNotContains('colspan', $html);
+    }
+
+    public function testMoreThanTwoColumnResultColspanTest()
+    {
+        $this->createMultipleUsers(10);
+        $this->createMultipleCompanies(5);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('owner_id');
+        $table->column('name');
+        $table->column('turnover');
+        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+            return $displayedList->sum('turnover');
+        });
+        $table->render();
+        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
+        $this->assertEquals(2, substr_count($html, '<td'));
+        $this->assertContains('colspan="2"', $html);
+    }
 }

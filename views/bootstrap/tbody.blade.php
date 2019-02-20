@@ -132,16 +132,7 @@
                 @endif
             </tr>
         @endforeach
-        @foreach($table->results as $result)
-            <tr {{ classTag($table->trClasses, 'result') }}>
-                <td {{ classTag($table->tdClasses, $result->classes) }} scope="row">
-                    {{ $result->title }}
-                </td>
-                <td {{ classTag($table->tdClasses, $result->classes) }}>
-                    {!! $result->htmlClosure ? ($result->htmlClosure)($table->list->getCollection()) : null !!}
-                </td>
-            </tr>
-        @endforeach
+        @include('laravel-table::' . $table->resultsComponentPath)
     @endif
 </tbody>
 

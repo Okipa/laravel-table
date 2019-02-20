@@ -40,6 +40,7 @@ Give it a try !
   - [->tableTemplate()](#-tabletemplate)
   - [->theadTemplate()](#-theadtemplate)
   - [->tbodyTemplate()](#-tbodytemplate)
+  - [->resultsTemplate()](#-resultstemplate)
   - [->tfootTemplate()](#-tfoottemplate)
   - [->column()](#-column)
   - [->result()](#-result)
@@ -401,6 +402,19 @@ destroyButton.click(function(e){
 **Use case example :**
 ```php
 (new \Okipa\LaravelTable\Table)->tbodyTemplate('tailwindCss.tbody');
+```
+
+### `->resultsTemplate()`
+> Set a custom template path for the results component.  
+> The default results template path is defined in the `config('laravel-table.template.results')` config value.
+
+**Note :**
+- Signature : `resultsTemplate(string $resultsComponentPath): \Okipa\LaravelTable\Table`
+- Optional
+
+**Use case example :**
+```php
+(new \Okipa\LaravelTable\Table)->resultsComponentPath('tailwindCss.results');
 ```
 
 ### `->tfootTemplate()`
