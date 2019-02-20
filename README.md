@@ -22,44 +22,44 @@ Give it a try !
 - [Customize translations](#customize-translations)
 - [Customize templates](#customize-templates)
 - [Table API](#table-api)
-  - [->model()](#-model)
-  - [->request()](#-request)
-  - [->routes()](#-routes)
-  - [->destroyConfirmationHtmlAttributes()](#-destroyconfirmationhtmlattributes)
-  - [->rowsNumber()](#-rowsnumber)
-  - [->rowsNumberSelectionActivation()](#-rowsnumberselectionactivation)
-  - [->query()](#-query)
-  - [->appends()](#-appends)
-  - [->containerClasses()](#-containerclasses)
-  - [->tableClasses()](#-tableclasses)
-  - [->trClasses()](#-trclasses)
-  - [->thClasses()](#-thclasses)
-  - [->tdClasses()](#-tdclasses)
-  - [->rowsConditionalClasses()](#-rowsconditionalclasses)
-  - [->disableRows()](#-disableRows)
-  - [->tableTemplate()](#-tabletemplate)
-  - [->theadTemplate()](#-theadtemplate)
-  - [->tbodyTemplate()](#-tbodytemplate)
-  - [->resultsTemplate()](#-resultstemplate)
-  - [->tfootTemplate()](#-tfoottemplate)
-  - [->column()](#-column)
-  - [->result()](#-result)
+  - [->model()](#table-model)
+  - [->request()](#table-request)
+  - [->routes()](#table-routes)
+  - [->destroyConfirmationHtmlAttributes()](#table-destroyconfirmationhtmlattributes)
+  - [->rowsNumber()](#table-rowsnumber)
+  - [->rowsNumberSelectionActivation()](#table-rowsnumberselectionactivation)
+  - [->query()](#table-query)
+  - [->appends()](#table-appends)
+  - [->containerClasses()](#table-containerclasses)
+  - [->tableClasses()](#table-tableclasses)
+  - [->trClasses()](#table-trclasses)
+  - [->thClasses()](#table-thclasses)
+  - [->tdClasses()](#table-tdclasses)
+  - [->rowsConditionalClasses()](#table-rowsconditionalclasses)
+  - [->disableRows()](#table-disableRows)
+  - [->tableTemplate()](#table-tabletemplate)
+  - [->theadTemplate()](#table-theadtemplate)
+  - [->tbodyTemplate()](#table-tbodytemplate)
+  - [->resultsTemplate()](#table-resultstemplate)
+  - [->tfootTemplate()](#table-tfoottemplate)
+  - [->column()](#table-column)
+  - [->result()](#table-result)
 - [Column API](#column-api)
-  - [->classes()](#-classes)
-  - [->title()](#-title)
-  - [->sortable()](#-sortable)
-  - [->searchable()](#-searchable)
-  - [->dateTimeFormat()](#-datetimeformat)
-  - [->button()](#-button)
-  - [->link()](#-link)
-  - [->icon()](#-icon)
-  - [->stringLimit()](#-stringlimit)
+  - [->classes()](#column-classes)
+  - [->title()](#column-title)
+  - [->sortable()](#column-sortable)
+  - [->searchable()](#column-searchable)
+  - [->dateTimeFormat()](#column-datetimeformat)
+  - [->button()](#column-button)
+  - [->link()](#column-link)
+  - [->icon()](#column-icon)
+  - [->stringLimit()](#column-stringlimit)
   - [->value()](#-value)
   - [->html()](#-html)
 - [Result API](#result-api)
-  - ->title()
-  - ->html()
-  - ->classes()
+  - [->title()](#result-title)
+  - [->html()](#result-html)
+  - [->classes()](#result-classes)
 - [Tips](#tips)
 - [Usage examples](#usage-examples)
   - [Basic](#basic)
@@ -109,9 +109,9 @@ Then, play with the templates in your `resources/views/vendor/laravel-table` dir
 ------------------------------------------------------------------------------------------------------------------------
 
 ## Table API
-:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#-column) and the  [->result()](#-result)method** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
+:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#table-column) and the  [->result()](#table-result)method** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
 
-### `->model()`
+### [`->model()`](#table-model)
 > Set the model used during the table generation.
 
 **Notes:**
@@ -123,7 +123,7 @@ Then, play with the templates in your `resources/views/vendor/laravel-table` dir
 (new \Okipa\LaravelTable\Table)->model(\App\News::class);
 ```
 
-### `->request()`
+### [`->request()`](#table-request)
 > Set the request used for the table generation.
 
 **Notes:**
@@ -139,7 +139,7 @@ public function index(Request $request) {
 }
 ```
 
-### `->routes()`
+### [`->routes()`](#table-route)
 > Set the routes used during the table generation.  
 > The routes declarations will be used for the following features :
 > - `index` (required) : used for the rows number definition, sort and search features.
@@ -173,7 +173,7 @@ public function index(Request $request) {
 ]);
 ```
 
-### `->rowsNumber`
+### [`->rowsNumber`](#table-rowsNumber)
 > Override the number of rows to display on the table.  
 > The default number of displayed rows is defined in the `config('laravel-table.rows.number.default')` config value.
 
@@ -186,7 +186,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->rowsNumber(50);
 ```
 
-### `->rowsNumberSelectionActivation()`
+### [`->rowsNumberSelectionActivation()`](#table-rowsNumberSelectionActivation)
 > Override the default rows number selection activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
 > The default rows number selection activation status is managed by the `config('laravel-table.rows.number.selection')` value.
@@ -200,7 +200,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->rowsNumberSelectionActivation(false);
 ```
 
-### `->query()`
+### [`->query()`](#table-query)
 > Set the query closure that will be executed during the table generation.  
 > For example, you can define your joined tables here.  
 > The closure let you manipulate the following attribute : `$query`.
@@ -218,7 +218,7 @@ public function index(Request $request) {
 });
 ```
 
-### `->appends()`
+### [`->appends()`](#table-appends)
 > Add an array of arguments to append to the paginator and to the following table actions :
 > - row number selection
 > - searching
@@ -234,7 +234,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->appends(request()->only('status'));
 ```
 
-### `->containerClasses()`
+### [`->containerClasses()`](#table-containerClasses)
 > Override default table container classes.  
 > The default container classes are defined in the `config('laravel-table.classes.container')` config value.
 
@@ -247,7 +247,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->containerClasses(['set', 'your', 'classes']);
 ```
 
-### `->tableClasses()`
+### [`->tableClasses()`](#table-containerClasses)
 > Override default table classes.  
 > The default table classes are defined in the `config('laravel-table.classes.table')` config value.
 
@@ -260,7 +260,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->tableClasses(['set', 'your', 'classes']);
 ```
 
-### `->trClasses()`
+### [`->trClasses()`](#table-trClasses)
 > Override default table tr classes.  
 > The default tr classes are defined in the `config('laravel-table.classes.tr')` config value.
 
@@ -273,7 +273,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->trClasses(['set', 'your', 'classes']);
 ```
 
-### `->thClasses()`
+### [`->thClasses()`](#table-thClasses)
 > Override default table tr classes.  
 > The default th classes are defined in the `config('laravel-table.classes.th')` config value.
 
@@ -286,7 +286,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->thClasses(['set', 'your', 'classes']);
 ```
 
-### `->tdClasses()`
+### [`->tdClasses()`](#table-tdClasses)
 > Override default table td classes.  
 > The default td classes are defined in the `config('laravel-table.classes.td')` config value.
 
@@ -299,7 +299,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->tdClasses(['set', 'your', 'classes']);
 ```
 
-### `->rowsConditionalClasses()`
+### [`->rowsConditionalClasses()`](#table-rowsConditionalClasses)
 > Set rows classes when the given conditions are respected.  
 > The closure let you manipulate the following attribute : `$model`.
 `
@@ -314,7 +314,7 @@ public function index(Request $request) {
 }, ['set', 'your', 'classes']);
 ```
 
-### `->destroyConfirmationHtmlAttributes()`
+### [`->destroyConfirmationHtmlAttributes()`](#table-destroyConfirmationHtmlAttributes)
 > Define html attributes on the destroy buttons to handle dynamic javascript destroy confirmations.  
 > **Beware :** the management of the destroy confirmation is on you, if you do not setup a javascript treatment to ask a confirmation, the destroy action will be directly executed.
 
@@ -347,7 +347,7 @@ destroyButton.click(function(e){
 })
 ```
 
-### `->disableRows()`
+### [`->disableRows()`](#table-disableRows)
 > Set the disable lines closure that will be executed during the table generation.  
 > The optional second param let you override the classes that will be applied for the disabled lines.  
 > By default, the « config('laravel-table.rows.disabled.classes') » config value is applied.  
@@ -365,7 +365,7 @@ destroyButton.click(function(e){
 }, ['bg-danger', 'text-primary']);
 ```
 
-### `->tableTemplate()`
+### [`->tableTemplate()`](#table-tableTemplate)
 > Set a custom template path for the table component.  
 > The default table template path is defined in the `config('laravel-table.template.table')` config value.
 
@@ -378,7 +378,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->tableTemplate('tailwindCss.table');
 ```
 
-### `->theadTemplate()`
+### [`->theadTemplate()`](#table-theadTemplate)
 > Set a custom template path for the thead component.  
 > The default thead template path is defined in the `config('laravel-table.template.thead')` config value.
 
@@ -391,7 +391,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->theadTemplate('tailwindCss.thead');
 ```
 
-### `->tbodyTemplate()`
+### [`->tbodyTemplate()`](#table-tbodyTemplate)
 > Set a custom template path for the tbody component.  
 > The default tbody template path is defined in the `config('laravel-table.template.tbody')` config value.
 
@@ -404,7 +404,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->tbodyTemplate('tailwindCss.tbody');
 ```
 
-### `->resultsTemplate()`
+### [`->resultsTemplate()`](#table-resultsTemplate)
 > Set a custom template path for the results component.  
 > The default results template path is defined in the `config('laravel-table.template.results')` config value.
 
@@ -417,7 +417,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->resultsComponentPath('tailwindCss.results');
 ```
 
-### `->tfootTemplate()`
+### [`->tfootTemplate()`](#table-tfootTemplate)
 > Set a custom template path for the tfoot component.  
 > The default tfoot template path is defined in the `config('laravel-table.template.tfoot')` config value.
 
@@ -430,7 +430,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->tfootTemplate('tailwindCss.tfoot');
 ```
 
-### `->column()`
+### [`->column()`](#table-column)
 > Add a column that will be displayed in the table.  
 > The column key is optional if the column is not declared as sortable or searchable.
 
@@ -444,7 +444,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->column('email');
 ```
 
-### `->result()`
+### [`->result()`](#table-result)
 > Add a result row that will be displayed at the bottom of the table.  
 
 **Note :**
@@ -460,7 +460,7 @@ destroyButton.click(function(e){
 ## Column API
 :warning: All the column methods are chainable with `\Okipa\LaravelTable\Column` object.
 
-### `->classes()`
+### [`->classes()`](#column-classes)
 > Set the custom classes that will be applied on this column only.
 
 **Note :**
@@ -472,7 +472,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->column()->classes(['font-weight-bold']);
 ```
 
-### `->title()`
+### [`->title()`](#column-title)
 > Set the column title or override the default (`__('validation.attributes.[column key])`) title generated from the column name.
 
 **Note :**
@@ -484,7 +484,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->column()->title('E-mail');
 ```
 
-### `->sortable()`
+### [`->sortable()`](#column-sortable)
 > Make the column sortable.  
 > You also can choose to set the column sorted by default.  
 > If no column is sorted by default, the first one will be automatically sorted.
@@ -500,7 +500,7 @@ destroyButton.click(function(e){
 (new \Okipa\LaravelTable\Table)->column('email')->sortable(true, 'desc');
 ```
 
-### `->searchable()`
+### [`->searchable()`](#column-searchable)
 > Make the column searchable.  
 > The first param allows you to precise the searched database table (can references a database table alias).  
 > The second param allows you to precise the searched database attributes (if not precised, the table database column is searched).
@@ -529,7 +529,7 @@ $table = (new \Okipa\LaravelTable\Table)->model(\App\User::class)->query(functio
 $table->column('company')->searchable('companiesAliasedTable', ['name', 'activity']);
 ```
 
-### `->dateTimeFormat()`
+### [`->dateTimeFormat()`](#column-dateTimeFormat)
 > Set the format for a datetime, date or time database column (optional).  
 > (Carbon::parse($value)->format($format) method is used under the hood).
 
@@ -542,7 +542,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 (new \Okipa\LaravelTable\Table)->column('created_at')->dateTimeFormat('d/m/Y H:i');
 ```
 
-### `->button()`
+### [`->button()`](#column-button)
 > Display the column as a button with the given classes.
 
 **Note :**
@@ -554,7 +554,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 (new \Okipa\LaravelTable\Table)->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
 ```
 
-### `->link()`
+### [`->link()`](#column-link)
 > Wrap the column value into a `<a></a>` component.  
 > You can declare the link as a string or as a closure which will let you manipulate the following attributes : `$model`, `$column`.  
 > If no url is declared, it will be set with the column value.
@@ -575,7 +575,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 });
 ```
 
-### `->icon()`
+### [`->icon()`](#column-icon)
 > Add an icon before the displayed value.  
 > Set the second param as true if you want the icon to be displayed even if the column has no value.
 
@@ -588,7 +588,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 (new \Okipa\LaravelTable\Table)->column('email')->icon('<i class="fas fa-envelope"></i>', true);
 ```
 
-### `->stringLimit()`
+### [`->stringLimit()`](#column-stringLimit)
 > Set the string value display limitation.  
 > Shows "..." when the limit is reached.
 
@@ -601,7 +601,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 (new \Okipa\LaravelTable\Table)->column('email')->stringLimit(30);
 ```
 
-### `->value()`
+### [`->value()`](#column-value)
 > Display a custom value for the column.  
 > The closure let you manipulate the following attributes : `$model`, `$column`.
 
@@ -616,7 +616,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 });
 ```
 
-### `->html()`
+### [`->html()`](#column-html)
 > Display a custom HTML for the column.  
 > The closure let you manipulate the following attributes : `$model`, `$column`.
 
@@ -634,7 +634,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 ## Result API
 :warning: All the result methods are chainable with `\Okipa\LaravelTable\Result` object.
 
-### `->title()`
+### [`->title()`](#result-title)
 > Set the result row title.
 
 **Note :**
@@ -646,7 +646,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 (new \Okipa\LaravelTable\Table)->result()->title('Turnover total');
 ```
 
-### `->html()`
+### [`->html()`](#result-html)
 > Display a HTML output for the result row.  
 > The closure let you manipulate the following attributes : `$displayedList`.
 
@@ -661,7 +661,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 });
 ```
 
-### `->classes()`
+### [`->classes()`](#result-classes)
 > Override the default results classes and apply the given classes only on this result row.  
 > The default result classes are managed by the `config('laravel-table.classes.results')` value.
 
