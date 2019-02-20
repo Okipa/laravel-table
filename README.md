@@ -260,7 +260,7 @@ public function index(Request $request) {
 (new \Okipa\LaravelTable\Table)->containerClasses(['set', 'your', 'classes']);
 ```
 
-<h3 id="table-containerClasses">->tableClasses()</h3>
+<h3 id="table-tableClasses">->tableClasses()</h3>
 
 > Override default table classes.  
 > The default table classes are defined in the `config('laravel-table.classes.table')` config value.
