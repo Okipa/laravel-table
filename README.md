@@ -335,6 +335,7 @@ public function index(Request $request) {
 <h3 id="table-destroyConfirmationHtmlAttributes">->destroyConfirmationHtmlAttributes()</h3>
 
 > Define html attributes on the destroy buttons to handle dynamic javascript destroy confirmations.  
+> The closure let you manipulate the following attribute : `$model`.  
 > **Beware :** the management of the destroy confirmation is on you, if you do not setup a javascript treatment to ask a confirmation, the destroy action will be directly executed.
 
 **Note :**
