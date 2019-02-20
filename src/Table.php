@@ -179,9 +179,22 @@ class Table implements Htmlable
     {
         $this->checkModelIsDefined();
         $column = new Column($this, $databaseColumn);
-        $this->columns[] = $column;
+        $this->columns->push($column);
 
         return $column;
+    }
+
+    /**
+     * Add a result row that will be displayed at the bottom of the table.
+     *
+     * @return \Okipa\LaravelTable\Result
+     */
+    public function result(): Result
+    {
+        $result = new Result;
+        $this->results->push($result);
+
+        return $result;
     }
 
     /**
@@ -354,7 +367,6 @@ class Table implements Htmlable
         $this->applySortClauses($query);
         $this->paginateList($query);
         $this->applyClosuresOnPaginatedList();
-        $this->applyResultsClauses();
     }
 
     /**
@@ -459,20 +471,6 @@ class Table implements Htmlable
 
             return $model;
         });
-    }
-
-    protected function applyResultsClauses()
-    {
-        $displayedList = $this->list->getCollection();
-        $resultsRowsCount = $this->columns->max('resultClosures')->count();
-        for ($ii = 0; $ii < $resultsRowsCount; $ii++) {
-            $resultRow = new Collection();
-            foreach ($this->columns as $column) {
-                $result = $column->resultClosures->get($ii) ? $column->resultClosures->get($ii)($displayedList) : null;
-                $resultRow->push($result);
-            }
-            $this->results->push($resultRow);
-        };
     }
 
     /**

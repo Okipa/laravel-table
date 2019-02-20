@@ -28,7 +28,7 @@
                         $showLink = $link && ($customValue || $value || $showIcon);
                         $showButton = $column->buttonClasses && ($value || $customValue || $showIcon);
                     @endphp
-                    <td {{ classTag($table->tdClasses, $column->columnClasses) }}
+                    <td {{ classTag($table->tdClasses, $column->classes) }}
                         {{ htmlAttributes($columnKey === 0 ? ['scope' => 'row'] : null) }}>
                         {{-- custom html element --}}
                         @if($html)
@@ -132,16 +132,7 @@
                 @endif
             </tr>
         @endforeach
-        @foreach($table->results as $resultRow)
-            <tr {{ classTag($table->trClasses, 'results') }}>
-                @foreach($resultRow as $resultKey => $result)
-                    <td {{ classTag($table->tdClasses, $table->resultClasses, 'result') }}
-                        {{ htmlAttributes($resultKey === 0 ? ['scope' => 'row'] : null) }}>
-                        {!! $result !!}
-                    </td>
-                @endforeach
-            </tr>
-        @endforeach
+        @include('laravel-table::' . $table->resultsComponentPath)
     @endif
 </tbody>
 

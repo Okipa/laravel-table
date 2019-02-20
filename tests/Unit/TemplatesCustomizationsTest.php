@@ -29,6 +29,13 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $this->assertEquals($templatePath, $table->tbodyComponentPath);
     }
 
+    public function testSetResultsTemplateAttribute()
+    {
+        $templatePath = 'results-test';
+        $table = (new Table)->model(User::class)->resultsTemplate($templatePath);
+        $this->assertEquals($templatePath, $table->resultsComponentPath);
+    }
+
     public function testSetTfootTemplateAttribute()
     {
         $templatePath = 'tfoot-test';
@@ -76,6 +83,20 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $this->assertContains('<tbody id="tbody-test">', $html);
+    }
+
+    public function testSetResultsTemplateHtml()
+    {
+        view()->addNamespace('laravel-table', 'tests/views');
+        $this->createMultipleUsers(2);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->theadTemplate('results-test');
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertContains('<tr id="results-test"><td></td></tr>', $html);
     }
 
     public function testSetTfootTemplateHtml()
