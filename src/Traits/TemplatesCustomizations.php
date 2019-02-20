@@ -9,6 +9,7 @@ trait TemplatesCustomizations
     public $tableComponentPath;
     public $theadComponentPath;
     public $tbodyComponentPath;
+    public $resultsComponentPath;
     public $tfootComponentPath;
 
     /**
@@ -57,6 +58,21 @@ trait TemplatesCustomizations
     }
 
     /**
+     * Set a custom template path for the results component.
+     * The default results template path is defined in the config('laravel-table.template.results') config value.
+     *
+     * @param string $resultsComponentPath
+     *
+     * @return \Okipa\LaravelTable\Table
+     */
+    public function resultsTemplate(string $resultsComponentPath): Table
+    {
+        $this->resultsComponentPath = $resultsComponentPath;
+
+        return $this;
+    }
+
+    /**
      * Set a custom template path for the tfoot component.
      * The default tfoot template path is defined in the config('laravel-table.template.tfoot') config value.
      *
@@ -81,6 +97,7 @@ trait TemplatesCustomizations
         $this->tableComponentPath = config('laravel-table.template.table');
         $this->theadComponentPath = config('laravel-table.template.thead');
         $this->tbodyComponentPath = config('laravel-table.template.tbody');
+        $this->resultsComponentPath = config('laravel-table.template.results');
         $this->tfootComponentPath = config('laravel-table.template.tfoot');
     }
 }
