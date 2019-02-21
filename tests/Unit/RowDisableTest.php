@@ -47,7 +47,7 @@ class RowDisableTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertContains(implode(' ', $classes), $html);
         foreach ($users as $user) {
-            if($user->id === 1 || $user->id === 2) {
+            if ($user->id === 1 || $user->id === 2) {
                 $this->assertNotContains('edit-' . $user->id, $html);
                 $this->assertNotContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
             } else {
@@ -84,7 +84,7 @@ class RowDisableTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertContains(implode(' ', $classes), $html);
         foreach ($users as $user) {
-            if($user->id === 1 || $user->id === 2) {
+            if ($user->id === 1 || $user->id === 2) {
                 $this->assertNotContains('edit-' . $user->id, $html);
                 $this->assertNotContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
             } else {

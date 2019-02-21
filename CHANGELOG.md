@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.10](https://github.com/Okipa/laravel-table/releases/tag/1.0.10)
+2019-02-21
+- Fixed a templating problem when disabling a line (one `td` html tag was missing).
+
 ## [1.0.9](https://github.com/Okipa/laravel-table/releases/tag/1.0.9)
 2019-02-21
 - Updated design in order to respect the bootstrap basics.

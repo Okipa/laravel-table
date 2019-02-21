@@ -58,7 +58,8 @@ class ConfigTest extends LaravelTableTestCase
         $table->column('name')
             ->title('Name')
             ->sortable()
-            ->searchable();;
+            ->searchable();
+        ;
         $table->column('email')
             ->title('Email')
             ->searchable()
