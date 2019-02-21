@@ -2,9 +2,8 @@
     {{-- rows number / search --}}
     @if($table->rowsNumberSelectionActivation || ! $table->searchableColumns->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
-            <td {{ classTag('border-0', 'bg-light', $table->tdClasses) }}
-                colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') 
-                    || $table->isRouteDefined('destroy') ? 1 : 0) }}">
+            <td {{ classTag('bg-light', $table->tdClasses) }}
+                {{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }}>
                 <div class="d-flex flex-wrap justify-content-between py-3">
                     {{-- rows number selection --}}
                     <div class="px-4 py-2 rows-number-selection">
@@ -92,7 +91,7 @@
     {{-- column titles --}}
     <tr {{ classTag($table->trClasses) }}>
         @foreach($table->columns as $column)
-            <th {{ classTag('border-0', $table->thClasses) }} scope="col">
+            <th {{ classTag($table->thClasses) }} scope="col">
                 @if($column->isSortable)
                     <a href="{{ $table->route('index', array_merge([
                             'sortBy'    => $column->databaseDefaultColumn,

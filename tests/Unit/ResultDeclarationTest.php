@@ -71,8 +71,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertNotContains('result', $html);
     }
-    
-    public function testOneColumnResultColspanTest()
+
+    public function testResultColspanWithSingleColumn()
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
@@ -85,9 +85,10 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
         $this->assertEquals(1, substr_count($html, '<td'));
+        $this->assertNotContains('colspan', $html);
     }
 
-    public function testTwoColumnResultColspanTest()
+    public function testResultColspanWithMultipleColumns()
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
@@ -100,16 +101,19 @@ class ResultDeclarationTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
-        $this->assertEquals(2, substr_count($html, '<td'));
-        $this->assertNotContains('colspan', $html);
+        $this->assertEquals(1, substr_count($html, '<td'));
+        $this->assertContains('colspan="2"', $html);
     }
 
-    public function testMoreThanTwoColumnResultColspanTest()
+    public function testResultColspanTestWithEditRoute()
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
-        $this->routes(['users'], ['index']);
-        $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $this->routes(['users'], ['index', 'edit']);
+        $table = (new Table)->model(Company::class)->routes([
+            'index' => ['name' => 'users.index'],
+            'edit'  => ['name' => 'users.edit'],
+        ]);
         $table->column('owner_id');
         $table->column('name');
         $table->column('turnover');
@@ -118,7 +122,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
-        $this->assertEquals(2, substr_count($html, '<td'));
-        $this->assertContains('colspan="2"', $html);
+        $this->assertEquals(1, substr_count($html, '<td'));
+        $this->assertContains('colspan="4"', $html);
     }
 }

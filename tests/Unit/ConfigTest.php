@@ -21,6 +21,7 @@ class ConfigTest extends LaravelTableTestCase
         $this->assertTrue(array_key_exists('tr', config('laravel-table.classes')));
         $this->assertTrue(array_key_exists('th', config('laravel-table.classes')));
         $this->assertTrue(array_key_exists('td', config('laravel-table.classes')));
+        $this->assertTrue(array_key_exists('results', config('laravel-table.classes')));
         // laravel-table.icon
         $this->assertTrue(array_key_exists('rowsNumber', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('sort', config('laravel-table.icon')));
@@ -61,8 +62,7 @@ class ConfigTest extends LaravelTableTestCase
         $table->column('name')
             ->title('Name')
             ->sortable()
-            ->searchable();
-        ;
+            ->searchable();;
         $table->column('email')
             ->title('Email')
             ->searchable()

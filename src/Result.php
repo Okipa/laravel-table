@@ -12,12 +12,9 @@ class Result
 
     /**
      * \Okipa\LaravelTable\Column constructor.
-     *
-     * @param string|null $databaseColumnReference
      */
-    public function __construct(string $databaseColumnReference = null)
+    public function __construct()
     {
-        $this->title = $databaseColumnReference ? __('validation.attributes.' . $databaseColumnReference) : null;
         $this->classes = config('laravel-table.classes.results');
     }
 

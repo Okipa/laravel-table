@@ -2,8 +2,7 @@
     @if($table->list->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
             <td {{ classTag($table->tdClasses, 'text-center', 'p-4') }}
-                colspan="{{ $table->columnsCount() + ($table->isRouteDefined('edit') 
-                    || $table->isRouteDefined('destroy') ? 1 : 0) }}"
+                {{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }}
                 scope="row">
                 <span class="text-info">
                     <i class="fa fa-info-circle" aria-hidden="true"></i>

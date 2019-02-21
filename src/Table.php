@@ -153,7 +153,7 @@ class Table implements Htmlable
      * The closure let you manipulate the following attribute : $model.
      *
      * @param \Closure $rowDisableClosure
-     * @param array    $classes
+     * @param array $classes
      *
      * @return \Okipa\LaravelTable\Table
      */
@@ -214,14 +214,28 @@ class Table implements Htmlable
      */
     public function columnsCount(): int
     {
-        return $this->columns->count();
+        $extraColumnsCount = $this->isRouteDefined('edit') || $this->isRouteDefined('destroy') ? 1 : 0;
+
+        return $this->columns->count() + $extraColumnsCount;
+    }
+
+    /**
+     * Check if a route is defined from its key.
+     *
+     * @param string $routeKey
+     *
+     * @return bool
+     */
+    public function isRouteDefined(string $routeKey): bool
+    {
+        return (isset($this->routes[$routeKey]) || ! empty($this->routes[$routeKey]));
     }
 
     /**
      * Get the route from its key.
      *
      * @param string $routeKey
-     * @param array  $params
+     * @param array $params
      *
      * @return string
      */
@@ -472,17 +486,5 @@ class Table implements Htmlable
 
             return $model;
         });
-    }
-
-    /**
-     * Check if a route is defined from its key.
-     *
-     * @param string $routeKey
-     *
-     * @return bool
-     */
-    public function isRouteDefined(string $routeKey): bool
-    {
-        return (isset($this->routes[$routeKey]) || ! empty($this->routes[$routeKey]));
     }
 }

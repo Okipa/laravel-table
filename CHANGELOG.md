@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.8](https://github.com/Okipa/laravel-table/releases/tag/1.0.8)
+2019-02-21
+- Updated the result displaying in one and only `td` html tag : the title is displayed on the left and the result html on the right.
+- Also fixed the result classes rendering location, which is now on the `tr` html tag and no more on the `td` html tags.
+
 ## [1.0.7](https://github.com/Okipa/laravel-table/releases/tag/1.0.7)
 2019-02-19
 - **Breaking change :** reverted last tag features => removed the capacity to add some result outputs with the `->result()` method the Column objects.

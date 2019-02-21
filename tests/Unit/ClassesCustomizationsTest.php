@@ -168,7 +168,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->result()->classes($classes);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
+        $this->assertEquals(1, substr_count($html, implode(' ', $classes)));
     }
 
     public function testRowConditionalClassesHtml()
