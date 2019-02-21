@@ -9,6 +9,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\Company;
 use Okipa\LaravelTable\Test\Models\User;
+use PDOException;
 
 class SearchTest extends LaravelTableTestCase
 {
@@ -405,7 +406,7 @@ class SearchTest extends LaravelTableTestCase
         $this->assertEmpty($table->list->toArray()['data']);
     }
 
-    public function testCaseInsensitiveTestHtml()
+    public function testSqliteCaseInsensitiveTestHtml()
     {
         $users = $this->createMultipleUsers(10);
         $users->each(function ($user, $key) {
@@ -429,5 +430,25 @@ class SearchTest extends LaravelTableTestCase
         $this->assertEquals($users->filter(function ($user) {
             return in_array($user->name, ['alpha', 'ALPHA']);
         })->toArray(), $table->list->toArray()['data']);
+    }
+
+    public function testPostgresCaseInsensitiveTestHtml()
+    {
+        $this->expectException(PDOException::class);
+        $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: select '
+                                      . 'count(*) as aggregate from "users_test" where ("users_test"."name" ILIKE '
+                                      . '%alpha% or "users_test"."email" ILIKE %alpha%))');
+        $connection = config('database.default');
+        config()->set('database.connections.' . $connection . '.driver', 'pgsql');
+        $this->createMultipleUsers(10);
+        $searchedValue = 'alpha';
+        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->request($customRequest);
+        $table->column('name')->title('Name')->searchable();
+        $table->column('email')->title('Email')->searchable();
+        $table->render();
     }
 }

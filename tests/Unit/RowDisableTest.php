@@ -27,7 +27,7 @@ class RowDisableTest extends LaravelTableTestCase
             return $model->id === 1 || $model->id === 2;
         };
         $classes = ['test-disabled-default-class'];
-        config()->set('laravel-table.rows.disabled.classes', $classes);
+        config()->set('laravel-table.classes.disabled', $classes);
         $table = (new Table)->model(User::class)
             ->routes([
                 'index'   => ['name' => 'users.index'],
@@ -46,9 +46,15 @@ class RowDisableTest extends LaravelTableTestCase
         }
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertContains(implode(' ', $classes), $html);
-        $this->assertContains('disabled="disabled"', $html);
-        $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
-        $this->assertEquals(4, substr_count($html, 'disabled="disabled"'));
+        foreach ($users as $user) {
+            if($user->id === 1 || $user->id === 2) {
+                $this->assertNotContains('edit-' . $user->id, $html);
+                $this->assertNotContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+            } else {
+                $this->assertContains('edit-' . $user->id, $html);
+                $this->assertContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+            }
+        }
     }
 
     public function testDisableLineWithCustomClassHtml()
@@ -77,11 +83,15 @@ class RowDisableTest extends LaravelTableTestCase
         }
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertContains(implode(' ', $classes), $html);
-        $this->assertContains('disabled', $html);
-        $this->assertContains('disabled="disabled"', $html);
-        $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
-        $this->assertEquals(14, substr_count($html, 'disabled'));
-        $this->assertEquals(4, substr_count($html, 'disabled="disabled"'));
+        foreach ($users as $user) {
+            if($user->id === 1 || $user->id === 2) {
+                $this->assertNotContains('edit-' . $user->id, $html);
+                $this->assertNotContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+            } else {
+                $this->assertContains('edit-' . $user->id, $html);
+                $this->assertContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+            }
+        }
     }
 
     public function testWithNoDisableLinesHtml()

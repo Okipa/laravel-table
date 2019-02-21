@@ -184,7 +184,7 @@ public function index(Request $request) {
 <h3 id="table-rowsNumber">->rowsNumber</h3>
 
 > Override the number of rows to display on the table.  
-> The default number of displayed rows is defined in the `config('laravel-table.rows.number.default')` config value.
+> The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.
 
 **Note :**
 - Signature : `rowsNumber(int $rows): \Okipa\LaravelTable\Table`
@@ -199,7 +199,7 @@ public function index(Request $request) {
 
 > Override the default rows number selection activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number selection activation status is managed by the `config('laravel-table.rows.number.selection')` value.
+> The default rows number selection activation status is managed by the `config('laravel-table.value.rowsNumberSelectionActivation')` value.
 
 **Note :**`
 - Signature : `rowsNumberSelectionActivation($activate = true): \Okipa\LaravelTable\Table`
@@ -371,7 +371,7 @@ destroyButton.click(function(e){
 
 > Set the disable lines closure that will be executed during the table generation.  
 > The optional second param let you override the classes that will be applied for the disabled lines.  
-> By default, the « config('laravel-table.rows.disabled.classes') » config value is applied.  
+> By default, the « config('laravel-table.classes.disabled') » config value is applied.  
 > For example, you can disable the current logged user to prevent him being edited or deleted from the table.  
 > The closure let you manipulate the following attribute : `$model`.
 

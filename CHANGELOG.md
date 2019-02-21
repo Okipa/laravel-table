@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.9](https://github.com/Okipa/laravel-table/releases/tag/1.0.9)
+2019-02-21
+- Updated design in order to respect the bootstrap basics.
+- Updated config architecture to improve the logic.
+- The `edit` and `destroy` buttons are now hidden when a line is disabled.
+- Improved compatibility with `postgres` for the searching action, using `ILIKE` instead of `LIKE` operator for case-insensitive searching.
+
 ## [1.0.8](https://github.com/Okipa/laravel-table/releases/tag/1.0.8)
 2019-02-21
 - Updated the result displaying in one and only `td` html tag : the title is displayed on the left and the result html on the right.

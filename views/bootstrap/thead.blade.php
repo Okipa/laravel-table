@@ -1,12 +1,12 @@
-<thead class="table-header">
+<thead>
     {{-- rows number / search --}}
     @if($table->rowsNumberSelectionActivation || ! $table->searchableColumns->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
             <td {{ classTag('bg-light', $table->tdClasses) }}
                 {{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }}>
-                <div class="d-flex flex-wrap justify-content-between py-3">
+                <div class="d-flex flex-wrap justify-content-between py-2">
                     {{-- rows number selection --}}
-                    <div class="px-4 py-2 rows-number-selection">
+                    <div class="px-3 py-1 rows-number-selection">
                         @if($table->rowsNumberSelectionActivation)
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="search" value="{{ $table->request->search }}">
@@ -29,7 +29,7 @@
                                            aria-label="@lang('laravel-table::laravel-table.rowsNumber')">
                                     <div class="input-group-append">
                                         <div class="input-group-text py-0">
-                                            <button class="btn btn-link text-success p-0" type="submit">
+                                            <button class="btn btn-link p-0 text-primary" type="submit">
                                                 {!! config('laravel-table.icon.validate') !!}
                                             </button>
                                         </div>
@@ -39,7 +39,7 @@
                         @endif
                     </div>
                     {{-- searching --}}
-                    <div class="flex-fill px-4 py-2 searching">
+                    <div class="flex-fill px-3 py-1 searching">
                         @if(count($table->searchableColumns))
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="rows" value="{{ $table->request->rows }}">
@@ -50,7 +50,9 @@
                                 @endforeach
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">{!! config('laravel-table.icon.search') !!}</span>
+                                        <span class="input-group-text text-secondary">
+                                            {!! config('laravel-table.icon.search') !!}
+                                        </span>
                                     </div>
                                     <input class="form-control"
                                            type="text"
@@ -74,7 +76,7 @@
                                     @else
                                         <div class="input-group-append">
                                             <span class="input-group-text py-0">
-                                                <button class="btn btn-link text-success p-0" type="submit">
+                                                <button class="btn btn-link p-0 text-primary" type="submit">
                                                     {!! config('laravel-table.icon.validate') !!}
                                                 </button>
                                             </span>

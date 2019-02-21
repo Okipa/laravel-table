@@ -3,12 +3,13 @@
 return [
 
     'classes' => [
-        'container' => ['table-responsive', 'pt-3'],
-        'table'     => ['table-striped', 'table-hover', 'mt-3'],
+        'container' => ['table-responsive'],
+        'table'     => ['table-striped', 'table-hover'],
         'tr'        => [],
         'th'        => ['align-middle'],
         'td'        => ['align-middle'],
-        'results'   => ['table-secondary', 'font-weight-bold'],
+        'results'   => ['table-dark', 'font-weight-bold'],
+        'disabled'  => ['table-danger', 'disabled'],
     ],
 
     'icon' => [
@@ -24,14 +25,9 @@ return [
         'destroy'    => '<i class="fas fa-trash fa-fw"></i>',
     ],
 
-    'rows' => [
-        'number'   => [
-            'default'   => 20,
-            'selection' => true,
-        ],
-        'disabled' => [
-            'classes' => ['disabled', 'bg-secondary', 'text-white'],
-        ],
+    'value' => [
+        'rowsNumber'                    => 20,
+        'rowsNumberSelectionActivation' => true,
     ],
 
     'template' => [

@@ -24,7 +24,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testDeactivateRowsNumberSelectionFromConfigHtml()
     {
-        config()->set('laravel-table.rows.number.selection', false);
+        config()->set('laravel-table.value.rowsNumberSelectionActivation', false);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name');
@@ -43,7 +43,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testDeactivateRowsNumberSelectionFromMethodHtml()
     {
-        config()->set('laravel-table.rows.number.selection', true);
+        config()->set('laravel-table.value.rowsNumberSelectionActivation', true);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -64,7 +64,7 @@ class RowsNumberTest extends LaravelTableTestCase
     
     public function testActivateRowsNumberSelectionHtml()
     {
-        config()->set('laravel-table.rows.number.selection', false);
+        config()->set('laravel-table.value.rowsNumberSelectionActivation', false);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])

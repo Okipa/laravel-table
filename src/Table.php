@@ -46,8 +46,8 @@ class Table implements Htmlable
     {
         $this->initializeDefaultComponents();
         $this->initializeTableDefaultClasses();
-        $this->rows = config('laravel-table.rows.number.default');
-        $this->rowsNumberSelectionActivation = config('laravel-table.rows.number.selection');
+        $this->rows = config('laravel-table.value.rowsNumber');
+        $this->rowsNumberSelectionActivation = config('laravel-table.value.rowsNumberSelectionActivation');
         $this->sortableColumns = new Collection();
         $this->searchableColumns = new Collection();
         $this->request = request();
@@ -102,7 +102,7 @@ class Table implements Htmlable
 
     /**
      * Override the number of rows to display on the table.
-     * The default number of displayed rows is defined in the config('laravel-table.rows.number.default') config value.
+     * The default number of displayed rows is defined in the config('laravel-table.value.rowsNumber') config value.
      *
      * @param int $rows
      *
@@ -119,7 +119,7 @@ class Table implements Htmlable
      * Override the default rows number selection activation status.
      * Calling this method displays a rows number input that enable the user to choose how much rows to show.
      * The default rows number selection activation status is defined in the
-     * config('laravel-table.rows.number.selection') config value.
+     * config('laravel-table.value.rowsNumberSelectionActivation') config value.
      *
      * @param bool $activate
      *
@@ -161,7 +161,7 @@ class Table implements Htmlable
     {
         $this->disableRows->push([
             'closure' => $rowDisableClosure,
-            'classes' => ! empty($classes) ? $classes : config('laravel-table.rows.disabled.classes'),
+            'classes' => ! empty($classes) ? $classes : config('laravel-table.classes.disabled'),
         ]);
 
         return $this;
@@ -413,21 +413,34 @@ class Table implements Htmlable
                     $databaseSearchedTable = $column->databaseSearchedTable
                         ? $column->databaseSearchedTable
                         : $column->databaseDefaultTable;
-                    $operator = $columnKey > 0 ? 'orWhere' : 'where';
+                    $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
                     $databaseSearchedColumns = $column->databaseSearchedColumns
                         ? $column->databaseSearchedColumns
                         : [$column->databaseDefaultColumn];
                     foreach ($databaseSearchedColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
-                        $operator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $operator;
-                        $subQuery->{$operator}(
+                        $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
+                        $subQuery->{$whereOperator}(
                             $databaseSearchedTable . '.' . $searchedDatabaseColumn,
-                            'like',
+                            $this->casInsensitiveLikeOperator(),
                             '%' . $searched . '%'
                         );
                     }
                 });
             });
         }
+    }
+
+    /**
+     * Get insensitive like operator according to the used database driver.
+     *
+     * @return string
+     */
+    protected function casInsensitiveLikeOperator(): string
+    {
+        $connection = config('database.default');
+        $driver = config('database.connections.' . $connection . '.driver');
+
+        return in_array($driver, ['pgsql']) ? 'ILIKE' : 'LIKE';
     }
 
     /**

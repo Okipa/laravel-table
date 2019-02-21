@@ -1,7 +1,7 @@
 <tbody>
     @if($table->list->isEmpty())
         <tr {{ classTag($table->trClasses) }}>
-            <td {{ classTag($table->tdClasses, 'text-center', 'p-4') }}
+            <td {{ classTag($table->tdClasses, 'text-center', 'p-3') }}
                 {{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }}
                 scope="row">
                 <span class="text-info">
@@ -18,11 +18,9 @@
                         $value = $model->{$column->databaseDefaultColumn};
                         $customValue = $column->valueClosure ? ($column->valueClosure)($model, $column) : null;
                         $html = $column->htmlClosure ? ($column->htmlClosure)($model, $column) : null;
-                        $link = $column->url instanceof Closure 
-                                    ? ($column->url)($model, $column) 
-                                    : ($column->url !== true 
-                                        ? $column->url 
-                                        : ($customValue ? $customValue : $value));
+                        $link = $column->url instanceof Closure ? ($column->url)($model, $column) : ($column->url !== true 
+                            ? $column->url 
+                            : ($customValue ? $customValue : $value));
                         $showIcon = $column->icon && (($customValue || $value) || $column->displayIconWhenNoValue);
                         $showLink = $link && ($customValue || $value || $showIcon);
                         $showButton = $column->buttonClasses && ($value || $customValue || $showIcon);
@@ -76,55 +74,40 @@
                     </td>
                 @endforeach
                 {{-- actions --}}
-                @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy')))
-                    <td {{ classTag('text-right', $table->tdClasses) }}>
+                @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy')) && ! $model->disabledClasses)
+                    <td {{ classTag($table->tdClasses, 'text-right') }}>
                         <div class="d-flex justify-content-end">
                             {{-- edit button --}}
                             @if($table->isRouteDefined('edit'))
-                                @if(! $model->disabledClasses)
-                                    <form id="edit-{{ $model->id }}"
-                                          class="flex-shrink-0"
-                                          role="form"
-                                          method="GET"
-                                          action="{{ $table->route('edit', ['id' => $model->id]) }}">
-                                @endif
-                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses 
-                                        ? 'disabled' 
-                                        : null) }}
-                                            type="submit"
-                                            title="@lang('laravel-table::laravel-table.edit')"
-                                            {{ htmlAttributes($model->disabledClasses 
-                                                ? ['disabled' => 'disabled'] 
-                                                : null) }}>
+                                <form id="edit-{{ $model->id }}"
+                                      class="flex-shrink-0"
+                                      role="form"
+                                      method="GET"
+                                      action="{{ $table->route('edit', ['id' => $model->id]) }}">
+                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }}
+                                        type="submit"
+                                        title="@lang('laravel-table::laravel-table.edit')"
+                                        {{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                         {!! config('laravel-table.icon.edit') !!}
                                     </button>
-                                @if(! $model->disabledClasses)
-                                    </form>
-                                @endif
+                                </form>
                             @endif
                             {{-- destroy button --}}
                             @if($table->isRouteDefined('destroy'))
-                                @if(! $model->disabledClasses)
-                                    <form id="destroy-{{ $model->id }}"
-                                          class="ml-3 destroy"
-                                          role="form"
-                                          method="POST"
-                                          action="{{ $table->route('destroy', ['id' => $model->id]) }}">
-                                        @csrf()
-                                        @method('DELETE')
-                                @endif
-                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses 
-                                                ? 'disabled' 
-                                                : null) }}
-                                            type="submit"
-                                            title="@lang('laravel-table::laravel-table.destroy')"
-                                            {{ htmlAttributes($model->destroyConfirmationAttributes,
-                                                $model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
+                                <form id="destroy-{{ $model->id }}"
+                                      class="ml-3 destroy"
+                                      role="form"
+                                      method="POST"
+                                      action="{{ $table->route('destroy', ['id' => $model->id]) }}">
+                                    @csrf()
+                                    @method('DELETE')
+                                    <button {{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses ? 'disabled' : null) }}
+                                        type="submit"
+                                        title="@lang('laravel-table::laravel-table.destroy')"
+                                        {{ htmlAttributes($model->destroyConfirmationAttributes, $model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                         {!! config('laravel-table.icon.destroy') !!}
                                     </button>
-                                @if(! $model->disabledClasses)
-                                    </form>
-                                @endif
+                                </form>
                             @endif
                         </div>
                     </td>
