@@ -78,10 +78,25 @@
                     <td {{ classTag($table->tdClasses, 'text-right') }}>
                         @if(! $model->disabledClasses)
                             <div class="d-flex justify-content-end">
+                                {{-- show button --}}
+                                @if($table->isRouteDefined('show'))
+                                    <form id="show-{{ $model->id }}"
+                                          class="flex-shrink-0"
+                                          role="form"
+                                          method="GET"
+                                          action="{{ $table->route('show', ['id' => $model->id]) }}">
+                                        <button {{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }}
+                                            type="submit"
+                                            title="@lang('laravel-table::laravel-table.show')"
+                                            {{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
+                                            {!! config('laravel-table.icon.show') !!}
+                                        </button>
+                                    </form>
+                                @endif
                                 {{-- edit button --}}
                                 @if($table->isRouteDefined('edit'))
                                     <form id="edit-{{ $model->id }}"
-                                          class="flex-shrink-0"
+                                          class="ml-1"
                                           role="form"
                                           method="GET"
                                           action="{{ $table->route('edit', ['id' => $model->id]) }}">
@@ -96,7 +111,7 @@
                                 {{-- destroy button --}}
                                 @if($table->isRouteDefined('destroy'))
                                     <form id="destroy-{{ $model->id }}"
-                                          class="ml-3 destroy"
+                                          class="ml-1 destroy"
                                           role="form"
                                           method="POST"
                                           action="{{ $table->route('destroy', ['id' => $model->id]) }}">
