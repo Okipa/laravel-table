@@ -34,6 +34,7 @@ class ConfigTest extends LaravelTableTestCase
         $this->assertTrue(array_key_exists('create', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('edit', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('destroy', config('laravel-table.icon')));
+        $this->assertTrue(array_key_exists('show', config('laravel-table.icon')));
         // laravel-table.value
         $this->assertTrue(array_key_exists('rowsNumber', config('laravel-table.value')));
         $this->assertTrue(array_key_exists('rowsNumberSelectionActivation', config('laravel-table.value')));
@@ -48,18 +49,19 @@ class ConfigTest extends LaravelTableTestCase
     {
         config()->set('laravel-table.value.rowsNumber', 9999);
         $this->createMultipleUsers(3);
-        $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
+        $this->routes(['users'], ['index', 'create', 'edit', 'destroy', 'show']);
         $table = (new Table)->model(User::class)->routes([
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
+            'show' => ['name' => 'users.show'],
         ]);
         $table->column('name')
             ->title('Name')
             ->sortable()
             ->searchable();
-        ;
+
         $table->column('email')
             ->title('Email')
             ->searchable()

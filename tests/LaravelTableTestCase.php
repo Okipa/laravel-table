@@ -27,9 +27,9 @@ abstract class LaravelTableTestCase extends TestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 
@@ -50,7 +50,7 @@ abstract class LaravelTableTestCase extends TestCase
     /**
      * Setup the test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->loadMigrationsFrom([
@@ -58,5 +58,6 @@ abstract class LaravelTableTestCase extends TestCase
             '--realpath' => realpath(__DIR__ . '/database/migrations'),
         ]);
         $this->faker = Factory::create();
+
     }
 }

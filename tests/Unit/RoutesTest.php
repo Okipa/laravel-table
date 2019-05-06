@@ -14,7 +14,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » method to '
-                                      . 'declare it.');
+            . 'declare it.');
         $table = (new Table)->model(User::class);
         $table->render();
     }
@@ -22,10 +22,11 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetRoutesSuccess()
     {
         $routes = [
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
+            'show' => ['name' => 'users.show'],
         ];
         $table = (new Table)->routes($routes);
         $this->assertEquals($routes, $table->routes);
@@ -35,10 +36,10 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » '
-                                      . 'method to declare it.');
+            . 'method to declare it.');
         (new Table)->routes([
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
         ]);
     }
@@ -47,11 +48,11 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The « name » key is missing from the « create » route definition. Each route '
-                                      . 'definition should follow this structure : '
-                                      . '["index" => ["name" => "news.index"]. Fix your routes declaration in the '
-                                      . '« routes() » method.');
+            . 'definition should follow this structure : '
+            . '["index" => ["name" => "news.index"]. Fix your routes declaration in the '
+            . '« routes() » method.');
         (new Table)->routes([
-            'index'  => ['name' => 'users.index'],
+            'index' => ['name' => 'users.index'],
             'create' => ['test' => 'test'],
         ]);
     }
@@ -60,10 +61,10 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The « activate » key is not an authorized route key '
-                                      . '(index, create, edit, destroy). Fix your routes declaration in the '
-                                      . '« routes() » method.');
+            . '(index, create, edit, destroy, show). Fix your routes declaration in the '
+            . '« routes() » method.');
         (new Table)->routes([
-            'index'    => ['name' => 'users.index'],
+            'index' => ['name' => 'users.index'],
             'activate' => ['name' => 'users.activate'],
         ]);
     }
@@ -72,10 +73,11 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes([
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
+            'show' => ['name' => 'show.destroy'],
         ]);
         $this->assertEquals('http://localhost/users/index', $table->route('index'));
     }
@@ -84,7 +86,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid « $routeKey » argument for the « route() » method. The route key '
-                                      . '« create » has not been found in the routes stack.');
+            . '« create » has not been found in the routes stack.');
         $routes = ['index' => ['name' => 'users.index']];
         $table = (new Table)->routes($routes);
         $table->route('create');
@@ -94,7 +96,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid « $routeKey » argument for the « route() » method. The route key '
-                                      . '« update » has not been found in the routes stack.');
+            . '« update » has not been found in the routes stack.');
         (new Table)->route('update');
     }
 
@@ -109,7 +111,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create']);
         $table = (new Table)->routes([
-            'index'  => ['name' => 'users.index'],
+            'index' => ['name' => 'users.index'],
             'create' => ['name' => 'users.create'],
         ])->model(User::class);
         $table->column('name')->title('Name');
@@ -138,7 +140,7 @@ class RoutesTest extends LaravelTableTestCase
         $this->routes(['users'], ['index', 'edit']);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
-            'edit'  => ['name' => 'users.edit'],
+            'edit' => ['name' => 'users.edit'],
         ])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
@@ -168,7 +170,7 @@ class RoutesTest extends LaravelTableTestCase
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'destroy']);
         $table = (new Table)->routes([
-            'index'   => ['name' => 'users.index'],
+            'index' => ['name' => 'users.index'],
             'destroy' => ['name' => 'users.destroy'],
         ])->model(User::class);
         $table->column('name')->title('Name');
@@ -191,6 +193,37 @@ class RoutesTest extends LaravelTableTestCase
         foreach ($users as $user) {
             $this->assertNotContains('<form class="destroy-' . $user->id, $html);
             $this->assertNotContains('action="http://localhost/users/destroy?id=' . $user->id . '"', $html);
+        }
+    }
+
+    public function testSetShowRouteHtml()
+    {
+        $users = $this->createMultipleUsers(5);
+        $this->routes(['users'], ['index', 'show']);
+        $table = (new Table)->routes([
+            'index' => ['name' => 'users.index'],
+            'show' => ['name' => 'users.show'],
+        ])->model(User::class);
+        $table->column('name')->title('Name');
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        foreach ($users as $user) {
+            $this->assertContains('show-' . $user->id, $html);
+            $this->assertContains('action="http://localhost/users/show?id=' . $user->id . '"', $html);
+        }
+    }
+
+    public function testSetNoShowRouteHtml()
+    {
+        $users = $this->createMultipleUsers(5);
+        $this->routes(['users'], ['index', 'show']);
+        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table->column('name')->title('Name');
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        foreach ($users as $user) {
+            $this->assertNotContains('<form class="show-' . $user->id, $html);
+            $this->assertNotContains('action="http://localhost/users/' . $user->id . '"', $html);
         }
     }
 }

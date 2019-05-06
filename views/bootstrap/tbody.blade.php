@@ -74,7 +74,7 @@
                     </td>
                 @endforeach
                 {{-- actions --}}
-                @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy')))
+                @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') || $table->isRouteDefined('show')))
                     <td {{ classTag($table->tdClasses, 'text-right') }}>
                         @if(! $model->disabledClasses)
                             <div class="d-flex justify-content-end">
