@@ -51,17 +51,16 @@ class ConfigTest extends LaravelTableTestCase
         $this->createMultipleUsers(3);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy', 'show']);
         $table = (new Table)->model(User::class)->routes([
-            'index' => ['name' => 'users.index'],
-            'create' => ['name' => 'users.create'],
-            'edit' => ['name' => 'users.edit'],
+            'index'   => ['name' => 'users.index'],
+            'create'  => ['name' => 'users.create'],
+            'edit'    => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
-            'show' => ['name' => 'users.show'],
+            'show'    => ['name' => 'users.show'],
         ]);
         $table->column('name')
             ->title('Name')
             ->sortable()
             ->searchable();
-
         $table->column('email')
             ->title('Email')
             ->searchable()
@@ -69,7 +68,7 @@ class ConfigTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
         $this->assertEquals(9999, $table->rows);
-        $this->assertContains('value="9999"', $html);
-        $this->assertContains('rows=9999', $html);
+        $this->assertStringContainsString('value="9999"', $html);
+        $this->assertStringContainsString('rows=9999', $html);
     }
 }

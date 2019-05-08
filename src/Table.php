@@ -453,11 +453,9 @@ class Table implements Htmlable
     protected function applySortClauses(Builder $query): void
     {
         $this->sortBy = $this->request->sortBy
-            ? $this->request->sortBy
-            : ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->databaseDefaultColumn);
+            ?: ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->databaseDefaultColumn);
         $this->sortDir = $this->request->sortDir
-            ? $this->request->sortDir
-            : ($this->sortDir ? $this->sortDir : 'asc');
+            ?: ($this->sortDir ? $this->sortDir : 'asc');
         $query->orderBy($this->sortBy, $this->sortDir);
     }
 

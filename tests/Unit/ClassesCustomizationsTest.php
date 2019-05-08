@@ -86,7 +86,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
-        $this->assertContains('<div class="table-container ' . implode(' ', $classes) . '">', $html);
+        $this->assertStringContainsString('<div class="table-container ' . implode(' ', $classes) . '">', $html);
     }
 
     public function testTableClassesHtml()
@@ -100,7 +100,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
-        $this->assertContains('<table class="table ' . implode(' ', $classes) . '">', $html);
+        $this->assertStringContainsString('<table class="table ' . implode(' ', $classes) . '">', $html);
     }
 
     public function testTrClassesHtml()
@@ -194,7 +194,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
                 : $this->assertEmpty($user->conditionnalClasses);
         }
         $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
-        $this->assertContains(implode(' ', $classes), $html);
+        $this->assertStringContainsString(implode(' ', $classes), $html);
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
 }

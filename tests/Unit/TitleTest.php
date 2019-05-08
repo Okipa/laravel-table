@@ -23,7 +23,7 @@ class TitleTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('Name', $html);
-        $this->assertContains('Email', $html);
+        $this->assertStringContainsString('Name', $html);
+        $this->assertStringContainsString('Email', $html);
     }
 }

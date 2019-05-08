@@ -39,7 +39,7 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link();
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
+        $this->assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
     }
 
     public function testIsLinkStringHtml()
@@ -50,7 +50,7 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link('test');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<a href="test" title="' . $user->name . '">', $html);
+        $this->assertStringContainsString('<a href="test" title="' . $user->name . '">', $html);
     }
 
     public function testIsLinkClosureHtml()
@@ -63,7 +63,7 @@ class LinkTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<a href="url" title="' . $user->name . '">', $html);
+        $this->assertStringContainsString('<a href="url" title="' . $user->name . '">', $html);
     }
 
     public function testIsLinkWithDefaultValueHtml()
@@ -74,7 +74,7 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link();
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
+        $this->assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
     }
 
     public function testIsLinkWithNoValueHtml()
@@ -86,7 +86,7 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link();
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains('<a href="', $html);
+        $this->assertStringNotContainsString('<a href="', $html);
     }
 
     public function testIsLinkWithNoValueWithIconHtml()
@@ -98,7 +98,7 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link()->icon('icon', true);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains('<a href="', $html);
+        $this->assertStringNotContainsString('<a href="', $html);
     }
 
     public function testIsLinkWithCustomValueHtml()
@@ -112,7 +112,7 @@ class LinkTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<a href="url" title="test">', $html);
+        $this->assertStringContainsString('<a href="url" title="test">', $html);
     }
 
     public function testIsLinkWithNoValueCustomValueHtml()
@@ -126,6 +126,6 @@ class LinkTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<a href="test" title="test">', $html);
+        $this->assertStringContainsString('<a href="test" title="test">', $html);
     }
 }

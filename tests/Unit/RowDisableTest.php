@@ -3,8 +3,8 @@
 namespace Okipa\LaravelTable\Tests\Unit;
 
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
+use Okipa\LaravelTable\Test\Models\User;
 
 class RowDisableTest extends LaravelTableTestCase
 {
@@ -18,7 +18,7 @@ class RowDisableTest extends LaravelTableTestCase
         $this->assertEquals($rowDisableClosure, $table->disableRows->first()['closure']);
         $this->assertEquals($classes, $table->disableRows->first()['classes']);
     }
-    
+
     public function testDisableLineWithDefaultClassHtml()
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
@@ -45,14 +45,20 @@ class RowDisableTest extends LaravelTableTestCase
                 : $this->assertEmpty($user->disabledClasses);
         }
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(implode(' ', $classes), $html);
+        $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
-                $this->assertNotContains('edit-' . $user->id, $html);
-                $this->assertNotContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+                $this->assertStringNotContainsString('edit-' . $user->id, $html);
+                $this->assertStringNotContainsString(
+                    'action="http://localhost/users/edit?id=' . $user->id . '"',
+                    $html
+                );
             } else {
-                $this->assertContains('edit-' . $user->id, $html);
-                $this->assertContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+                $this->assertStringContainsString('edit-' . $user->id, $html);
+                $this->assertStringContainsString(
+                    'action="http://localhost/users/edit?id=' . $user->id . '"',
+                    $html
+                );
             }
         }
     }
@@ -82,14 +88,17 @@ class RowDisableTest extends LaravelTableTestCase
                 : $this->assertEmpty($user->disabledClasses);
         }
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(implode(' ', $classes), $html);
+        $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
-                $this->assertNotContains('edit-' . $user->id, $html);
-                $this->assertNotContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+                $this->assertStringNotContainsString('edit-' . $user->id, $html);
+                $this->assertStringNotContainsString(
+                    'action="http://localhost/users/edit?id=' . $user->id . '"',
+                    $html
+                );
             } else {
-                $this->assertContains('edit-' . $user->id, $html);
-                $this->assertContains('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
+                $this->assertStringContainsString('edit-' . $user->id, $html);
+                $this->assertStringContainsString('action="http://localhost/users/edit?id=' . $user->id . '"', $html);
             }
         }
     }
@@ -111,7 +120,7 @@ class RowDisableTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains(implode(' ', $classes), $html);
-        $this->assertNotContains('disabled="disabled"', $html);
+        $this->assertStringNotContainsString(implode(' ', $classes), $html);
+        $this->assertStringNotContainsString('disabled="disabled"', $html);
     }
 }

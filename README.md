@@ -1,4 +1,4 @@
-# Laravel Table
+# Generate tables with Laravel
 
 [![Source Code](https://img.shields.io/badge/source-okipa/laravel--table-blue.svg)](https://github.com/Okipa/laravel-table)
 [![Latest Version](https://img.shields.io/github/release/okipa/laravel-table.svg?style=flat-square)](https://github.com/Okipa/laravel-table/releases)
@@ -14,9 +14,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 Give it a try !
 
----
-
-## Table of Contents
+## Table of contents
 
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -65,12 +63,11 @@ Give it a try !
 - [Usage examples](#usage-examples)
   - [Basic](#basic)
   - [Advanced](#advances)
-- [Changelog](#changelog)
 - [Testing](#testing)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
 - [Credits](#credits)
 - [Licence](#license)
-
----
 
 ## Installation
 
@@ -79,8 +76,6 @@ Give it a try !
 ```bash
 composer require okipa/laravel-table
 ```
-
----
 
 ## Configuration
 
@@ -92,8 +87,6 @@ php artisan vendor:publish --tag=laravel-table::config
 
 Then, override the `config/laravel-table.php` file with you own configuration values.
 
----
-
 ## Customize translations
 
 You can customize the package translation by publishing them in your project :
@@ -104,8 +97,6 @@ php artisan vendor:publish --tag=laravel-table::translations
 
 Once you have published them, override them from your `resources/lang/[locale]\laravel-table.php` directory.
 
----
-
 ## Customize templates
 
 To modify or use your own template, you will have to publish the package blade templates in your project :
@@ -115,8 +106,6 @@ php artisan vendor:publish --tag=laravel-table::views
 ```
 
 Then, play with the templates in your `resources/views/vendor/laravel-table` directory.
-
----
 
 ## Table API
 
@@ -804,8 +793,6 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 (new \Okipa\LaravelTable\Table)->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
 ```
 
----
-
 ## Tips
 
 - **Request :** No need to transmit the request to the table : it systematically uses the current request given by the `request()` helper to get the number of lines to show and the searching, sorting or pagination data. However, if you need to pass a particular request to the table, you can do it with the `->request()` method.
@@ -816,8 +803,6 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
   - `->icon()`
   - `->stringLimit()`
   - `->value()`
-
----
 
 ## Usage examples
 
@@ -900,28 +885,24 @@ $table->result()->title('Total of comments')->html(function($displayedList){
 });
 ```
 
----
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
----
-
 ## Testing
 
 ```bash
 composer test
 ```
 
----
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Credits
 
-- [Okipa](https://github.com/Okipa)
-- [Other contributors](https://github.com/Okipa/laravel-table/graphs/contributors)
-
----
+- [Arthur LORENT](https://github.com/okipa)
+- [All Contributors](../../contributors)
 
 ## License
 

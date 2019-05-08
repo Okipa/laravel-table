@@ -30,8 +30,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('Result !', $html);
-        $this->assertContains((string) $companies->sum('turnover'), $html);
+        $this->assertStringContainsString('Result !', $html);
+        $this->assertStringContainsString((string) $companies->sum('turnover'), $html);
     }
 
     public function testSetResultsMultipleHtml()
@@ -52,9 +52,9 @@ class ResultDeclarationTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('Selected turnover', $html);
-        $this->assertContains((string) $companies->sum('turnover'), $html);
-        $this->assertContains('Total turnover', $html);
+        $this->assertStringContainsString('Selected turnover', $html);
+        $this->assertStringContainsString((string) $companies->sum('turnover'), $html);
+        $this->assertStringContainsString('Total turnover', $html);
     }
 
     public function testSetNoResult()
@@ -69,7 +69,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->column('turnover');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains('result', $html);
+        $this->assertStringNotContainsString('result', $html);
     }
 
     public function testResultColspanWithSingleColumn()
@@ -85,7 +85,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
         $this->assertEquals(1, substr_count($html, '<td'));
-        $this->assertNotContains('colspan', $html);
+        $this->assertStringNotContainsString('colspan', $html);
     }
 
     public function testResultColspanWithMultipleColumns()
@@ -102,7 +102,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
         $this->assertEquals(1, substr_count($html, '<td'));
-        $this->assertContains('colspan="2"', $html);
+        $this->assertStringContainsString('colspan="2"', $html);
     }
 
     public function testResultColspanTestWithEditRoute()
@@ -123,6 +123,6 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
         $this->assertEquals(1, substr_count($html, '<td'));
-        $this->assertContains('colspan="4"', $html);
+        $this->assertStringContainsString('colspan="4"', $html);
     }
 }

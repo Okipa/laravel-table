@@ -29,7 +29,7 @@ class AppendsTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = $table->list->links()->toHtml();
-        $this->assertContains('test=testValue', $html);
+        $this->assertStringContainsString('test=testValue', $html);
     }
 
     public function testSetAppendedToRequest()

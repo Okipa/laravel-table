@@ -162,11 +162,11 @@ class SortTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<a href="http://localhost/users/index?sortBy=name&amp;sortDir=desc&amp;rows=20"',
             $thead
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '<a href="http://localhost/users/index?sortBy=email&amp;sortDir=desc&amp;rows=20"',
             $thead
         );

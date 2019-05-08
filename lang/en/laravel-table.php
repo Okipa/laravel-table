@@ -2,16 +2,16 @@
 
 return [
 
-    'rowsNumber' => 'Rows number',
-    'emptyTable' => 'No results were found.',
-    'search' => 'Search by :',
+    'rowsNumber'   => 'Rows number',
+    'emptyTable'   => 'No results were found.',
+    'search'       => 'Search by :',
     'cancelSearch' => 'Cancel research',
-    'actions' => 'Actions',
-    'create' => 'Create',
-    'edit' => 'Edit',
-    'show' => 'Show',
-    'destroy' => 'Delete',
-    'cancel' => 'Cancel',
-    'navigation' => 'Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>',
+    'actions'      => 'Actions',
+    'create'       => 'Create',
+    'edit'         => 'Edit',
+    'show'         => 'Show',
+    'destroy'      => 'Delete',
+    'cancel'       => 'Cancel',
+    'navigation'   => 'Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>',
 
 ];

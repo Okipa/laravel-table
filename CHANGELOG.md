@@ -4,8 +4,9 @@
 
 2019-05-06
 
-- Added `show` to the list of available routes. - _[Dranthos](https://github.com/Dranthos)_
-- Added Spanish translation. - _[Dranthos](https://github.com/Dranthos)_
+- Added `show` to the list of available routes. - _[@Dranthos](https://github.com/Dranthos)_
+- Added Spanish translation. - _[@Dranthos](https://github.com/Dranthos)_
+- Wrapped sortable columns titles in order to avoid line jump between the sort icon and the column title. 
 
 ## [1.0.10](https://github.com/Okipa/laravel-table/releases/tag/1.0.10)
 

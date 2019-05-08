@@ -28,6 +28,6 @@ class CustomValueTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('user name = ' . $user->name, $html);
+        $this->assertStringContainsString('user name = ' . $user->name, $html);
     }
 }

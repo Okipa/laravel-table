@@ -205,9 +205,9 @@ class SearchTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         foreach ($companies as $company) {
             if ($company->owner->name === $searchedValue) {
-                $this->assertContains($company->owner->name, $html);
+                $this->assertStringContainsString($company->owner->name, $html);
             } else {
-                $this->assertNotContains($company->owner->name, $html);
+                $this->assertStringNotContainsString($company->owner->name, $html);
             }
         }
     }
@@ -321,14 +321,14 @@ class SearchTest extends LaravelTableTestCase
         $table->column('email')->title('Email')->searchable();
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('searching', $html);
-        $this->assertContains('name="search"', $html);
-        $this->assertContains(
+        $this->assertStringContainsString('searching', $html);
+        $this->assertStringContainsString('name="search"', $html);
+        $this->assertStringContainsString(
             'placeholder="' . __('laravel-table::laravel-table.search') . ' '
             . $table->searchableTitles() . '"',
             $html
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'aria-label="' . __('laravel-table::laravel-table.search') . ' '
             . $table->searchableTitles() . '"',
             $html
@@ -343,13 +343,13 @@ class SearchTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertNotContains('<div class="searching', $html);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString('<div class="searching', $html);
+        $this->assertStringNotContainsString(
             'placeholder="' . __('laravel-table::laravel-table.thead.search') . ' '
             . $table->searchableTitles() . '"',
             $html
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'title="' . __('laravel-table::laravel-table.thead.search') . ' '
             . $table->searchableTitles() . '"',
             $html

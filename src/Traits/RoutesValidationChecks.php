@@ -38,7 +38,7 @@ trait RoutesValidationChecks
     {
         $routeKeys = array_keys($routes);
         foreach ($requiredRouteKeys as $requiredRouteKey) {
-            if (!in_array($requiredRouteKey, $routeKeys)) {
+            if (! in_array($requiredRouteKey, $routeKeys)) {
                 throw new ErrorException(
                     'The required « ' . $requiredRouteKey
                     . ' » route key is missing. Use the « routes() » method to declare it.'
@@ -59,7 +59,7 @@ trait RoutesValidationChecks
     protected function checkAllowedRoutesValidity(array $routes, array $allowedRouteKeys): void
     {
         foreach (array_keys($routes) as $routeKey) {
-            if (!in_array($routeKey, $allowedRouteKeys)) {
+            if (! in_array($routeKey, $allowedRouteKeys)) {
                 throw new ErrorException(
                     'The « ' . $routeKey . ' » key is not an authorized route key (' . implode(', ', $allowedRouteKeys)
                     . '). Fix your routes declaration in the « routes() » method.'
@@ -81,7 +81,7 @@ trait RoutesValidationChecks
         $requiredRouteParams = ['name'];
         foreach ($routes as $routeKey => $route) {
             foreach ($requiredRouteParams as $requiredRouteParam) {
-                if (!in_array($requiredRouteParam, array_keys($route))) {
+                if (! in_array($requiredRouteParam, array_keys($route))) {
                     throw new ErrorException(
                         'The « ' . $requiredRouteParam . ' » key is missing from the « ' . $routeKey
                         . ' » route definition. Each route definition should follow this structure : '
@@ -95,7 +95,7 @@ trait RoutesValidationChecks
 
     protected function checkRouteIsDefined(string $routeKey)
     {
-        if (!isset($this->routes[$routeKey]) || empty($this->routes[$routeKey])) {
+        if (! isset($this->routes[$routeKey]) || empty($this->routes[$routeKey])) {
             throw new InvalidArgumentException(
                 'Invalid « $routeKey » argument for the « route() » method. The route key « '
                 . $routeKey . ' » has not been found in the routes stack.'

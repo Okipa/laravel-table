@@ -25,7 +25,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('updated_at')->dateTimeFormat('d/m/Y');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(Carbon::parse($user->updated_at)->format('d/m/Y'), $html);
+        $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('d/m/Y'), $html);
     }
 
     public function testDateTimeFormatAttribute()
@@ -44,7 +44,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('updated_at')->dateTimeFormat('d/m');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(Carbon::parse($user->updated_at)->format('d/m'), $html);
+        $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('d/m'), $html);
     }
 
     public function testSetColumnDateTimeToTimeFormatHtml()
@@ -56,7 +56,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('updated_at')->dateTimeFormat('H\h i\m\i\n');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(Carbon::parse($user->updated_at)->format('H\h i\m\i\n'), $html);
+        $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('H\h i\m\i\n'), $html);
     }
 
     public function testSetColumnDateTimeToDateTimeFormatHtml()
@@ -68,6 +68,6 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('updated_at')->dateTimeFormat('d/m/Y H:i');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(Carbon::parse($user->updated_at)->format('d/m/Y H:i'), $html);
+        $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('d/m/Y H:i'), $html);
     }
 }

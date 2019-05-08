@@ -26,7 +26,7 @@ class ColumnDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $html = $table->render();
-        $this->assertContains('validation.attributes.name', $html);
+        $this->assertStringContainsString('validation.attributes.name', $html);
     }
 
     public function testAddColumnWithNoDefinedModel()

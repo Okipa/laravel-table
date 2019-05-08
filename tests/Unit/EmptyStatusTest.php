@@ -15,7 +15,7 @@ class EmptyStatusTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(__('laravel-table::laravel-table.emptyTable'), $html);
+        $this->assertStringContainsString(__('laravel-table::laravel-table.emptyTable'), $html);
     }
 
     public function testFilledListHtml()
@@ -27,6 +27,6 @@ class EmptyStatusTest extends LaravelTableTestCase
         $table->column('email');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains(__('laravel-table::laravel-table.emptyTable'), $html);
+        $this->assertStringNotContainsString(__('laravel-table::laravel-table.emptyTable'), $html);
     }
 }

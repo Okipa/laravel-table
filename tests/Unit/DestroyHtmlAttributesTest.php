@@ -49,7 +49,7 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertEquals(5, substr_count($html, 'data-confirm'));
         foreach ($table->list as $model) {
-            $this->assertContains(__('Are you sure you want to delete the user :name ?', [
+            $this->assertStringContainsString(__('Are you sure you want to delete the user :name ?', [
                 'name' => $model->name,
             ]), $html);
         }

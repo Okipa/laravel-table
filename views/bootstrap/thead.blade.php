@@ -95,7 +95,8 @@
         @foreach($table->columns as $column)
             <th {{ classTag($table->thClasses) }} scope="col">
                 @if($column->isSortable)
-                    <a href="{{ $table->route('index', array_merge([
+                    <a class="d-flex"
+                       href="{{ $table->route('index', array_merge([
                             'sortBy'    => $column->databaseDefaultColumn,
                             'sortDir'   => $table->request->sortDir === 'desc' ? 'asc' : 'desc',
                             'search'    => $table->request->search,

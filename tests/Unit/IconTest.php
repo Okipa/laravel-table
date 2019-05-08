@@ -32,7 +32,7 @@ class IconTest extends LaravelTableTestCase
         $table->column('name')->icon('icon');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('icon', $html);
+        $this->assertStringContainsString('icon', $html);
     }
 
     public function testSetIconWithCustomValueHtml()
@@ -45,7 +45,7 @@ class IconTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('icon', $html);
+        $this->assertStringContainsString('icon', $html);
     }
 
     public function testSetIconWithNoValueHtml()
@@ -57,7 +57,7 @@ class IconTest extends LaravelTableTestCase
         $table->column('name')->icon('icon');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains('icon', $html);
+        $this->assertStringNotContainsString('icon', $html);
     }
 
     public function testSetIconWithNoValueButShowAnywayValueHtml()
@@ -69,6 +69,6 @@ class IconTest extends LaravelTableTestCase
         $table->column('name')->icon('icon', true);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('icon', $html);
+        $this->assertStringContainsString('icon', $html);
     }
 }

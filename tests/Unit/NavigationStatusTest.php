@@ -29,6 +29,6 @@ class NavigationStatusTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->render();
         $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
-        $this->assertContains($table->navigationStatus(), $html);
+        $this->assertStringContainsString($table->navigationStatus(), $html);
     }
 }

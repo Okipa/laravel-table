@@ -31,13 +31,13 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertNotContains('rows-number-selection', $thead);
-        $this->assertNotContains('type="number"', $thead);
-        $this->assertNotContains('name="rows"', $thead);
-        $this->assertNotContains('value="20"', $thead);
-        $this->assertNotContains('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringNotContainsString('rows-number-selection', $thead);
+        $this->assertStringNotContainsString('type="number"', $thead);
+        $this->assertStringNotContainsString('name="rows"', $thead);
+        $this->assertStringNotContainsString('value="20"', $thead);
+        $this->assertStringNotContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
                               . '"', $thead);
-        $this->assertNotContains('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringNotContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
                               . '"', $thead);
     }
 
@@ -52,13 +52,13 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertNotContains('rows-number-selection', $thead);
-        $this->assertNotContains('type="number"', $thead);
-        $this->assertNotContains('name="rows"', $thead);
-        $this->assertNotContains('value="20"', $thead);
-        $this->assertNotContains('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringNotContainsString('rows-number-selection', $thead);
+        $this->assertStringNotContainsString('type="number"', $thead);
+        $this->assertStringNotContainsString('name="rows"', $thead);
+        $this->assertStringNotContainsString('value="20"', $thead);
+        $this->assertStringNotContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
                                  . '"', $thead);
-        $this->assertNotContains('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringNotContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
                                  . '"', $thead);
     }
     
@@ -73,13 +73,13 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('rows-number-selection', $thead);
-        $this->assertContains('type="number"', $thead);
-        $this->assertContains('name="rows"', $thead);
-        $this->assertContains('value="20"', $thead);
-        $this->assertContains('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringContainsString('rows-number-selection', $thead);
+        $this->assertStringContainsString('type="number"', $thead);
+        $this->assertStringContainsString('name="rows"', $thead);
+        $this->assertStringContainsString('value="20"', $thead);
+        $this->assertStringContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
                               . '"', $thead);
-        $this->assertContains('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
                               . '"', $thead);
     }
 
@@ -93,13 +93,13 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('rows-number-selection', $thead);
-        $this->assertContains('type="number"', $thead);
-        $this->assertContains('name="rows"', $thead);
-        $this->assertContains('value="15"', $thead);
-        $this->assertContains('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringContainsString('rows-number-selection', $thead);
+        $this->assertStringContainsString('type="number"', $thead);
+        $this->assertStringContainsString('name="rows"', $thead);
+        $this->assertStringContainsString('value="15"', $thead);
+        $this->assertStringContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
                               . '"', $thead);
-        $this->assertContains('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
+        $this->assertStringContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
                               . '"', $thead);
     }
 

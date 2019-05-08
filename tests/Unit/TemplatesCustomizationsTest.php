@@ -54,7 +54,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
-        $this->assertContains('<table id="table-test">', $html);
+        $this->assertStringContainsString('<table id="table-test">', $html);
     }
 
     public function testSetTheadTemplateHtml()
@@ -68,7 +68,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('<thead id="thead-test">', $html);
+        $this->assertStringContainsString('<thead id="thead-test">', $html);
     }
 
     public function testSetTbodyTemplateHtml()
@@ -82,7 +82,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('<tbody id="tbody-test">', $html);
+        $this->assertStringContainsString('<tbody id="tbody-test">', $html);
     }
 
     public function testSetResultsTemplateHtml()
@@ -96,7 +96,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('<tr id="results-test"><td></td></tr>', $html);
+        $this->assertStringContainsString('<tr id="results-test"><td></td></tr>', $html);
     }
 
     public function testSetTfootTemplateHtml()
@@ -110,6 +110,6 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertContains('<tfoot id="tfoot-test">', $html);
+        $this->assertStringContainsString('<tfoot id="tfoot-test">', $html);
     }
 }

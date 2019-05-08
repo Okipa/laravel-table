@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\Tests\Unit;
 
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
@@ -23,6 +24,6 @@ class StringLimitTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->column('email')->title('Email')->stringLimit(2);
         $html = $table->render();
-        $this->assertContains(str_limit($user->email, 2), $html);
+        $this->assertStringContainsString(Str::limit($user->email, 2), $html);
     }
 }

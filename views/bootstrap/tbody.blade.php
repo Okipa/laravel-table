@@ -52,7 +52,7 @@
                                     {{ $customValue }}
                                 {{-- string limit --}}
                                 @elseif($column->stringLimit)
-                                    {{ str_limit(strip_tags($value), $column->stringLimit) }}
+                                    {{ Str::limit(strip_tags($value), $column->stringLimit) }}
                                 {{-- datetime format --}}
                                 @elseif($column->dateTimeFormat)
                                     {{ $value 
@@ -81,7 +81,6 @@
                                 {{-- show button --}}
                                 @if($table->isRouteDefined('show'))
                                     <form id="show-{{ $model->id }}"
-                                          class="flex-shrink-0"
                                           role="form"
                                           method="GET"
                                           action="{{ $table->route('show', ['id' => $model->id]) }}">
@@ -96,7 +95,7 @@
                                 {{-- edit button --}}
                                 @if($table->isRouteDefined('edit'))
                                     <form id="edit-{{ $model->id }}"
-                                          class="ml-1"
+                                          class="ml-2"
                                           role="form"
                                           method="GET"
                                           action="{{ $table->route('edit', ['id' => $model->id]) }}">
@@ -111,7 +110,7 @@
                                 {{-- destroy button --}}
                                 @if($table->isRouteDefined('destroy'))
                                     <form id="destroy-{{ $model->id }}"
-                                          class="ml-1 destroy"
+                                          class="ml-2 destroy"
                                           role="form"
                                           method="POST"
                                           action="{{ $table->route('destroy', ['id' => $model->id]) }}">

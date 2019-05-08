@@ -23,8 +23,8 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<button class="btn btn-primary', $html);
-        $this->assertContains('</button>', $html);
+        $this->assertStringContainsString('<button class="btn btn-primary', $html);
+        $this->assertStringContainsString('</button>', $html);
     }
 
     public function testIsButtonWithNoValueHtml()
@@ -36,8 +36,8 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertNotContains('<button class="btn btn-primary', $html);
-        $this->assertNotContains('</button>', $html);
+        $this->assertStringNotContainsString('<button class="btn btn-primary', $html);
+        $this->assertStringNotContainsString('</button>', $html);
     }
 
     public function testIsButtonWithNoValueWithIconHtml()
@@ -49,8 +49,8 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary'])->icon('icon', true);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains('<button class="btn btn-primary', $html);
-        $this->assertContains('</button>', $html);
+        $this->assertStringContainsString('<button class="btn btn-primary', $html);
+        $this->assertStringContainsString('</button>', $html);
     }
 
     public function testIsButtonWithCustomValueHtml()
@@ -64,10 +64,10 @@ class ButtonTest extends LaravelTableTestCase
         });
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<button class="buttonClass user-name-' . str_slug(strip_tags($user->name)) . '">',
             $html
         );
-        $this->assertContains('</button>', $html);
+        $this->assertStringContainsString('</button>', $html);
     }
 }
