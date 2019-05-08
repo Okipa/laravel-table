@@ -7,6 +7,7 @@ use ErrorException;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Okipa\LaravelTable\Traits\ClassesCustomizations;
@@ -62,6 +63,7 @@ class Table implements Htmlable
      * @param string $tableModel
      *
      * @return \Okipa\LaravelTable\Table
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function model(string $tableModel): Table
     {
@@ -101,14 +103,14 @@ class Table implements Htmlable
     }
 
     /**
-     * Override the number of rows to display on the table.
+     * Override the config default number of rows to display on the table.
      * The default number of displayed rows is defined in the config('laravel-table.value.rowsNumber') config value.
      *
-     * @param int $rows
+     * @param int|false $rows
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function rowsNumber(int $rows): Table
+    public function rowsNumber(?int $rows): Table
     {
         $this->rows = $rows;
 
@@ -245,7 +247,7 @@ class Table implements Htmlable
 
         return route(
             $this->routes[$routeKey]['name'],
-            array_merge(array_get($this->routes[$routeKey], 'params', []), $params)
+            array_merge(Arr::get($this->routes[$routeKey], 'params', []), $params)
         );
     }
 
@@ -350,22 +352,21 @@ class Table implements Htmlable
     protected function handleRequest(): void
     {
         $validator = Validator::make($this->request->only('rows', 'search', 'sortBy', 'sortDir'), [
-            'rows'    => 'required|numeric',
+            'rows'    => 'required|integer',
             'search'  => 'nullable|string',
             'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
             'sortDir' => 'nullable|string|in:asc,desc',
         ]);
         if ($validator->fails()) {
             $this->request->merge([
-                'rows'    => $this->rows ? $this->rows : config('laravel-table.value.rows'),
+                'rows'    => $this->rows ?? config('laravel-table.value.rows'),
                 'search'  => null,
                 'sortBy'  => $this->sortBy,
                 'sortDir' => $this->sortDir,
             ]);
-        } else {
-            $this->rows = $this->request->rows;
-            $this->search = $this->request->search;
         }
+        $this->rows = $this->request->rows;
+        $this->search = $this->request->search;
     }
 
     /**
@@ -468,7 +469,9 @@ class Table implements Htmlable
      */
     protected function paginateList(Builder $query): void
     {
-        $this->list = $query->paginate($this->rows);
+        //        dd($this->rows, $query->count());
+        $this->list = $query->paginate($this->rows ?: $query->count());
+        //        dd(config('laravel-table.value.rowsNumber'), $this->rows, $query->count(), $this->list->count());
         $this->list->appends(array_merge([
             'rows'    => $this->rows,
             'search'  => $this->search,

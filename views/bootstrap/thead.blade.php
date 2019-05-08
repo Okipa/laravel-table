@@ -6,8 +6,8 @@
                 {{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }}>
                 <div class="d-flex flex-wrap justify-content-between py-2">
                     {{-- rows number selection --}}
-                    <div class="px-3 py-1 rows-number-selection">
-                        @if($table->rowsNumberSelectionActivation)
+                    @if($table->rowsNumberSelectionActivation)
+                        <div class="px-3 py-1 rows-number-selection">
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="search" value="{{ $table->request->search }}">
                                 <input type="hidden" name="sortBy" value="{{ $table->request->sortBy }}">
@@ -36,11 +36,11 @@
                                     </div>
                                 </div>
                             </form>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                     {{-- searching --}}
-                    <div class="flex-fill px-3 py-1 searching">
-                        @if(count($table->searchableColumns))
+                    @if(count($table->searchableColumns))
+                        <div class="flex-fill px-3 py-1 searching">
                             <form role="form" method="GET" action="{{ $table->route('index') }}">
                                 <input type="hidden" name="rows" value="{{ $table->request->rows }}">
                                 <input type="hidden" name="sortBy" value="{{ $table->request->sortBy }}">
@@ -84,8 +84,8 @@
                                     @endif
                                 </div>
                             </form>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </td>
         </tr>

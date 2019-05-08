@@ -21,24 +21,33 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->rowsNumber($rows);
         $this->assertEquals($rows, $table->rows);
     }
+    
+    public function testSetUnlimitedRowsNumberAttribute()
+    {
+        $rows = false;
+        $table = (new Table)->rowsNumber(false);
+        $this->assertEquals($rows, $table->rows);
+    }
 
     public function testDeactivateRowsNumberSelectionFromConfigHtml()
     {
         config()->set('laravel-table.value.rowsNumberSelectionActivation', false);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->title('Name');
-        $table->column('email')->title('Email');
+        $table->column('name')->searchable();
+        $table->column('email');
         $table->render();
-        $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertStringNotContainsString('rows-number-selection', $thead);
-        $this->assertStringNotContainsString('type="number"', $thead);
-        $this->assertStringNotContainsString('name="rows"', $thead);
-        $this->assertStringNotContainsString('value="20"', $thead);
-        $this->assertStringNotContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
-                              . '"', $thead);
-        $this->assertStringNotContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
-                              . '"', $thead);
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertStringNotContainsString('rows-number-selection', $html);
+        $this->assertStringNotContainsString('type="hidden" name="search"', $html);
+        $this->assertStringNotContainsString(
+            'placeholder="' . __('laravel-table::laravel-table.rowsNumber') . '"',
+            $html
+        );
+        $this->assertStringNotContainsString(
+            'aria-label="' . __('laravel-table::laravel-table.rowsNumber') . '"',
+            $html
+        );
     }
 
     public function testDeactivateRowsNumberSelectionFromMethodHtml()
@@ -48,20 +57,18 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumberSelectionActivation(false);
-        $table->column('name')->title('Name');
-        $table->column('email')->title('Email');
+        $table->column('name')->searchable();
+        $table->column('email');
         $table->render();
-        $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertStringNotContainsString('rows-number-selection', $thead);
-        $this->assertStringNotContainsString('type="number"', $thead);
-        $this->assertStringNotContainsString('name="rows"', $thead);
-        $this->assertStringNotContainsString('value="20"', $thead);
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertStringNotContainsString('rows-number-selection', $html);
+        $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
-                                 . '"', $thead);
+            . '"', $html);
         $this->assertStringNotContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
-                                 . '"', $thead);
+            . '"', $html);
     }
-    
+
     public function testActivateRowsNumberSelectionHtml()
     {
         config()->set('laravel-table.value.rowsNumberSelectionActivation', false);
@@ -69,21 +76,31 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumberSelectionActivation();
-        $table->column('name')->title('Name');
-        $table->column('email')->title('Email');
+        $table->column('name');
+        $table->column('email');
         $table->render();
-        $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertStringContainsString('rows-number-selection', $thead);
-        $this->assertStringContainsString('type="number"', $thead);
-        $this->assertStringContainsString('name="rows"', $thead);
-        $this->assertStringContainsString('value="20"', $thead);
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertStringContainsString('rows-number-selection', $html);
+        $this->assertStringContainsString('type="hidden" name="search"', $html);
         $this->assertStringContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
-                              . '"', $thead);
+            . '"', $html);
         $this->assertStringContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
-                              . '"', $thead);
+            . '"', $html);
     }
 
-    public function testSetCustomRowsNumberHtml()
+    public function testSetCustomRowsNumberFromConfigHtml()
+    {
+        config()->set('laravel-table.value.rowsNumber', 15);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name');
+        $table->column('email');
+        $table->render();
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertStringContainsString('value="15"', $html);
+    }
+
+    public function testSetCustomRowsNumberFromMethodHtml()
     {
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
@@ -92,15 +109,8 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertStringContainsString('rows-number-selection', $thead);
-        $this->assertStringContainsString('type="number"', $thead);
-        $this->assertStringContainsString('name="rows"', $thead);
-        $this->assertStringContainsString('value="15"', $thead);
-        $this->assertStringContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
-                              . '"', $thead);
-        $this->assertStringContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
-                              . '"', $thead);
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $this->assertStringContainsString('value="15"', $html);
     }
 
     public function testSetCustomRowsNumberFromRequest()
@@ -111,12 +121,31 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
-        $table->column('name')->title('Name')->sortable(true, 'asc');
-        $table->column('email')->title('Email');
+        $table->column('name')->sortable(true, 'asc');
+        $table->column('email');
         $table->render();
         $this->assertEquals(
             App(User::class)->orderBy('name', 'asc')->paginate(10)->toArray()['data'],
             $table->list->toArray()['data']
         );
+    }
+
+    public function testSetUnlimitedRowsNumberHtml()
+    {
+        config()->set('laravel-table.value.rowsNumber', 5);
+        $users = $this->createMultipleUsers(20);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->rowsNumber(false);
+        $table->column('name');
+        $table->column('email');
+        $table->render();
+        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $this->assertStringContainsString('value=""', $html);
+        foreach ($users as $user) {
+            $this->assertStringContainsString($user->name, $html);
+            $this->assertStringContainsString($user->email, $html);
+        }
     }
 }

@@ -163,11 +163,11 @@ class SortTest extends LaravelTableTestCase
         $table->render();
         $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $this->assertStringContainsString(
-            '<a href="http://localhost/users/index?sortBy=name&amp;sortDir=desc&amp;rows=20"',
+            'href="http://localhost/users/index?sortBy=name&amp;sortDir=desc&amp;rows=20"',
             $thead
         );
         $this->assertStringNotContainsString(
-            '<a href="http://localhost/users/index?sortBy=email&amp;sortDir=desc&amp;rows=20"',
+            'href="http://localhost/users/index?sortBy=email&amp;sortDir=desc&amp;rows=20"',
             $thead
         );
     }

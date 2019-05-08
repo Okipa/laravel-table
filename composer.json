@@ -28,7 +28,8 @@
     "require": {
         "php": ">=7.1",
         "illuminate/support": "~5.2",
-        "okipa/laravel-html-helper": "^1.0"
+        "okipa/laravel-html-helper": "^1.0",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^3.6",

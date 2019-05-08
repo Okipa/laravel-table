@@ -190,18 +190,21 @@ public function index(Request $request) {
 
 <h3 id="table-rowsNumber">->rowsNumber</h3>
 
-> Override the number of rows to display on the table.  
-> The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.
+> Override the config default number of rows to display on the table.  
+> The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.  
+> Set `false` to display all the models contained in database.
 
 **Note :**
 
-- Signature : `rowsNumber(int $rows): \Okipa\LaravelTable\Table`
+- Signature : `rowsNumber(?int $rows): \Okipa\LaravelTable\Table`
 - Optional
 
 **Use case example :**
 
 ```php
 (new \Okipa\LaravelTable\Table)->rowsNumber(50);
+// or
+(new \Okipa\LaravelTable\Table)->rowsNumber(false);
 ```
 
 <h3 id="table-rowsNumberSelectionActivation">->rowsNumberSelectionActivation()</h3>
@@ -837,7 +840,7 @@ $table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)
         'destroy'    => ['name' => 'news.destroy'],
         'show'    => ['name' => 'news.show'],
     ])
-    ->rowsNumber(50)
+    ->rowsNumber(50) // or set `false` to get all the items contained in database
     ->rowsNumberSelectionActivation(false)
     ->query(function ($query) use ($category_id) {
         // some examples of what you can do
