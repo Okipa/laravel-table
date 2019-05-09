@@ -14,6 +14,10 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 Give it a try !
 
+## Compatibility
+
+This version is compatible with Laravel 5.5+ and PHP7.2+.
+
 ## Table of contents
 
 - [Installation](#installation)

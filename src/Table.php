@@ -313,7 +313,7 @@ class Table implements Htmlable
         return __('laravel-table::laravel-table.navigation', [
             'start' => ($this->list->perPage() * ($this->list->currentPage() - 1)) + 1,
             'stop'  => $this->list->count() + (($this->list->currentPage() - 1) * $this->list->perPage()),
-            'total' => $this->list->total(),
+            'total' => (int) $this->list->total(),
         ]);
     }
 
@@ -469,9 +469,7 @@ class Table implements Htmlable
      */
     protected function paginateList(Builder $query): void
     {
-        //        dd($this->rows, $query->count());
-        $this->list = $query->paginate($this->rows ?: $query->count());
-        //        dd(config('laravel-table.value.rowsNumber'), $this->rows, $query->count(), $this->list->count());
+        $this->list = $query->paginate((int) $this->rows ?: $query->count());
         $this->list->appends(array_merge([
             'rows'    => $this->rows,
             'search'  => $this->search,

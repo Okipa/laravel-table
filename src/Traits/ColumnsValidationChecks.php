@@ -11,6 +11,7 @@ use Okipa\LaravelTable\Column;
 
 trait ColumnsValidationChecks
 {
+
     /**
      * Check if a route is defined from its key.
      *
