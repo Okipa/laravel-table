@@ -8,21 +8,101 @@ use InvalidArgumentException;
 
 class Column
 {
+    /**
+     * The table instance the table column is associated to.
+     *
+     * @property \Okipa\LaravelTable\Table $table
+     */
     public $table;
+    /**
+     * The database table the table column is associated to.
+     *
+     * @property string $databaseDefaultTable
+     */
     public $databaseDefaultTable;
+    /**
+     * The database table the table column is associated to for the searching action.
+     *
+     * @property string $databaseSearchedTable
+     */
     public $databaseSearchedTable;
+    /**
+     * The database column the table column is associated to.
+     *
+     * @property string $databaseDefaultColumn
+     */
     public $databaseDefaultColumn;
+    /**
+     * The database column the table column is associated to for the searching action.
+     *
+     * @property string $databaseSearchedColumns
+     */
     public $databaseSearchedColumns;
+    /**
+     * The table column sortable status.
+     *
+     * @property bool $isSortable
+     */
     public $isSortable;
+    /**
+     * The table column custom title.
+     *
+     * @property string $title
+     */
     public $title;
+    /**
+     * The table column datetime format.
+     *
+     * @property string $dateTimeFormat
+     */
     public $dateTimeFormat;
+    /**
+     * The table column button classes.
+     *
+     * @property array $buttonClasses
+     */
     public $buttonClasses;
+    /**
+     * The table column string length limitation.
+     *
+     * @property int $stringLimit
+     */
     public $stringLimit;
+    /**
+     * The table column url.
+     *
+     * @property string $url
+     */
     public $url;
+    /**
+     * The table column custom value closure.
+     *
+     * @property Closure $valueClosure
+     */
     public $valueClosure;
+    /**
+     * The table column custom html output closure.
+     *
+     * @property Closure $htmlClosure
+     */
     public $htmlClosure;
+    /**
+     * The table column value prepended icon.
+     *
+     * @property string $icon
+     */
     public $icon;
+    /**
+     * The icon display status when no value is found.
+     *
+     * @property bool $displayIconWhenNoValue
+     */
     public $displayIconWhenNoValue;
+    /**
+     * The table column classes.
+     *
+     * @property array $classes
+     */
     public $classes;
 
     /**
@@ -87,13 +167,13 @@ class Column
     {
         if ($this->table->sortBy || $this->table->sortDir) {
             $errorMessage = 'The table is already sorted by the « ' . $this->table->sortBy
-                            . ' » database column. You only can sort a table column by default once.';
+                . ' » database column. You only can sort a table column by default once.';
             throw new ErrorException($errorMessage);
         }
         $this->table->sortBy = $this->databaseDefaultColumn;
         $acceptedDirections = ['asc', 'desc'];
         $errorMessage = 'Invalid « $sortDirection » second argument for « sortable() » method. Has to be « asc » or '
-                        . '« desc ». « ' . $sortDirection . ' » given.';
+            . '« desc ». « ' . $sortDirection . ' » given.';
         if (! in_array($sortDirection, $acceptedDirections)) {
             throw new InvalidArgumentException($errorMessage);
         }

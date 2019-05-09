@@ -28,6 +28,7 @@ trait ClassesCustomizations
     {
         $this->containerClasses = $containerClasses;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -43,6 +44,7 @@ trait ClassesCustomizations
     {
         $this->tableClasses = $tableClasses;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -58,6 +60,7 @@ trait ClassesCustomizations
     {
         $this->trClasses = $trClasses;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -73,6 +76,7 @@ trait ClassesCustomizations
     {
         $this->thClasses = $thClasses;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -87,6 +91,7 @@ trait ClassesCustomizations
     {
         $this->tdClasses = $tdClasses;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -101,6 +106,7 @@ trait ClassesCustomizations
     {
         $this->resultClasses = $resultClasses;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -120,6 +126,7 @@ trait ClassesCustomizations
             'classes' => $rowClasses,
         ]);
 
+        /** @var Table $this */
         return $this;
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Column;
 
 trait ColumnsValidationChecks
@@ -136,8 +137,8 @@ trait ColumnsValidationChecks
             $fromSqlStatement = last(explode(' from ', (string) $query->toSql()));
             preg_match_all('/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/', $fromSqlStatement, $aliases);
             if (! empty(array_filter($aliases))) {
-                $position = array_keys(array_where(array_shift($aliases), function ($alias) use ($table) {
-                    return str_contains($alias, $table);
+                $position = array_keys(Arr::where(array_shift($aliases), function ($alias) use ($table) {
+                    return Str::contains($alias, $table);
                 }));
                 $alias = head($aliases)[head($position)];
                 $columns = Schema::getColumnListing($alias);

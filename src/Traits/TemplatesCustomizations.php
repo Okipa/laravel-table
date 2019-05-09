@@ -24,6 +24,7 @@ trait TemplatesCustomizations
     {
         $this->tableComponentPath = $tableComponentPath;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -39,6 +40,7 @@ trait TemplatesCustomizations
     {
         $this->theadComponentPath = $theadComponentPath;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -54,6 +56,7 @@ trait TemplatesCustomizations
     {
         $this->tbodyComponentPath = $tbodyComponentPath;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -69,6 +72,7 @@ trait TemplatesCustomizations
     {
         $this->resultsComponentPath = $resultsComponentPath;
 
+        /** @var Table $this */
         return $this;
     }
 
@@ -84,6 +88,7 @@ trait TemplatesCustomizations
     {
         $this->tfootComponentPath = $tfootComponentPath;
 
+        /** @var Table $this */
         return $this;
     }
 

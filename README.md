@@ -194,7 +194,7 @@ public function index(Request $request) {
 
 <h3 id="table-rowsNumber">->rowsNumber</h3>
 
-> Override the config default number of rows to display on the table.  
+> Override the config default number of rows displayed on the table.  
 > The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.  
 > Set `false` to display all the models contained in database.
 

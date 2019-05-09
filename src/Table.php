@@ -21,23 +21,113 @@ class Table implements Htmlable
     use ClassesCustomizations;
     use RoutesValidationChecks;
     use ColumnsValidationChecks;
+    /**
+     * The model used during the table generation.
+     *
+     * @property \Illuminate\Database\Eloquent\Model $model
+     */
     public $model;
+    /**
+     * The number of rows displayed on the table.
+     *
+     * @property int $rows
+     */
     public $rows;
+    /**
+     * The rows number selection activation status.
+     *
+     * @property bool $rowsNumberSelectionActivation
+     */
     public $rowsNumberSelectionActivation;
+    /**
+     * The sortable columns in the table.
+     *
+     * @property \Illuminate\Support\Collection $sortableColumns
+     */
     public $sortableColumns;
+    /**
+     * The database column name the table is sorted.
+     *
+     * @property string $sortBy
+     */
     public $sortBy;
+    /**
+     * The direction the table is sorted.
+     *
+     * @property string $sortDir
+     */
     public $sortDir;
+    /**
+     * The searched value in database.
+     *
+     * @property string $search
+     */
     public $search;
+    /**
+     * The searchable columns in the table.
+     *
+     * @property \Illuminate\Support\Collection $searchableColumns
+     */
     public $searchableColumns;
+    /**
+     * The request used by the table.
+     *
+     * @property \Illuminate\Http\Request $request
+     */
     public $request;
+    /**
+     * The routes used by the table.
+     *
+     * @property array $routes
+     */
     public $routes = [];
+    /**
+     * The table columns.
+     *
+     * @property \Illuminate\Support\Collection $columns
+     */
     public $columns;
+    /**
+     * The table additional query instructions closure.
+     *
+     * @property Closure $queryClosure
+     */
     public $queryClosure;
+    /**
+     * The table disabled rows.
+     *
+     * @property \Illuminate\Support\Collection $disableRows
+     */
     public $disableRows;
+    /**
+     * The table generated list to display.
+     *
+     * @property \Illuminate\Pagination\LengthAwarePaginator $list
+     */
     public $list;
+    /**
+     * The generated html code used for each line destroy confirmation closure.
+     *
+     * @property Closure $destroyConfirmationClosure
+     */
     public $destroyConfirmationClosure;
+    /**
+     * The values to append to the request treatments.
+     *
+     * @property array $appendedValues
+     */
     public $appendedValues = [];
+    /**
+     * The generated hidden fields to insert in the html form when values are appended to the request.
+     *
+     * @property array $appendedHiddenFields
+     */
     public $appendedHiddenFields = [];
+    /**
+     * The result lines to display at the bottom of the table.
+     *
+     * @property \Illuminate\Support\Collection $results
+     */
     public $results;
 
     /**
@@ -103,10 +193,10 @@ class Table implements Htmlable
     }
 
     /**
-     * Override the config default number of rows to display on the table.
+     * Override the config default number of rows displayed on the table.
      * The default number of displayed rows is defined in the config('laravel-table.value.rowsNumber') config value.
      *
-     * @param int|false $rows
+     * @param int|null $rows
      *
      * @return \Okipa\LaravelTable\Table
      */
