@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.12](https://github.com/Okipa/laravel-table/releases/tag/1.0.12)
+
+2019-05-09
+
+- Locked project compatibility to Laravel 5.5+ and PHP7.2+ to avoid issues.
+- Improved code phpdoc for better maintainability.
+
 ## [1.0.11](https://github.com/Okipa/laravel-table/releases/tag/1.0.11)
 
 2019-05-06
