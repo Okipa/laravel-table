@@ -25,7 +25,7 @@ class RowsNumberTest extends LaravelTableTestCase
     public function testSetUnlimitedRowsNumberAttribute()
     {
         $rows = false;
-        $table = (new Table)->rowsNumber(false);
+        $table = (new Table)->rowsNumber(null);
         $this->assertEquals($rows, $table->rows);
     }
 
@@ -137,7 +137,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
-            ->rowsNumber(false);
+            ->rowsNumber(null);
         $table->column('name');
         $table->column('email');
         $table->render();

@@ -208,7 +208,7 @@ public function index(Request $request) {
 ```php
 (new \Okipa\LaravelTable\Table)->rowsNumber(50);
 // or
-(new \Okipa\LaravelTable\Table)->rowsNumber(false);
+(new \Okipa\LaravelTable\Table)->rowsNumber(null);
 ```
 
 <h3 id="table-rowsNumberSelectionActivation">->rowsNumberSelectionActivation()</h3>

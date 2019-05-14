@@ -21,7 +21,7 @@
 - Added Spanish translation. - _[@Dranthos](https://github.com/Dranthos)_
 - Wrapped sortable columns titles in order to avoid line jump between the sort icon and the column title (Issue #14).
 - Improved rows number selection and search bar template to fix wrong display the rows number is disabled for example (Issue #15).
-- Added possibility to show all the models contained in database with `->rowsNumber(false)` chained on the `Table` instance (Issue #16).
+- Added possibility to show all the models contained in database with `->rowsNumber(null)` chained on the `Table` instance (Issue #16).
 
 ## [1.0.10](https://github.com/Okipa/laravel-table/releases/tag/1.0.10)
 
