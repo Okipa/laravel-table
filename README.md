@@ -395,7 +395,7 @@ public function index(Request $request) {
 // this example assume that a bootstrap modal component has been included in your view
 // https://getbootstrap.com/docs/4.3/components/modal/#modal-components
 const destroyButton = $('form.destroy button[type="submit"]');
-destroyButton.click(function(e) {
+destroyButton.click((e) => {
   e.preventDefault();
   const $this = $(e.target);
   const message = $this.data("confirm");

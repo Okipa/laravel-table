@@ -547,7 +547,9 @@ class Table implements Htmlable
             ?: ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->databaseDefaultColumn);
         $this->sortDir = $this->request->sortDir
             ?: ($this->sortDir ? $this->sortDir : 'asc');
-        $query->orderBy($this->sortBy, $this->sortDir);
+        if ($this->sortBy && $this->sortDir) {
+            $query->orderBy($this->sortBy, $this->sortDir);
+        }
     }
 
     /**

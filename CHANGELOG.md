@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.13](https://github.com/Okipa/laravel-table/releases/tag/1.0.13)
+
+2019-05-14
+
+- Fixed a use case when no sortable columns are defined and an empty `orderBy` is called in the SQL request, causing an exception with MySQL.
+
 ## [1.0.12](https://github.com/Okipa/laravel-table/releases/tag/1.0.12)
 
 2019-05-09

@@ -11,6 +11,19 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class SortTest extends LaravelTableTestCase
 {
+    public function testNoSortableAttribute()
+    {
+        $users = $this->createMultipleUsers(2);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name');
+        $table->column('email');
+        $table->render();
+        foreach ($users as $key => $user) {
+            $this->assertEquals($user->name, $table->list->items()[$key]['name']);
+        }
+    }
+
     public function testSetSortableAttribute()
     {
         $table = (new Table)->model(User::class);
@@ -161,14 +174,14 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email');
         $table->render();
-        $thead = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $this->assertStringContainsString(
             'href="http://localhost/users/index?sortBy=name&amp;sortDir=desc&amp;rows=20"',
-            $thead
+            $html
         );
         $this->assertStringNotContainsString(
             'href="http://localhost/users/index?sortBy=email&amp;sortDir=desc&amp;rows=20"',
-            $thead
+            $html
         );
     }
 }
