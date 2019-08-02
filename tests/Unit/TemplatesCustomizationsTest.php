@@ -78,10 +78,10 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
-            ->theadTemplate('tbody-test');
+            ->tbodyTemplate('tbody-test');
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertStringContainsString('<tbody id="tbody-test">', $html);
     }
 
@@ -92,10 +92,10 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
-            ->theadTemplate('results-test');
+            ->resultsTemplate('results-test');
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
         $this->assertStringContainsString('<tr id="results-test"><td></td></tr>', $html);
     }
 
@@ -106,10 +106,10 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
-            ->theadTemplate('tfoot-test');
+            ->tfootTemplate('tfoot-test');
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
         $this->assertStringContainsString('<tfoot id="tfoot-test">', $html);
     }
 }
