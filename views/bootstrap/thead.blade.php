@@ -55,7 +55,7 @@
                                     </div>
                                     <input class="form-control"
                                            type="text"
-                                           name="search"
+                                           name="{{ $table->searchField }}"
                                            value="{{ $table->request->get($table->searchField) }}"
                                            placeholder="@lang('laravel-table::laravel-table.search') {{ $table->searchableTitles() }}"
                                            aria-label="@lang('laravel-table::laravel-table.search') {{ $table->searchableTitles() }}">
