@@ -26,6 +26,7 @@ This version is compatible with Laravel 5.5+ and PHP7.2+.
 - [Customize templates](#customize-templates)
 - [Table API](#table-api)
   - [->model()](#table-model)
+  - [->identifier()](#table-identifier)
   - [->request()](#table-request)
   - [->routes()](#table-routes)
   - [->destroyConfirmationHtmlAttributes()](#table-destroyConfirmationHtmlAttributes)
