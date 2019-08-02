@@ -21,7 +21,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->rowsNumber($rows);
         $this->assertEquals($rows, $table->rows);
     }
-    
+
     public function testSetUnlimitedRowsNumberAttribute()
     {
         $rows = false;
@@ -63,10 +63,14 @@ class RowsNumberTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $this->assertStringNotContainsString('rows-number-selection', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
-        $this->assertStringNotContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
-            . '"', $html);
-        $this->assertStringNotContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
-            . '"', $html);
+        $this->assertStringNotContainsString(
+            'placeholder="' . __('laravel-table::laravel-table.rowsNumber') . '"',
+            $html
+        );
+        $this->assertStringNotContainsString(
+            'aria-label="' . __('laravel-table::laravel-table.rowsNumber') . '"',
+            $html
+        );
     }
 
     public function testActivateRowsNumberSelectionHtml()
@@ -82,10 +86,14 @@ class RowsNumberTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $this->assertStringContainsString('rows-number-selection', $html);
         $this->assertStringContainsString('type="hidden" name="search"', $html);
-        $this->assertStringContainsString('placeholder="' . __('laravel-table::laravel-table.rowsNumber')
-            . '"', $html);
-        $this->assertStringContainsString('aria-label="' . __('laravel-table::laravel-table.rowsNumber')
-            . '"', $html);
+        $this->assertStringContainsString(
+            'placeholder="' . __('laravel-table::laravel-table.rowsNumber') . '"',
+            $html
+        );
+        $this->assertStringContainsString(
+            'aria-label="' . __('laravel-table::laravel-table.rowsNumber') . '"',
+            $html
+        );
     }
 
     public function testSetCustomRowsNumberFromConfigHtml()
@@ -116,7 +124,7 @@ class RowsNumberTest extends LaravelTableTestCase
     public function testSetCustomRowsNumberFromRequest()
     {
         $this->createMultipleUsers(20);
-        $customRequest = (new Request)->merge(['rows' => 10]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 10]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])

@@ -100,6 +100,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+
         $this->assertStringContainsString('<table class="table ' . implode(' ', $classes) . '">', $html);
     }
 

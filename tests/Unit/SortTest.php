@@ -61,7 +61,7 @@ class SortTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table is already sorted by the « name » database column. You only can sort '
-                                      . 'a table column by default once');
+            . 'a table column by default once');
         $table = (new Table)->model(User::class);
         $table->column('name')->sortable(true);
         $table->column('email')->sortable(true);
@@ -95,8 +95,8 @@ class SortTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the sortable table columns has no defined database column. '
-                                      . 'You have to define a database column for each sortable table columns by '
-                                      . 'setting a string parameter in the « column() » method.');
+            . 'You have to define a database column for each sortable table columns by '
+            . 'setting a string parameter in the « column() » method.');
         $this->createMultipleUsers(5);
         $this->routes(['companies'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'companies.index']])->model(User::class);
@@ -107,7 +107,11 @@ class SortTest extends LaravelTableTestCase
     public function testSortByColumn()
     {
         $users = $this->createMultipleUsers(3);
-        $customRequest = (new Request)->merge(['rows' => 20, 'sortBy' => 'email', 'sortDir' => 'desc']);
+        $customRequest = (new Request)->merge([
+            (new Table)->rowsField    => 20,
+            (new Table)->sortByField  => 'email',
+            (new Table)->sortDirField => 'desc',
+        ]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -125,7 +129,11 @@ class SortTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $companies = $this->createMultipleCompanies(5);
         $this->routes(['companies'], ['index']);
-        $customRequest = (new Request)->merge(['rows'    => 20, 'sortBy'  => 'owner', 'sortDir' => 'desc']);
+        $customRequest = (new Request)->merge([
+            (new Table)->rowsField    => 20,
+            (new Table)->sortByField  => 'owner',
+            (new Table)->sortDirField => 'desc',
+        ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function ($query) {
@@ -146,7 +154,11 @@ class SortTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
-        $customRequest = (new Request)->merge(['rows' => 5, 'sortBy' => 'owner', 'sortDir' => 'desc']);
+        $customRequest = (new Request)->merge([
+            (new Table)->rowsField    => 5,
+            (new Table)->sortByField  => 'owner',
+            (new Table)->sortDirField => 'desc',
+        ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function ($query) {
@@ -170,17 +182,19 @@ class SortTest extends LaravelTableTestCase
     public function testSortableColumnHtml()
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email');
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $this->assertStringContainsString(
-            'href="http://localhost/users/index?sortBy=name&amp;sortDir=desc&amp;rows=20"',
+            'href="http://localhost/users/index?' . $table->rowsField . '=20&amp;' . $table->sortByField . '=name&amp;'
+            . $table->sortDirField . '=desc"',
             $html
         );
         $this->assertStringNotContainsString(
-            'href="http://localhost/users/index?sortBy=email&amp;sortDir=desc&amp;rows=20"',
+            'href="http://localhost/users/index?' . $table->rowsField . '=20&amp;' . $table->sortByField . '=email&amp;'
+            . $table->sortDirField . '=desc"',
             $html
         );
     }

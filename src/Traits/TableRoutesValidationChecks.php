@@ -5,7 +5,7 @@ namespace Okipa\LaravelTable\Traits;
 use ErrorException;
 use InvalidArgumentException;
 
-trait RoutesValidationChecks
+trait TableRoutesValidationChecks
 {
     /**
      * Check routes validity.

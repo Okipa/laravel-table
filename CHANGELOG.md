@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/Okipa/laravel-table/releases/tag/1.1.0)
+
+2019-08-02
+
+- Added the possibility to add an identifier to a table with `->identifier('your identifier')`. This identifier will be used for several things :
+  - It will be added as an id (formatted as a slug string) to the table itself.
+  - It will be used to automatically customize the following interaction fields sent to the table, in order to be able to interact with a specific table if you have several of them on a single view : `rows`, `search`, `sort_by`, `sort_dir`.  
+
 ## [1.0.13](https://github.com/Okipa/laravel-table/releases/tag/1.0.13)
 
 2019-05-14

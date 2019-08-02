@@ -6,14 +6,21 @@ use Closure;
 use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Table;
 
-trait ClassesCustomizations
+trait TableClassesCustomizations
 {
+    /** @property array $containerClasses */
     public $containerClasses;
+    /** @property array $tableClasses */
     public $tableClasses;
+    /** @property array $trClasses */
     public $trClasses;
+    /** @property array $thClasses */
     public $thClasses;
+    /** @property array $tdClasses */
     public $tdClasses;
+    /** @property array $resultClasses */
     public $resultClasses;
+    /** @property array $rowsConditionalClasses */
     public $rowsConditionalClasses;
 
     /**

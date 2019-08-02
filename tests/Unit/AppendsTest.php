@@ -38,10 +38,10 @@ class AppendsTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $appended = ['test' => 'testValue', 'array' => ['value1', 'value2']];
         $customRequest = (new Request)->merge([
-            'sortBy'  => 'name',
-            'sortDir' => 'desc',
-            'search'  => 'test',
-            'rows'    => 20,
+            (new Table)->rowsField    => 20,
+            (new Table)->searchField  => 'test',
+            (new Table)->sortByField  => 'name',
+            (new Table)->sortDirField => 'desc',
         ]);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -52,16 +52,16 @@ class AppendsTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
         $sortingHttpArguments = htmlspecialchars(http_build_query(array_merge([
-            'sortBy'  => 'name',
-            'sortDir' => 'asc',
-            'search'  => 'test',
-            'rows'    => 20,
+            $table->rowsField    => 20,
+            $table->searchField  => 'test',
+            $table->sortByField  => 'name',
+            $table->sortDirField => 'asc',
         ], $appended)));
         $searchCancelingHttpArguments = htmlspecialchars(http_build_query(array_merge([
-            'rows'    => 20,
-            'sortBy'  => 'name',
-            'sortDir' => 'desc',
-            'search'  => null,
+            $table->rowsField    => 20,
+            $table->searchField  => null,
+            $table->sortByField  => 'name',
+            $table->sortDirField => 'desc',
         ], $appended)));
         $this->assertEquals(1, substr_count($html, $sortingHttpArguments));
         $this->assertEquals(1, substr_count($html, $searchCancelingHttpArguments));

@@ -53,7 +53,7 @@ class SearchTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $searchedValue = $users->sortBy('name')->values()->first()->name;
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -71,7 +71,7 @@ class SearchTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(10);
         $searchedValue = 'al';
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -191,7 +191,7 @@ class SearchTest extends LaravelTableTestCase
         $companies = $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
         $searchedValue = $companies->first()->owner->name;
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index'],])
             ->query(function ($query) {
@@ -218,7 +218,7 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = $users->first()->name;
-        $customRequest = (new Request)->merge(['rows' => 5, 'search' => $searchedValue, 'page' => 2]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 5, 'search' => $searchedValue, 'page' => 2]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function ($query) {
@@ -240,7 +240,7 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = '@';
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
@@ -264,7 +264,7 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = '@';
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
@@ -392,7 +392,7 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(3);
         $this->routes(['users'], ['index']);
         $searchedValue = $userAlpha->email;
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest)
@@ -420,7 +420,7 @@ class SearchTest extends LaravelTableTestCase
             }
         });
         $searchedValue = 'alpha';
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -443,7 +443,7 @@ class SearchTest extends LaravelTableTestCase
         config()->set('database.connections.' . $connection . '.driver', 'pgsql');
         $this->createMultipleUsers(10);
         $searchedValue = 'alpha';
-        $customRequest = (new Request)->merge(['rows' => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])

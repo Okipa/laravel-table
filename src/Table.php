@@ -9,125 +9,49 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
-use Okipa\LaravelTable\Traits\ClassesCustomizations;
-use Okipa\LaravelTable\Traits\ColumnsValidationChecks;
-use Okipa\LaravelTable\Traits\RoutesValidationChecks;
-use Okipa\LaravelTable\Traits\TemplatesCustomizations;
+use Illuminate\Support\Str;
+use Okipa\LaravelTable\Traits\TableClassesCustomizations;
+use Okipa\LaravelTable\Traits\TableColumnsValidationChecks;
+use Okipa\LaravelTable\Traits\TableInteractions;
+use Okipa\LaravelTable\Traits\TableRoutesValidationChecks;
+use Okipa\LaravelTable\Traits\TableTemplatesCustomizations;
 
 class Table implements Htmlable
 {
-    use TemplatesCustomizations;
-    use ClassesCustomizations;
-    use RoutesValidationChecks;
-    use ColumnsValidationChecks;
-    /**
-     * The model used during the table generation.
-     *
-     * @property \Illuminate\Database\Eloquent\Model $model
-     */
+    use TableTemplatesCustomizations;
+    use TableClassesCustomizations;
+    use TableRoutesValidationChecks;
+    use TableColumnsValidationChecks;
+    use TableInteractions;
+    /** @property string $identifier */
+    public $identifier;
+    /** @property \Illuminate\Database\Eloquent\Model $model */
     public $model;
-    /**
-     * The number of rows displayed on the table.
-     *
-     * @property int $rows
-     */
-    public $rows;
-    /**
-     * The rows number selection activation status.
-     *
-     * @property bool $rowsNumberSelectionActivation
-     */
+    /** @property bool $rowsNumberSelectionActivation */
     public $rowsNumberSelectionActivation;
-    /**
-     * The sortable columns in the table.
-     *
-     * @property \Illuminate\Support\Collection $sortableColumns
-     */
+    /** @property \Illuminate\Support\Collection $sortableColumns */
     public $sortableColumns;
-    /**
-     * The database column name the table is sorted.
-     *
-     * @property string $sortBy
-     */
-    public $sortBy;
-    /**
-     * The direction the table is sorted.
-     *
-     * @property string $sortDir
-     */
-    public $sortDir;
-    /**
-     * The searched value in database.
-     *
-     * @property string $search
-     */
-    public $search;
-    /**
-     * The searchable columns in the table.
-     *
-     * @property \Illuminate\Support\Collection $searchableColumns
-     */
+    /** @property \Illuminate\Support\Collection $searchableColumns */
     public $searchableColumns;
-    /**
-     * The request used by the table.
-     *
-     * @property \Illuminate\Http\Request $request
-     */
+    /** @property \Illuminate\Http\Request $request */
     public $request;
-    /**
-     * The routes used by the table.
-     *
-     * @property array $routes
-     */
+    /** @property array $routes */
     public $routes = [];
-    /**
-     * The table columns.
-     *
-     * @property \Illuminate\Support\Collection $columns
-     */
+    /** @property \Illuminate\Support\Collection $columns */
     public $columns;
-    /**
-     * The table additional query instructions closure.
-     *
-     * @property Closure $queryClosure
-     */
+    /** @property Closure $queryClosure */
     public $queryClosure;
-    /**
-     * The table disabled rows.
-     *
-     * @property \Illuminate\Support\Collection $disableRows
-     */
+    /** @property \Illuminate\Support\Collection $disableRows */
     public $disableRows;
-    /**
-     * The table generated list to display.
-     *
-     * @property \Illuminate\Pagination\LengthAwarePaginator $list
-     */
+    /** @property \Illuminate\Pagination\LengthAwarePaginator $list */
     public $list;
-    /**
-     * The generated html code used for each line destroy confirmation closure.
-     *
-     * @property Closure $destroyConfirmationClosure
-     */
+    /** @property Closure $destroyConfirmationClosure */
     public $destroyConfirmationClosure;
-    /**
-     * The values to append to the request treatments.
-     *
-     * @property array $appendedValues
-     */
+    /** @property array $appendedValues */
     public $appendedValues = [];
-    /**
-     * The generated hidden fields to insert in the html form when values are appended to the request.
-     *
-     * @property array $appendedHiddenFields
-     */
+    /** @property array $appendedHiddenFields */
     public $appendedHiddenFields = [];
-    /**
-     * The result lines to display at the bottom of the table.
-     *
-     * @property \Illuminate\Support\Collection $results
-     */
+    /** @property \Illuminate\Support\Collection $results */
     public $results;
 
     /**
@@ -158,6 +82,23 @@ class Table implements Htmlable
     public function model(string $tableModel): Table
     {
         $this->model = app()->make($tableModel);
+
+        return $this;
+    }
+
+    /**
+     * Set the table identifier, in order to automatically generate its id and to customize all the interaction fields
+     * in case of multiple tables used on a single view : the interactions with the table like sorting, searching an
+     * more will only have an impact on the identified table.
+     *
+     * @param string $identifier
+     *
+     * @return \Okipa\LaravelTable\Table
+     */
+    public function identifier(string $identifier): Table
+    {
+        $this->identifier = Str::slug($identifier);
+        $this->redefineInteractionFieldsFromIdentifier();
 
         return $this;
     }
@@ -428,35 +369,10 @@ class Table implements Htmlable
     {
         $this->checkRoutesValidity($this->routes);
         $this->checkIfAtLeastOneColumnIsDeclared();
-        $this->handleRequest();
+        $this->handleRequestInteractionValues();
         $this->generateEntitiesListFromQuery();
 
         return view('laravel-table::' . $this->tableComponentPath, ['table' => $this]);
-    }
-
-    /**
-     * Handle the request treatments.
-     *
-     * @return void
-     */
-    protected function handleRequest(): void
-    {
-        $validator = Validator::make($this->request->only('rows', 'search', 'sortBy', 'sortDir'), [
-            'rows'    => 'required|integer',
-            'search'  => 'nullable|string',
-            'sortBy'  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
-            'sortDir' => 'nullable|string|in:asc,desc',
-        ]);
-        if ($validator->fails()) {
-            $this->request->merge([
-                'rows'    => $this->rows ?? config('laravel-table.value.rows'),
-                'search'  => null,
-                'sortBy'  => $this->sortBy,
-                'sortDir' => $this->sortDir,
-            ]);
-        }
-        $this->rows = $this->request->rows;
-        $this->search = $this->request->search;
     }
 
     /**
@@ -484,71 +400,9 @@ class Table implements Htmlable
      */
     protected function applyQueryClosure(Builder $query): void
     {
-        if ($closure = $this->queryClosure) {
+        $closure = $this->queryClosure;
+        if ($closure) {
             $closure($query);
-        }
-    }
-
-    /**
-     * Apply search clauses
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return void
-     */
-    protected function applySearchClauses(Builder $query): void
-    {
-        if ($searched = $this->request->search) {
-            $query->where(function ($subQuery) use ($searched) {
-                $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
-                    $databaseSearchedTable = $column->databaseSearchedTable
-                        ? $column->databaseSearchedTable
-                        : $column->databaseDefaultTable;
-                    $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
-                    $databaseSearchedColumns = $column->databaseSearchedColumns
-                        ? $column->databaseSearchedColumns
-                        : [$column->databaseDefaultColumn];
-                    foreach ($databaseSearchedColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
-                        $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
-                        $subQuery->{$whereOperator}(
-                            $databaseSearchedTable . '.' . $searchedDatabaseColumn,
-                            $this->casInsensitiveLikeOperator(),
-                            '%' . $searched . '%'
-                        );
-                    }
-                });
-            });
-        }
-    }
-
-    /**
-     * Get insensitive like operator according to the used database driver.
-     *
-     * @return string
-     */
-    protected function casInsensitiveLikeOperator(): string
-    {
-        $connection = config('database.default');
-        $driver = config('database.connections.' . $connection . '.driver');
-
-        return in_array($driver, ['pgsql']) ? 'ILIKE' : 'LIKE';
-    }
-
-    /**
-     * Apply sort clauses.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return void
-     */
-    protected function applySortClauses(Builder $query): void
-    {
-        $this->sortBy = $this->request->sortBy
-            ?: ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->databaseDefaultColumn);
-        $this->sortDir = $this->request->sortDir
-            ?: ($this->sortDir ? $this->sortDir : 'asc');
-        if ($this->sortBy && $this->sortDir) {
-            $query->orderBy($this->sortBy, $this->sortDir);
         }
     }
 
@@ -563,10 +417,10 @@ class Table implements Htmlable
     {
         $this->list = $query->paginate($this->rows ?: (int) $query->count());
         $this->list->appends(array_merge([
-            'rows'    => $this->rows,
-            'search'  => $this->search,
-            'sortBy'  => $this->sortBy,
-            'sortDir' => $this->sortDir,
+            $this->rowsField    => $this->rows,
+            $this->searchField  => $this->search,
+            $this->sortByField  => $this->sortBy,
+            $this->sortDirField => $this->sortDir,
         ], $this->appendedValues));
     }
 

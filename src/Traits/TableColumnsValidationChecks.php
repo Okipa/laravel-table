@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Okipa\LaravelTable\Column;
 
-trait ColumnsValidationChecks
+trait TableColumnsValidationChecks
 {
-
     /**
      * Check if a route is defined from its key.
      *
@@ -110,7 +109,8 @@ trait ColumnsValidationChecks
         $tableData = $this->tableData($column, $query);
         foreach ($searchedDatabaseColumns as $searchedDatabaseColumn) {
             if (! in_array($searchedDatabaseColumn, $tableData['columns'])) {
-                $dynamicMessagePart = ($tableAlias = Arr::get($tableData, 'alias'))
+                $tableAlias = Arr::get($tableData, 'alias');
+                $dynamicMessagePart = $tableAlias
                     ? '« ' . $tableData['table'] . ' » (aliased as « ' . $tableAlias . ' ») table'
                     : '« ' . $tableData['table'] . ' » table';
                 $errorMessage = 'The table column with related « ' . $searchedDatabaseColumn . ' » database column is '

@@ -4,12 +4,17 @@ namespace Okipa\LaravelTable\Traits;
 
 use Okipa\LaravelTable\Table;
 
-trait TemplatesCustomizations
+trait TableTemplatesCustomizations
 {
+    /** @property string $tableComponentPath */
     public $tableComponentPath;
+    /** @property string $theadComponentPath */
     public $theadComponentPath;
+    /** @property string $tbodyComponentPath */
     public $tbodyComponentPath;
+    /** @property string $resultsComponentPath */
     public $resultsComponentPath;
+    /** @property string $tfootComponentPath */
     public $tfootComponentPath;
 
     /**

@@ -130,6 +130,21 @@ Then, play with the templates in your `resources/views/vendor/laravel-table` dir
 (new \Okipa\LaravelTable\Table)->model(\App\News::class);
 ```
 
+<h3 id="table-identifier">->identifier()</h3>
+
+> Set the table identifier, in order to automatically generate its id and to customize all the interaction fields in case of multiple tables used on a single view : the interactions with the table like sorting, searching an more will only have an impact on the identified table.
+
+**Notes:**
+
+- Signature : `identifier(string $identifier): \Okipa\LaravelTable\Table`
+- Optional
+
+**Use case example :**
+
+```php
+(new \Okipa\LaravelTable\Table)->identifier('Your identifier');
+```
+
 <h3 id="table-request">->request()</h3>
 
 > Set the request used for the table generation.
