@@ -100,13 +100,9 @@ trait TableInteractions
         if ($searched) {
             $query->where(function (Builder $subQuery) use ($searched) {
                 $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
-                    $databaseSearchedTable = $column->databaseSearchedTable
-                        ? $column->databaseSearchedTable
-                        : $column->databaseDefaultTable;
+                    $databaseSearchedTable = $column->databaseSearchedTable ?: $column->databaseDefaultTable;
                     $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
-                    $databaseSearchedColumns = $column->databaseSearchedColumns
-                        ? $column->databaseSearchedColumns
-                        : [$column->databaseDefaultColumn];
+                    $databaseSearchedColumns = $column->databaseSearchedColumns ?: [$column->databaseDefaultColumn];
                     foreach ($databaseSearchedColumns as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
                         $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
                         $subQuery->{$whereOperator}(

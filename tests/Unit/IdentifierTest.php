@@ -83,7 +83,7 @@ class IdentifierTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->render();
         $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
-        $this->assertEquals(1, substr_count($html, 'name="identifier_test_search"'));
+        $this->assertEquals(2, substr_count($html, 'name="identifier_test_search"'));
     }
 
     public function testSortByFieldWithIdentifierHtml()
