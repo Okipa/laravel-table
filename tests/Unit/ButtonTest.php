@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\Tests\Unit;
 
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\User;
@@ -65,7 +66,7 @@ class ButtonTest extends LaravelTableTestCase
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertStringContainsString(
-            '<button class="buttonClass user-name-' . str_slug(strip_tags($user->name)) . '">',
+            '<button class="buttonClass user-name-' . Str::slug(strip_tags($user->name)) . '">',
             $html
         );
         $this->assertStringContainsString('</button>', $html);

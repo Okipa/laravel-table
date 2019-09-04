@@ -12,11 +12,12 @@ Laravel Table allows you to easily render tables in your views, directly built f
 This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAwesome 5`.  
 **However**, the templates customization makes it very simple to use with another UI framework.
 
-Give it a try !
-
 ## Compatibility
 
-This version is compatible with Laravel 5.5+ and PHP7.2+.
+| Laravel version | PHP version | Package version |
+|---|---|---|
+| ^6.0 | ^7.2 | ^2.0 |
+| ^5.5 | ^7.2 | ^1.0 |
 
 ## Table of contents
 
@@ -79,7 +80,7 @@ This version is compatible with Laravel 5.5+ and PHP7.2+.
 - Install the package with composer :
 
 ```bash
-composer require okipa/laravel-table
+composer require "okipa/laravel-table:^2.0"
 ```
 
 ## Configuration
