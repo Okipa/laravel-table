@@ -16,7 +16,6 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 | Laravel version | PHP version | Package version |
 |---|---|---|
-| ^6.0 | ^7.2 | ^2.0 |
 | ^5.5 | ^7.2 | ^1.0 |
 
 ## Table of contents
@@ -80,7 +79,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 - Install the package with composer :
 
 ```bash
-composer require "okipa/laravel-table:^2.0"
+composer require "okipa/laravel-table:^1.2"
 ```
 
 ## Configuration

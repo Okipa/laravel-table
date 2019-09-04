@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0](https://github.com/Okipa/laravel-table/releases/tag/2.0.0)
+## [1.2.0](https://github.com/Okipa/laravel-table/releases/tag/1.2.0)
 2019-09-04
 - Added compatibility for Laravel 6.
 
