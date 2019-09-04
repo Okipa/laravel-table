@@ -165,7 +165,7 @@ public function index(Request $request) {
 }
 ```
 
-<h3 id="table-route">->routes()</h3>
+<h3 id="table-routes">->routes()</h3>
 
 > Set the routes used during the table generation.  
 > The routes declarations will be used for the following features :
