@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Test;
 
 use Faker\Factory;
+use Okipa\LaravelTable\LaravelTableServiceProvider;
 use Okipa\LaravelTable\Test\Fakers\CompaniesFaker;
 use Okipa\LaravelTable\Test\Fakers\RoutesFaker;
 use Okipa\LaravelTable\Test\Fakers\UsersFaker;
@@ -43,7 +44,7 @@ abstract class LaravelTableTestCase extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Okipa\LaravelTable\LaravelTableServiceProvider',
+            LaravelTableServiceProvider::class,
         ];
     }
 
@@ -53,10 +54,7 @@ abstract class LaravelTableTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->loadMigrationsFrom([
-            '--database' => 'testing',
-            '--realpath' => realpath(__DIR__ . '/database/migrations'),
-        ]);
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
         $this->faker = Factory::create();
     }
 }
