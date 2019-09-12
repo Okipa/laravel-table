@@ -172,9 +172,9 @@ public function index(Request $request) {
 >
 > - `index` (required) : used for the rows number definition, sort and search features.
 > - `create` (optional) : the **create** button is displayed if this route is declared. The button used this route to redirect to the model creation page.
-> - `edit` (optional) : the **edit** button is displayed on each row if this route is declared. The route is used to redirect to the model edition page and takes the model `id` param by default (all other params will be appended to this one).
-> - `destroy` (optional) : the **destroy** button is displayed on each row if this route is declared. The route is used to trigger the model destroy action and takes the model `id` param by default (all other params will be appended to this one).
-> - `show` (optional) : the **show** button is displayed on each row if this route is declared. The route is used to trigger the model show action and takes the model `id` param by default (all other params will be appended to this one).
+> - `edit` (optional) : the **edit** button is displayed on each row if this route is declared. The route is used to redirect to the model edition page.
+> - `destroy` (optional) : the **destroy** button is displayed on each row if this route is declared. The route is used to trigger the model destroy action.
+> - `show` (optional) : the **show** button is displayed on each row if this route is declared. The route is used to redirect to the model show page.
 
 **Note :**
 
@@ -194,6 +194,23 @@ public function index(Request $request) {
         ]
     ]
 ];
+```
+
+- As the model id is always added to the `edit`, `destroy` and `show` routes, you do not have to define it.  
+
+```php
+    // assuming your declared your edit route like this :
+    (new Table)->model(User::class)->routes([
+        ...
+        'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
+        ...
+    ])
+    // the route will defined like this during the table instantiation :
+    route('user.edit, [$user->id, 'foo' => 'bar']);
+    // as so, you have to declare your route accordingly, for example :
+    Route::get('user/edit/{id}', 'UsersController@edit')->name('user.edit');
+    // or with implicit binding
+    Route::get('user/edit/{user}', 'UsersController@edit')->name('user.edit');
 ```
 
 **Use case example :**

@@ -80,7 +80,7 @@
                                     <form id="show-{{ $model->id }}"
                                           role="form"
                                           method="GET"
-                                          action="{{ $table->route('show', ['id' => $model->id]) }}">
+                                          action="{{ $table->route('show', [$model->id]) }}">
                                         <button{{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.show')"{{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                             {!! config('laravel-table.icon.show') !!}
                                         </button>
@@ -92,7 +92,7 @@
                                           class="ml-2"
                                           role="form"
                                           method="GET"
-                                          action="{{ $table->route('edit', ['id' => $model->id]) }}">
+                                          action="{{ $table->route('edit', [$model->id]) }}">
                                         <button{{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.edit')"{{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                             {!! config('laravel-table.icon.edit') !!}
                                         </button>
@@ -104,7 +104,7 @@
                                           class="ml-2 destroy"
                                           role="form"
                                           method="POST"
-                                          action="{{ $table->route('destroy', ['id' => $model->id]) }}">
+                                          action="{{ $table->route('destroy', [$model->id]) }}">
                                         @csrf()
                                         @method('DELETE')
                                         <button{{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.destroy')"{{ htmlAttributes($model->destroyConfirmationAttributes, $model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
