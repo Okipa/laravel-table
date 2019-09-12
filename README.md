@@ -205,7 +205,7 @@ public function index(Request $request) {
         'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
         // ...
     ])
-    // the route will defined like this during the table instantiation :
+    // the route will be generated like this during the table instantiation :
     route('user.edit, [$user->id, 'foo' => 'bar']);
     // as so, you have to declare your route accordingly, for example :
     Route::get('user/edit/{id}', 'UsersController@edit')->name('user.edit');
