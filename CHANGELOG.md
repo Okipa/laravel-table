@@ -10,7 +10,7 @@
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...
 ])
-// the route will defined like this during the table instantiation :
+// the route will be generated like this during the table instantiation :
 route('user.edit, [$user->id, 'foo' => 'bar']);
 // instead of this way
 route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
