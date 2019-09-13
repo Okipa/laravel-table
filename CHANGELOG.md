@@ -2,7 +2,7 @@
 
 ## [1.2.1](https://github.com/Okipa/laravel-table/releases/tag/1.2.1)
 2019-09-13
-- Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the route call :
+- Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the `route()` helper call :
 ```php
 // assuming your declared your edit route like this :
 (new Table)->model(User::class)->routes([
