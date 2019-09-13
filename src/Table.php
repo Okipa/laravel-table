@@ -276,13 +276,11 @@ class Table implements Htmlable
     {
         $this->checkRouteIsDefined($routeKey);
 
-
-//        dd($this->routes[$routeKey]['name'], array_merge(Arr::get($this->routes[$routeKey], 'params', []), $params));
-//        dd(route('users.index', []));
+//        dd($this->routes, $params);
 
         return route(
             $this->routes[$routeKey]['name'],
-            array_merge(Arr::get($this->routes[$routeKey], 'params', []), $params)
+            array_merge($params, Arr::get($this->routes[$routeKey], 'params', []))
         );
     }
 

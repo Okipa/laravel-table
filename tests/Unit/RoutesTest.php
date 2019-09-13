@@ -235,20 +235,20 @@ class RoutesTest extends LaravelTableTestCase
                 return null;
             },
         ]);
-        app('router')->get('/user/edit/{id}', [
+        app('router')->get('/user/edit/{id}/{foo}', [
             'as' => 'user.edit', function () {
                 return null;
             },
         ]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
-            'edit'  => ['name' => 'user.edit'],
+            'edit'  => ['name' => 'user.edit', 'params' => ['bar']],
         ])->model(User::class);
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertStringContainsString('edit-' . $user->id, $html);
-        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
+        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '/bar"', $html);
     }
 
     public function testSetImplicitBindingRoutes()
@@ -259,19 +259,19 @@ class RoutesTest extends LaravelTableTestCase
                 return null;
             },
         ]);
-        app('router')->get('/user/edit/{user}', [
+        app('router')->get('/user/edit/{user}/{foo}', [
             'as' => 'user.edit', function () {
                 return null;
             },
         ]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
-            'edit'  => ['name' => 'user.edit'],
+            'edit'  => ['name' => 'user.edit', 'params' => ['bar']],
         ])->model(User::class);
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
         $this->assertStringContainsString('edit-' . $user->id, $html);
-        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
+        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '/bar"', $html);
     }
 }

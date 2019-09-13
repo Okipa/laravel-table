@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.2](https://github.com/Okipa/laravel-table/releases/tag/1.2.2)
+2019-09-13
+- Fixed params order when generating the table routes. The table model id was not positioned at first when declaring other parameters.
+
+```php
+// with a route declared like this :
+Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
+// and a table routes declaration like this :
+(new Table)->model(User::class)->routes([
+    // ...
+    'edit'    => ['name'=> 'user.edit', 'params' => ['bar']],
+    //...
+])
+// the route is now correctly generated and gives : /user/edit/1/bar instead of /user/edit/bar/1
+```
+
 ## [1.2.1](https://github.com/Okipa/laravel-table/releases/tag/1.2.1)
 2019-09-13
 - Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the `route()` helper call :
