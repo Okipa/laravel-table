@@ -226,4 +226,52 @@ class RoutesTest extends LaravelTableTestCase
             $this->assertStringNotContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
         }
     }
+
+    public function testSetRouteWithId()
+    {
+        $user = $this->createUniqueUser();
+        app('router')->get('/users', [
+            'as' => 'users.index', function () {
+                return null;
+            },
+        ]);
+        app('router')->get('/user/edit/{id}', [
+            'as' => 'user.edit', function () {
+                return null;
+            },
+        ]);
+        $table = (new Table)->routes([
+            'index' => ['name' => 'users.index'],
+            'edit'  => ['name' => 'user.edit'],
+        ])->model(User::class);
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $this->assertStringContainsString('edit-' . $user->id, $html);
+        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
+    }
+
+    public function testSetImplicitBindingRoutes()
+    {
+        $user = $this->createUniqueUser();
+        app('router')->get('/users', [
+            'as' => 'users.index', function () {
+                return null;
+            },
+        ]);
+        app('router')->get('/user/edit/{user}', [
+            'as' => 'user.edit', function () {
+                return null;
+            },
+        ]);
+        $table = (new Table)->routes([
+            'index' => ['name' => 'users.index'],
+            'edit'  => ['name' => 'user.edit'],
+        ])->model(User::class);
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $this->assertStringContainsString('edit-' . $user->id, $html);
+        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
+    }
 }
