@@ -240,7 +240,7 @@ class RoutesTest extends LaravelTableTestCase
                 return null;
             },
         ]);
-        app('router')->get('/user/destroy/{id}/{foo}', [
+        app('router')->post('/user/destroy/{id}/{foo}', [
             'as' => 'user.destroy', function () {
                 return null;
             },
@@ -277,7 +277,7 @@ class RoutesTest extends LaravelTableTestCase
                 return null;
             },
         ]);
-        app('router')->get('/user/destroy/{user}/{foo}', [
+        app('router')->post('/user/destroy/{user}/{foo}', [
             'as' => 'user.destroy', function () {
                 return null;
             },

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Traits\TableClassesCustomizations;
 use Okipa\LaravelTable\Traits\TableColumnsValidationChecks;
 use Okipa\LaravelTable\Traits\TableInteractions;

@@ -1,9 +1,24 @@
 # Changelog
 
+## [1.2.3](https://github.com/Okipa/laravel-table/releases/tag/1.2.3)
+2019-09-13
+- The model is now directly passed to the route during the table `show`, `edit` and `destroy` routes generation instead of its id.
+```php
+// assuming your declared your edit route like this :
+(new Table)->model(User::class)->routes([
+    // ...
+    'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
+    //...
+])
+// the route will be generated like this during the table instantiation :
+route('user.edit, [$user, 'foo' => 'bar']);
+// instead of this way
+route('user.edit, [$user->id, 'foo' => 'bar']);
+```
+
 ## [1.2.2](https://github.com/Okipa/laravel-table/releases/tag/1.2.2)
 2019-09-13
 - Fixed params order when generating the table routes. The table model id was not positioned at first when declaring other parameters.
-
 ```php
 // with a route declared like this :
 Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');

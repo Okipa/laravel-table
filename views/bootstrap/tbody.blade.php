@@ -77,10 +77,10 @@
                             <div class="d-flex justify-content-end">
                                 {{-- show button --}}
                                 @if($table->isRouteDefined('show'))
-                                    <form id="show-{{ $model->id }}"
+                                    <form id="show-{{ $model->getKey() }}"
                                           role="form"
                                           method="GET"
-                                          action="{{ $table->route('show', [$model->id]) }}">
+                                          action="{{ $table->route('show', [$model]) }}">
                                         <button{{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.show')"{{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                             {!! config('laravel-table.icon.show') !!}
                                         </button>
@@ -88,11 +88,11 @@
                                 @endif
                                 {{-- edit button --}}
                                 @if($table->isRouteDefined('edit'))
-                                    <form id="edit-{{ $model->id }}"
+                                    <form id="edit-{{ $model->getKey() }}"
                                           class="ml-2"
                                           role="form"
                                           method="GET"
-                                          action="{{ $table->route('edit', [$model->id]) }}">
+                                          action="{{ $table->route('edit', [$model]) }}">
                                         <button{{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.edit')"{{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
                                             {!! config('laravel-table.icon.edit') !!}
                                         </button>
@@ -100,11 +100,11 @@
                                 @endif
                                 {{-- destroy button --}}
                                 @if($table->isRouteDefined('destroy'))
-                                    <form id="destroy-{{ $model->id }}"
+                                    <form id="destroy-{{ $model->getKey() }}"
                                           class="ml-2 destroy"
                                           role="form"
                                           method="POST"
-                                          action="{{ $table->route('destroy', [$model->id]) }}">
+                                          action="{{ $table->route('destroy', [$model]) }}">
                                         @csrf()
                                         @method('DELETE')
                                         <button{{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.destroy')"{{ htmlAttributes($model->destroyConfirmationAttributes, $model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
