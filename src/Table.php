@@ -276,8 +276,6 @@ class Table implements Htmlable
     {
         $this->checkRouteIsDefined($routeKey);
 
-//        dd($this->routes, $params);
-
         return route(
             $this->routes[$routeKey]['name'],
             array_merge($params, Arr::get($this->routes[$routeKey], 'params', []))
