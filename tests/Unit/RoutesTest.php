@@ -227,7 +227,7 @@ class RoutesTest extends LaravelTableTestCase
         }
     }
 
-    public function testSetRouteWithId()
+    public function testSetRouteDefinitionWithProvidedId()
     {
         $user = $this->createUniqueUser();
         app('router')->get('/users', [
@@ -240,15 +240,28 @@ class RoutesTest extends LaravelTableTestCase
                 return null;
             },
         ]);
+        app('router')->get('/user/destroy/{id}/{foo}', [
+            'as' => 'user.destroy', function () {
+                return null;
+            },
+        ]);
+        app('router')->get('/user/show/{id}/{foo}', [
+            'as' => 'user.show', function () {
+                return null;
+            },
+        ]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
             'edit'  => ['name' => 'user.edit', 'params' => ['bar']],
+            'destroy'  => ['name' => 'user.destroy', 'params' => ['bar']],
+            'show'  => ['name' => 'user.show', 'params' => ['bar']],
         ])->model(User::class);
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertStringContainsString('edit-' . $user->id, $html);
         $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '/bar"', $html);
+        $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '/bar"', $html);
+        $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '/bar"', $html);
     }
 
     public function testSetImplicitBindingRoutes()
@@ -264,14 +277,27 @@ class RoutesTest extends LaravelTableTestCase
                 return null;
             },
         ]);
+        app('router')->get('/user/destroy/{user}/{foo}', [
+            'as' => 'user.destroy', function () {
+                return null;
+            },
+        ]);
+        app('router')->get('/user/show/{user}/{foo}', [
+            'as' => 'user.show', function () {
+                return null;
+            },
+        ]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
             'edit'  => ['name' => 'user.edit', 'params' => ['bar']],
+            'destroy'  => ['name' => 'user.destroy', 'params' => ['bar']],
+            'show'  => ['name' => 'user.show', 'params' => ['bar']],
         ])->model(User::class);
         $table->column('name');
         $table->render();
         $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
-        $this->assertStringContainsString('edit-' . $user->id, $html);
         $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '/bar"', $html);
+        $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '/bar"', $html);
+        $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '/bar"', $html);
     }
 }

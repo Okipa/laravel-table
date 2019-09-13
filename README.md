@@ -79,7 +79,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 - Install the package with composer :
 
 ```bash
-composer require "okipa/laravel-table:^1.2"
+composer require "okipa/laravel-table:^1.0"
 ```
 
 ## Configuration
@@ -917,7 +917,7 @@ $table->column('category_id')
         return config('news.category.' . $model->{$column->databaseDefaultColumn});
     });
 $table->column()->link(function($model){
-    return route('news.show', ['id' => $model->id]);
+    return route('news.show', $model);
 })->button(['btn', 'btn-sm', 'btn-primary']);
 $table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
 $table->result()->title('Total of comments')->html(function($displayedList){
