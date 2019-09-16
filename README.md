@@ -197,10 +197,10 @@ public function index(Request $request) {
 ];
 ```
 
-- :warning: As the current model is always provided as a param to the `edit`, `destroy` and `show` routes, you do not have to define it in the routes declaration. You also should declare your routes carefully to avoid errors. See the examples bellow :
+- :warning: As the current model is always provided as a param to the `edit`, `destroy` and `show` routes, you do not have to define it in the `->routes()` call. You also should declare your routes carefully to avoid errors. See the examples bellow :
 
 ```php
-    // assuming your declared your route with implicit binding this :
+    // assuming your declared your route with implicit binding :
     Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
     // you'll have to declare your params with keys as following :
     (new Table)->model(User::class)->routes([
@@ -208,7 +208,7 @@ public function index(Request $request) {
         'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
     ])
-    // because the route will be generated with the table related model as first param :
+    // because the route will be generated with the table related model as first param (the params order differs from the declaration) :
     route('user.edit, [$user, 'parent' => $parent, 'child' => $child]);
 ```
 
@@ -221,7 +221,7 @@ public function index(Request $request) {
         'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherValue']],
         // ...
     ])
-    // because the route will be generated with the table related model as first param :
+    // because the route params are given in the same order as the route declaration :
     route('user.edit, [$user, $child, 'otherValue']);
 ```
 
