@@ -225,8 +225,6 @@ public function index(Request $request) {
     route('user.edit, [$user, $child, 'otherValue']);
 ```
 
-- :warning:
-
 **Use case example :**
 
 ```php
