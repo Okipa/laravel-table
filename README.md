@@ -183,6 +183,7 @@ public function index(Request $request) {
 - Each route have to be defined with the following structure :
 
 ```php
+// example
 [
     'index' => [
         // required
@@ -196,22 +197,35 @@ public function index(Request $request) {
 ];
 ```
 
-- As the model id is always added to the `edit`, `destroy` and `show` routes, you do not have to define it.  
+- :warning: As the current model is always provided as a param to the `edit`, `destroy` and `show` routes, you do not have to define it in the routes declaration. You also should declare your routes carefully to avoid errors. See the examples bellow :
 
 ```php
-    // assuming your declared your edit route like this :
+    // assuming your declared your route with implicit binding this :
+    Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
+    // you'll have to declare your params with keys as following :
     (new Table)->model(User::class)->routes([
         // ...
-        'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
+        'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
     ])
-    // the route will be generated like this during the table instantiation :
-    route('user.edit, [$user->id, 'foo' => 'bar']);
-    // as so, you have to declare your route accordingly, for example :
-    Route::get('user/edit/{id}', 'UsersController@edit')->name('user.edit');
-    // or with implicit binding
-    Route::get('user/edit/{user}', 'UsersController@edit')->name('user.edit');
+    // because the route will be generated with the table related model as first param :
+    route('user.edit, [$user, 'parent' => $parent, 'child' => $child]);
 ```
+
+```php
+    // now imagine your route is declared with the table related model as first param like this :
+    Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
+    // in this case only, you will be able to declare your routes without keys :
+    (new Table)->model(User::class)->routes([
+        // ...
+        'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherValue']],
+        // ...
+    ])
+    // because the route will be generated with the table related model as first param :
+    route('user.edit, [$user, $child, 'otherValue']);
+```
+
+- :warning:
 
 **Use case example :**
 
