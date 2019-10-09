@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.2.3](https://github.com/Okipa/laravel-table/releases/tag/1.2.3)
+## [1.2.4](https://github.com/Okipa/laravel-table/releases/tag/1.2.4)
 
 2019-09-13
 
