@@ -4,9 +4,9 @@
 [![Latest Version](https://img.shields.io/github/release/okipa/laravel-table.svg?style=flat-square)](https://github.com/Okipa/laravel-table/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/okipa/laravel-table.svg?style=flat-square)](https://packagist.org/packages/okipa/laravel-table)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://scrutinizer-ci.com/g/Okipa/laravel-table/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Okipa/laravel-table/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Okipa/laravel-table/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Okipa/laravel-table/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Okipa/laravel-table/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Okipa/laravel-table/?branch=master)
+[![Build Status](https://travis-ci.org/Okipa/laravel-table.svg?branch=master)](https://travis-ci.org/Okipa/laravel-table)
+[![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-table?branch=master)
+[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-table.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-table/?branch=master)
 
 Laravel Table allows you to easily render tables in your views, directly built from PHP code.  
 This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAwesome 5`.  
@@ -16,7 +16,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 | Laravel version | PHP version | Package version |
 |---|---|---|
-| ^5.5 | ^7.2 | ^1.0 |
+| ^5.5 | ^7.1 | ^1.0 |
 
 ## Table of contents
 

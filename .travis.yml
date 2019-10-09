@@ -1,0 +1,31 @@
+language: php
+
+php:
+  - 7.1
+  - 7.2
+  - 7.3
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --no-progress --no-interaction --prefer-dist --no-suggest
+
+script:
+  - mkdir -p build/logs
+  - vendor/bin/phpcs
+  - vendor/bin/phpmd config,src text phpmd.xml
+  - vendor/bin/phpstan analyse
+  - vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php vendor/bin/php-coveralls -v
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false
