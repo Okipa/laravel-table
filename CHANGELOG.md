@@ -2,7 +2,7 @@
 
 ## [1.2.4](https://github.com/Okipa/laravel-table/releases/tag/1.2.4)
 
-2019-09-13
+2019-10-09
 
 - Transferred PhpUnit builds tasks from Scrutinizer to Travis CI.
 - Transferred code coverage storage from Scrutinizer to Coveralls.
