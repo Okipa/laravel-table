@@ -29,7 +29,7 @@
         "php": "^7.1",
         "ext-pdo": "*",
         "illuminate/support": "~5.5.0||~5.6.0||~5.7.0||~5.8.0||^6.0",
-        "okipa/laravel-html-helper": "^1.0"
+        "okipa/laravel-html-helper": "^1.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
