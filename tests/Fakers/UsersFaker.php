@@ -28,7 +28,7 @@ trait UsersFaker
 
     public function generateFakeUserData()
     {
-        $this->clearPassword = $this->faker->password;
+        $this->clearPassword = $this->faker->word;
 
         return [
             'name'     => $this->faker->word,

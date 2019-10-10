@@ -29,15 +29,15 @@
         "php": "^7.1",
         "ext-pdo": "*",
         "illuminate/support": "~5.5.0||~5.6.0||~5.7.0||~5.8.0||^6.0",
-        "okipa/laravel-html-helper": "^1.0"
+        "okipa/laravel-html-helper": "^1.1.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
         "nunomaduro/larastan": "^0.4",
         "orchestra/testbench": "~3.8.0||^4.0",
         "php-coveralls/php-coveralls": "^2.1",
-        "phpmd/phpmd": "^2.0",
-        "squizlabs/php_codesniffer": "^3.0"
+        "phpmd/phpmd": "^2.7",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
         "psr-4": {
