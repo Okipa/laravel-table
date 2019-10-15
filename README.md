@@ -18,6 +18,32 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 |---|---|---|
 | ^5.5 | ^7.1 | ^1.0 |
 
+## Usage
+
+Prepare the table configuration somewhere in your code and pass it to the view :
+
+```php
+$table = (new \Okipa\LaravelTable\Table)->model(\App\News::class)->routes([
+    'index'   => ['name' => 'users.index'],
+    'create'  => ['name' => 'user.create'],
+    'edit'    => ['name' => 'user.edit'],
+    'destroy' => ['name' => 'user.destroy'],
+])->destroyConfirmationHtmlAttributes(function (User $user) {
+    return [
+        'data-confirm' => 'Are you sure you want to delete the user ' . $user->name . ' ?',
+    ];
+});
+$table->column('first_name')->sortable(true)->searchable();
+$table->column('last_name')->sortable()->searchable();
+$table->column('email')->sortable()->searchable();
+```
+
+In your view, simply render it like this :
+
+```blade
+    {{ $table }}
+```
+
 ## Table of contents
 
 - [Installation](#installation)
