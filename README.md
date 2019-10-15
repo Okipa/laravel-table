@@ -87,7 +87,7 @@ composer require "okipa/laravel-table:^1.0"
 To personalize the package configuration, you have to publish it with the following command :
 
 ```bash
-php artisan vendor:publish --tag=laravel-table::config
+php artisan vendor:publish --tag=laravel-table:config
 ```
 
 Then, override the `config/laravel-table.php` file with you own configuration values.
