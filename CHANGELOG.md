@@ -4,7 +4,7 @@
 
 2019-10-15
 
-- Fixed the translations publication and overriding as specified on the Laravel documentation : https://laravel.com/docs/.7/packages#translations.
+- Fixed the translations publication and overriding as specified on the Laravel documentation : https://laravel.com/docs/packages#translations.
 - Changed the command to publish the translations to : `php artisan vendor:publish --tag=laravel-table:translations`
 - Changed the command to publish the configuration to : `php artisan vendor:publish --tag=laravel-table:config`
 - Changed the command to publish the views to : `php artisan vendor:publish --tag=laravel-table:views`
