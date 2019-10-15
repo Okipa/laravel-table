@@ -14,13 +14,13 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'laravel-table');
         $this->publishes([
             __DIR__ . '/../config/laravel-table.php' => config_path('laravel-table.php'),
-        ], 'laravel-table::config');
+        ], 'laravel-table:config');
         $this->publishes([
-            __DIR__ . '/../lang' => resource_path('lang'),
-        ], 'laravel-table::translations');
+            __DIR__ . '/../lang' => resource_path('lang/vendor/laravel-table'),
+        ], 'laravel-table:translations');
         $this->publishes([
             __DIR__ . '/../views' => resource_path('views/vendor/laravel-table'),
-        ], 'laravel-table::views');
+        ], 'laravel-table:views');
         // we load the laravel html helper package
         // https://github.com/Okipa/laravel-html-helper
         $this->app->register(HtmlHelperServiceProvider::class);

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.5](https://github.com/Okipa/laravel-table/releases/tag/1.2.5)
+
+2019-10-14
+
+- Fixed the translations publication and overriding as specified on the Laravel documentation : https://laravel.com/docs/.7/packages#translations.
+- Changed the command to publish the translations to : `php artisan vendor:publish --tag=laravel-table:translations`
+- Changed the command to publish the configuration to : `php artisan vendor:publish --tag=laravel-table:config`
+- Changed the command to publish the views to : `php artisan vendor:publish --tag=laravel-table:views`
+- Improved testing with Travis CI (added some tests with `--prefer-lowest` composer tag to check the package compatibility with the lowest dependencies versions).
+
 ## [1.2.4](https://github.com/Okipa/laravel-table/releases/tag/1.2.4)
 
 2019-10-09
