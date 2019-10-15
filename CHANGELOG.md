@@ -2,7 +2,7 @@
 
 ## [1.2.5](https://github.com/Okipa/laravel-table/releases/tag/1.2.5)
 
-2019-10-14
+2019-10-15
 
 - Fixed the translations publication and overriding as specified on the Laravel documentation : https://laravel.com/docs/.7/packages#translations.
 - Changed the command to publish the translations to : `php artisan vendor:publish --tag=laravel-table:translations`
