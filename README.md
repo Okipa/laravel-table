@@ -120,17 +120,16 @@ Then, override the `config/laravel-table.php` file with you own configuration va
 
 ## Customize translations
 
-You can customize the package translation by publishing them in your project :
+To customize the existing translations, publish the packages translations files to make the wanted changes :
 
 ```bash
 php artisan vendor:publish --tag=laravel-table:translations
 ```
 
-Once you have published them, override them from your `resources/lang/vendor/laravel-table/<locale>/laravel-table.php` directory.
-
 ## Customize templates
 
-To modify or use your own template, you will have to publish the package blade templates in your project :
+Customize the used templates to make this package fit to your needs.  
+Publish the views with the command :
 
 ```bash
 php artisan vendor:publish --tag=laravel-table:views
