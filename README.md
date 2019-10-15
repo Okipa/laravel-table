@@ -135,8 +135,6 @@ Publish the views with the command :
 php artisan vendor:publish --tag=laravel-table:views
 ```
 
-Then, play with the templates in your `resources/views/vendor/laravel-table` directory.
-
 ## Table API
 
 :warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#table-column) and the [->result()](#table-result) methods** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
