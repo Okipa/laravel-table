@@ -38,7 +38,7 @@ $table->column('last_name')->sortable()->searchable();
 $table->column('email')->sortable()->searchable();
 ```
 
-In your view, simply render it like this :
+In your view, simply render your table like this :
 
 ```blade
 {{ $table }}
