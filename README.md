@@ -41,7 +41,7 @@ $table->column('email')->sortable()->searchable();
 In your view, simply render it like this :
 
 ```blade
-    {{ $table }}
+{{ $table }}
 ```
 
 ## Table of contents
