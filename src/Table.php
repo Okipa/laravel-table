@@ -279,7 +279,7 @@ class Table implements Htmlable
 
         return route(
             $this->routes[$routeKey]['name'],
-            array_merge($params, Arr::get($this->routes[$routeKey], 'params', []))
+            array_merge(Arr::get($this->routes[$routeKey], 'params', []), $params)
         );
     }
 
