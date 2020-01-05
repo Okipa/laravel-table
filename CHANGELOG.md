@@ -4,7 +4,7 @@
 
 2020-01-05
 
-* Replaced hard-coded action `info` icon by config value.
+* Replaced hard-coded `info` action icon by config value.
 
 ## [1.2.5](https://github.com/Okipa/laravel-table/releases/tag/1.2.5)
 
