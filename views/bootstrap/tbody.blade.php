@@ -3,7 +3,7 @@
         <tr{{ classTag($table->trClasses) }}>
             <td{{ classTag($table->tdClasses, 'text-center', 'p-3') }}{{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }} scope="row">
                 <span class="text-info">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    {!! config('laravel-table.icon.info') !!}
                 </span>
                 @lang('laravel-table::laravel-table.emptyTable')
             </td>
@@ -16,7 +16,7 @@
                         $value = $model->{$column->databaseDefaultColumn};
                         $customValue = $column->valueClosure ? ($column->valueClosure)($model, $column) : null;
                         $html = $column->htmlClosure ? ($column->htmlClosure)($model, $column) : null;
-                        $link = $column->url instanceof Closure ? ($column->url)($model, $column) : ($column->url !== true 
+                        $link = $column->url instanceof Closure ? ($column->url)($model, $column) : ($column->url !== true
                             ? $column->url 
                             : ($customValue ? $customValue : $value));
                         $showIcon = $column->icon && (($customValue || $value) || $column->displayIconWhenNoValue);
@@ -52,7 +52,7 @@
                                     {{ Str::limit(strip_tags($value), $column->stringLimit) }}
                                 {{-- datetime format --}}
                                 @elseif($column->dateTimeFormat)
-                                    {{ $value 
+                                    {{ $value
                                         ? \Carbon\Carbon::parse($value)->format($column->dateTimeFormat)
                                         : null }}
                                 {{-- basic value --}}
