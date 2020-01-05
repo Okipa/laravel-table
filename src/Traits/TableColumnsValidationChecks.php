@@ -135,6 +135,7 @@ trait TableColumnsValidationChecks
         $table = $column->databaseSearchedTable ?: $column->databaseDefaultTable;
         if ($column->databaseSearchedTable) {
             $fromSqlStatement = last(explode(' from ', (string) $query->toSql()));
+            $aliases = [];
             preg_match_all('/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/', $fromSqlStatement, $aliases);
             if (! empty(array_filter($aliases))) {
                 $position = array_keys(Arr::where(array_shift($aliases), function ($alias) use ($table) {
