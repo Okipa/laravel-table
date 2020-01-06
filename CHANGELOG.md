@@ -1,12 +1,12 @@
 # Changelog
 
-## [1.2.6](https://github.com/Okipa/laravel-table/releases/tag/1.2.6)
+## [1.2.6](https://github.com/Okipa/laravel-table/compare/1.2.5...1.2.6)
 
 2020-01-05
 
 * Replaced hard-coded `info` action icon by config value.
 
-## [1.2.5](https://github.com/Okipa/laravel-table/releases/tag/1.2.5)
+## [1.2.5](https://github.com/Okipa/laravel-table/compare/1.2.4...1.2.5)
 
 2019-10-15
 
@@ -16,7 +16,7 @@
 * Changed the command to publish the views to : `php artisan vendor:publish --tag=laravel-table:views`
 * Improved testing with Travis CI (added some tests with `--prefer-lowest` composer tag to check the package compatibility with the lowest dependencies versions).
 
-## [1.2.4](https://github.com/Okipa/laravel-table/releases/tag/1.2.4)
+## [1.2.4](https://github.com/Okipa/laravel-table/compare/1.2.3...1.2.4)
 
 2019-10-09
 
@@ -24,7 +24,7 @@
 * Transferred code coverage storage from Scrutinizer to Coveralls.
 * Re-authorized PHP7.1 as minimal version.
 
-## [1.2.3](https://github.com/Okipa/laravel-table/releases/tag/1.2.3)
+## [1.2.3](https://github.com/Okipa/laravel-table/compare/1.2.2...1.2.3)
 
 2019-09-13
 
@@ -42,7 +42,7 @@ route('user.edit, [$user, 'foo' => 'bar']);
 route('user.edit, [$user->id, 'foo' => 'bar']);
 ```
 
-## [1.2.2](https://github.com/Okipa/laravel-table/releases/tag/1.2.2)
+## [1.2.2](https://github.com/Okipa/laravel-table/compare/1.2.1...1.2.2)
 
 2019-09-13
 
@@ -59,7 +59,7 @@ Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
 // the route is now correctly generated and gives : /user/edit/1/bar instead of /user/edit/bar/1
 ```
 
-## [1.2.1](https://github.com/Okipa/laravel-table/releases/tag/1.2.1)
+## [1.2.1](https://github.com/Okipa/laravel-table/compare/1.2.0...1.2.1)
 
 2019-09-13
 
@@ -77,13 +77,13 @@ route('user.edit, [$user->id, 'foo' => 'bar']);
 route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 ```
 
-## [1.2.0](https://github.com/Okipa/laravel-table/releases/tag/1.2.0)
+## [1.2.0](https://github.com/Okipa/laravel-table/compare/1.1.0...1.2.0)
 
 2019-09-04
 
 * Added compatibility for Laravel 6.
 
-## [1.1.0](https://github.com/Okipa/laravel-table/releases/tag/1.1.0)
+## [1.1.0](https://github.com/Okipa/laravel-table/compare/1.0.13...1.1.0)
 
 2019-08-02
 
@@ -92,20 +92,20 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
   * It will be used to automatically customize the following interaction fields sent to the table, in order to be able to interact with a specific table if you have several of them on a single view : `rows`, `search`, `sort_by`, `sort_dir`.
 * :warning: if you have published the views, you will have to re-publish them.  
 
-## [1.0.13](https://github.com/Okipa/laravel-table/releases/tag/1.0.13)
+## [1.0.13](https://github.com/Okipa/laravel-table/compare/1.0.12...1.0.13)
 
 2019-05-14
 
 * Fixed a use case when no sortable columns are defined and an empty `orderBy` is called in the SQL request, causing an exception with MySQL.
 
-## [1.0.12](https://github.com/Okipa/laravel-table/releases/tag/1.0.12)
+## [1.0.12](https://github.com/Okipa/laravel-table/compare/1.0.11...1.0.12)
 
 2019-05-09
 
 * Locked project compatibility to Laravel 5.5+ and PHP7.2+ to avoid issues.
 * Improved code phpdoc for better maintainability.
 
-## [1.0.11](https://github.com/Okipa/laravel-table/releases/tag/1.0.11)
+## [1.0.11](https://github.com/Okipa/laravel-table/compare/1.0.10...1.0.11)
 
 2019-05-06
 
@@ -115,13 +115,13 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 * Improved rows number selection and search bar template to fix wrong display the rows number is disabled for example (Issue #15).
 * Added possibility to show all the models contained in database with `->rowsNumber(null)` chained on the `Table` instance (Issue #16).
 
-## [1.0.10](https://github.com/Okipa/laravel-table/releases/tag/1.0.10)
+## [1.0.10](https://github.com/Okipa/laravel-table/compare/1.0.9...1.0.10)
 
 2019-02-21
 
 * Fixed a templating problem when disabling a line (one `td` html tag was missing).
 
-## [1.0.9](https://github.com/Okipa/laravel-table/releases/tag/1.0.9)
+## [1.0.9](https://github.com/Okipa/laravel-table/compare/1.0.8...1.0.9)
 
 2019-02-21
 
@@ -130,14 +130,14 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 * The `edit` and `destroy` buttons are now hidden when a line is disabled.
 * Improved compatibility with `postgres` for the searching action, using `ILIKE` instead of `LIKE` operator for case-insensitive searching.
 
-## [1.0.8](https://github.com/Okipa/laravel-table/releases/tag/1.0.8)
+## [1.0.8](https://github.com/Okipa/laravel-table/compare/1.0.7...1.0.8)
 
 2019-02-21
 
 * Updated the result displaying in one and only `td` html tag : the title is displayed on the left and the result html on the right.
 * Also fixed the result classes rendering location, which is now on the `tr` html tag and no more on the `td` html tags.
 
-## [1.0.7](https://github.com/Okipa/laravel-table/releases/tag/1.0.7)
+## [1.0.7](https://github.com/Okipa/laravel-table/compare/1.0.6...1.0.7)
 
 2019-02-19
 
@@ -149,7 +149,7 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
   * `->classes()` : Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the config('laravel-table.classes.results') value.
 * Added the capacity to manage a custom results template path in the config and with the `->$resultsComponentPath()` method.
 
-## [1.0.6](https://github.com/Okipa/laravel-table/releases/tag/1.0.6)
+## [1.0.6](https://github.com/Okipa/laravel-table/compare/1.0.5...1.0.6)
 
 2019-02-19
 
@@ -157,25 +157,25 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 * Added the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
 * Improved accessibility by adding `scope` attributes to correct td html tags.
 
-## [1.0.5](https://github.com/Okipa/laravel-table/releases/tag/1.0.5)
+## [1.0.5](https://github.com/Okipa/laravel-table/compare/1.0.4...1.0.5)
 
 2019-02-18
 
 * Updated `thead` and `tfoot` components in order to improve the responsive behavior.
 
-## [1.0.4](https://github.com/Okipa/laravel-table/releases/tag/1.0.4)
+## [1.0.4](https://github.com/Okipa/laravel-table/compare/1.0.3...1.0.4)
 
 2019-02-17
 
 * `->appends()` does now also add appended attributes to search canceling and sorting actions.
 
-## [1.0.3](https://github.com/Okipa/laravel-table/releases/tag/1.0.3)
+## [1.0.3](https://github.com/Okipa/laravel-table/compare/1.0.2...1.0.3)
 
 2019-02-15
 
 * `->appends()` method does now add appended key values to rows number selection form and to searching form as hidden fields.
 
-## [1.0.2](https://github.com/Okipa/laravel-table/releases/tag/1.0.2)
+## [1.0.2](https://github.com/Okipa/laravel-table/compare/1.0.1...1.0.2)
 
 2019-02-15
 
