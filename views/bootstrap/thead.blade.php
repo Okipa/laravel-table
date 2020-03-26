@@ -120,7 +120,7 @@
                 @endif
             </th>
         @endforeach
-        @if($table->isRouteDefined('edit') || $table->isRouteDefined('destroy'))
+        @if($table->isRouteDefined('show') || $table->isRouteDefined('edit') || $table->isRouteDefined('destroy'))
             <th{{ classTag('text-right', $table->thClasses) }} scope="col">
                 @lang('laravel-table::laravel-table.actions')
             </th>
