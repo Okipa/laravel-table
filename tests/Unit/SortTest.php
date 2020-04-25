@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Tests\Unit;
 
 use ErrorException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
