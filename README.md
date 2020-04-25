@@ -1,4 +1,4 @@
-# Generate eloquent tables with Laravel
+# Generate tables from Eloquent models
 
 [![Source Code](https://img.shields.io/badge/source-okipa/laravel--table-blue.svg)](https://github.com/Okipa/laravel-table)
 [![Latest Version](https://img.shields.io/github/release/okipa/laravel-table.svg?style=flat-square)](https://github.com/Okipa/laravel-table/releases)

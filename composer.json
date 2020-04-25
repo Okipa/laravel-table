@@ -1,6 +1,6 @@
 {
     "name": "okipa/laravel-table",
-    "description": "Generate eloquent tables with Laravel.",
+    "description": "Generate tables from Eloquent models.",
     "type": "library",
     "keywords": [
         "okipa",

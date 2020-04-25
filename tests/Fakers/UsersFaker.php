@@ -31,7 +31,7 @@ trait UsersFaker
         $this->clearPassword = $this->faker->word;
 
         return [
-            'name'     => $this->faker->word,
+            'name'     => $this->faker->name,
             'email'    => $this->faker->email,
             'password' => Hash::make($this->clearPassword),
         ];

@@ -9,6 +9,7 @@
 * Added Laravel 7 support.
 * Dropped Laravel support before 5.8 version.
 * Dropped PHP support before 7.2 version.
+* Reworked documentation.
 
 ## [1.2.7](https://github.com/Okipa/laravel-table/compare/1.2.6...1.2.7)
 
