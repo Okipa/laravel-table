@@ -248,7 +248,7 @@ class Table implements Htmlable
      */
     public function columnsCount(): int
     {
-        $extraColumnsCount = $this->isRouteDefined('edit') || $this->isRouteDefined('destroy') ? 1 : 0;
+        $extraColumnsCount = $this->isRouteDefined('show') || $this->isRouteDefined('edit') || $this->isRouteDefined('destroy') ? 1 : 0;
 
         return $this->columns->count() + $extraColumnsCount;
     }

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.7](https://github.com/Okipa/laravel-table/compare/1.2.6...1.2.7)
+
+2020-04-03
+
+* Fixed missing column when the `show` action is the only one defined.
+
 ## [1.2.6](https://github.com/Okipa/laravel-table/compare/1.2.5...1.2.6)
 
 2020-01-05
