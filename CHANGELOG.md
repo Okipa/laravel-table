@@ -4,7 +4,7 @@
 
 2020-04-25
 
-* Tests have been migrated to Github actions.
+* Tests have been migrated from Travis to Github actions.
 * Added PHP7.4 support.
 * Added Laravel 7 support.
 * Dropped Laravel support before 5.8 version.
