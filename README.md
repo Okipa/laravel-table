@@ -64,7 +64,7 @@ Then, display it in the view:
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Translations](#translations)
-* [Customize templates](#customize-templates)
+* [Templates](#templates)
 * [Table API](#table-api)
   * [->model()](#table-model)
   * [->identifier()](#table-identifier)
@@ -139,7 +139,7 @@ Optionally Publish the package translations:
 php artisan vendor:publish --tag=laravel-table:translations
 ```
 
-## Customize templates
+## Templates
 
 Optionally Publish the package templates:
 
@@ -596,7 +596,7 @@ destroyButton.click((e) => {
 
 * Signature: `column(string $databaseColumn = null): \Okipa\LaravelTable\Column`
 * Required
-* **Warning: ** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Column` object. See the use case examples to check how to use this method.
+* **Warning:** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Column` object. See the use case examples to check how to use this method.
 
 **Use case example:**
 
@@ -612,7 +612,7 @@ destroyButton.click((e) => {
 
 * Signature: `result(): Result`
 * Optional
-* **Warning: ** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Result` object. See the use case examples to check how to use this method.
+* **Warning:** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Result` object. See the use case examples to check how to use this method.
 
 **Use case example:**
 
