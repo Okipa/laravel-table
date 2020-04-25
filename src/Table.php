@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Traits\TableClassesCustomizations;
 use Okipa\LaravelTable\Traits\TableColumnsValidationChecks;
 use Okipa\LaravelTable\Traits\TableInteractions;
@@ -24,34 +23,49 @@ class Table implements Htmlable
     use TableRoutesValidationChecks;
     use TableColumnsValidationChecks;
     use TableInteractions;
+
     /** @property string $identifier */
     public $identifier;
+
     /** @property \Illuminate\Database\Eloquent\Model $model */
     public $model;
+
     /** @property bool $rowsNumberSelectionActivation */
     public $rowsNumberSelectionActivation;
+
     /** @property \Illuminate\Support\Collection $sortableColumns */
     public $sortableColumns;
+
     /** @property \Illuminate\Support\Collection $searchableColumns */
     public $searchableColumns;
+
     /** @property \Illuminate\Http\Request $request */
     public $request;
+
     /** @property array $routes */
     public $routes = [];
+
     /** @property \Illuminate\Support\Collection $columns */
     public $columns;
+
     /** @property Closure $queryClosure */
     public $queryClosure;
+
     /** @property \Illuminate\Support\Collection $disableRows */
     public $disableRows;
+
     /** @property \Illuminate\Pagination\LengthAwarePaginator $list */
     public $list;
+
     /** @property Closure $destroyConfirmationClosure */
     public $destroyConfirmationClosure;
+
     /** @property array $appendedValues */
     public $appendedValues = [];
+
     /** @property array $appendedHiddenFields */
     public $appendedHiddenFields = [];
+
     /** @property \Illuminate\Support\Collection $results */
     public $results;
 
@@ -248,7 +262,9 @@ class Table implements Htmlable
      */
     public function columnsCount(): int
     {
-        $extraColumnsCount = $this->isRouteDefined('show') || $this->isRouteDefined('edit') || $this->isRouteDefined('destroy') ? 1 : 0;
+        $extraColumnsCount = $this->isRouteDefined('show')
+        || $this->isRouteDefined('edit')
+        || $this->isRouteDefined('destroy') ? 1 : 0;
 
         return $this->columns->count() + $extraColumnsCount;
     }
@@ -344,7 +360,7 @@ class Table implements Htmlable
     {
         return (string) __('laravel-table::laravel-table.navigation', [
             'start' => ($this->list->perPage() * ($this->list->currentPage() - 1)) + 1,
-            'stop'  => $this->list->count() + (($this->list->currentPage() - 1) * $this->list->perPage()),
+            'stop' => $this->list->count() + (($this->list->currentPage() - 1) * $this->list->perPage()),
             'total' => (int) $this->list->total(),
         ]);
     }
@@ -418,9 +434,9 @@ class Table implements Htmlable
     {
         $this->list = $query->paginate($this->rows ?: (int) $query->count());
         $this->list->appends(array_merge([
-            $this->rowsField    => $this->rows,
-            $this->searchField  => $this->search,
-            $this->sortByField  => $this->sortBy,
+            $this->rowsField => $this->rows,
+            $this->searchField => $this->search,
+            $this->sortByField => $this->sortBy,
             $this->sortDirField => $this->sortDir,
         ], $this->appendedValues));
     }

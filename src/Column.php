@@ -6,38 +6,54 @@ use Closure;
 use ErrorException;
 use InvalidArgumentException;
 
+/** @SuppressWarnings(PHPMD.TooManyFields) */
 class Column
 {
     /** @property \Okipa\LaravelTable\Table $table */
     public $table;
+
     /** @property string $databaseDefaultTable */
     public $databaseDefaultTable;
+
     /** @property string $databaseSearchedTable */
     public $databaseSearchedTable;
+
     /** @property string $databaseDefaultColumn */
     public $databaseDefaultColumn;
+
     /** @property string $databaseSearchedColumns */
     public $databaseSearchedColumns;
+
     /** @property bool $isSortable */
     public $isSortable;
+
     /** @property string $title */
     public $title;
+
     /** @property string $dateTimeFormat */
     public $dateTimeFormat;
+
     /** @property array $buttonClasses */
     public $buttonClasses;
+
     /** @property int $stringLimit */
     public $stringLimit;
+
     /** @property string $url */
     public $url;
+
     /** @property Closure $valueClosure */
     public $valueClosure;
+
     /** @property Closure $htmlClosure */
     public $htmlClosure;
+
     /** @property string $icon */
     public $icon;
+
     /** @property bool $displayIconWhenNoValue */
     public $displayIconWhenNoValue;
+
     /** @property array $classes */
     public $classes;
 
@@ -56,8 +72,7 @@ class Column
     }
 
     /**
-     * Set the column title or override the default __('validation.attributes.[column key]) title generated from the
-     * column name.
+     * Set a custom column title and override the default `__('validation.attributes.[$database_column])` one.
      *
      * @param string|null $title
      *

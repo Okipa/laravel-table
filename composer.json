@@ -27,7 +27,7 @@
     ],
     "require": {
         "ext-pdo": "*",
-        "php": "^7.2",
+        "php": "^7.4",
         "illuminate/support": "~5.8.0||^6.0||^7.0",
         "okipa/laravel-html-helper": "^1.3"
     },
