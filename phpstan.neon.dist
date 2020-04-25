@@ -1,7 +1,17 @@
 includes:
     - ./vendor/nunomaduro/larastan/extension.neon
+
 parameters:
-    level: 5
+
     paths:
         - config
         - src
+
+    # The level 8 is the highest level
+    level: 5
+
+    ignoreErrors:
+        - '#Access to an undefined property#'
+
+    excludes_analyse:
+        - ./*/*/FileToBeExcluded.php

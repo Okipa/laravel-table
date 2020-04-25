@@ -1,0 +1,76 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['7.2', '7.3', '7.4']
+        laravel: ['5.8.*', '6.*', '7.*']
+        include:
+          - laravel: '7.*'
+            testbench: '5.*'
+          - laravel: '6.*'
+            testbench: '4.*'
+          - laravel: '5.8.*'
+            testbench: '3.8.*'
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: common, curl, json, mbstring, zip, sqlite, pdo_sqlite
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction --no-suggest
+
+      # lower php and laravel versions
+
+      - name: PHPUnit
+        if: matrix.php != '7.4' || matrix.laravel != '7.*'
+        run: vendor/bin/phpunit
+
+      # last php and laravel versions
+
+      - name: Code analysis
+        if: matrix.php == '7.4' && matrix.laravel == '7.*'
+        run: |
+          vendor/bin/phpcs
+          vendor/bin/phpmd src text phpmd.xml
+          vendor/bin/phpstan analyse
+
+      - name: PHPUnit + Code coverage
+        if: matrix.php == '7.4' && matrix.laravel == '7.*'
+        run: |
+          mkdir -p build/logs
+          vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+
+      - name: Code coverage upload to Coveralls
+        if: matrix.php == '7.4' && matrix.laravel == '7.*'
+        env:
+          COVERALLS_RUN_LOCALLY: 1
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
+          echo ${GITHUB_REF##*/}
+          composer require php-coveralls/php-coveralls
+          vendor/bin/php-coveralls -v --coverage_clover=build/logs/clover.xml
