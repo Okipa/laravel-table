@@ -178,7 +178,7 @@ php artisan vendor:publish --tag=laravel-table:views
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->identifier('Your identifier');
+(new Table)->identifier('Your identifier');
 ```
 
 <h3 id="table-request">->request()</h3>
@@ -264,7 +264,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->routes([
+(new Table)->routes([
     'index' => ['name' => 'news.index'],
     'create' => ['name' => 'news.create', 'params' => ['param1' => 'value1']],
     'edit' => ['name' => 'news.edit', 'params' => ['param2' => 'value2']],
@@ -287,9 +287,9 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->rowsNumber(50);
+(new Table)->rowsNumber(50);
 // or
-(new \Okipa\LaravelTable\Table)->rowsNumber(null);
+(new Table)->rowsNumber(null);
 ```
 
 <h3 id="table-rowsNumberSelectionActivation">->rowsNumberSelectionActivation()</h3>
@@ -306,7 +306,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->rowsNumberSelectionActivation(false);
+(new Table)->rowsNumberSelectionActivation(false);
 ```
 
 <h3 id="table-query">->query()</h3>
@@ -323,7 +323,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->query(function($query){
+(new Table)->query(function($query){
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('users', 'users.id', '=', 'companies.owner_id');
@@ -347,7 +347,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->appends(request()->only('status'));
+(new Table)->appends(request()->only('status'));
 ```
 
 <h3 id="table-containerClasses">->containerClasses()</h3>
@@ -363,7 +363,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->containerClasses(['set', 'your', 'classes']);
+(new Table)->containerClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tableClasses">->tableClasses()</h3>
@@ -379,7 +379,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->tableClasses(['set', 'your', 'classes']);
+(new Table)->tableClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-trClasses">->trClasses()</h3>
@@ -395,7 +395,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->trClasses(['set', 'your', 'classes']);
+(new Table)->trClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-thClasses">->thClasses()</h3>
@@ -411,7 +411,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->thClasses(['set', 'your', 'classes']);
+(new Table)->thClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tdClasses">->tdClasses()</h3>
@@ -427,7 +427,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->tdClasses(['set', 'your', 'classes']);
+(new Table)->tdClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-rowsConditionalClasses">->rowsConditionalClasses()</h3>
@@ -443,7 +443,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->rowsConditionalClasses(function($model){
+(new Table)->rowsConditionalClasses(function($model){
     return $model->hasParticularAttribute;
 }, ['set', 'your', 'classes']);
 ```
@@ -462,7 +462,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->destroyHtmlAttributes(function($model){
+(new Table)->destroyHtmlAttributes(function($model){
     return ['data-confirm' => __('Are you sure you want to delete the user :name ?', [
         'name' => $model->name
     ])];
@@ -502,7 +502,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->disableRows(function($user){
+(new Table)->disableRows(function($user){
     return $user->id = auth()->id;
 }, ['bg-danger', 'text-primary']);
 ```
@@ -520,7 +520,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->tableTemplate('tailwindCss.table');
+(new Table)->tableTemplate('tailwindCss.table');
 ```
 
 <h3 id="table-theadTemplate">->theadTemplate()</h3>
@@ -536,7 +536,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->theadTemplate('tailwindCss.thead');
+(new Table)->theadTemplate('tailwindCss.thead');
 ```
 
 <h3 id="table-tbodyTemplate">->tbodyTemplate()</h3>
@@ -552,7 +552,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->tbodyTemplate('tailwindCss.tbody');
+(new Table)->tbodyTemplate('tailwindCss.tbody');
 ```
 
 <h3 id="table-resultsTemplate">->resultsTemplate()</h3>
@@ -568,7 +568,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->resultsComponentPath('tailwindCss.results');
+(new Table)->resultsComponentPath('tailwindCss.results');
 ```
 
 <h3 id="table-tfootTemplate">->tfootTemplate()</h3>
@@ -584,7 +584,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->tfootTemplate('tailwindCss.tfoot');
+(new Table)->tfootTemplate('tailwindCss.tfoot');
 ```
 
 <h3 id="table-column">->column()</h3>
@@ -601,7 +601,12 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->column('email');
+// first configure your table
+$table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+// then configure each column
+$table->column('name');
+$table->column('email');
+// ...
 ```
 
 <h3 id="table-result">->result()</h3>
@@ -617,7 +622,12 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->result();
+// first configure your table
+$table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+// then configure each result line
+$table->result()->title('Total');
+$table->result()->title('Active');
+// ...
 ```
 
 ## Column API
@@ -636,7 +646,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->column()->classes(['font-weight-bold']);
+(new Table)->column()->classes(['font-weight-bold']);
 ```
 
 <h3 id="column-title">->title()</h3>
@@ -651,7 +661,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->column()->title('E-mail');
+(new Table)->column()->title('E-mail');
 ```
 
 <h3 id="column-sortable">->sortable()</h3>
@@ -668,10 +678,10 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new \Okipa\LaravelTable\Table)->column('email')->sortable();
+(new Table)->column('email')->sortable();
 
 // alternative
-(new \Okipa\LaravelTable\Table)->column('email')->sortable(true, 'desc');
+(new Table)->column('email')->sortable(true, 'desc');
 ```
 
 <h3 id="column-searchable">->searchable()</h3>
