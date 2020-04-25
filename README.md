@@ -313,7 +313,7 @@ public function index(\Illuminate\Http\Request $request)
 
 > Set the query closure that will be executed during the table generation.  
 > For example, you can define your joined tables here.  
-> The closure let you manipulate the following attribute: `$query`.
+> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Builder $query`.
 
 **Note:**
 
@@ -323,7 +323,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->query(function($query){
+(new Table)->query(function(Builder $query){
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('users', 'users.id', '=', 'companies.owner_id');
@@ -433,7 +433,7 @@ public function index(\Illuminate\Http\Request $request)
 <h3 id="table-rowsConditionalClasses">->rowsConditionalClasses()</h3>
 
 > Set rows classes when the given conditions are respected.  
-> The closure let you manipulate the following attribute: `$model`.
+> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
 > `
 > **Note:**
 
@@ -443,7 +443,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->rowsConditionalClasses(function($model){
+(new Table)->rowsConditionalClasses(function(User $user){
     return $model->hasParticularAttribute;
 }, ['set', 'your', 'classes']);
 ```
@@ -451,7 +451,7 @@ public function index(\Illuminate\Http\Request $request)
 <h3 id="table-destroyConfirmationHtmlAttributes">->destroyConfirmationHtmlAttributes()</h3>
 
 > Define html attributes on the destroy buttons to handle dynamic javascript destroy confirmations.  
-> The closure let you manipulate the following attribute: `$model`.  
+> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.  
 > **Beware:** the management of the destroy confirmation is on you, if you do not setup a javascript treatment to ask a confirmation, the destroy action will be directly executed.
 
 **Note:**
@@ -462,7 +462,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->destroyHtmlAttributes(function($model){
+(new Table)->destroyHtmlAttributes(function(User $user){
     return ['data-confirm' => __('Are you sure you want to delete the user :name ?', [
         'name' => $model->name
     ])];
@@ -492,7 +492,7 @@ destroyButton.click((e) => {
 > The optional second param let you override the classes that will be applied for the disabled lines.  
 > By default, the « config('laravel-table.classes.disabled') » config value is applied.  
 > For example, you can disable the current logged user to prevent him being edited or deleted from the table.  
-> The closure let you manipulate the following attribute: `$model`.
+> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
 
 **Note:**
 
@@ -502,7 +502,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->disableRows(function($user){
+(new Table)->disableRows(function(User $user){
     return $user->id = auth()->id;
 }, ['bg-danger', 'text-primary']);
 ```
@@ -646,7 +646,7 @@ $table->result()->title('Active');
 **Use case example:**
 
 ```php
-(new Table)->column()->classes(['font-weight-bold']);
+$table->column()->classes(['font-weight-bold']);
 ```
 
 <h3 id="column-title">->title()</h3>
@@ -661,7 +661,7 @@ $table->result()->title('Active');
 **Use case example:**
 
 ```php
-(new Table)->column()->title('E-mail');
+$table->column()->title('E-mail');
 ```
 
 <h3 id="column-sortable">->sortable()</h3>
@@ -678,10 +678,10 @@ $table->result()->title('Active');
 **Use case example:**
 
 ```php
-(new Table)->column('email')->sortable();
+$table->column('email')->sortable();
 
 // alternative
-(new Table)->column('email')->sortable(true, 'desc');
+$table->column('email')->sortable(true, 'desc');
 ```
 
 <h3 id="column-searchable">->searchable()</h3>
@@ -699,10 +699,10 @@ $table->result()->title('Active');
 
 ```php
 // example 1
-(new Table)->column('email')->searchable();
+$table->column('email')->searchable();
 
 // example 2
-$table = (new Table)->model(User::class)->query(function($query) {
+$table = (new Table)->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('companies', 'companies.owner_id', '=', 'users.id');
@@ -710,7 +710,7 @@ $table = (new Table)->model(User::class)->query(function($query) {
 $table->column('company')->searchable('companies', ['name']);
 
 // example 3
-$table = (new Table)->model(User::class)->query(function($query) {
+$table = (new Table)->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
     $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');
@@ -731,7 +731,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->column('created_at')->dateTimeFormat('d/m/Y H:i');
+$table->column('created_at')->dateTimeFormat('d/m/Y H:i');
 ```
 
 <h3 id="column-button">->button()</h3>
@@ -746,13 +746,13 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
+$table->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
 ```
 
 <h3 id="column-link">->link()</h3>
 
 > Wrap the column value into a `<a></a>` component.  
-> You can declare the link as a string or as a closure which will let you manipulate the following attributes: `$model`, `$column`.  
+> You can declare the link as a string or as a closure which will let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.  
 > If no url is declared, it will be set with the column value.
 
 **Note:**
@@ -764,11 +764,13 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 
 ```php
 // example 1
-(new Table)->column('url')->link();
+$table->column('url')->link();
+
 // example 2
-(new Table)->column()->link(route('news.index'));
+$table->column()->link(route('news.index'));
+
 // example 3
-(new Table)->column()->link(function($news) {
+$table->column()->link(function(News $news) {
     return route('news.show', $news);
 });
 ```
@@ -786,7 +788,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->column('email')->icon('<i class="fas fa-envelope"></i>', true);
+$table->column('email')->icon('<i class="fas fa-envelope"></i>', true);
 ```
 
 <h3 id="column-stringLimit">->stringLimit()</h3>
@@ -802,13 +804,13 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->column('email')->stringLimit(30);
+$table->column('email')->stringLimit(30);
 ```
 
 <h3 id="column-value">->value()</h3>
 
 > Display a custom value for the column.  
-> The closure let you manipulate the following attributes: `$model`, `$column`.
+> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
 
 **Note:**
 
@@ -818,7 +820,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->column()->value(function($user) {
+$table->column()->value(function(User $user) {
     return config('users.type.' . $user->type_id);
 });
 ```
@@ -826,7 +828,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 <h3 id="column-html">->html()</h3>
 
 > Display a custom HTML for the column.  
-> The closure let you manipulate the following attributes: `$model`, `$column`.
+> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
 
 **Note:**
 
@@ -836,7 +838,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->column()->html(function($user) {
+$table->column()->html(function(User $user) {
     return '<div>' . $user->first_name . '</div>';
 });
 ```
@@ -857,13 +859,13 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->result()->title('Turnover total');
+$table->result()->title('Turnover total');
 ```
 
 <h3 id="result-html">->html()</h3>
 
 > Display a HTML output for the result row.  
-> The closure let you manipulate the following attributes: `$displayedList`.
+> The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $displayedList`.
 
 **Note:**
 
@@ -873,7 +875,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->result()->html(function($displayedList) {
+$table->result()->html(function(Collection $displayedList) {
     return $displayedList->sum('turnover');
 });
 ```
@@ -891,7 +893,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 **Use case example:**
 
 ```php
-(new Table)->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
+$table->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
 ```
 
 ## Tips
@@ -938,7 +940,7 @@ $table = (new Table)->model(News::class)
     ])
     ->rowsNumber(50) // or set `false` to get all the items contained in database
     ->rowsNumberSelectionActivation(false)
-    ->query(function ($query) use ($category_id) {
+    ->query(function (Builder $query) use ($category_id) {
         // some examples of what you can do
         $query->select('news.*');
         // add a constraint
@@ -954,32 +956,32 @@ $table = (new Table)->model(News::class)
         $query->addSelect('users.name as author');
         $query->join('users', 'users.id', '=', 'news.author_id');
     })
-    ->disableRows(function($model){
-        return $model->id === 1 || $model->id === 2;
+    ->disableRows(function(News $news){
+        return $news->id === 1 || $news->id === 2;
     }, ['disabled', 'bg-secondary'])
-    ->rowsConditionalClasses(function($model){
-        return $model->id === 3;
+    ->rowsConditionalClasses(function(News $news){
+        return $news->id === 3;
     }, ['highlighted', 'bg-success']);
-$table->column('image')->html(function ($model, $column) {
-    return $model->{$column->databaseDefaultColumn}
-        ? '<img src="' . $model->{$column->databaseDefaultColumn} . '" alt="' .  $model->title . '">'
+$table->column('image')->html(function (News $news, Column $column) {
+    return $news->{$column->databaseDefaultColumn}
+        ? '<img src="' . $news->{$column->databaseDefaultColumn} . '" alt="' .  $news->title . '">'
         : null;
 });
 $table->column('title')->sortable()->searchable();
 $table->column('content')->stringLimit(30);
-$table->column('author')->sortable()->searchable('user', ['name']);
+$table->column('author')->sortable(true)->searchable('user', ['name']);
 $table->column('category_id')
     ->title('Category custom name')
     ->icon('your-icon')
     ->button(['btn', 'btn-sm', 'btn-outline-primary'])
-    ->value(function ($model, $column) {
-        return config('news.category.' . $model->{$column->databaseDefaultColumn});
+    ->value(function (News $news, Column $column) {
+        return config('news.category.' . $news->{$column->databaseDefaultColumn});
     });
-$table->column()->link(function($model){
-    return route('news.show', $model);
+$table->column()->link(function(News $news){
+    return route('news.show', $news);
 })->button(['btn', 'btn-sm', 'btn-primary']);
 $table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
-$table->result()->title('Total of comments')->html(function($displayedList){
+$table->result()->title('Total of comments')->html(function(Collection $displayedList){
     return $displayedList->sum('comments_count');
 });
 ```

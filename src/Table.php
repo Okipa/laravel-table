@@ -182,7 +182,7 @@ class Table implements Htmlable
 
     /**
      * Set the query closure that will be executed during the table generation.
-     * The closure let you manipulate the following attribute : $query.
+     * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Builder $query.
      *
      * @param Closure $queryClosure
      *
@@ -198,7 +198,7 @@ class Table implements Htmlable
     /**
      * Set the disable lines closure that will be executed during the table generation.
      * The optional second param let you override the classes that will be applied for the disabled lines.
-     * The closure let you manipulate the following attribute : $model.
+     * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Model $model.
      *
      * @param \Closure $rowDisableClosure
      * @param array $classes
@@ -336,7 +336,7 @@ class Table implements Htmlable
 
     /**
      * Define html attributes on the destroy buttons to handle dynamic javascript destroy confirmations.
-     * The closure let you manipulate the following attribute : $model.
+     * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Model $model.
      * Beware : the management of the destroy confirmation is on you, if you do not setup a javascript treatment to
      * ask a confirmation, the destroy action will be directly executed.
      *

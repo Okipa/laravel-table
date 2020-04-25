@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\Tests\Unit;
 
+use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\Company;
@@ -25,7 +26,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Result !')->html(function ($displayedList) {
+        $table->result()->title('Result !')->html(function (Collection $displayedList) {
             return $displayedList->sum('turnover');
         });
         $table->render();
@@ -44,7 +45,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->rowsNumber(2);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
             return $displayedList->sum('turnover');
         });
         $table->result()->title('Total turnover')->html(function () {
@@ -79,7 +80,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
             return $displayedList->sum('turnover');
         });
         $table->render();
@@ -96,7 +97,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
             return $displayedList->sum('turnover');
         });
         $table->render();
@@ -117,7 +118,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->column('owner_id');
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function ($displayedList) {
+        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
             return $displayedList->sum('turnover');
         });
         $table->render();
