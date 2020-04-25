@@ -8,7 +8,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-table?branch=master)
 [![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-table.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-table/?branch=master)
 
-Easily render tables from eloquent models in your views, directly built from PHP code.
+Easily render tables from Eloquent models in your views.
   
 This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAwesome 5` but can quickly be reconfigured to work with any UI framework.
 
@@ -21,7 +21,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 ## Usage
 
-First, prepare the table configuration:
+First, set your table configuration:
 
 ```php
 
