@@ -10,23 +10,16 @@
 		<exclude name="StaticAccess"/>
 		<exclude name="ElseExpression"/>
 		<exclude name="BooleanArgumentFlag"/>
-		<exclude name="IfStatementAssignment"/>
 	</rule>
 	<!-- code size rules -->
 	<rule ref="rulesets/codesize.xml">
 		<exclude name="TooManyPublicMethods"/>
 		<exclude name="TooManyMethods"/>
-		<exclude name="TooManyFields"/>
 		<exclude name="ExcessiveClassComplexity"/>
 	</rule>
 	<rule ref="rulesets/codesize.xml/TooManyPublicMethods">
 		<properties>
 			<property name="maxmethods" value="20"/>
-		</properties>
-	</rule>
-	<rule ref="rulesets/codesize.xml/TooManyFields">
-		<properties>
-			<property name="maxfields" value="20"/>
 		</properties>
 	</rule>
 	<rule ref="rulesets/codesize.xml/TooManyMethods">

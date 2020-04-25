@@ -34,7 +34,7 @@ class Result
 
     /**
      * Display a HTML output for the result row.
-     * The closure let you manipulate the following attributes : $displayedList.
+     * The closure let you manipulate the following attributes : \Illuminate\Support\Collection $displayedList.
      *
      * @param Closure $htmlClosure
      *

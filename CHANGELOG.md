@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.0](https://github.com/Okipa/laravel-table/compare/1.2.7...1.3.0)
+
+2020-04-25
+
+* Tests have been migrated from Travis to Github actions.
+* Added PHP7.4 support.
+* Added Laravel 7 support.
+* Dropped Laravel support before 5.8 version.
+* Dropped PHP support before 7.2 version.
+* Reworked documentation.
+
 ## [1.2.7](https://github.com/Okipa/laravel-table/compare/1.2.6...1.2.7)
 
 2020-04-03
@@ -151,8 +162,8 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 * **Possible breaking change :** reverted last tag features => removed the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
 * Added the capacity to append some results objects to the table with the `->result()` method with the following methods :
   * `->title()` : Set the result row title.
-  * `->html()` : Display a HTML output for the result row. The closure let you manipulate the following attributes : \$displayedList.
-  * `->classes()` : Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the config('laravel-table.classes.results') value.
+  * `->html()` : Display a HTML output for the result row. The closure let you manipulate the following attributes : `\Illuminate\Support\Collection $displayedList`.
+  * `->classes()` : Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the `config('laravel-table.classes.results')` value.
 * Added the capacity to manage a custom results template path in the config and with the `->$resultsComponentPath()` method.
 
 ## [1.0.6](https://github.com/Okipa/laravel-table/compare/1.0.5...1.0.6)

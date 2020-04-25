@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Tests\Unit;
 
 use ErrorException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
@@ -136,7 +137,7 @@ class SortTest extends LaravelTableTestCase
         ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function (Builder $query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
@@ -161,7 +162,7 @@ class SortTest extends LaravelTableTestCase
         ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
-            ->query(function ($query) {
+            ->query(function (Builder $query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
