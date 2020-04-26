@@ -2,7 +2,7 @@
 
 namespace Okipa\LaravelTable\Test\Fakers;
 
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Okipa\LaravelTable\Test\Models\User;
 
 trait UsersFaker

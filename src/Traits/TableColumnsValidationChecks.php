@@ -31,7 +31,7 @@ trait TableColumnsValidationChecks
     {
         if (! $this->model instanceof Model) {
             $errorMessage = 'The table model has not been defined or is not an instance of « '
-                            . Model::class . ' ».';
+                . Model::class . ' ».';
             throw new ErrorException($errorMessage);
         }
     }
@@ -70,8 +70,8 @@ trait TableColumnsValidationChecks
     {
         if (! $column->databaseDefaultColumn && $column->isSortable) {
             $errorMessage = 'One of the sortable table columns has no defined database column. You have to define a '
-                            . 'database column for each sortable table columns by setting a string parameter in the '
-                            . '« column() » method.';
+                . 'database column for each sortable table columns by setting a string parameter in the '
+                . '« column() » method.';
             throw new ErrorException($errorMessage);
         }
     }
@@ -88,8 +88,8 @@ trait TableColumnsValidationChecks
     {
         if (! $column->databaseDefaultColumn) {
             $errorMessage = 'One of the searchable table columns has no defined database column. You have to define '
-                            . 'a database column for each searchable table columns by setting a string parameter in '
-                            . 'the « column() » method.';
+                . 'a database column for each searchable table columns by setting a string parameter in '
+                . 'the « column() » method.';
             throw new ErrorException($errorMessage);
         }
     }
@@ -114,9 +114,9 @@ trait TableColumnsValidationChecks
                     ? '« ' . $tableData['table'] . ' » (aliased as « ' . $tableAlias . ' ») table'
                     : '« ' . $tableData['table'] . ' » table';
                 $errorMessage = 'The table column with related « ' . $searchedDatabaseColumn . ' » database column is '
-                                . 'searchable and does not exist in the ' . $dynamicMessagePart
-                                . '. Set the database searched table and (optionally) columns with the « sortable() » '
-                                . 'method arguments.';
+                    . 'searchable and does not exist in the ' . $dynamicMessagePart
+                    . '. Set the database searched table and (optionally) columns with the « sortable() » '
+                    . 'method arguments.';
                 throw new ErrorException($errorMessage);
             }
         }
@@ -163,7 +163,7 @@ trait TableColumnsValidationChecks
     {
         if ($this->columns->isEmpty()) {
             $errorMessage = 'No column has been added to the table. Please add at least one column by using the '
-                            . '« column() » method on the table object.';
+                . '« column() » method on the table object.';
             throw new ErrorException($errorMessage);
         }
     }

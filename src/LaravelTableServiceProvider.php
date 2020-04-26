@@ -2,7 +2,6 @@
 
 namespace Okipa\LaravelTable;
 
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Okipa\LaravelHtmlHelper\HtmlHelperServiceProvider;
 

@@ -30,7 +30,7 @@ trait CompaniesFaker
         $max = User::all()->count();
 
         return [
-            'name'     => $this->faker->company,
+            'name' => $this->faker->company,
             'owner_id' => rand(1, $max),
             'turnover' => rand(1000, 99999),
         ];
