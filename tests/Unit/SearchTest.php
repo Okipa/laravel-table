@@ -194,7 +194,7 @@ class SearchTest extends LaravelTableTestCase
         $searchedValue = $companies->first()->owner->name;
         $customRequest = (new Request)->merge([(new Table)->rowsField => 20, 'search' => $searchedValue]);
         $table = (new Table)->model(Company::class)
-            ->routes(['index' => ['name' => 'companies.index'],])
+            ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
                 $query->addSelect('users_test.name as owner');

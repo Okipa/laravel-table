@@ -100,7 +100,8 @@ Then, display it in the view:
   * [->dateTimeFormat()](#column-dateTimeFormat)
   * [->button()](#column-button)
   * [->link()](#column-link)
-  * [->icon()](#column-icon)
+  * [->prepend()](#column-prepend)
+  * [->append()](#column-append)
   * [->stringLimit()](#column-stringLimit)
   * [->value()](#-value)
   * [->html()](#-html)
@@ -826,20 +827,36 @@ $table->column()->link(function(News $news) {
 });
 ```
 
-<h3 id="column-icon">->icon()</h3>
+<h3 id="column-prepend">->prepend()</h3>
 
-> Add an icon before the displayed value.  
-> Set the second param as true if you want the icon to be displayed even if the column has no value.
+> Prepend HTML to the displayed value.  
+> Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
 
 **Note:**
 
-* Signature: `icon(string $icon, bool $displaydisplayIconWhenNoValue = false): \Okipa\LaravelTable\Column`
+* Signature: `prepend(string $prependicon, bool $displayPrependEvenIfNoValue = false): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
 
 ```php
-$table->column('email')->icon('<i class="fas fa-envelope"></i>', true);
+$table->column('email')->prepend('<i class="fas fa-envelope"></i>', true);
+```
+
+<h3 id="column-append">->append()</h3>
+
+> Append HTML to the displayed value.  
+> Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
+
+**Note:**
+
+* Signature: `append(string $prependicon, bool $displayAppendEvenIfNoValue = false): \Okipa\LaravelTable\Column`
+* Optional
+
+**Use case example:**
+
+```php
+$table->column('email')->append('<i class="fas fa-envelope"></i>', true);
 ```
 
 <h3 id="column-stringLimit">->stringLimit()</h3>
@@ -952,7 +969,8 @@ $table->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
 * **Columns displaying combination:** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
   * `->button()`
   * `->link()`
-  * `->icon()`
+  * `->prepend()`
+  * `->append()`
   * `->stringLimit()`
   * `->value()`
 
@@ -1023,7 +1041,8 @@ $table->column('content')->stringLimit(30);
 $table->column('author')->sortable(true)->searchable('user', ['name']);
 $table->column('category_id')
     ->title('Category custom name')
-    ->icon('your-icon')
+    ->prepend('your-icon')
+    ->append('your-other-icon')
     ->button(['btn', 'btn-sm', 'btn-outline-primary'])
     ->value(function (News $news, Column $column) {
         return config('news.category.' . $news->{$column->databaseDefaultColumn});
