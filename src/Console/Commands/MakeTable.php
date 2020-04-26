@@ -3,6 +3,9 @@
 namespace Okipa\LaravelTable\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
+use InvalidArgumentException;
+use Symfony\Component\Console\Input\InputOption;
 
 class MakeTable extends GeneratorCommand
 {
@@ -28,9 +31,9 @@ class MakeTable extends GeneratorCommand
     protected function getStub(): string
     {
         if ($this->option('model')) {
-            $stub = '/stubs/export.model.stub';
+            $stub = '/stubs/table.model.stub';
         }
-        $stub = $stub ?? '/stubs/export.plain.stub';
+        $stub = $stub ?? '/stubs/table.stub';
 
         return __DIR__ . $stub;
     }
@@ -38,7 +41,7 @@ class MakeTable extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string $rootNamespace
+     * @param string $rootNamespace
      *
      * @return string
      */
@@ -51,11 +54,12 @@ class MakeTable extends GeneratorCommand
      * Build the class with the given name.
      * Remove the base controller import if we are already in base namespace.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function buildClass($name)
+    protected function buildClass($name): string
     {
         $replace = [];
         if ($this->option('model')) {
@@ -63,8 +67,50 @@ class MakeTable extends GeneratorCommand
         }
 
         return str_replace(
-            array_keys($replace), array_values($replace), parent::buildClass($name)
+            array_keys($replace),
+            array_values($replace),
+            parent::buildClass($name)
         );
+    }
+
+    /**
+     * Build the model replacement values.
+     *
+     * @param array $replace
+     *
+     * @return array
+     */
+    protected function buildModelReplacements(array $replace): array
+    {
+        $modelClass = $this->parseModel($this->option('model'));
+
+        return array_merge($replace, [
+            'DummyFullModelClass' => $modelClass,
+            'DummyModelClass' => class_basename($modelClass),
+            '$dummyModel' => '$' . Str::camel(class_basename($modelClass)),
+        ]);
+    }
+
+    /**
+     * Get the fully-qualified model class name.
+     *
+     * @param string $model
+     *
+     * @return string
+     */
+    protected function parseModel(string $model): string
+    {
+        $result = preg_match('([^A-Za-z0-9_/\\\\])', $model);
+        if ($result) {
+            throw new InvalidArgumentException('Model name contains invalid characters.');
+        }
+        $model = trim(str_replace('/', '\\', $model), '\\');
+        $rootNamespace = $this->laravel->getNamespace();
+        if (! Str::startsWith($model, $rootNamespace)) {
+            $model = $rootNamespace . $model;
+        }
+
+        return $model;
     }
 
     /**
@@ -72,11 +118,10 @@ class MakeTable extends GeneratorCommand
      *
      * @return array
      */
-    protected function getOptions()
+    protected function getOptions(): array
     {
         return [
-            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Generate an export for the given model.'],
-            ['query', '', InputOption::VALUE_NONE, 'Generate an export for a query.'],
+            ['model', 'm', InputOption::VALUE_OPTIONAL, 'Generate a table configuration for the given model.'],
         ];
     }
 }

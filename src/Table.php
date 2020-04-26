@@ -84,6 +84,9 @@ class Table implements Htmlable
         $this->columns = new Collection();
         $this->disableRows = new Collection();
         $this->results = new Collection();
+        if (method_exists($this, 'configure')) {
+            $this->configure();
+        }
     }
 
     /**

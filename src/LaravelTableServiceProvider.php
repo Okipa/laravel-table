@@ -4,10 +4,11 @@ namespace Okipa\LaravelTable;
 
 use Illuminate\Support\ServiceProvider;
 use Okipa\LaravelHtmlHelper\HtmlHelperServiceProvider;
+use Okipa\LaravelTable\Console\Commands\MakeTable;
 
 class LaravelTableServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../views', 'laravel-table');
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'laravel-table');
@@ -25,8 +26,9 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->app->register(HtmlHelperServiceProvider::class);
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-table.php', 'laravel-table');
+        $this->commands([MakeTable::class]);
     }
 }
