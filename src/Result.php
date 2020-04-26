@@ -6,8 +6,13 @@ use Closure;
 
 class Result
 {
+    /** @property string $title */
     public $title;
+
+    /** @property \Closure $htmlClosure */
     public $htmlClosure;
+
+    /** @property array $classes */
     public $classes;
 
     /**
@@ -36,7 +41,7 @@ class Result
      * Display a HTML output for the result row.
      * The closure let you manipulate the following attributes : \Illuminate\Support\Collection $displayedList.
      *
-     * @param Closure $htmlClosure
+     * @param \Closure $htmlClosure
      *
      * @return \Okipa\LaravelTable\Result
      */

@@ -50,7 +50,7 @@ class AppendsTest extends LaravelTableTestCase
             ->appends($appended);
         $table->column('name')->sortable()->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $sortingHttpArguments = htmlspecialchars(http_build_query(array_merge([
             $table->rowsField    => 20,
             $table->searchField  => 'test',

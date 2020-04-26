@@ -85,6 +85,9 @@ Then, display it in the view:
   * [->tableTemplate()](#table-tableTemplate)
   * [->theadTemplate()](#table-theadTemplate)
   * [->tbodyTemplate()](#table-tbodyTemplate)
+  * [->showTemplate()](#table-showTemplate)
+  * [->editTemplate()](#table-editTemplate)
+  * [->destroyTemplate()](#table-destroyTemplate)
   * [->resultsTemplate()](#table-resultsTemplate)
   * [->tfootTemplate()](#table-tfootTemplate)
   * [->column()](#table-column)
@@ -514,7 +517,7 @@ destroyButton.click((e) => {
 
 **Note:**
 
-* Signature: `tableTemplate(string $tableComponentPath): \Okipa\LaravelTable\Table`
+* Signature: `tableTemplate(string $tableTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
@@ -530,7 +533,7 @@ destroyButton.click((e) => {
 
 **Note:**
 
-* Signature: `theadTemplate(string $theadComponentPath): \Okipa\LaravelTable\Table`
+* Signature: `theadTemplate(string $theadTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
@@ -546,13 +549,61 @@ destroyButton.click((e) => {
 
 **Note:**
 
-* Signature: `tbodyTemplate(string $tbodyComponentPath): \Okipa\LaravelTable\Table`
+* Signature: `tbodyTemplate(string $tbodyTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
 (new Table)->tbodyTemplate('tailwindCss.tbody');
+```
+
+<h3 id="table-showTemplate">->showTemplate()</h3>
+
+> Set a custom template path for the show component.  
+> The default show template path is defined in the `config('laravel-table.template.show')` config value.
+
+**Note:**
+
+* Signature: `showTemplate(string $showTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->showTemplate('tailwindCss.show');
+```
+
+<h3 id="table-editTemplate">->editTemplate()</h3>
+
+> Set a custom template path for the edit component.  
+> The default edit template path is defined in the `config('laravel-table.template.edit')` config value.
+
+**Note:**
+
+* Signature: `editTemplate(string $editTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->editTemplate('tailwindCss.edit');
+```
+
+<h3 id="table-destroyTemplate">->destroyTemplate()</h3>
+
+> Set a custom template path for the destroy component.  
+> The default destroy template path is defined in the `config('laravel-table.template.destroy')` config value.
+
+**Note:**
+
+* Signature: `destroyTemplate(string $destroyTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->destroyTemplate('tailwindCss.destroy');
 ```
 
 <h3 id="table-resultsTemplate">->resultsTemplate()</h3>

@@ -10,18 +10,25 @@ trait TableInteractions
 {
     /** @property int $rows */
     public $rows;
+
     /** @property bool $rowsField */
     public $rowsField = 'rows';
+
     /** @property string $sortBy */
     public $sortBy;
+
     /** @property string $sortByField */
     public $sortByField = 'sort_by';
+
     /** @property string $sortDir */
     public $sortDir;
+
     /** @property string $sortDirField */
     public $sortDirField = 'sort_dir';
+
     /** @property string $search */
     public $search;
+
     /** @property string $searchField */
     public $searchField = 'search';
 
@@ -52,16 +59,16 @@ trait TableInteractions
             $this->sortByField,
             $this->sortDirField
         ), [
-            $this->rowsField    => 'required|integer',
-            $this->searchField  => 'nullable|string',
-            $this->sortByField  => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
+            $this->rowsField => 'required|integer',
+            $this->searchField => 'nullable|string',
+            $this->sortByField => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
             $this->sortDirField => 'nullable|string|in:asc,desc',
         ]);
         if ($validator->fails()) {
             $this->request->merge([
-                $this->rowsField    => $this->rows ?? config('laravel-table.value.rows'),
-                $this->searchField  => null,
-                $this->sortByField  => $this->sortBy,
+                $this->rowsField => $this->rows ?? config('laravel-table.value.rows'),
+                $this->searchField => null,
+                $this->sortByField => $this->sortBy,
                 $this->sortDirField => $this->sortDir,
             ]);
         }

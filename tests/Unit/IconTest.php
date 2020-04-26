@@ -31,7 +31,7 @@ class IconTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->icon('icon');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('icon', $html);
     }
 
@@ -44,7 +44,7 @@ class IconTest extends LaravelTableTestCase
             return 'test';
         });
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('icon', $html);
     }
 
@@ -56,7 +56,7 @@ class IconTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->icon('icon');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString('icon', $html);
     }
 
@@ -68,7 +68,7 @@ class IconTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->icon('icon', true);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('icon', $html);
     }
 }

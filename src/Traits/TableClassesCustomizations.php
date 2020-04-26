@@ -10,16 +10,22 @@ trait TableClassesCustomizations
 {
     /** @property array $containerClasses */
     public $containerClasses;
+
     /** @property array $tableClasses */
     public $tableClasses;
+
     /** @property array $trClasses */
     public $trClasses;
+
     /** @property array $thClasses */
     public $thClasses;
+
     /** @property array $tdClasses */
     public $tdClasses;
+
     /** @property array $resultClasses */
     public $resultClasses;
+
     /** @property array $rowsConditionalClasses */
     public $rowsConditionalClasses;
 
@@ -122,7 +128,7 @@ trait TableClassesCustomizations
      * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Model $model.
      *
      * @param \Closure $rowClassesClosure
-     * @param array    $rowClasses
+     * @param array $rowClasses
      *
      * @return \Okipa\LaravelTable\Table
      */

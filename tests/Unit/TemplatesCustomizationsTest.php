@@ -12,21 +12,42 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
     {
         $templatePath = 'table-test';
         $table = (new Table)->model(User::class)->tableTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->tableComponentPath);
+        $this->assertEquals($templatePath, $table->tableTemplatePath);
     }
 
     public function testSetTheadTemplateAttribute()
     {
         $templatePath = 'thead-test';
         $table = (new Table)->model(User::class)->theadTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->theadComponentPath);
+        $this->assertEquals($templatePath, $table->theadTemplatePath);
     }
 
     public function testSetTbodyTemplateAttribute()
     {
         $templatePath = 'tbody-test';
         $table = (new Table)->model(User::class)->tbodyTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->tbodyComponentPath);
+        $this->assertEquals($templatePath, $table->tbodyTemplatePath);
+    }
+
+    public function testSetShowTemplateAttribute()
+    {
+        $templatePath = 'show-test';
+        $table = (new Table)->model(User::class)->showTemplate($templatePath);
+        $this->assertEquals($templatePath, $table->showTemplatePath);
+    }
+
+    public function testSetEditTemplateAttribute()
+    {
+        $templatePath = 'edit-test';
+        $table = (new Table)->model(User::class)->editTemplate($templatePath);
+        $this->assertEquals($templatePath, $table->editTemplatePath);
+    }
+
+    public function testSetDestroyTemplateAttribute()
+    {
+        $templatePath = 'edit-test';
+        $table = (new Table)->model(User::class)->destroyTemplate($templatePath);
+        $this->assertEquals($templatePath, $table->destroyTemplatePath);
     }
 
     public function testSetResultsTemplateAttribute()
@@ -42,7 +63,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->tfootTemplate($templatePath);
         $this->assertEquals($templatePath, $table->tfootComponentPath);
     }
-    
+
     public function testSetTableTemplateHtml()
     {
         view()->addNamespace('laravel-table', 'tests/views');
@@ -53,7 +74,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->tableTemplate('table-test');
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<table id="table-test">', $html);
     }
 
@@ -67,7 +88,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->theadTemplate('thead-test');
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<thead id="thead-test">', $html);
     }
 
@@ -81,8 +102,50 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->tbodyTemplate('tbody-test');
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<tbody id="tbody-test">', $html);
+    }
+
+    public function testSetShowTemplateHtml()
+    {
+        view()->addNamespace('laravel-table', 'tests/views');
+        $this->createMultipleUsers(2);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->showTemplate('show-test');
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->showTemplatePath, compact('table'))->render();
+        $this->assertStringContainsString('<form id="show-test">', $html);
+    }
+
+    public function testSetEditTemplateHtml()
+    {
+        view()->addNamespace('laravel-table', 'tests/views');
+        $this->createMultipleUsers(2);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->editTemplate('edit-test');
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->editTemplatePath, compact('table'))->render();
+        $this->assertStringContainsString('<form id="edit-test">', $html);
+    }
+
+    public function testSetDestroyTemplateHtml()
+    {
+        view()->addNamespace('laravel-table', 'tests/views');
+        $this->createMultipleUsers(2);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->destroyTemplate('destroy-test');
+        $table->column('name');
+        $table->render();
+        $html = view('laravel-table::' . $table->destroyTemplatePath, compact('table'))->render();
+        $this->assertStringContainsString('<form id="destroy-test">', $html);
     }
 
     public function testSetResultsTemplateHtml()

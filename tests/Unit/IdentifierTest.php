@@ -54,7 +54,7 @@ class IdentifierTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertEquals(1, substr_count($html, '<table id="identifier-test"'));
     }
 
@@ -68,7 +68,7 @@ class IdentifierTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertEquals(2, substr_count($html, 'name="identifier_test_rows"'));
     }
 
@@ -82,7 +82,7 @@ class IdentifierTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertEquals(2, substr_count($html, 'name="identifier_test_search"'));
     }
 
@@ -96,7 +96,7 @@ class IdentifierTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertEquals(2, substr_count($html, 'name="identifier_test_sort_by"'));
     }
 
@@ -110,7 +110,7 @@ class IdentifierTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertEquals(2, substr_count($html, 'name="identifier_test_sort_dir"'));
     }
 }

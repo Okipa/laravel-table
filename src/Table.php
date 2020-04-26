@@ -48,7 +48,7 @@ class Table implements Htmlable
     /** @property \Illuminate\Support\Collection $columns */
     public $columns;
 
-    /** @property Closure $queryClosure */
+    /** @property \Closure $queryClosure */
     public $queryClosure;
 
     /** @property \Illuminate\Support\Collection $disableRows */
@@ -57,7 +57,7 @@ class Table implements Htmlable
     /** @property \Illuminate\Pagination\LengthAwarePaginator $list */
     public $list;
 
-    /** @property Closure $destroyConfirmationClosure */
+    /** @property \Closure $destroyConfirmationClosure */
     public $destroyConfirmationClosure;
 
     /** @property array $appendedValues */
@@ -184,7 +184,7 @@ class Table implements Htmlable
      * Set the query closure that will be executed during the table generation.
      * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Builder $query.
      *
-     * @param Closure $queryClosure
+     * @param \Closure $queryClosure
      *
      * @return \Okipa\LaravelTable\Table
      */
@@ -389,7 +389,7 @@ class Table implements Htmlable
         $this->handleRequestInteractionValues();
         $this->generateEntitiesListFromQuery();
 
-        return view('laravel-table::' . $this->tableComponentPath, ['table' => $this]);
+        return view('laravel-table::' . $this->tableTemplatePath, ['table' => $this]);
     }
 
     /**

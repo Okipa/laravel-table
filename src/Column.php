@@ -42,10 +42,10 @@ class Column
     /** @property string $url */
     public $url;
 
-    /** @property Closure $valueClosure */
+    /** @property \Closure $valueClosure */
     public $valueClosure;
 
-    /** @property Closure $htmlClosure */
+    /** @property \Closure $htmlClosure */
     public $htmlClosure;
 
     /** @property string $icon */
@@ -234,7 +234,7 @@ class Column
      * The closure let you manipulate the following attributes : \Illuminate\Database\Eloquent\Model $model,
      * \Okipa\LaravelTable\Column$column.
      *
-     * @param Closure $valueClosure
+     * @param \Closure $valueClosure
      *
      * @return \Okipa\LaravelTable\Column
      */
@@ -250,7 +250,7 @@ class Column
      * The closure let you manipulate the following attributes : \Illuminate\Database\Eloquent\Model $model,
      * \Okipa\LaravelTable\Column $column.
      *
-     * @param Closure $htmlClosure
+     * @param \Closure $htmlClosure
      *
      * @return \Okipa\LaravelTable\Column
      */

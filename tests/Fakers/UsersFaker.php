@@ -2,7 +2,7 @@
 
 namespace Okipa\LaravelTable\Test\Fakers;
 
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Okipa\LaravelTable\Test\Models\User;
 
 trait UsersFaker
@@ -31,8 +31,8 @@ trait UsersFaker
         $this->clearPassword = $this->faker->word;
 
         return [
-            'name'     => $this->faker->word(10),
-            'email'    => $this->faker->email,
+            'name'     => $this->faker->unique()->name(),
+            'email'    => $this->faker->unique()->email,
             'password' => Hash::make($this->clearPassword),
         ];
     }
