@@ -44,7 +44,7 @@ class RowDisableTest extends LaravelTableTestCase
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
         }
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
@@ -87,7 +87,7 @@ class RowDisableTest extends LaravelTableTestCase
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
         }
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
@@ -119,7 +119,7 @@ class RowDisableTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString(implode(' ', $classes), $html);
         $this->assertStringNotContainsString('disabled="disabled"', $html);
     }

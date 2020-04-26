@@ -144,7 +144,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($users as $user) {
             $this->assertStringContainsString('edit-' . $user->id, $html);
             $this->assertStringContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
@@ -158,7 +158,7 @@ class RoutesTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="edit-' . $user->id, $html);
             $this->assertStringNotContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
@@ -175,7 +175,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($users as $user) {
             $this->assertStringContainsString('destroy-' . $user->id, $html);
             $this->assertStringContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
@@ -189,7 +189,7 @@ class RoutesTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="destroy-' . $user->id, $html);
             $this->assertStringNotContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
@@ -206,7 +206,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($users as $user) {
             $this->assertStringContainsString('show-' . $user->id, $html);
             $this->assertStringContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
@@ -220,7 +220,7 @@ class RoutesTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="show-' . $user->id, $html);
             $this->assertStringNotContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
@@ -258,7 +258,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '"', $html);
@@ -295,7 +295,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '"', $html);
@@ -332,7 +332,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(
             'action="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html
@@ -378,7 +378,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(
             'action="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html

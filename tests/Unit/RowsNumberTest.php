@@ -37,7 +37,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString('rows-number-selection', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString(
@@ -60,7 +60,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString('rows-number-selection', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString(
@@ -83,7 +83,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('rows-number-selection', $html);
         $this->assertStringContainsString('type="hidden" name="search"', $html);
         $this->assertStringContainsString(
@@ -104,7 +104,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('value="15"', $html);
     }
 
@@ -117,7 +117,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('value="15"', $html);
     }
 
@@ -149,7 +149,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('value=""', $html);
         foreach ($users as $user) {
             $this->assertStringContainsString($user->name, $html);

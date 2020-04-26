@@ -4,7 +4,7 @@ return [
 
     'rowsNumber'   => 'Rows number',
     'emptyTable'   => 'No results were found.',
-    'search'       => 'Search by :',
+    'search'       => 'Search by:',
     'cancelSearch' => 'Cancel research',
     'actions'      => 'Actions',
     'create'       => 'Create',

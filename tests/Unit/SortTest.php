@@ -187,7 +187,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(
             'href="http://localhost/users/index?' . $table->rowsField . '=20&amp;' . $table->sortByField . '=name&amp;'
             . $table->sortDirField . '=desc"',

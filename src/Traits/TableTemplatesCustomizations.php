@@ -6,14 +6,27 @@ use Okipa\LaravelTable\Table;
 
 trait TableTemplatesCustomizations
 {
-    /** @property string $tableComponentPath */
-    public $tableComponentPath;
-    /** @property string $theadComponentPath */
-    public $theadComponentPath;
-    /** @property string $tbodyComponentPath */
-    public $tbodyComponentPath;
+    /** @property string $tableTemplatePath */
+    public $tableTemplatePath;
+
+    /** @property string $theadTemplatePath */
+    public $theadTemplatePath;
+
+    /** @property string $tbodyTemplatePath */
+    public $tbodyTemplatePath;
+
+    /** @property string $showTemplatePath */
+    public $showTemplatePath;
+
+    /** @property string $editTemplatePath */
+    public $editTemplatePath;
+
+    /** @property string $destroyTemplatePath */
+    public $destroyTemplatePath;
+
     /** @property string $resultsComponentPath */
     public $resultsComponentPath;
+
     /** @property string $tfootComponentPath */
     public $tfootComponentPath;
 
@@ -21,13 +34,13 @@ trait TableTemplatesCustomizations
      * Set a custom template path for the table component.
      * The default table template path is defined in the config('laravel-table.template.table') config value.
      *
-     * @param string $tableComponentPath
+     * @param string $tableTemplatePath
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function tableTemplate(string $tableComponentPath): Table
+    public function tableTemplate(string $tableTemplatePath): Table
     {
-        $this->tableComponentPath = $tableComponentPath;
+        $this->tableTemplatePath = $tableTemplatePath;
 
         /** @var Table $this */
         return $this;
@@ -37,13 +50,13 @@ trait TableTemplatesCustomizations
      * Set a custom template path for the thead component.
      * The default thead template path is defined in the config('laravel-table.template.thead') config value.
      *
-     * @param string $theadComponentPath
+     * @param string $theadTemplatePath
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function theadTemplate(string $theadComponentPath): Table
+    public function theadTemplate(string $theadTemplatePath): Table
     {
-        $this->theadComponentPath = $theadComponentPath;
+        $this->theadTemplatePath = $theadTemplatePath;
 
         /** @var Table $this */
         return $this;
@@ -53,13 +66,61 @@ trait TableTemplatesCustomizations
      * Set a custom template path for the tbody component.
      * The default tbody template path is defined in the config('laravel-table.template.tbody') config value.
      *
-     * @param string $tbodyComponentPath
+     * @param string $tbodyTemplatePath
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function tbodyTemplate(string $tbodyComponentPath): Table
+    public function tbodyTemplate(string $tbodyTemplatePath): Table
     {
-        $this->tbodyComponentPath = $tbodyComponentPath;
+        $this->tbodyTemplatePath = $tbodyTemplatePath;
+
+        /** @var Table $this */
+        return $this;
+    }
+
+    /**
+     * Set a custom template path for the show component.
+     * The default show template path is defined in the config('laravel-table.template.show') config value.
+     *
+     * @param string $showTemplatePath
+     *
+     * @return \Okipa\LaravelTable\Table
+     */
+    public function showTemplate(string $showTemplatePath): Table
+    {
+        $this->showTemplatePath = $showTemplatePath;
+
+        /** @var Table $this */
+        return $this;
+    }
+
+    /**
+     * Set a custom template path for the edit component.
+     * The default edit template path is defined in the config('laravel-table.template.edit') config value.
+     *
+     * @param string $editTemplatePath
+     *
+     * @return \Okipa\LaravelTable\Table
+     */
+    public function editTemplate(string $editTemplatePath): Table
+    {
+        $this->editTemplatePath = $editTemplatePath;
+
+        /** @var Table $this */
+        return $this;
+    }
+
+    /**
+     * Set a custom template path for the destroy component.
+     * The default destroy template path is defined in the config('laravel-table.template.destroy') config value.
+     *
+     * @param string $destroyTemplatePath
+     *
+     * @return \Okipa\LaravelTable\Table
+     */
+    public function destroyTemplate(string $destroyTemplatePath): Table
+    {
+        $this->destroyTemplatePath = $destroyTemplatePath;
 
         /** @var Table $this */
         return $this;
@@ -104,10 +165,13 @@ trait TableTemplatesCustomizations
      */
     protected function initializeDefaultComponents(): void
     {
-        $this->tableComponentPath = config('laravel-table.template.table');
-        $this->theadComponentPath = config('laravel-table.template.thead');
-        $this->tbodyComponentPath = config('laravel-table.template.tbody');
-        $this->resultsComponentPath = config('laravel-table.template.results');
-        $this->tfootComponentPath = config('laravel-table.template.tfoot');
+        $this->tableTemplatePath = config('laravel-table.template.table', 'bootstrap.table');
+        $this->theadTemplatePath = config('laravel-table.template.thead', 'bootstrap.thead');
+        $this->tbodyTemplatePath = config('laravel-table.template.tbody', 'bootstrap.tbody');
+        $this->showTemplatePath = config('laravel-table.template.show', 'bootstrap.show');
+        $this->editTemplatePath = config('laravel-table.template.edit', 'bootstrap.edit');
+        $this->destroyTemplatePath = config('laravel-table.template.destroy', 'bootstrap.destroy');
+        $this->resultsComponentPath = config('laravel-table.template.results', 'bootstrap.results');
+        $this->tfootComponentPath = config('laravel-table.template.tfoot', 'bootstrap.tfoot');
     }
 }

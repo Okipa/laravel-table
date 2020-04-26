@@ -27,7 +27,7 @@ class CustomValueTest extends LaravelTableTestCase
             return 'user name = ' . $model->name;
         });
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('user name = ' . $user->name, $html);
     }
 }

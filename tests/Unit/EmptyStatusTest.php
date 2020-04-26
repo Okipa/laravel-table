@@ -14,7 +14,7 @@ class EmptyStatusTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(config('laravel-table.icon.info'), $html);
         $this->assertStringContainsString(__('laravel-table::laravel-table.emptyTable'), $html);
     }
@@ -27,7 +27,7 @@ class EmptyStatusTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString(config('laravel-table.icon.info'), $html);
         $this->assertStringNotContainsString(__('laravel-table::laravel-table.emptyTable'), $html);
     }

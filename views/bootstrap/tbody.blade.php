@@ -17,7 +17,7 @@
                         $customValue = $column->valueClosure ? ($column->valueClosure)($model, $column) : null;
                         $html = $column->htmlClosure ? ($column->htmlClosure)($model, $column) : null;
                         $link = $column->url instanceof Closure ? ($column->url)($model, $column) : ($column->url !== true
-                            ? $column->url 
+                            ? $column->url
                             : ($customValue ? $customValue : $value));
                         $showIcon = $column->icon && (($customValue || $value) || $column->displayIconWhenNoValue);
                         $showLink = $link && ($customValue || $value || $showIcon);
@@ -75,43 +75,9 @@
                     <td{{ classTag($table->tdClasses, 'text-right') }}>
                         @if(! $model->disabledClasses)
                             <div class="d-flex justify-content-end">
-                                {{-- show button --}}
-                                @if($table->isRouteDefined('show'))
-                                    <form id="show-{{ $model->getKey() }}"
-                                          role="form"
-                                          method="GET"
-                                          action="{{ $table->route('show', [$model]) }}">
-                                        <button{{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.show')"{{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
-                                            {!! config('laravel-table.icon.show') !!}
-                                        </button>
-                                    </form>
-                                @endif
-                                {{-- edit button --}}
-                                @if($table->isRouteDefined('edit'))
-                                    <form id="edit-{{ $model->getKey() }}"
-                                          class="ml-2"
-                                          role="form"
-                                          method="GET"
-                                          action="{{ $table->route('edit', [$model]) }}">
-                                        <button{{ classTag('btn', 'btn-link', 'p-0', 'text-primary', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.edit')"{{ htmlAttributes($model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
-                                            {!! config('laravel-table.icon.edit') !!}
-                                        </button>
-                                    </form>
-                                @endif
-                                {{-- destroy button --}}
-                                @if($table->isRouteDefined('destroy'))
-                                    <form id="destroy-{{ $model->getKey() }}"
-                                          class="ml-2 destroy"
-                                          role="form"
-                                          method="POST"
-                                          action="{{ $table->route('destroy', [$model]) }}">
-                                        @csrf()
-                                        @method('DELETE')
-                                        <button{{ classTag('btn', 'btn-link', 'p-0', 'text-danger', $model->disabledClasses ? 'disabled' : null) }} type="submit" title="@lang('laravel-table::laravel-table.destroy')"{{ htmlAttributes($model->destroyConfirmationAttributes, $model->disabledClasses ? ['disabled' => 'disabled'] : null) }}>
-                                            {!! config('laravel-table.icon.destroy') !!}
-                                        </button>
-                                    </form>
-                                @endif
+                                @include('laravel-table::' . $table->showTemplatePath)
+                                @include('laravel-table::' . $table->editTemplatePath)
+                                @include('laravel-table::' . $table->destroyTemplatePath)
                             </div>
                         @endif
                     </td>

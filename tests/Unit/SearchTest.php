@@ -203,7 +203,7 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('owner')->searchable('users_test', ['name']);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         foreach ($companies as $company) {
             if ($company->owner->name === $searchedValue) {
                 $this->assertStringContainsString($company->owner->name, $html);
@@ -321,7 +321,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email')->searchable();
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('searching', $html);
         $this->assertStringContainsString('type="hidden" name="rows"', $html);
         $this->assertStringContainsString(
@@ -343,7 +343,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->render();
-        $html = view('laravel-table::' . $table->theadComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString('searching', $html);
         $this->assertStringNotContainsString('type="hidden" name="rows"', $html);
         $this->assertStringNotContainsString(

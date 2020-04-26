@@ -389,7 +389,7 @@ class Table implements Htmlable
         $this->handleRequestInteractionValues();
         $this->generateEntitiesListFromQuery();
 
-        return view('laravel-table::' . $this->tableComponentPath, ['table' => $this]);
+        return view('laravel-table::' . $this->tableTemplatePath, ['table' => $this]);
     }
 
     /**

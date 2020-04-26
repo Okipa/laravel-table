@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0](https://github.com/Okipa/laravel-table/compare/1.3.0...1.4.0)
+
+2020-04-26
+
+* Added more granularity in the template customization possibilities : the `show`, `edit` and `destroy` actions are now defined in their own component. This way, it becomes easier to customize tiny parts of the table without touching to the others.
+  * Added `config('laravel-table.template.show')`, `config('laravel-table.template.edit')` and `config('laravel-table.template.destroy')` configs to set each new default component path.
+  * Added `->showTemplate()`, `->editTemplate()` and `->destroyTemplate()` to give the ability to customize these templates on the fly.
+* Added fallback path for each template if the config value is not defined, in order to prevent any update breaking change.
+
 ## [1.3.0](https://github.com/Okipa/laravel-table/compare/1.2.7...1.3.0)
 
 2020-04-25

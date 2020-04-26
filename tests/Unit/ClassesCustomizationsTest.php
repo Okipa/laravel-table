@@ -39,7 +39,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column();
         $this->assertEquals($classes, $table->thClasses);
     }
-    
+
     public function testTdClassesAttribute()
     {
         $classes = ['test-custom-class'];
@@ -85,7 +85,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->containerClasses($classes);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<div class="table-container ' . implode(' ', $classes) . '">', $html);
     }
 
@@ -99,7 +99,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->tableClasses($classes);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
 
         $this->assertStringContainsString('<table class="table ' . implode(' ', $classes) . '">', $html);
     }
@@ -114,7 +114,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->trClasses($classes);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertEquals(substr_count($html, '<tr '), substr_count($html, implode(' ', $classes)));
     }
 
@@ -128,7 +128,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->thClasses($classes);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertEquals(substr_count($html, '<th '), substr_count($html, implode(' ', $classes)));
     }
 
@@ -142,7 +142,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->tdClasses($classes);
         $table->column('name');
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertEquals(substr_count($html, '<td '), substr_count($html, implode(' ', $classes)));
     }
 
@@ -154,7 +154,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->classes($classes);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
 
@@ -168,7 +168,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column('email');
         $table->result()->classes($classes);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertEquals(1, substr_count($html, implode(' ', $classes)));
     }
 
@@ -194,7 +194,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
                 ? $this->assertEquals($user->conditionnalClasses, $classes)
                 : $this->assertEmpty($user->conditionnalClasses);
         }
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
     }

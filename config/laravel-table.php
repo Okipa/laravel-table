@@ -3,7 +3,7 @@
 return [
 
     /*
-     * Default classes for each table parts.
+     * Default classes for each table part.
      */
     'classes' => [
         'container' => ['table-responsive'],
@@ -34,7 +34,7 @@ return [
     ],
 
     /*
-     * Default table values
+     * Default table configuration.
      */
     'value' => [
         'rowsNumber' => 20,
@@ -42,12 +42,15 @@ return [
     ],
 
     /*
-     * Default template paths for each table parts.
+     * Default template path for each table part.
      */
     'template' => [
         'table' => 'bootstrap.table',
         'thead' => 'bootstrap.thead',
         'tbody' => 'bootstrap.tbody',
+        'show' => 'bootstrap.show',
+        'edit' => 'bootstrap.edit',
+        'destroy' => 'bootstrap.destroy',
         'results' => 'bootstrap.results',
         'tfoot' => 'bootstrap.tfoot',
     ],

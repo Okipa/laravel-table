@@ -66,7 +66,7 @@ class ConfigTest extends LaravelTableTestCase
             ->searchable()
             ->sortable();
         $table->render();
-        $html = view('laravel-table::' . $table->tableComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
         $this->assertEquals(9999, $table->rows);
         $this->assertStringContainsString('value="9999"', $html);
         $this->assertStringContainsString('rows=9999', $html);

@@ -23,7 +23,7 @@ class ButtonTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);
         $this->assertStringContainsString('</button>', $html);
     }
@@ -36,7 +36,7 @@ class ButtonTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString('<button class="btn btn-primary', $html);
         $this->assertStringNotContainsString('</button>', $html);
     }
@@ -49,7 +49,7 @@ class ButtonTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary'])->icon('icon', true);
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);
         $this->assertStringContainsString('</button>', $html);
     }
@@ -64,7 +64,7 @@ class ButtonTest extends LaravelTableTestCase
             return 'user name = ' . $model->name;
         });
         $table->render();
-        $html = view('laravel-table::' . $table->tbodyComponentPath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString(
             '<button class="buttonClass user-name-' . Str::slug(strip_tags($user->name)) . '">',
             $html
