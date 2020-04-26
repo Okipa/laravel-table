@@ -7,8 +7,6 @@ use Okipa\LaravelTable\Test\Models\User;
 
 trait CompaniesFaker
 {
-    public $data;
-
     public function createMultipleCompanies(int $count)
     {
         for ($ii = 0; $ii < $count; $ii++) {
@@ -28,7 +26,7 @@ trait CompaniesFaker
     public function generateFakeCompanyData()
     {
         return [
-            'name' => $this->faker->unique()->word(15),
+            'name' => $this->faker->unique()->company,
             'owner_id' => rand(1, User::all()->count()),
             'turnover' => rand(1000, 99999),
         ];
