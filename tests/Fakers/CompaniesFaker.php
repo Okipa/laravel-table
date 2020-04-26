@@ -27,11 +27,9 @@ trait CompaniesFaker
 
     public function generateFakeCompanyData()
     {
-        $max = User::all()->count();
-
         return [
-            'name' => $this->faker->company,
-            'owner_id' => rand(1, $max),
+            'name' => $this->faker->unique()->word(15),
+            'owner_id' => rand(1, User::all()->count()),
             'turnover' => rand(1000, 99999),
         ];
     }

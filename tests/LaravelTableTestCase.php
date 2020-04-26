@@ -11,7 +11,9 @@ use Orchestra\Testbench\TestCase;
 
 abstract class LaravelTableTestCase extends TestCase
 {
+    /** @var \Faker\Factory $faker */
     protected $faker;
+
     use RoutesFaker;
     use UsersFaker;
     use CompaniesFaker;
@@ -28,9 +30,9 @@ abstract class LaravelTableTestCase extends TestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 
