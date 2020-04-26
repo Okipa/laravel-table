@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/Okipa/laravel-table/compare/1.4.0...1.5.0)
+
+2020-04-26
+
+* Deprecated the `->icon()` method.
+* Added the `->prepend()` method to the table columns (which will replace the previous `->icon()` one) to prepend HTML to a column value.
+* Added the `->append()` method to the table columns to append HTML to a column value.
+
 ## [1.4.0](https://github.com/Okipa/laravel-table/compare/1.3.0...1.4.0)
 
 2020-04-26

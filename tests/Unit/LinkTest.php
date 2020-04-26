@@ -89,13 +89,25 @@ class LinkTest extends LaravelTableTestCase
         $this->assertStringNotContainsString('<a href="', $html);
     }
 
-    public function testIsLinkWithNoValueWithIconHtml()
+    public function testIsLinkWithNoValueWithPrependedHtml()
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link()->icon('icon', true);
+        $table->column('name')->link()->prepend('icon', true);
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $this->assertStringNotContainsString('<a href="', $html);
+    }
+
+    public function testIsLinkWithNoValueWithAppendedHtml()
+    {
+        $user = $this->createUniqueUser();
+        $user->update(['name' => null]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->link()->append('icon', true);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringNotContainsString('<a href="', $html);

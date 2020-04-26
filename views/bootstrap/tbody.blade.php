@@ -19,9 +19,10 @@
                         $link = $column->url instanceof Closure ? ($column->url)($model, $column) : ($column->url !== true
                             ? $column->url
                             : ($customValue ? $customValue : $value));
-                        $showIcon = $column->icon && (($customValue || $value) || $column->displayIconWhenNoValue);
-                        $showLink = $link && ($customValue || $value || $showIcon);
-                        $showButton = $column->buttonClasses && ($value || $customValue || $showIcon);
+                        $showPrepend = $column->prepend && (($customValue || $value) || $column->displayPrependEvenIfNoValue);
+                        $showAppend = $column->append && (($customValue || $value) || $column->displayAppendEvenIfNoValue);
+                        $showLink = $link && ($customValue || $value || $showPrepend || $showAppend);
+                        $showButton = $column->buttonClasses && ($value || $customValue || $showPrepend || $showAppend);
                     @endphp
                     <td{{ classTag($table->tdClasses, $column->classes) }}{{ htmlAttributes($columnKey === 0 ? ['scope' => 'row'] : null) }}>
                         {{-- custom html element --}}
@@ -40,9 +41,9 @@
                                     $customValue ? Str::slug(strip_tags($customValue), '-') : null
                                 ) }}>
                             @endif
-                                {{-- icon--}}
-                                @if($showIcon)
-                                    {!! $column->icon !!}
+                                {{-- prepend --}}
+                                @if($showPrepend)
+                                    {!! $column->prepend !!}
                                 @endif
                                 {{-- custom value --}}
                                 @if($customValue)
@@ -58,6 +59,10 @@
                                 {{-- basic value --}}
                                 @else
                                     {!! $value !!}
+                                @endif
+                                {{-- append --}}
+                                @if($showAppend)
+                                    {!! $column->append !!}
                                 @endif
                             {{-- button end --}}
                             @if($showButton)

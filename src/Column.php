@@ -48,11 +48,17 @@ class Column
     /** @property \Closure $htmlClosure */
     public $htmlClosure;
 
-    /** @property string $icon */
-    public $icon;
+    /** @property string $prepend */
+    public $prepend;
 
-    /** @property bool $displayIconWhenNoValue */
-    public $displayIconWhenNoValue;
+    /** @property string $append */
+    public $append;
+
+    /** @property bool $displayPrependEvenIfNoValue */
+    public $displayPrependEvenIfNoValue;
+
+    /** @property bool $displayAppendEvenIfNoValue */
+    public $displayAppendEvenIfNoValue;
 
     /** @property array $classes */
     public $classes;
@@ -200,14 +206,49 @@ class Column
      * Set the second param as true if you want the icon to be displayed even if the column has no value.
      *
      * @param string $icon
-     * @param bool $displayIconWhenNoValue
+     * @param bool $displayPrependEvenIfNoValue
+     *
+     * @return \Okipa\LaravelTable\Column
+     * @deprecated ('Use the ->prepend() method instead.')
+     */
+    public function icon(string $icon, bool $displayPrependEvenIfNoValue = false): Column
+    {
+        $this->prepend = $icon;
+        $this->displayPrependEvenIfNoValue = $displayPrependEvenIfNoValue;
+
+        return $this;
+    }
+
+    /**
+     * Prepend HTML to the displayed value.
+     * Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
+     *
+     * @param string $prepend
+     * @param bool $displayPrependEvenIfNoValue
      *
      * @return \Okipa\LaravelTable\Column
      */
-    public function icon(string $icon, bool $displayIconWhenNoValue = false): Column
+    public function prepend(string $prepend, bool $displayPrependEvenIfNoValue = false): Column
     {
-        $this->icon = $icon;
-        $this->displayIconWhenNoValue = $displayIconWhenNoValue;
+        $this->prepend = $prepend;
+        $this->displayPrependEvenIfNoValue = $displayPrependEvenIfNoValue;
+
+        return $this;
+    }
+
+    /**
+     * Append HTML to the displayed value.
+     * Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
+     *
+     * @param string $append
+     * @param bool $displayAppendEvenIfNoValue
+     *
+     * @return \Okipa\LaravelTable\Column
+     */
+    public function append(string $append, bool $displayAppendEvenIfNoValue = false): Column
+    {
+        $this->append = $append;
+        $this->displayAppendEvenIfNoValue = $displayAppendEvenIfNoValue;
 
         return $this;
     }

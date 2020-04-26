@@ -41,13 +41,26 @@ class ButtonTest extends LaravelTableTestCase
         $this->assertStringNotContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueWithIconHtml()
+    public function testIsButtonWithNoValueWithPrependedHtml()
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->button(['btn', 'btn-primary'])->icon('icon', true);
+        $table->column('name')->button(['btn', 'btn-primary'])->prepend('icon', true);
+        $table->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $this->assertStringContainsString('<button class="btn btn-primary', $html);
+        $this->assertStringContainsString('</button>', $html);
+    }
+
+    public function testIsButtonWithNoValueWithAppendedHtml()
+    {
+        $user = $this->createUniqueUser();
+        $user->update(['name' => null]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->button(['btn', 'btn-primary'])->append('icon', true);
         $table->render();
         $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);
