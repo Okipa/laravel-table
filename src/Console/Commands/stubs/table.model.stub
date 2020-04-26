@@ -1,0 +1,9 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+
+class DummyClass
+{
+}
