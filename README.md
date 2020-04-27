@@ -79,7 +79,7 @@ class UsersController
 
 ```
 
-And display it:
+And display it the view:
 
 ```blade
 {{ $table }}
