@@ -202,24 +202,6 @@ class Column
     }
 
     /**
-     * Add an icon before the displayed value.
-     * Set the second param as true if you want the icon to be displayed even if the column has no value.
-     *
-     * @param string $icon
-     * @param bool $displayPrependEvenIfNoValue
-     *
-     * @return \Okipa\LaravelTable\Column
-     * @deprecated ('Use the ->prepend() method instead.')
-     */
-    public function icon(string $icon, bool $displayPrependEvenIfNoValue = false): Column
-    {
-        $this->prepend = $icon;
-        $this->displayPrependEvenIfNoValue = $displayPrependEvenIfNoValue;
-
-        return $this;
-    }
-
-    /**
      * Prepend HTML to the displayed value.
      * Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
      *
