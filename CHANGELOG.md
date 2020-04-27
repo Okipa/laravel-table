@@ -5,7 +5,7 @@
 2020-04-27
 
 * Added `Table` facade.
-* Added a cleaner architecture to handle tables:
+* Added a cleaner architecture for tables handling (see documentation):
   * With the new table generation command, execute `php artisan make:table UsersTable --model App/Users` to generate your users table.
   * Tables are now generated in the `app\Tables` directory.
 

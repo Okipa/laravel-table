@@ -17,5 +17,9 @@ abstract class AbstractTable
 
     abstract protected function columns(Table $table): void;
 
-    abstract protected function resultLines(Table $table): void;
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    protected function resultLines(Table $table): void
+    {
+        //
+    }
 }
