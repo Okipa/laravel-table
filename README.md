@@ -40,7 +40,7 @@ class UsersTable extends AbstractTable
 {
     protected function table(): Table
     {
-        return Table::model(User::class)->routes([
+        return (new Table)->model(User::class)->routes([
             'index' => ['name' => 'users.index'],
             'create' => ['name' => 'user.create'],
             'edit' => ['name' => 'user.edit'],
@@ -82,7 +82,7 @@ class UsersController
 And display it the view:
 
 ```blade
-{{ $table }}
+{{ $table() }}
 ```
 
 ## Table of contents
@@ -201,7 +201,7 @@ class NewsTable extends AbstractTable
 
     protected function table(): Table
     {
-        return Table::model(News::class)
+        return (new Table)->model(News::class)
             ->identifier('News table')
             ->request($this->request)
             ->routes([
@@ -298,7 +298,7 @@ class NewsTable extends AbstractTable
 **Use case example:**
 
 ```php
-Table::model(User::class);
+(new Table)->model(User::class);
 ```
 
 <h3 id="table-identifier">->identifier()</h3>
@@ -313,7 +313,7 @@ Table::model(User::class);
 **Use case example:**
 
 ```php
-Table::identifier('Your identifier');
+(new Table)->identifier('Your identifier');
 ```
 
 <h3 id="table-request">->request()</h3>
@@ -362,7 +362,7 @@ class UsersTable extends AbstractTable
 
     protected function table(): Table
     {
-        return Table::model(User::class)->request($this->request);
+        return (new Table)->model(User::class)->request($this->request);
     }
 
     // ...
@@ -407,7 +407,7 @@ class UsersTable extends AbstractTable
     // assuming your declared your route with implicit binding:
     Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
     // you will have to declare your params with keys as following:
-    Table::model(User::class)->routes([
+    (new Table)->model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
@@ -420,7 +420,7 @@ class UsersTable extends AbstractTable
     // now imagine your route is declared with the table related model as first param like this:
     Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
     // in this case only, you will be able to declare your routes without keys:
-    Table::model(User::class)->routes([
+    (new Table)->model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherValue']],
         // ...
@@ -432,7 +432,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-Table::routes([
+(new Table)->routes([
     'index' => ['name' => 'news.index'],
     'create' => ['name' => 'news.create', 'params' => ['param1' => 'value1']],
     'edit' => ['name' => 'news.edit', 'params' => ['param2' => 'value2']],
@@ -455,9 +455,9 @@ Table::routes([
 **Use case example:**
 
 ```php
-Table::rowsNumber(50);
+(new Table)->rowsNumber(50);
 // or
-Table::rowsNumber(null);
+(new Table)->rowsNumber(null);
 ```
 
 <h3 id="table-rowsNumberSelectionActivation">->rowsNumberSelectionActivation()</h3>
@@ -474,7 +474,7 @@ Table::rowsNumber(null);
 **Use case example:**
 
 ```php
-Table::rowsNumberSelectionActivation(false);
+(new Table)->rowsNumberSelectionActivation(false);
 ```
 
 <h3 id="table-query">->query()</h3>
@@ -491,7 +491,7 @@ Table::rowsNumberSelectionActivation(false);
 **Use case example:**
 
 ```php
-Table::query(function(Builder $query){
+(new Table)->query(function(Builder $query){
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('users', 'users.id', '=', 'companies.owner_id');
@@ -515,7 +515,7 @@ Table::query(function(Builder $query){
 **Use case example:**
 
 ```php
-Table::appends(request()->only('status'));
+(new Table)->appends(request()->only('status'));
 ```
 
 <h3 id="table-containerClasses">->containerClasses()</h3>
@@ -531,7 +531,7 @@ Table::appends(request()->only('status'));
 **Use case example:**
 
 ```php
-Table::containerClasses(['set', 'your', 'classes']);
+(new Table)->containerClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tableClasses">->tableClasses()</h3>
@@ -547,7 +547,7 @@ Table::containerClasses(['set', 'your', 'classes']);
 **Use case example:**
 
 ```php
-Table::tableClasses(['set', 'your', 'classes']);
+(new Table)->tableClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-trClasses">->trClasses()</h3>
@@ -563,7 +563,7 @@ Table::tableClasses(['set', 'your', 'classes']);
 **Use case example:**
 
 ```php
-Table::trClasses(['set', 'your', 'classes']);
+(new Table)->trClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-thClasses">->thClasses()</h3>
@@ -579,7 +579,7 @@ Table::trClasses(['set', 'your', 'classes']);
 **Use case example:**
 
 ```php
-Table::thClasses(['set', 'your', 'classes']);
+(new Table)->thClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tdClasses">->tdClasses()</h3>
@@ -595,7 +595,7 @@ Table::thClasses(['set', 'your', 'classes']);
 **Use case example:**
 
 ```php
-Table::tdClasses(['set', 'your', 'classes']);
+(new Table)->tdClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-rowsConditionalClasses">->rowsConditionalClasses()</h3>
@@ -611,7 +611,7 @@ Table::tdClasses(['set', 'your', 'classes']);
 **Use case example:**
 
 ```php
-Table::rowsConditionalClasses(function(User $user){
+(new Table)->rowsConditionalClasses(function(User $user){
     return $model->hasParticularAttribute;
 }, ['set', 'your', 'classes']);
 ```
@@ -630,7 +630,7 @@ Table::rowsConditionalClasses(function(User $user){
 **Use case example:**
 
 ```php
-Table::destroyHtmlAttributes(function(User $user){
+(new Table)->destroyHtmlAttributes(function(User $user){
     return ['data-confirm' => __('Are you sure you want to delete the user :name ?', [
         'name' => $model->name
     ])];
@@ -670,7 +670,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-Table::disableRows(function(User $user){
+(new Table)->disableRows(function(User $user){
     return $user->id = auth()->id;
 }, ['bg-danger', 'text-primary']);
 ```
@@ -688,7 +688,7 @@ Table::disableRows(function(User $user){
 **Use case example:**
 
 ```php
-Table::tableTemplate('tailwindCss.table');
+(new Table)->tableTemplate('tailwindCss.table');
 ```
 
 <h3 id="table-theadTemplate">->theadTemplate()</h3>
@@ -704,7 +704,7 @@ Table::tableTemplate('tailwindCss.table');
 **Use case example:**
 
 ```php
-Table::theadTemplate('tailwindCss.thead');
+(new Table)->theadTemplate('tailwindCss.thead');
 ```
 
 <h3 id="table-tbodyTemplate">->tbodyTemplate()</h3>
@@ -720,7 +720,7 @@ Table::theadTemplate('tailwindCss.thead');
 **Use case example:**
 
 ```php
-Table::tbodyTemplate('tailwindCss.tbody');
+(new Table)->tbodyTemplate('tailwindCss.tbody');
 ```
 
 <h3 id="table-showTemplate">->showTemplate()</h3>
@@ -736,7 +736,7 @@ Table::tbodyTemplate('tailwindCss.tbody');
 **Use case example:**
 
 ```php
-Table::showTemplate('tailwindCss.show');
+(new Table)->showTemplate('tailwindCss.show');
 ```
 
 <h3 id="table-editTemplate">->editTemplate()</h3>
@@ -752,7 +752,7 @@ Table::showTemplate('tailwindCss.show');
 **Use case example:**
 
 ```php
-Table::editTemplate('tailwindCss.edit');
+(new Table)->editTemplate('tailwindCss.edit');
 ```
 
 <h3 id="table-destroyTemplate">->destroyTemplate()</h3>
@@ -768,7 +768,7 @@ Table::editTemplate('tailwindCss.edit');
 **Use case example:**
 
 ```php
-Table::destroyTemplate('tailwindCss.destroy');
+(new Table)->destroyTemplate('tailwindCss.destroy');
 ```
 
 <h3 id="table-resultsTemplate">->resultsTemplate()</h3>
@@ -784,7 +784,7 @@ Table::destroyTemplate('tailwindCss.destroy');
 **Use case example:**
 
 ```php
-Table::resultsComponentPath('tailwindCss.results');
+(new Table)->resultsComponentPath('tailwindCss.results');
 ```
 
 <h3 id="table-tfootTemplate">->tfootTemplate()</h3>
@@ -800,7 +800,7 @@ Table::resultsComponentPath('tailwindCss.results');
 **Use case example:**
 
 ```php
-Table::tfootTemplate('tailwindCss.tfoot');
+(new Table)->tfootTemplate('tailwindCss.tfoot');
 ```
 
 <h3 id="table-column">->column()</h3>
@@ -908,7 +908,7 @@ $table->column('email')->sortable(true, 'desc');
 $table->column('email')->searchable();
 
 // example 2
-$table = Table::model(User::class)->query(function(Builder $query) {
+$table = (new Table)->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('companies', 'companies.owner_id', '=', 'users.id');
@@ -916,7 +916,7 @@ $table = Table::model(User::class)->query(function(Builder $query) {
 $table->column('company')->searchable('companies', ['name']);
 
 // example 3
-$table = Table::model(User::class)->query(function(Builder $query) {
+$table = (new Table)->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
     $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');

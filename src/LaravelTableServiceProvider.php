@@ -30,13 +30,5 @@ class LaravelTableServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-table.php', 'laravel-table');
         $this->commands([MakeTable::class]);
-        $this->registerFacades();
-    }
-
-    protected function registerFacades(): void
-    {
-        $this->app->bind('Table', function () {
-            return (new Table);
-        });
     }
 }
