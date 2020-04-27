@@ -27,7 +27,7 @@ Create your table class with the following command:
 php artisan make:table UsersTable --model=App/Users
 ```
 
-Set your table configuration in the generated file (can be found in `app\Tables`):
+Set your table configuration in the generated file, which can be found in the `app\Tables` directory:
 
 ```php
 namespace App\Tables;
