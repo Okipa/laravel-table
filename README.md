@@ -91,7 +91,7 @@ And display it the view:
 * [Configuration](#configuration)
 * [Translations](#translations)
 * [Templates](#templates)
-* [Advanced usage example](#advanced-usage-example)
+* [Advanced configuration example](#advanced-configuration-example)
 * [Tips](#tips)
 * [Table API](#table-api)
   * [->model()](#table-model)
@@ -175,7 +175,7 @@ Optionally Publish the package templates:
 php artisan vendor:publish --tag=laravel-table:views
 ```
 
-## Advanced usage example
+## Advanced configuration example
 
 ```php
 namespace App\Tables;
@@ -265,7 +265,7 @@ class NewsTable extends AbstractTable
 
     protected function resultLines(Table $table): void
     {
-        $table->result()->title('Total of comments')->html(function(Collection $displayedList){
+        $table->result()->title('Comments')->html(function(Collection $displayedList){
             return $displayedList->sum('comments_count');
         });
     }
@@ -330,10 +330,13 @@ Table::identifier('Your identifier');
 Pass the request to your table:
 
 ```php
-public function index(\Illuminate\Http\Request $request)
+class UsersController
 {
-    $table = new UsersTable($request);
-    // ...
+    public function index(\Illuminate\Http\Request $request)
+    {
+        $table = new UsersTable($request);
+        // ...
+    }
 }
 ```
 
