@@ -21,19 +21,26 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 ## Usage
 
-First, set your table configuration:
+Create your table class with the following command:
+
+```bash
+php artisan make:table UsersTable --model=App/Users
+```
+
+Set your table configuration in the generated file, which can be found in the `app\Tables` directory:
 
 ```php
+namespace App\Tables;
 
-use \Illuminate\View\View;
-use \Okipa\LaravelTable\Table;
-use \App\User;
+use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Okipa\LaravelTable\Table;
+use App\Users;
 
-class UsersController
+class UsersTable extends AbstractTable
 {
-    public function index(): View
+    protected function table(): Table
     {
-        $table = (new Table)->model(User::class)->routes([
+        return Table::model(User::class)->routes([
             'index'   => ['name' => 'users.index'],
             'create'  => ['name' => 'user.create'],
             'edit'    => ['name' => 'user.edit'],
@@ -43,9 +50,28 @@ class UsersController
                 'data-confirm' => 'Are you sure you want to delete the user ' . $user->name . ' ?',
             ];
         });
+    }
+
+    protected function columns(Table $table): void
+    {
         $table->column('first_name')->sortable(true)->searchable();
         $table->column('last_name')->sortable()->searchable();
         $table->column('email')->sortable()->searchable();
+    }
+}
+```
+
+Send your table to your view:
+
+```php
+use \Illuminate\View\View;
+use \App\Tables\UsersTable;
+
+class UsersController
+{
+    public function index(): View
+    {
+        $table = new UsersTable;
     
         return view('templates.users.index', compact('table'));
     }
@@ -53,7 +79,7 @@ class UsersController
 
 ```
 
-Then, display it in the view:
+And display it the view:
 
 ```blade
 {{ $table }}
@@ -65,6 +91,8 @@ Then, display it in the view:
 * [Configuration](#configuration)
 * [Translations](#translations)
 * [Templates](#templates)
+* [Advanced configuration example](#advanced-configuration-example)
+* [Tips](#tips)
 * [Table API](#table-api)
   * [->model()](#table-model)
   * [->identifier()](#table-identifier)
@@ -109,10 +137,6 @@ Then, display it in the view:
   * [->title()](#result-title)
   * [->html()](#result-html)
   * [->classes()](#result-classes)
-* [Tips](#tips)
-* [Usage examples](#usage-examples)
-  * [Basic](#basic)
-  * [Advanced](#advances)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -151,6 +175,113 @@ Optionally Publish the package templates:
 php artisan vendor:publish --tag=laravel-table:views
 ```
 
+## Advanced configuration example
+
+```php
+namespace App\Tables;
+
+use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Illuminate\Http\Request;
+use Okipa\LaravelTable\Table;
+use App\News;
+use Illuminate\Database\Eloquent\Builder;
+
+class NewsTable extends AbstractTable
+{
+    protected Request $request;
+
+    protected int $categoryId;
+
+    public function __construct(Request $request, int $categoryId)
+    {
+        parent::__construct();
+        $this->request = $request;
+        $this->categoryId = $categoryId;
+    }
+
+    protected function table(): Table
+    {
+        return Table::model(News::class)
+            ->identifier('News table')
+            ->request($this->request)
+            ->routes([
+                'index'      => ['name' => 'news.index'],
+                'create'     => ['name' => 'news.create'],
+                'edit'       => ['name' => 'news.edit'],
+                'destroy'    => ['name' => 'news.destroy'],
+                'show'    => ['name' => 'news.show'],
+            ])
+            ->rowsNumber(50) // or set `false` to get all the items contained in database
+            ->rowsNumberSelectionActivation(false)
+            ->query(function (Builder $query) {
+                // some examples of what you can do
+                $query->select('news.*');
+                // add a constraint
+                $query->where('category_id', $this->categoryId);
+                // get value stored in a json field
+                $query->addSelect('news.json_field->>json_attribute as json_attribute');
+                // get a formatted value form a pivot table
+                $query->selectRaw('count(comments.id) as comments_count');
+                $query->leftJoin('news_commment', 'news_commment.news_id', '=', 'news.id');
+                $query->leftJoin('comments', 'comments.id', '=', 'news_commment.comment_id');
+                $query->groupBy('comments.id');
+                // alias a value to make it available from the column model
+                $query->addSelect('users.name as author');
+                $query->join('users', 'users.id', '=', 'news.author_id');
+            })
+            ->disableRows(function(News $news){
+                return $news->id === 1 || $news->id === 2;
+            }, ['disabled', 'bg-secondary'])
+            ->rowsConditionalClasses(function(News $news){
+                return $news->id === 3;
+            }, ['highlighted', 'bg-success'])
+            // append all request params to the paginator
+            ->appends($this->request->all());
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('image')->html(function (News $news, Column $column) {
+            return $news->{$column->databaseDefaultColumn}
+                ? '<img src="' . $news->{$column->databaseDefaultColumn} . '" alt="' .  $news->title . '">'
+                : null;
+        });
+        $table->column('title')->sortable()->searchable();
+        $table->column('content')->stringLimit(30);
+        $table->column('author')->sortable(true)->searchable('user', ['name']);
+        $table->column('category_id')
+            ->title('Category custom name')
+            ->prepend('your-icon')
+            ->append('your-other-icon')
+            ->button(['btn', 'btn-sm', 'btn-outline-primary'])
+            ->value(function (News $news, Column $column) {
+                return config('news.category.' . $news->{$column->databaseDefaultColumn});
+            });
+        $table->column()->link(function(News $news){
+            return route('news.show', $news);
+        })->button(['btn', 'btn-sm', 'btn-primary']);
+        $table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
+    }
+
+    protected function resultLines(Table $table): void
+    {
+        $table->result()->title('Comments')->html(function(Collection $displayedList){
+            return $displayedList->sum('comments_count');
+        });
+    }
+}
+```
+
+## Tips
+
+* **Columns displaying combination:** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
+  * `->button()`
+  * `->link()`
+  * `->prepend()`
+  * `->append()`
+  * `->stringLimit()`
+  * `->value()`
+
 ## Table API
 
 :warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#table-column) and the [->result()](#table-result) methods** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
@@ -167,7 +298,7 @@ php artisan vendor:publish --tag=laravel-table:views
 **Use case example:**
 
 ```php
-(new Table)->model(User::class);
+Table::model(User::class);
 ```
 
 <h3 id="table-identifier">->identifier()</h3>
@@ -182,7 +313,7 @@ php artisan vendor:publish --tag=laravel-table:views
 **Use case example:**
 
 ```php
-(new Table)->identifier('Your identifier');
+Table::identifier('Your identifier');
 ```
 
 <h3 id="table-request">->request()</h3>
@@ -196,11 +327,44 @@ php artisan vendor:publish --tag=laravel-table:views
 
 **Use case example:**
 
+Pass the request to your table:
+
 ```php
-// example in a controller
-public function index(\Illuminate\Http\Request $request)
+class UsersController
 {
-    $table = (new Table)->request($request);
+    public function index(\Illuminate\Http\Request $request)
+    {
+        $table = new UsersTable($request);
+        // ...
+    }
+}
+```
+
+Then, use the custom request in your table:
+
+```php
+namespace App\Tables;
+
+use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Illuminate\Http\Request;
+use Okipa\LaravelTable\Table;
+use App\Users;
+
+class UsersTable extends AbstractTable
+{
+    protected Request $request;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->request = $request;
+    }
+
+    protected function table(): Table
+    {
+        return Table::model(User::class)->request($this->request);
+    }
+
     // ...
 }
 ```
@@ -243,7 +407,7 @@ public function index(\Illuminate\Http\Request $request)
     // assuming your declared your route with implicit binding:
     Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
     // you will have to declare your params with keys as following:
-    (new Table)->model(User::class)->routes([
+    Table::model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
@@ -256,19 +420,19 @@ public function index(\Illuminate\Http\Request $request)
     // now imagine your route is declared with the table related model as first param like this:
     Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
     // in this case only, you will be able to declare your routes without keys:
-    (new Table)->model(User::class)->routes([
+    Table::model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherValue']],
         // ...
-    ])
+    ]);
     // because the route params are given in the same order as the route declaration:
-    route('user.edit, [$user, $child, 'otherValue']);
+    route('user.edit', [$user, $child, 'otherValue']);
 ```
 
 **Use case example:**
 
 ```php
-(new Table)->routes([
+Table::routes([
     'index' => ['name' => 'news.index'],
     'create' => ['name' => 'news.create', 'params' => ['param1' => 'value1']],
     'edit' => ['name' => 'news.edit', 'params' => ['param2' => 'value2']],
@@ -277,7 +441,7 @@ public function index(\Illuminate\Http\Request $request)
 ]);
 ```
 
-<h3 id="table-rowsNumber">->rowsNumber</h3>
+<h3 id="table-rowsNumber">->rowsNumber()</h3>
 
 > Override the config default number of rows displayed on the table.  
 > The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.  
@@ -291,9 +455,9 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->rowsNumber(50);
+Table::rowsNumber(50);
 // or
-(new Table)->rowsNumber(null);
+Table::rowsNumber(null);
 ```
 
 <h3 id="table-rowsNumberSelectionActivation">->rowsNumberSelectionActivation()</h3>
@@ -310,7 +474,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->rowsNumberSelectionActivation(false);
+Table::rowsNumberSelectionActivation(false);
 ```
 
 <h3 id="table-query">->query()</h3>
@@ -327,7 +491,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->query(function(Builder $query){
+Table::query(function(Builder $query){
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('users', 'users.id', '=', 'companies.owner_id');
@@ -351,7 +515,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->appends(request()->only('status'));
+Table::appends(request()->only('status'));
 ```
 
 <h3 id="table-containerClasses">->containerClasses()</h3>
@@ -367,7 +531,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->containerClasses(['set', 'your', 'classes']);
+Table::containerClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tableClasses">->tableClasses()</h3>
@@ -383,7 +547,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->tableClasses(['set', 'your', 'classes']);
+Table::tableClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-trClasses">->trClasses()</h3>
@@ -399,7 +563,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->trClasses(['set', 'your', 'classes']);
+Table::trClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-thClasses">->thClasses()</h3>
@@ -415,7 +579,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->thClasses(['set', 'your', 'classes']);
+Table::thClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tdClasses">->tdClasses()</h3>
@@ -431,7 +595,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->tdClasses(['set', 'your', 'classes']);
+Table::tdClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-rowsConditionalClasses">->rowsConditionalClasses()</h3>
@@ -447,7 +611,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->rowsConditionalClasses(function(User $user){
+Table::rowsConditionalClasses(function(User $user){
     return $model->hasParticularAttribute;
 }, ['set', 'your', 'classes']);
 ```
@@ -466,7 +630,7 @@ public function index(\Illuminate\Http\Request $request)
 **Use case example:**
 
 ```php
-(new Table)->destroyHtmlAttributes(function(User $user){
+Table::destroyHtmlAttributes(function(User $user){
     return ['data-confirm' => __('Are you sure you want to delete the user :name ?', [
         'name' => $model->name
     ])];
@@ -506,7 +670,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->disableRows(function(User $user){
+Table::disableRows(function(User $user){
     return $user->id = auth()->id;
 }, ['bg-danger', 'text-primary']);
 ```
@@ -524,7 +688,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->tableTemplate('tailwindCss.table');
+Table::tableTemplate('tailwindCss.table');
 ```
 
 <h3 id="table-theadTemplate">->theadTemplate()</h3>
@@ -540,7 +704,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->theadTemplate('tailwindCss.thead');
+Table::theadTemplate('tailwindCss.thead');
 ```
 
 <h3 id="table-tbodyTemplate">->tbodyTemplate()</h3>
@@ -556,7 +720,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->tbodyTemplate('tailwindCss.tbody');
+Table::tbodyTemplate('tailwindCss.tbody');
 ```
 
 <h3 id="table-showTemplate">->showTemplate()</h3>
@@ -572,7 +736,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->showTemplate('tailwindCss.show');
+Table::showTemplate('tailwindCss.show');
 ```
 
 <h3 id="table-editTemplate">->editTemplate()</h3>
@@ -588,7 +752,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->editTemplate('tailwindCss.edit');
+Table::editTemplate('tailwindCss.edit');
 ```
 
 <h3 id="table-destroyTemplate">->destroyTemplate()</h3>
@@ -604,7 +768,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->destroyTemplate('tailwindCss.destroy');
+Table::destroyTemplate('tailwindCss.destroy');
 ```
 
 <h3 id="table-resultsTemplate">->resultsTemplate()</h3>
@@ -620,7 +784,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->resultsComponentPath('tailwindCss.results');
+Table::resultsComponentPath('tailwindCss.results');
 ```
 
 <h3 id="table-tfootTemplate">->tfootTemplate()</h3>
@@ -636,7 +800,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->tfootTemplate('tailwindCss.tfoot');
+Table::tfootTemplate('tailwindCss.tfoot');
 ```
 
 <h3 id="table-column">->column()</h3>
@@ -653,12 +817,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-// first configure your table
-$table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-// then configure each column
 $table->column('name');
-$table->column('email');
-// ...
 ```
 
 <h3 id="table-result">->result()</h3>
@@ -674,12 +833,7 @@ $table->column('email');
 **Use case example:**
 
 ```php
-// first configure your table
-$table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-// then configure each result line
-$table->result()->title('Total');
-$table->result()->title('Active');
-// ...
+$table->result();
 ```
 
 ## Column API
@@ -754,7 +908,7 @@ $table->column('email')->sortable(true, 'desc');
 $table->column('email')->searchable();
 
 // example 2
-$table = (new Table)->model(User::class)->query(function(Builder $query) {
+$table = Table::model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('companies', 'companies.owner_id', '=', 'users.id');
@@ -762,7 +916,7 @@ $table = (new Table)->model(User::class)->query(function(Builder $query) {
 $table->column('company')->searchable('companies', ['name']);
 
 // example 3
-$table = (new Table)->model(User::class)->query(function(Builder $query) {
+$table = Table::model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
     $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');
@@ -962,98 +1116,6 @@ $table->result()->html(function(Collection $displayedList) {
 
 ```php
 $table->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
-```
-
-## Tips
-
-* **Columns displaying combination:** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
-  * `->button()`
-  * `->link()`
-  * `->prepend()`
-  * `->append()`
-  * `->stringLimit()`
-  * `->value()`
-
-## Usage examples
-
-### Basic
-
-In your controller, simply call the package like the following example to generate your table:
-
-```php
-$table = (new Table)->model(News::class)->routes(['index' => ['name' => 'news.index']]);
-$table->column('title')->sortable()->searchable();
-```
-
-Then, send your `$table` object in your view and render your table like this:
-
-```blade
-{{ $table }}
-```
-
-That's it !
-
-### Advanced
-
-If you need your table for a more advanced usage, with a multilingual project for example, here is an example of what you can do in your controller:
-
-```php
-$table = (new Table)->model(News::class)
-    ->request($request)
-    ->routes([
-        'index'      => ['name' => 'news.index'],
-        'create'     => ['name' => 'news.create'],
-        'edit'       => ['name' => 'news.edit'],
-        'destroy'    => ['name' => 'news.destroy'],
-        'show'    => ['name' => 'news.show'],
-    ])
-    ->rowsNumber(50) // or set `false` to get all the items contained in database
-    ->rowsNumberSelectionActivation(false)
-    ->query(function (Builder $query) use ($category_id) {
-        // some examples of what you can do
-        $query->select('news.*');
-        // add a constraint
-        $query->where('category_id', $category_id);
-        // get value stored in a json field
-        $query->addSelect('news.json_field->>json_attribute as json_attribute');
-        // get a formatted value form a pivot table
-        $query->selectRaw('count(comments.id) as comments_count');
-        $query->leftJoin('news_commment', 'news_commment.news_id', '=', 'news.id');
-        $query->leftJoin('comments', 'comments.id', '=', 'news_commment.comment_id');
-        $query->groupBy('comments.id');
-        // alias a value to make it available from the column model
-        $query->addSelect('users.name as author');
-        $query->join('users', 'users.id', '=', 'news.author_id');
-    })
-    ->disableRows(function(News $news){
-        return $news->id === 1 || $news->id === 2;
-    }, ['disabled', 'bg-secondary'])
-    ->rowsConditionalClasses(function(News $news){
-        return $news->id === 3;
-    }, ['highlighted', 'bg-success']);
-$table->column('image')->html(function (News $news, Column $column) {
-    return $news->{$column->databaseDefaultColumn}
-        ? '<img src="' . $news->{$column->databaseDefaultColumn} . '" alt="' .  $news->title . '">'
-        : null;
-});
-$table->column('title')->sortable()->searchable();
-$table->column('content')->stringLimit(30);
-$table->column('author')->sortable(true)->searchable('user', ['name']);
-$table->column('category_id')
-    ->title('Category custom name')
-    ->prepend('your-icon')
-    ->append('your-other-icon')
-    ->button(['btn', 'btn-sm', 'btn-outline-primary'])
-    ->value(function (News $news, Column $column) {
-        return config('news.category.' . $news->{$column->databaseDefaultColumn});
-    });
-$table->column()->link(function(News $news){
-    return route('news.show', $news);
-})->button(['btn', 'btn-sm', 'btn-primary']);
-$table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
-$table->result()->title('Total of comments')->html(function(Collection $displayedList){
-    return $displayedList->sum('comments_count');
-});
 ```
 
 ## Testing

@@ -1,0 +1,31 @@
+<?php
+
+namespace DummyNamespace;
+
+use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Okipa\LaravelTable\Table;
+
+class DummyClass extends AbstractTable
+{
+    /**
+     * @return void
+     * @throws \ErrorException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    protected function table(): Table
+    {
+        return Table::model(...);
+        //
+    }
+
+    protected function columns(Table $table): void
+    {
+        $table->column('...')->sortable()->searchable();
+        //
+    }
+
+    protected function resultLines(Table $table): void
+    {
+        //
+    }
+}
