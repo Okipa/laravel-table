@@ -62,6 +62,9 @@
             "providers": [
                 "Okipa\\LaravelTable\\LaravelTableServiceProvider"
             ]
+        },
+        "aliases": {
+            "Table": "Okipa\\LaravelTable\\Facades\\Table"
         }
     },
     "config": {
