@@ -1,9 +1,11 @@
 # Changelog
 
-## [1.6.0](https://github.com/Okipa/laravel-table/compare/1.5.0...1.6.0)
+## [2.0.0](https://github.com/Okipa/laravel-table/compare/1.5.0...2.0.0)
 
 2020-04-27
 
+* Dropped support for PHP versions under 7.4.
+* Dropped support for Laravel versions under 6.0.
 * Added a cleaner architecture for tables handling (see documentation):
   * With the new table generation command, execute `php artisan make:table UsersTable --model App/Users` to generate your users table.
   * Tables are now generated in the `app\Tables` directory.
