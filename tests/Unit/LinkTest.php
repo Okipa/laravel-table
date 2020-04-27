@@ -12,14 +12,14 @@ class LinkTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->link();
-        $this->assertEquals(true, $table->columns->first()->url);
+        $this->assertEquals(true, $table->getColumns()->first()->url);
     }
 
     public function testSetIsLinkAttributeString()
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->link('link');
-        $this->assertEquals('link', $table->columns->first()->url);
+        $this->assertEquals('link', $table->getColumns()->first()->url);
     }
 
     public function testSetIsLinkAttributeClosure()
@@ -28,7 +28,7 @@ class LinkTest extends LaravelTableTestCase
         $closure = function ($model, $column) {
         };
         $table->column('name')->link($closure);
-        $this->assertEquals($closure, $table->columns->first()->url);
+        $this->assertEquals($closure, $table->getColumns()->first()->url);
     }
 
     public function testIsLinkEmptyHtml()

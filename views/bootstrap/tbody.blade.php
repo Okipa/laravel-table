@@ -1,17 +1,17 @@
 <tbody>
-    @if($table->list->isEmpty())
+    @if($table->getPaginatedList()->isEmpty())
         <tr{{ classTag($table->trClasses) }}>
             <td{{ classTag($table->tdClasses, 'text-center', 'p-3') }}{{ htmlAttributes($table->columnsCount() > 1 ? ['colspan' => $table->columnsCount()] : null) }} scope="row">
                 <span class="text-info">
                     {!! config('laravel-table.icon.info') !!}
                 </span>
-                @lang('laravel-table::laravel-table.emptyTable')
+                @lang('No results were found.')
             </td>
         </tr>
     @else
-        @foreach($table->list as $model)
+        @foreach($table->getPaginatedList() as $model)
             <tr{{ classTag($table->trClasses, $model->conditionnalClasses, $model->disabledClasses) }}>
-                @foreach($table->columns as $columnKey => $column)
+                @foreach($table->getColumns() as $columnKey => $column)
                     @php
                         $value = $model->{$column->databaseDefaultColumn};
                         $customValue = $column->valueClosure ? ($column->valueClosure)($model, $column) : null;

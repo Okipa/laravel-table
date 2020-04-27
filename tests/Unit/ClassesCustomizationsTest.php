@@ -53,7 +53,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $classes = ['test-custom-class'];
         $table = (new Table)->model(User::class);
         $table->column()->classes($classes);
-        $this->assertEquals($classes, $table->columns->first()->classes);
+        $this->assertEquals($classes, $table->getColumns()->first()->classes);
     }
 
     public function testResultClassesAttribute()
@@ -61,7 +61,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $classes = ['test-custom-class'];
         $table = (new Table)->model(User::class);
         $table->result()->classes($classes);
-        $this->assertEquals($classes, $table->results->first()->classes);
+        $this->assertEquals($classes, $table->getResults()->first()->classes);
     }
 
     public function testRowConditionalClassesAttribute()
@@ -175,8 +175,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
     public function testRowConditionalClassesHtml()
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
-        $users = $this->createMultipleUsers(5);
-        $closure = function ($model) use ($users) {
+        $this->createMultipleUsers(5);
+        $closure = function ($model) {
             return $model->id === 1 || $model->id === 2;
         };
         $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
@@ -189,7 +189,7 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
         $table->configure();
-        foreach ($table->list->getCollection() as $user) {
+        foreach ($table->getPaginatedList()->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->conditionnalClasses, $classes)
                 : $this->assertEmpty($user->conditionnalClasses);

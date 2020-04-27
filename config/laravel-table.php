@@ -26,11 +26,11 @@ return [
         'search' => '<i class="fas fa-search"></i>',
         'validate' => '<i class="fas fa-check"></i>',
         'info' => '<i class="fas fa-info-circle fa-fw"></i>',
-        'cancel' => '<i class="fas fa-times"></i>',
+        'reset' => '<i class="fas fa-undo fa-fw"></i>',
         'create' => '<i class="fas fa-plus-circle fa-fw "></i>',
+        'show' => '<i class="fas fa-eye fa-fw"></i>',
         'edit' => '<i class="fas fa-edit fa-fw"></i>',
         'destroy' => '<i class="fas fa-trash fa-fw"></i>',
-        'show' => '<i class="fas fa-eye fa-fw"></i>',
     ],
 
     /*

@@ -45,11 +45,11 @@ trait TableColumnsValidationChecks
      */
     protected function checkColumnsValidity(Builder $query): void
     {
-        $this->columns->map(function (Column $column) use ($query) {
+        $this->getColumns()->map(function (Column $column) use ($query) {
             $this->checkSortableColumnHasAttribute($column);
             $isSearchable = in_array(
                 $column->databaseDefaultColumn,
-                $this->searchableColumns->pluck('databaseDefaultColumn')->toArray()
+                $this->getSearchableColumns()->pluck('databaseDefaultColumn')->toArray()
             );
             if ($isSearchable) {
                 $this->checkSearchableColumnHasAttribute($column);
@@ -161,7 +161,7 @@ trait TableColumnsValidationChecks
      */
     protected function checkIfAtLeastOneColumnIsDeclared(): void
     {
-        if ($this->columns->isEmpty()) {
+        if ($this->getColumns()->isEmpty()) {
             $errorMessage = 'No column has been added to the table. Please add at least one column by using the '
                 . '« column() » method on the table object.';
             throw new ErrorException($errorMessage);

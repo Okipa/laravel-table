@@ -4,11 +4,11 @@ namespace Okipa\LaravelTable;
 
 use Closure;
 use ErrorException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -18,6 +18,7 @@ use Okipa\LaravelTable\Traits\TableInteractions;
 use Okipa\LaravelTable\Traits\TableRoutesValidationChecks;
 use Okipa\LaravelTable\Traits\TableTemplatesCustomizations;
 
+/** @SuppressWarnings(PHPMD.ExcessivePublicCount) */
 class Table implements Htmlable
 {
     use TableTemplatesCustomizations;
@@ -26,48 +27,83 @@ class Table implements Htmlable
     use TableColumnsValidationChecks;
     use TableInteractions;
 
-    public string $identifier;
+    protected string $identifier;
 
-    public Model $model;
+    protected Model $model;
 
-    public bool $rowsNumberSelectionActivation;
+    protected bool $rowsNumberSelectionActivation;
 
-    public Collection $sortableColumns;
+    protected Collection $sortableColumns;
 
-    public Collection $searchableColumns;
+    protected Collection $searchableColumns;
 
-    public Request $request;
+    protected Request $request;
 
-    public array $routes = [];
+    protected array $routes = [];
 
-    public Collection $columns;
+    protected Collection $columns;
 
-    public Closure $queryClosure;
+    protected ?Closure $queryClosure;
 
-    public Collection $disableRows;
+    protected Collection $disabledRows;
 
-    public LengthAwarePaginator $list;
+    protected LengthAwarePaginator $paginatedList;
 
-    public Closure $destroyConfirmationClosure;
+    protected Closure $destroyConfirmationClosure;
 
-    public array $appendedValues = [];
+    protected array $appendedValues = [];
 
-    public array $appendedHiddenFields = [];
+    protected array $appendedHiddenFields = [];
 
-    public Collection $results;
+    protected Collection $results;
 
     public function __construct()
     {
         $this->initializeDefaultComponents();
         $this->initializeTableDefaultClasses();
-        $this->rows = config('laravel-table.value.rowsNumber');
-        $this->rowsNumberSelectionActivation = config('laravel-table.value.rowsNumberSelectionActivation');
+        $this->rowsValue = config('laravel-table.value.rowsNumber');
+        $this->rowsNumberSelectionActivation = (bool) config('laravel-table.value.rowsNumberSelectionActivation');
         $this->sortableColumns = new Collection();
         $this->searchableColumns = new Collection();
         $this->request = request();
         $this->columns = new Collection();
-        $this->disableRows = new Collection();
+        $this->disabledRows = new Collection();
         $this->results = new Collection();
+    }
+
+    public function setSortByValue(string $sortByValue): void
+    {
+        $this->sortByValue = $sortByValue;
+    }
+
+    public function setSortDirValue(string $sortDirValue): void
+    {
+        $this->sortDirValue = $sortDirValue;
+    }
+
+    public function getSortByValue(): string
+    {
+        return $this->sortByValue;
+    }
+
+    public function getSortDirValue(): string
+    {
+        return $this->sortDirValue;
+    }
+
+    public function getSortableColumns(): Collection
+    {
+        return $this->sortableColumns;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function getRowsNumberSelectionActivation(): bool
+    {
+        return $this->rowsNumberSelectionActivation;
     }
 
     /**
@@ -142,7 +178,7 @@ class Table implements Htmlable
      */
     public function rowsNumber(?int $rows): Table
     {
-        $this->rows = $rows;
+        $this->rowsValue = $rows;
 
         return $this;
     }
@@ -191,7 +227,7 @@ class Table implements Htmlable
      */
     public function disableRows(Closure $rowDisableClosure, array $classes = []): Table
     {
-        $this->disableRows->push([
+        $this->disabledRows->push([
             'closure' => $rowDisableClosure,
             'classes' => ! empty($classes) ? $classes : config('laravel-table.classes.disabled'),
         ]);
@@ -211,9 +247,14 @@ class Table implements Htmlable
     {
         $this->checkModelIsDefined();
         $column = new Column($this, $databaseColumn);
-        $this->columns->push($column);
+        $this->getColumns()->push($column);
 
         return $column;
+    }
+
+    public function getColumns(): Collection
+    {
+        return $this->columns;
     }
 
     /**
@@ -224,9 +265,14 @@ class Table implements Htmlable
     public function result(): Result
     {
         $result = new Result;
-        $this->results->push($result);
+        $this->getResults()->push($result);
 
         return $result;
+    }
+
+    public function getResults(): Collection
+    {
+        return $this->results;
     }
 
     /**
@@ -236,7 +282,12 @@ class Table implements Htmlable
      */
     public function searchableTitles(): string
     {
-        return $this->searchableColumns->implode('title', ', ');
+        return $this->getSearchableColumns()->implode('title', ', ');
+    }
+
+    public function getSearchableColumns(): Collection
+    {
+        return $this->searchableColumns;
     }
 
     /**
@@ -250,7 +301,7 @@ class Table implements Htmlable
         || $this->isRouteDefined('edit')
         || $this->isRouteDefined('destroy') ? 1 : 0;
 
-        return $this->columns->count() + $extraColumnsCount;
+        return $this->getColumns()->count() + $extraColumnsCount;
     }
 
     /**
@@ -342,11 +393,17 @@ class Table implements Htmlable
      */
     public function navigationStatus(): string
     {
-        return (string) __('laravel-table::laravel-table.navigation', [
-            'start' => ($this->list->perPage() * ($this->list->currentPage() - 1)) + 1,
-            'stop' => $this->list->count() + (($this->list->currentPage() - 1) * $this->list->perPage()),
-            'total' => (int) $this->list->total(),
+        return (string) __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
+            'start' => ($this->getPaginatedList()->perPage() * ($this->getPaginatedList()->currentPage() - 1)) + 1,
+            'stop' => $this->getPaginatedList()->count()
+                + (($this->getPaginatedList()->currentPage() - 1) * $this->getPaginatedList()->perPage()),
+            'total' => (int) $this->getPaginatedList()->total(),
         ]);
+    }
+
+    public function getPaginatedList(): LengthAwarePaginator
+    {
+        return $this->paginatedList;
     }
 
     /**
@@ -383,13 +440,18 @@ class Table implements Htmlable
      */
     protected function generateEntitiesListFromQuery(): void
     {
-        $query = $this->model->query();
+        $query = $this->getModel()->query();
         $this->applyQueryClosure($query);
         $this->checkColumnsValidity($query);
         $this->applySearchClauses($query);
         $this->applySortClauses($query);
         $this->paginateList($query);
         $this->applyClosuresOnPaginatedList();
+    }
+
+    public function getModel(): Model
+    {
+        return $this->model;
     }
 
     /**
@@ -401,10 +463,15 @@ class Table implements Htmlable
      */
     protected function applyQueryClosure(Builder $query): void
     {
-        $closure = $this->queryClosure;
+        $closure = $this->getQueryClosure();
         if ($closure) {
             $closure($query);
         }
+    }
+
+    public function getQueryClosure(): ?Closure
+    {
+        return $this->queryClosure;
     }
 
     /**
@@ -416,13 +483,18 @@ class Table implements Htmlable
      */
     protected function paginateList(Builder $query): void
     {
-        $this->list = $query->paginate($this->rows ?: (int) $query->count());
-        $this->list->appends(array_merge([
-            $this->rowsField => $this->rows,
-            $this->searchField => $this->search,
-            $this->sortByField => $this->sortBy,
-            $this->sortDirField => $this->sortDir,
-        ], $this->appendedValues));
+        $this->paginatedList = $query->paginate($this->rowsValue ?: $query->count());
+        $this->getPaginatedList()->appends(array_merge([
+            $this->rowsField => $this->rowsValue,
+            $this->searchField => $this->searchValue,
+            $this->sortByField => $this->getSortByValue(),
+            $this->sortDirField => $this->getSortDirValue(),
+        ], $this->getAppendedValues()));
+    }
+
+    public function getAppendedValues(): array
+    {
+        return $this->appendedValues;
     }
 
     /**
@@ -432,18 +504,28 @@ class Table implements Htmlable
      */
     protected function applyClosuresOnPaginatedList(): void
     {
-        $this->list->getCollection()->transform(function ($model) {
+        $this->getPaginatedList()->getCollection()->transform(function ($model) {
             $this->rowsConditionalClasses->each(function ($row) use ($model) {
                 $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
-            $this->disableRows->each(function ($row) use ($model) {
+            $this->getDisabledRows()->each(function ($row) use ($model) {
                 $model->disabledClasses = ($row['closure'])($model) ? $row['classes'] : null;
             });
-            if ($this->destroyConfirmationClosure) {
-                $model->destroyConfirmationAttributes = ($this->destroyConfirmationClosure)($model);
+            if ($this->getDestroyConfirmationClosure()) {
+                $model->destroyConfirmationAttributes = ($this->getDestroyConfirmationClosure())($model);
             }
 
             return $model;
         });
+    }
+
+    public function getDisabledRows(): Collection
+    {
+        return $this->disabledRows;
+    }
+
+    public function getDestroyConfirmationClosure(): Closure
+    {
+        return $this->destroyConfirmationClosure;
     }
 }

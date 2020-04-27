@@ -14,8 +14,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->result()->title('Test');
-        $this->assertEquals($table->results->count(), 1);
-        $this->assertEquals($table->results->first()->title, 'Test');
+        $this->assertEquals($table->getResults()->count(), 1);
+        $this->assertEquals($table->getResults()->first()->title, 'Test');
     }
 
     public function testSetResultsHtml()

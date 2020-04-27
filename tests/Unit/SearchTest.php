@@ -18,23 +18,23 @@ class SearchTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->searchable();
-        $this->assertEquals('name', $table->searchableColumns->first()->databaseDefaultColumn);
+        $this->assertEquals('name', $table->getSearchableColumns()->first()->databaseDefaultColumn);
     }
 
     public function testSetSearchedDatabaseTableAttributeOnly()
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->searchable('databaseSearchedTable');
-        $this->assertEquals('databaseSearchedTable', $table->columns->first()->databaseSearchedTable);
-        $this->assertEquals([], $table->columns->first()->databaseSearchedColumns);
+        $this->assertEquals('databaseSearchedTable', $table->getColumns()->first()->databaseSearchedTable);
+        $this->assertEquals([], $table->getColumns()->first()->databaseSearchedColumns);
     }
 
     public function testSetSearchedDatabaseTableAndSearchedDatabaseColumns()
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->searchable('databaseSearchedTable', ['searchedField']);
-        $this->assertEquals('databaseSearchedTable', $table->columns->first()->databaseSearchedTable);
-        $this->assertEquals(['searchedField'], $table->columns->first()->databaseSearchedColumns);
+        $this->assertEquals('databaseSearchedTable', $table->getColumns()->first()->databaseSearchedTable);
+        $this->assertEquals(['searchedField'], $table->getColumns()->first()->databaseSearchedColumns);
     }
 
     public function testNotExistingSearchableColumn()
@@ -64,7 +64,7 @@ class SearchTest extends LaravelTableTestCase
         $table->configure();
         $this->assertEquals(
             $users->sortBy('name')->where('name', $searchedValue)->values()->toArray(),
-            $table->list->toArray()['data']
+            $table->getPaginatedList()->toArray()['data']
         );
     }
 
@@ -86,7 +86,7 @@ class SearchTest extends LaravelTableTestCase
                 ->where('email', 'like', '%' . $searchedValue . '%')
                 ->get()
                 ->toArray(),
-            $table->list->toArray()['data']
+            $table->getPaginatedList()->toArray()['data']
         );
     }
 
@@ -231,7 +231,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('owner')->searchable('users_test', ['name']);
         $table->configure();
         foreach (App(Company::class)->paginate(5) as $key => $company) {
-            $this->assertEquals($company->name, $table->list->toArray()['data'][$key]['name']);
+            $this->assertEquals($company->name, $table->getPaginatedList()->toArray()['data'][$key]['name']);
         }
     }
 
@@ -253,7 +253,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->sortable(true);
         $table->column('owner')->searchable('users_test', ['name', 'email']);
         $table->configure();
-        foreach ($table->list as $company) {
+        foreach ($table->getPaginatedList() as $company) {
             $owner = app(User::class)->find($company->owner_id);
             $this->assertEquals($company->owner, $owner->name . ' ' . $owner->email);
         }
@@ -283,7 +283,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->sortable(true);
         $table->column('owner')->searchable('userAliasedTable', ['name', 'email']);
         $table->configure();
-        foreach ($table->list as $company) {
+        foreach ($table->getPaginatedList() as $company) {
             $owner = app(User::class)->find($company->owner_id);
             $this->assertEquals($company->owner, $owner->name . ' ' . $owner->email);
         }
@@ -309,7 +309,7 @@ class SearchTest extends LaravelTableTestCase
             });
         $table->column('name')->searchable();
         $table->configure();
-        foreach ($table->list as $company) {
+        foreach ($table->getPaginatedList() as $company) {
             $this->assertEquals($company->name, $companies->where('id', $company->id)->first()->name);
         }
     }
@@ -405,7 +405,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
-        $this->assertEmpty($table->list->toArray()['data']);
+        $this->assertEmpty($table->getPaginatedList()->toArray()['data']);
     }
 
     public function testSqliteCaseInsensitiveTestHtml()
@@ -431,7 +431,7 @@ class SearchTest extends LaravelTableTestCase
         $table->configure();
         $this->assertEquals($users->filter(function ($user) {
             return in_array($user->name, ['alpha', 'ALPHA']);
-        })->toArray(), $table->list->toArray()['data']);
+        })->toArray(), $table->getPaginatedList()->toArray()['data']);
     }
 
     public function testPostgresCaseInsensitiveTestHtml()

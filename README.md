@@ -161,11 +161,22 @@ php artisan vendor:publish --tag=laravel-table:config
 
 ## Translations
 
-Optionally Publish the package translations:
+All captions are translatable.
 
-```bash
-php artisan vendor:publish --tag=laravel-table:translations
-```
+See how to translate them on the Laravel official documentation: https://laravel.com/docs/localization#using-translation-strings-as-keys.
+
+Here is the list of the sentences available for translation:
+
+* `Create`
+* `Show`
+* `Edit`
+* `Destroy`
+* `Number of rows`
+* `Search by:`
+* `Reset research`
+* `Actions`
+* `No results were found.`
+* `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
 ## Templates
 

@@ -14,7 +14,7 @@ class AppendsTest extends LaravelTableTestCase
         $appended = ['test' => 'testValue'];
         $table = (new Table)->model(User::class)->appends($appended);
         $table->column();
-        $this->assertEquals($appended, $table->appendedValues);
+        $this->assertEquals($appended, $table->getAppendedValues());
     }
 
     public function testSetAppendedToPaginationLink()
@@ -28,7 +28,7 @@ class AppendsTest extends LaravelTableTestCase
             ->appends($appended);
         $table->column('name');
         $table->configure();
-        $html = $table->list->links()->toHtml();
+        $html = $table->getPaginatedList()->links()->toHtml();
         $this->assertStringContainsString('test=testValue', $html);
     }
 

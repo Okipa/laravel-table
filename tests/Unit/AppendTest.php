@@ -12,16 +12,16 @@ class AppendTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->append('icon');
-        $this->assertEquals('icon', $table->columns->first()->append);
-        $this->assertEquals(false, $table->columns->first()->displayAppendEvenIfNoValue);
+        $this->assertEquals('icon', $table->getColumns()->first()->append);
+        $this->assertEquals(false, $table->getColumns()->first()->displayAppendEvenIfNoValue);
     }
 
     public function testSetAppendAttributeAndSetShowWithNoValue()
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->append('icon', true);
-        $this->assertEquals('icon', $table->columns->first()->append);
-        $this->assertEquals(true, $table->columns->first()->displayAppendEvenIfNoValue);
+        $this->assertEquals('icon', $table->getColumns()->first()->append);
+        $this->assertEquals(true, $table->getColumns()->first()->displayAppendEvenIfNoValue);
     }
 
     public function testSetAppendHtml()

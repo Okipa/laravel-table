@@ -30,7 +30,7 @@ class ConfigTest extends LaravelTableTestCase
         $this->assertTrue(array_key_exists('sortDesc', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('search', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('validate', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('cancel', config('laravel-table.icon')));
+        $this->assertTrue(array_key_exists('reset', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('create', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('edit', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('destroy', config('laravel-table.icon')));
@@ -67,7 +67,7 @@ class ConfigTest extends LaravelTableTestCase
             ->sortable();
         $table->configure();
         $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
-        $this->assertEquals(9999, $table->rows);
+        $this->assertEquals(9999, $table->rowsValue);
         $this->assertStringContainsString('value="9999"', $html);
         $this->assertStringContainsString('rows=9999', $html);
     }

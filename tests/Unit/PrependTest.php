@@ -12,16 +12,16 @@ class PrependTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->prepend('icon');
-        $this->assertEquals('icon', $table->columns->first()->prepend);
-        $this->assertEquals(false, $table->columns->first()->displayPrependEvenIfNoValue);
+        $this->assertEquals('icon', $table->getColumns()->first()->prepend);
+        $this->assertEquals(false, $table->getColumns()->first()->displayPrependEvenIfNoValue);
     }
 
     public function testSetPrependAttributeAndSetShowWithNoValue()
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->prepend('icon', true);
-        $this->assertEquals('icon', $table->columns->first()->prepend);
-        $this->assertEquals(true, $table->columns->first()->displayPrependEvenIfNoValue);
+        $this->assertEquals('icon', $table->getColumns()->first()->prepend);
+        $this->assertEquals(true, $table->getColumns()->first()->displayPrependEvenIfNoValue);
     }
 
     public function testSetPrependHtml()

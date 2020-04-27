@@ -11,7 +11,6 @@ class LaravelTableServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../views', 'laravel-table');
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'laravel-table');
         $this->publishes([
             __DIR__ . '/../config/laravel-table.php' => config_path('laravel-table.php'),
         ], 'laravel-table:config');

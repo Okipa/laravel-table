@@ -7,9 +7,9 @@
                     <div class="d-flex align-items-center px-3 py-1 creation-container">
                         <a href="{{ $table->route('create') }}"
                            class="btn btn-success"
-                           title="{{ __('laravel-table::laravel-table.create') }}">
+                           title="@lang('Create')">
                             {!! config('laravel-table.icon.create') !!}
-                            {{ __('laravel-table::laravel-table.create') }}
+                            @lang('Create')
                         </a>
                     </div>
                 @endif
@@ -19,7 +19,7 @@
                 </div>
                 {{-- pagination --}}
                 <div class="d-flex align-items-center mb-n3 px-3 py-1 pagination-container">
-                    {!! $table->list->links() !!}
+                    {!! $table->getPaginatedList()->links() !!}
                 </div>
             </div>
         </td>

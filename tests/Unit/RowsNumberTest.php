@@ -12,21 +12,21 @@ class RowsNumberTest extends LaravelTableTestCase
     public function testSetRowsNumberSelectionActivationAttribute()
     {
         $table = (new Table)->rowsNumberSelectionActivation();
-        $this->assertTrue($table->rowsNumberSelectionActivation);
+        $this->assertTrue($table->getRowsNumberSelectionActivation());
     }
 
     public function testSetRowsNumberAttribute()
     {
         $rows = 10;
         $table = (new Table)->rowsNumber($rows);
-        $this->assertEquals($rows, $table->rows);
+        $this->assertEquals($rows, $table->rowsValue);
     }
 
     public function testSetUnlimitedRowsNumberAttribute()
     {
         $rows = false;
         $table = (new Table)->rowsNumber(null);
-        $this->assertEquals($rows, $table->rows);
+        $this->assertEquals($rows, $table->rowsValue);
     }
 
     public function testDeactivateRowsNumberSelectionFromConfigHtml()
@@ -134,7 +134,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->configure();
         $this->assertEquals(
             App(User::class)->orderBy('name', 'asc')->paginate(10)->toArray()['data'],
-            $table->list->toArray()['data']
+            $table->getPaginatedList()->toArray()['data']
         );
     }
 

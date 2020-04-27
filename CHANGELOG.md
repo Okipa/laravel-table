@@ -12,6 +12,10 @@
   * Using this new way to manage table, you will have to display the view with `$table()` instead of `$table`.
   * Please note that even if is not documented anymore, the old behaviour is still functional in order to prevent any breaking change.
 * Removed the deprecated `->icon()` table column method.  
+* Removed translation files.
+* Small config changes.
+
+:point_right: [See the upgrade guide](/upgrade-guides/from-v1-to-v2.md)
 
 ## [1.5.0](https://github.com/Okipa/laravel-table/compare/1.4.0...1.5.0)
 

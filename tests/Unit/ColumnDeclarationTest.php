@@ -14,10 +14,10 @@ class ColumnDeclarationTest extends LaravelTableTestCase
         $columnAttribute = 'name';
         $table = (new Table)->model(User::class);
         $table->column($columnAttribute);
-        $this->assertEquals($table->columns->count(), 1);
-        $this->assertEquals($table->columns->first()->table, $table);
-        $this->assertEquals($table->columns->first()->databaseDefaultTable, app(User::class)->getTable());
-        $this->assertEquals($table->columns->first()->databaseDefaultColumn, $columnAttribute);
+        $this->assertEquals($table->getColumns()->count(), 1);
+        $this->assertEquals($table->getColumns()->first()->table, $table);
+        $this->assertEquals($table->getColumns()->first()->databaseDefaultTable, app(User::class)->getTable());
+        $this->assertEquals($table->getColumns()->first()->databaseDefaultColumn, $columnAttribute);
     }
 
     public function testAddColumnWithAttributeAndNoTitleHtml()

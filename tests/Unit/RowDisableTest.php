@@ -15,8 +15,8 @@ class RowDisableTest extends LaravelTableTestCase
         };
         $classes = ['test-disabled-custom-class'];
         $table = (new Table)->disableRows($rowDisableClosure, $classes);
-        $this->assertEquals($rowDisableClosure, $table->disableRows->first()['closure']);
-        $this->assertEquals($classes, $table->disableRows->first()['classes']);
+        $this->assertEquals($rowDisableClosure, $table->getDisabledRows()->first()['closure']);
+        $this->assertEquals($classes, $table->getDisabledRows()->first()['classes']);
     }
 
     public function testDisableLineWithDefaultClassHtml()
@@ -39,7 +39,7 @@ class RowDisableTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->configure();
-        foreach ($table->list->getCollection() as $user) {
+        foreach ($table->getPaginatedList()->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
@@ -82,7 +82,7 @@ class RowDisableTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
         $table->configure();
-        foreach ($table->list->getCollection() as $user) {
+        foreach ($table->getPaginatedList()->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);

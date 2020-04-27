@@ -13,7 +13,7 @@ class ButtonTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->button(['buttonClass']);
-        $this->assertEquals(['buttonClass'], $table->columns->first()->buttonClasses);
+        $this->assertEquals(['buttonClass'], $table->getColumns()->first()->buttonClasses);
     }
 
     public function testIsButtonHtml()

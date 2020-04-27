@@ -13,7 +13,7 @@ class IdentifierTest extends LaravelTableTestCase
     {
         $identifier = 'identifier test';
         $table = (new Table)->model(User::class)->identifier($identifier);
-        $this->assertEquals('identifier-test', $table->identifier);
+        $this->assertEquals('identifier-test', $table->getIdentifier());
     }
 
     public function testRowsFieldWithIdentifierAttribute()

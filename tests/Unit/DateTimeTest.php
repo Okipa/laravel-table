@@ -13,7 +13,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->dateTimeFormat('d/m/Y H:i:s');
-        $this->assertEquals('d/m/Y H:i:s', $table->columns->first()->dateTimeFormat);
+        $this->assertEquals('d/m/Y H:i:s', $table->getColumns()->first()->dateTimeFormat);
     }
 
     public function testDateFormatHtml()
@@ -32,7 +32,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->dateTimeFormat('H:i');
-        $this->assertEquals('H:i', $table->columns->first()->dateTimeFormat);
+        $this->assertEquals('H:i', $table->getColumns()->first()->dateTimeFormat);
     }
 
     public function testSetColumnDateTimeToDateFormatHtml()

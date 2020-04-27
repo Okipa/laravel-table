@@ -12,7 +12,7 @@ class TitleTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->title('Name');
-        $this->assertEquals('Name', $table->columns->first()->title);
+        $this->assertEquals('Name', $table->getColumns()->first()->title);
     }
 
     public function testTitleHtml()

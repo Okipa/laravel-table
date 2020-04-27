@@ -8,21 +8,21 @@ use Okipa\LaravelTable\Column;
 
 trait TableInteractions
 {
-    public int $rows;
+    protected string $rowsField = 'rows';
 
-    public string $rowsField = 'rows';
+    protected int $rowsValue;
 
-    public string $sortBy;
+    protected string $sortByField = 'sort_by';
 
-    public string $sortByField = 'sort_by';
+    protected string $sortByValue;
 
-    public string $sortDir;
+    protected string $sortDirField = 'sort_dir';
 
-    public string $sortDirField = 'sort_dir';
+    protected string $sortDirValue;
 
-    public string $search;
+    protected string $searchField = 'search';
 
-    public string $searchField = 'search';
+    protected string $searchValue;
 
     /**
      * Redefine table interaction fields from identifier.
@@ -31,7 +31,7 @@ trait TableInteractions
      */
     protected function redefineInteractionFieldsFromIdentifier(): void
     {
-        $underscoredIdentifier = $this->identifier ? str_replace('-', '_', $this->identifier) . '_' : '';
+        $underscoredIdentifier = $this->getIdentifier() ? str_replace('-', '_', $this->getIdentifier()) . '_' : '';
         $this->rowsField = $underscoredIdentifier . $this->rowsField;
         $this->searchField = $underscoredIdentifier . $this->searchField;
         $this->sortByField = $underscoredIdentifier . $this->sortByField;
@@ -51,21 +51,25 @@ trait TableInteractions
             $this->sortByField,
             $this->sortDirField
         ), [
-            $this->rowsField => 'required|integer',
-            $this->searchField => 'nullable|string',
-            $this->sortByField => 'nullable|string|in:' . $this->columns->implode('databaseDefaultColumn', ','),
-            $this->sortDirField => 'nullable|string|in:asc,desc',
+            $this->rowsField => ['required', 'integer'],
+            $this->searchField => ['nullable', 'string'],
+            $this->sortByField => [
+                'nullable',
+                'string',
+                'in:' . $this->getColumns()->implode('databaseDefaultColumn', ','),
+            ],
+            $this->sortDirField => ['nullable', 'string', 'in:asc,desc'],
         ]);
         if ($validator->fails()) {
             $this->request->merge([
-                $this->rowsField => $this->rows ?? config('laravel-table.value.rows'),
+                $this->rowsField => $this->rowsValue ?? config('laravel-table.value.rows'),
                 $this->searchField => null,
-                $this->sortByField => $this->sortBy,
-                $this->sortDirField => $this->sortDir,
+                $this->sortByField => $this->getSortByValue(),
+                $this->sortDirField => $this->getSortDirValue(),
             ]);
         }
-        $this->rows = $this->request->get($this->rowsField);
-        $this->search = $this->request->get($this->searchField);
+        $this->rowsValue = $this->request->get($this->rowsField);
+        $this->searchValue = $this->request->get($this->searchField);
     }
 
     /**
@@ -77,12 +81,12 @@ trait TableInteractions
      */
     protected function applySortClauses(Builder $query): void
     {
-        $this->sortBy = $this->request->get($this->sortByField)
-            ?: ($this->sortBy ? $this->sortBy : optional($this->sortableColumns->first())->databaseDefaultColumn);
-        $this->sortDir = $this->request->get($this->sortDirField)
-            ?: ($this->sortDir ? $this->sortDir : 'asc');
-        if ($this->sortBy && $this->sortDir) {
-            $query->orderBy($this->sortBy, $this->sortDir);
+        $this->sortByValue = $this->request->get($this->sortByField)
+            ?: ($this->getSortByValue() ?: optional($this->getSortableColumns()->first())->databaseDefaultColumn);
+        $this->sortDirValue = $this->request->get($this->sortDirField)
+            ?: ($this->getSortDirValue() ?: 'asc');
+        if ($this->getSortByValue() && $this->getSortDirValue()) {
+            $query->orderBy($this->getSortByValue(), $this->getSortDirValue());
         }
     }
 
@@ -98,7 +102,13 @@ trait TableInteractions
         $searched = $this->request->get($this->searchField);
         if ($searched) {
             $query->where(function (Builder $subQuery) use ($searched) {
-                $this->searchableColumns->map(function (Column $column, int $columnKey) use ($subQuery, $searched) {
+                $this->getSearchableColumns()->map(function (
+                    Column $column,
+                    int $columnKey
+                ) use (
+                    $subQuery,
+                    $searched
+                ) {
                     $databaseSearchedTable = $column->databaseSearchedTable ?: $column->databaseDefaultTable;
                     $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
                     $databaseSearchedColumns = $column->databaseSearchedColumns ?: [$column->databaseDefaultColumn];

@@ -16,6 +16,6 @@ class SetCustomTableTest extends LaravelTableTestCase
             $query->select('users.*')->where('users.activated');
         };
         $table = (new Table)->query($queryClosure);
-        $this->assertEquals($queryClosure, $table->queryClosure);
+        $this->assertEquals($queryClosure, $table->getQueryClosure());
     }
 }

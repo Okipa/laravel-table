@@ -9,52 +9,46 @@ use InvalidArgumentException;
 /** @SuppressWarnings(PHPMD.TooManyFields) */
 class Column
 {
-    public Table $table;
+    protected Table $table;
 
-    public string $databaseDefaultTable;
+    protected string $databaseDefaultTable;
 
-    public string $databaseSearchedTable;
+    protected string $databaseSearchedTable;
 
-    public string $databaseDefaultColumn;
+    protected string $databaseDefaultColumn;
 
-    public array $databaseSearchedColumns;
+    protected array $databaseSearchedColumns;
 
-    public bool $isSortable;
+    protected bool $isSortable;
 
-    public string $title;
+    protected string $title;
 
-    public string $dateTimeFormat;
+    protected string $dateTimeFormat;
 
-    public array $buttonClasses;
+    protected array $buttonClasses;
 
-    public int $stringLimit;
+    protected int $stringLimit;
 
-    public string $url;
+    protected string $url;
 
-    public Closure $valueClosure;
+    protected Closure $valueClosure;
 
-    public Closure $htmlClosure;
+    protected Closure $htmlClosure;
 
-    public string $prepend;
+    protected string $prepend;
 
-    public string $append;
+    protected string $append;
 
-    public bool $displayPrependEvenIfNoValue;
+    protected bool $displayPrependEvenIfNoValue;
 
-    public bool $displayAppendEvenIfNoValue;
+    protected bool $displayAppendEvenIfNoValue;
 
-    public array $classes;
+    protected array $classes;
 
-    /**
-     * \Okipa\LaravelTable\Column constructor.
-     *
-     * @param Table $table
-     * @param string|null $databaseColumn
-     */
     public function __construct(Table $table, string $databaseColumn = null)
     {
         $this->table = $table;
-        $this->databaseDefaultTable = $table->model->getTable();
+        $this->databaseDefaultTable = $table->getModel()->getTable();
         $this->databaseDefaultColumn = $databaseColumn;
         $this->title = $databaseColumn ? __('validation.attributes.' . $databaseColumn) : null;
     }
@@ -86,7 +80,7 @@ class Column
      */
     public function sortable(bool $sortByDefault = false, string $sortDirection = 'asc'): Column
     {
-        $this->table->sortableColumns->push($this);
+        $this->table->getSortableColumns()->push($this);
         $this->isSortable = true;
         if ($sortByDefault) {
             $this->sortByDefault($sortDirection);
@@ -104,19 +98,19 @@ class Column
      */
     protected function sortByDefault(string $sortDirection = 'asc')
     {
-        if ($this->table->sortBy || $this->table->sortDir) {
-            $errorMessage = 'The table is already sorted by the « ' . $this->table->sortBy
+        if ($this->table->getSortByValue() || $this->table->getSortDirValue()) {
+            $errorMessage = 'The table is already sorted by the « ' . $this->table->getSortByValue()
                 . ' » database column. You only can sort a table column by default once.';
             throw new ErrorException($errorMessage);
         }
-        $this->table->sortBy = $this->databaseDefaultColumn;
+        $this->table->setSortByValue($this->databaseDefaultColumn);
         $acceptedDirections = ['asc', 'desc'];
         $errorMessage = 'Invalid « $sortDirection » second argument for « sortable() » method. Has to be « asc » or '
             . '« desc ». « ' . $sortDirection . ' » given.';
         if (! in_array($sortDirection, $acceptedDirections)) {
             throw new InvalidArgumentException($errorMessage);
         }
-        $this->table->sortDir = $sortDirection;
+        $this->table->setSortDirValue($sortDirection);
     }
 
     /**
@@ -132,7 +126,7 @@ class Column
      */
     public function searchable(string $databaseSearchedTable = null, array $databaseSearchedColumns = []): Column
     {
-        $this->table->searchableColumns->push($this);
+        $this->table->getSortableColumns()->push($this);
         $this->databaseSearchedTable = $databaseSearchedTable;
         $this->databaseSearchedColumns = $databaseSearchedColumns;
 

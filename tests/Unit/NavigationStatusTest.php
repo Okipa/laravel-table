@@ -3,8 +3,8 @@
 namespace Okipa\LaravelTable\Tests\Unit;
 
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
+use Okipa\LaravelTable\Test\Models\User;
 
 class NavigationStatusTest extends LaravelTableTestCase
 {
@@ -15,11 +15,14 @@ class NavigationStatusTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
-        $this->assertEquals($table->navigationStatus(), __('laravel-table::laravel-table.navigation', [
-            'start' => 1,
-            'stop'  => 10,
-            'total' => 10,
-        ]));
+        $this->assertEquals(
+            $table->navigationStatus(),
+            __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
+                'start' => 1,
+                'stop' => 10,
+                'total' => 10,
+            ])
+        );
     }
 
     public function testNavigationStatusHtml()
