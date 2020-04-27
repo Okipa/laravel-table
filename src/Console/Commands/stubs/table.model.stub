@@ -9,7 +9,9 @@ use DummyFullModelClass;
 class DummyClass extends AbstractTable
 {
     /**
-     * @return void
+     * Configure the table itself.
+     *
+     * @return \Okipa\LaravelTable\Table
      * @throws \ErrorException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
@@ -22,14 +24,21 @@ class DummyClass extends AbstractTable
             'destroy' => ['name' => '...'],
         ])->destroyConfirmationHtmlAttributes(function (DummyModelClass $dummyModel) {
             return [
-                'data-confirm' => __('Are you sure you want to delete the line ' . $dummyModel->... . ' ?'),
+                'data-confirm' => __('Are you sure you want to delete the line ' . $dummyModel->database_attribute . ' ?'),
             ];
         });
     }
 
+    /**
+     * Configure the table columns.
+     *
+     * @param \Okipa\LaravelTable\Table $table
+     *
+     * @throws \ErrorException
+     */
     protected function columns(Table $table): void
     {
-        $table->column('...')->sortable()->searchable();
+        $table->column('database_attribute')->sortable()->searchable();
     }
 
     protected function resultLines(Table $table): void
