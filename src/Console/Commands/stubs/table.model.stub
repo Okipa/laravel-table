@@ -18,10 +18,10 @@ class DummyClass extends AbstractTable
     protected function table(): Table
     {
         return Table::model(DummyModelClass::class)->routes([
-            'index'   => ['name' => '...'],
-            'create'  => ['name' => '...'],
-            'edit'    => ['name' => '...'],
-            'destroy' => ['name' => '...'],
+            'index'   => ['name' => 'dummyRoutes.index'],
+            'create'  => ['name' => 'dummyRoute.create'],
+            'edit'    => ['name' => 'dummyRoute.edit'],
+            'destroy' => ['name' => 'dummyRoute.destroy'],
         ])->destroyConfirmationHtmlAttributes(function (DummyModelClass $dummyModel) {
             return [
                 'data-confirm' => __('Are you sure you want to delete the line ' . $dummyModel->database_attribute . ' ?'),
@@ -41,6 +41,11 @@ class DummyClass extends AbstractTable
         $table->column('database_attribute')->sortable()->searchable();
     }
 
+    /**
+     * Configure the table result lines.
+     *
+     * @param \Okipa\LaravelTable\Table $table
+     */
     protected function resultLines(Table $table): void
     {
         //
