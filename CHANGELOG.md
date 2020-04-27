@@ -5,7 +5,9 @@
 2020-04-27
 
 * Added `Table` facade.
-* Added table generation command: execute `php artisan make:table UsersTable --model App/Users` to generate your users table.
+* Added a cleaner architecture to handle tables:
+  * With the new table generation command, execute `php artisan make:table UsersTable --model App/Users` to generate your users table.
+  * Tables are now generated in the `app\Tables` directory.
 
 ## [1.5.0](https://github.com/Okipa/laravel-table/compare/1.4.0...1.5.0)
 

@@ -58,9 +58,6 @@ class UsersTable extends AbstractTable
         $table->column('last_name')->sortable()->searchable();
         $table->column('email')->sortable()->searchable();
     }
-
-    
-
 }
 ```
 
