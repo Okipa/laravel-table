@@ -41,9 +41,9 @@ class UsersTable extends AbstractTable
     protected function table(): Table
     {
         return Table::model(User::class)->routes([
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'user.create'],
-            'edit'    => ['name' => 'user.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'user.create'],
+            'edit' => ['name' => 'user.edit'],
             'destroy' => ['name' => 'user.destroy'],
         ])->destroyConfirmationHtmlAttributes(function (User $user) {
             return [
@@ -205,11 +205,11 @@ class NewsTable extends AbstractTable
             ->identifier('News table')
             ->request($this->request)
             ->routes([
-                'index'      => ['name' => 'news.index'],
-                'create'     => ['name' => 'news.create'],
-                'edit'       => ['name' => 'news.edit'],
-                'destroy'    => ['name' => 'news.destroy'],
-                'show'    => ['name' => 'news.show'],
+                'index' => ['name' => 'news.index'],
+                'create' => ['name' => 'news.create'],
+                'edit' => ['name' => 'news.edit'],
+                'destroy' => ['name' => 'news.destroy'],
+                'show' => ['name' => 'news.show'],
             ])
             ->rowsNumber(50) // or set `false` to get all the items contained in database
             ->rowsNumberSelectionActivation(false)
