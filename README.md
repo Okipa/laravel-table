@@ -441,7 +441,7 @@ Table::routes([
 ]);
 ```
 
-<h3 id="table-rowsNumber">->rowsNumber</h3>
+<h3 id="table-rowsNumber">->rowsNumber()</h3>
 
 > Override the config default number of rows displayed on the table.  
 > The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.  
