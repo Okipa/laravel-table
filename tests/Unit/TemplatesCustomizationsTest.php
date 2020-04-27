@@ -73,8 +73,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->tableTemplate('table-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<table id="table-test">', $html);
     }
 
@@ -87,8 +87,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->theadTemplate('thead-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<thead id="thead-test">', $html);
     }
 
@@ -101,8 +101,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->tbodyTemplate('tbody-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<tbody id="tbody-test">', $html);
     }
 
@@ -115,8 +115,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->showTemplate('show-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->showTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->showTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<form id="show-test">', $html);
     }
 
@@ -129,8 +129,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->editTemplate('edit-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->editTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->editTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<form id="edit-test">', $html);
     }
 
@@ -143,8 +143,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->destroyTemplate('destroy-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->destroyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->destroyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<form id="destroy-test">', $html);
     }
 
@@ -157,8 +157,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->resultsTemplate('results-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->toHtml();
         $this->assertStringContainsString('<tr id="results-test"><td></td></tr>', $html);
     }
 
@@ -171,8 +171,8 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->tfootTemplate('tfoot-test');
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->toHtml();
         $this->assertStringContainsString('<tfoot id="tfoot-test">', $html);
     }
 }

@@ -30,8 +30,8 @@ class AppendTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->append('icon');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('icon', $html);
     }
 
@@ -43,8 +43,8 @@ class AppendTest extends LaravelTableTestCase
         $table->column('name')->append('icon')->value(function () {
             return 'test';
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('icon', $html);
     }
 
@@ -55,8 +55,8 @@ class AppendTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->append('icon');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringNotContainsString('icon', $html);
     }
 
@@ -67,8 +67,8 @@ class AppendTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->append('icon', true);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('icon', $html);
     }
 }

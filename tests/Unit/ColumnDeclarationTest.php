@@ -25,7 +25,7 @@ class ColumnDeclarationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $html = $table->render();
+        $html = $table->toHtml();
         $this->assertStringContainsString('validation.attributes.name', $html);
     }
 
@@ -43,6 +43,6 @@ class ColumnDeclarationTest extends LaravelTableTestCase
         $this->expectExceptionMessage('No column has been added to the table. Please add at least one column by '
                                       . 'using the « column() » method on the table object.');
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->render();
+        $table->configure();
     }
 }

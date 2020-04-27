@@ -14,7 +14,7 @@ class NavigationStatusTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
+        $table->configure();
         $this->assertEquals($table->navigationStatus(), __('laravel-table::laravel-table.navigation', [
             'start' => 1,
             'stop'  => 10,
@@ -27,8 +27,8 @@ class NavigationStatusTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->toHtml();
         $this->assertStringContainsString($table->navigationStatus(), $html);
     }
 }

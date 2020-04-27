@@ -38,13 +38,13 @@ class RowDisableTest extends LaravelTableTestCase
             ->disableRows($closure);
         $table->column('name');
         $table->column('email');
-        $table->render();
+        $table->configure();
         foreach ($table->list->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
         }
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
@@ -81,13 +81,13 @@ class RowDisableTest extends LaravelTableTestCase
             ->disableRows($closure, $classes);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
+        $table->configure();
         foreach ($table->list->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
         }
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
@@ -118,8 +118,8 @@ class RowDisableTest extends LaravelTableTestCase
             ]);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringNotContainsString(implode(' ', $classes), $html);
         $this->assertStringNotContainsString('disabled="disabled"', $html);
     }

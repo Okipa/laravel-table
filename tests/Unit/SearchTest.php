@@ -47,7 +47,7 @@ class SearchTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('not_existing_column')->searchable();
-        $table->render();
+        $table->configure();
     }
 
     public function testSearchAccurateRequest()
@@ -61,7 +61,7 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('name')->searchable();
         $table->column('email');
-        $table->render();
+        $table->configure();
         $this->assertEquals(
             $users->sortBy('name')->where('name', $searchedValue)->values()->toArray(),
             $table->list->toArray()['data']
@@ -79,7 +79,7 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('name')->sortable(true);
         $table->column('email')->searchable();
-        $table->render();
+        $table->configure();
         $this->assertEquals(
             App(User::class)
                 ->orderBy('name', 'asc')
@@ -97,7 +97,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->searchable();
         $table->column('email');
-        $table->render();
+        $table->configure();
         $this->assertEquals('Name', $table->searchableTitles());
     }
 
@@ -108,7 +108,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->searchable();
         $table->column('email')->title('Email')->searchable();
-        $table->render();
+        $table->configure();
         $this->assertEquals('Name, Email', $table->searchableTitles());
     }
 
@@ -129,7 +129,7 @@ class SearchTest extends LaravelTableTestCase
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
             });
         $table->column('owner')->searchable();
-        $table->render();
+        $table->configure();
     }
 
     public function testSearchWithoutColumnAttribute()
@@ -143,7 +143,7 @@ class SearchTest extends LaravelTableTestCase
         $this->routes(['companies'], ['index']);
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'companies.index']]);
         $table->column()->searchable('users_test', ['name']);
-        $table->render();
+        $table->configure();
     }
 
     public function testSearchOnOtherTableFieldWithCustomTableDeclarationWithoutAlias()
@@ -163,7 +163,7 @@ class SearchTest extends LaravelTableTestCase
                 $query->join('users_test', 'users_test.id', '=', 'companies_test.owner_id');
             });
         $table->column('owner')->searchable('users_test');
-        $table->render();
+        $table->configure();
     }
 
     public function testSearchNonExistentFieldOnAliasedTable()
@@ -183,7 +183,7 @@ class SearchTest extends LaravelTableTestCase
                 $query->join('users_test as aliasesUserTable', 'aliasesUserTable.id', '=', 'companies_test.owner_id');
             });
         $table->column('nonExistent')->searchable('aliasesUserTable');
-        $table->render();
+        $table->configure();
     }
 
     public function testSearchOnOtherTableFieldWithCustomTableDeclarationHtml()
@@ -202,8 +202,8 @@ class SearchTest extends LaravelTableTestCase
             })
             ->request($customRequest);
         $table->column('owner')->searchable('users_test', ['name']);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($companies as $company) {
             if ($company->owner->name === $searchedValue) {
                 $this->assertStringContainsString($company->owner->name, $html);
@@ -229,7 +229,7 @@ class SearchTest extends LaravelTableTestCase
             })
             ->request($customRequest);
         $table->column('owner')->searchable('users_test', ['name']);
-        $table->render();
+        $table->configure();
         foreach (App(Company::class)->paginate(5) as $key => $company) {
             $this->assertEquals($company->name, $table->list->toArray()['data'][$key]['name']);
         }
@@ -252,7 +252,7 @@ class SearchTest extends LaravelTableTestCase
             });
         $table->column('name')->sortable(true);
         $table->column('owner')->searchable('users_test', ['name', 'email']);
-        $table->render();
+        $table->configure();
         foreach ($table->list as $company) {
             $owner = app(User::class)->find($company->owner_id);
             $this->assertEquals($company->owner, $owner->name . ' ' . $owner->email);
@@ -282,7 +282,7 @@ class SearchTest extends LaravelTableTestCase
             });
         $table->column('name')->sortable(true);
         $table->column('owner')->searchable('userAliasedTable', ['name', 'email']);
-        $table->render();
+        $table->configure();
         foreach ($table->list as $company) {
             $owner = app(User::class)->find($company->owner_id);
             $this->assertEquals($company->owner, $owner->name . ' ' . $owner->email);
@@ -308,7 +308,7 @@ class SearchTest extends LaravelTableTestCase
                 );
             });
         $table->column('name')->searchable();
-        $table->render();
+        $table->configure();
         foreach ($table->list as $company) {
             $this->assertEquals($company->name, $companies->where('id', $company->id)->first()->name);
         }
@@ -320,8 +320,8 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name');
         $table->column('email')->searchable();
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('searching', $html);
         $this->assertStringContainsString('type="hidden" name="rows"', $html);
         $this->assertStringContainsString(
@@ -342,8 +342,8 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringNotContainsString('searching', $html);
         $this->assertStringNotContainsString('type="hidden" name="rows"', $html);
         $this->assertStringNotContainsString(
@@ -404,7 +404,7 @@ class SearchTest extends LaravelTableTestCase
             });
         $table->column('name')->searchable();
         $table->column('email')->searchable();
-        $table->render();
+        $table->configure();
         $this->assertEmpty($table->list->toArray()['data']);
     }
 
@@ -428,7 +428,7 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('name')->searchable();
         $table->column('email')->searchable();
-        $table->render();
+        $table->configure();
         $this->assertEquals($users->filter(function ($user) {
             return in_array($user->name, ['alpha', 'ALPHA']);
         })->toArray(), $table->list->toArray()['data']);
@@ -451,6 +451,6 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('name')->searchable();
         $table->column('email')->searchable();
-        $table->render();
+        $table->configure();
     }
 }

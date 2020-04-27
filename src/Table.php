@@ -373,23 +373,23 @@ class Table implements Htmlable
      */
     public function toHtml(): string
     {
-        return (string) $this->render();
+        $this->configure();
+
+        return view('laravel-table::' . $this->tableTemplatePath, ['table' => $this])->toHtml();
     }
 
     /**
-     * Generate the table html.
+     * Execute the whole table configuration.
      *
-     * @return string
-     * @throws ErrorException
+     * @return void
+     * @throws \ErrorException
      */
-    public function render(): string
+    public function configure(): void
     {
         $this->checkRoutesValidity($this->routes);
         $this->checkIfAtLeastOneColumnIsDeclared();
         $this->handleRequestInteractionValues();
         $this->generateEntitiesListFromQuery();
-
-        return view('laravel-table::' . $this->tableTemplatePath, ['table' => $this]);
     }
 
     /**

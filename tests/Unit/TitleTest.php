@@ -21,8 +21,8 @@ class TitleTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('Name', $html);
         $this->assertStringContainsString('Email', $html);
     }

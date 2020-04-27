@@ -22,8 +22,8 @@ class ButtonTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary']);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);
         $this->assertStringContainsString('</button>', $html);
     }
@@ -35,8 +35,8 @@ class ButtonTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary']);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringNotContainsString('<button class="btn btn-primary', $html);
         $this->assertStringNotContainsString('</button>', $html);
     }
@@ -48,8 +48,8 @@ class ButtonTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary'])->prepend('icon', true);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);
         $this->assertStringContainsString('</button>', $html);
     }
@@ -61,8 +61,8 @@ class ButtonTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary'])->append('icon', true);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);
         $this->assertStringContainsString('</button>', $html);
     }
@@ -76,8 +76,8 @@ class ButtonTest extends LaravelTableTestCase
         $table->column()->button(['buttonClass'])->value(function ($model) {
             return 'user name = ' . $model->name;
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(
             '<button class="buttonClass user-name-' . Str::slug(strip_tags($user->name)) . '">',
             $html

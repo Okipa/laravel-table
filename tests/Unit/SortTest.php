@@ -19,7 +19,7 @@ class SortTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
-        $table->render();
+        $table->configure();
         foreach ($users as $key => $user) {
             $this->assertEquals($user->name, $table->list->items()[$key]['name']);
         }
@@ -42,7 +42,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('email')->sortable(true, 'desc');
         $this->assertEquals('email', $table->sortBy);
         $this->assertEquals('desc', $table->sortDir);
-        $table->render();
+        $table->configure();
         $this->assertEquals('email', $table->sortBy);
         $this->assertEquals('desc', $table->sortDir);
     }
@@ -54,7 +54,7 @@ class SortTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email')->sortable(true);
-        $table->render();
+        $table->configure();
         $this->assertEquals($users->sortBy('email')->values()->toArray(), $table->list->toArray()['data']);
     }
 
@@ -75,7 +75,7 @@ class SortTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name');
         $table->column('email');
-        $table->render();
+        $table->configure();
         $this->assertNull($table->sortBy);
         $this->assertEquals($table->sortDir, 'asc');
     }
@@ -87,7 +87,7 @@ class SortTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->sortable();
         $table->column('email')->sortable();
-        $table->render();
+        $table->configure();
         $this->assertEquals($table->sortBy, $table->columns->first()->databaseDefaultColumn);
         $this->assertEquals($table->sortDir, 'asc');
     }
@@ -102,7 +102,7 @@ class SortTest extends LaravelTableTestCase
         $this->routes(['companies'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'companies.index']])->model(User::class);
         $table->column()->sortable();
-        $table->render();
+        $table->configure();
     }
 
     public function testSortByColumn()
@@ -119,7 +119,7 @@ class SortTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email')->sortable();
-        $table->render();
+        $table->configure();
         $this->assertEquals('email', $table->sortBy);
         $this->assertEquals('desc', $table->sortDir);
         $this->assertEquals($users->sortByDesc('email')->values()->toArray(), $table->list->toArray()['data']);
@@ -144,7 +144,7 @@ class SortTest extends LaravelTableTestCase
             })
             ->request($customRequest);
         $table->column('owner')->sortable();
-        $table->render();
+        $table->configure();
         foreach ($companies->load('owner')->sortByDesc('owner.name')->values() as $key => $company) {
             $this->assertEquals($company->owner->name, $table->list->toArray()['data'][$key]['owner']);
         }
@@ -169,7 +169,7 @@ class SortTest extends LaravelTableTestCase
             })
             ->request($customRequest);
         $table->column('owner')->sortable();
-        $table->render();
+        $table->configure();
         $paginatedCompanies = Company::join('users_test', 'users_test.id', '=', 'companies_test.owner_id')
             ->orderBy('users_test.name', 'desc')
             ->select('companies_test.*')
@@ -186,8 +186,8 @@ class SortTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(
             'href="http://localhost/users/index?' . $table->rowsField . '=20&amp;' . $table->sortByField . '=name&amp;'
             . $table->sortDirField . '=desc"',

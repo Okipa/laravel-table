@@ -27,7 +27,7 @@ class AppendsTest extends LaravelTableTestCase
             ->rowsNumber(10)
             ->appends($appended);
         $table->column('name');
-        $table->render();
+        $table->configure();
         $html = $table->list->links()->toHtml();
         $this->assertStringContainsString('test=testValue', $html);
     }
@@ -49,8 +49,8 @@ class AppendsTest extends LaravelTableTestCase
             ->request($customRequest)
             ->appends($appended);
         $table->column('name')->sortable()->searchable();
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $sortingHttpArguments = htmlspecialchars(http_build_query(array_merge([
             $table->rowsField => 20,
             $table->searchField => 'test',

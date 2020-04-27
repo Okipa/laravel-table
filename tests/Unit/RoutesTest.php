@@ -16,7 +16,7 @@ class RoutesTest extends LaravelTableTestCase
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » method to '
             . 'declare it.');
         $table = (new Table)->model(User::class);
-        $table->render();
+        $table->configure();
     }
 
     public function testSetRoutesSuccess()
@@ -115,8 +115,8 @@ class RoutesTest extends LaravelTableTestCase
             'create' => ['name' => 'users.create'],
         ])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->toHtml();
         $this->assertStringContainsString('creation-container', $html);
         $this->assertStringContainsString('href="http://localhost/users/create"', $html);
         $this->assertStringContainsString('title="Create"', $html);
@@ -127,8 +127,8 @@ class RoutesTest extends LaravelTableTestCase
         $this->routes(['users'], ['index', 'create']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->toHtml();
         $this->assertStringNotContainsString('<div class="creation-container', $html);
         $this->assertStringNotContainsString('href="http://localhost/users/create"', $html);
         $this->assertStringNotContainsString('title="Add"', $html);
@@ -143,8 +143,8 @@ class RoutesTest extends LaravelTableTestCase
             'edit'  => ['name' => 'users.edit'],
         ])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringContainsString('edit-' . $user->id, $html);
             $this->assertStringContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
@@ -157,8 +157,8 @@ class RoutesTest extends LaravelTableTestCase
         $this->routes(['users'], ['index', 'edit']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="edit-' . $user->id, $html);
             $this->assertStringNotContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
@@ -174,8 +174,8 @@ class RoutesTest extends LaravelTableTestCase
             'destroy' => ['name' => 'users.destroy'],
         ])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringContainsString('destroy-' . $user->id, $html);
             $this->assertStringContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
@@ -188,8 +188,8 @@ class RoutesTest extends LaravelTableTestCase
         $this->routes(['users'], ['index', 'destroy']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="destroy-' . $user->id, $html);
             $this->assertStringNotContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
@@ -205,8 +205,8 @@ class RoutesTest extends LaravelTableTestCase
             'show'  => ['name' => 'users.show'],
         ])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringContainsString('show-' . $user->id, $html);
             $this->assertStringContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
@@ -219,8 +219,8 @@ class RoutesTest extends LaravelTableTestCase
         $this->routes(['users'], ['index', 'show']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="show-' . $user->id, $html);
             $this->assertStringNotContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
@@ -257,8 +257,8 @@ class RoutesTest extends LaravelTableTestCase
             'show'    => ['name' => 'user.show'],
         ])->model(User::class);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '"', $html);
@@ -294,8 +294,8 @@ class RoutesTest extends LaravelTableTestCase
             'show'    => ['name' => 'user.show'],
         ])->model(User::class);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '"', $html);
@@ -331,8 +331,8 @@ class RoutesTest extends LaravelTableTestCase
             'show'    => ['name' => 'user.show', 'params' => ['parentId' => 11, 'childId' => 33]],
         ])->model(User::class);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(
             'action="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html
@@ -377,8 +377,8 @@ class RoutesTest extends LaravelTableTestCase
             'show'    => ['name' => 'user.show', 'params' => ['parent' => 11, 'child' => 33]],
         ])->model(User::class);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(
             'action="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html

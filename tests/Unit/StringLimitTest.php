@@ -23,7 +23,7 @@ class StringLimitTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email')->stringLimit(2);
-        $html = $table->render();
+        $html = $table->toHtml();
         $this->assertStringContainsString(Str::limit($user->email, 2), $html);
     }
 }

@@ -36,8 +36,8 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->searchable();
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringNotContainsString('rows-number-selection', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString(
@@ -59,8 +59,8 @@ class RowsNumberTest extends LaravelTableTestCase
             ->rowsNumberSelectionActivation(false);
         $table->column('name')->searchable();
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringNotContainsString('rows-number-selection', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString(
@@ -82,8 +82,8 @@ class RowsNumberTest extends LaravelTableTestCase
             ->rowsNumberSelectionActivation();
         $table->column('name');
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('rows-number-selection', $html);
         $this->assertStringContainsString('type="hidden" name="search"', $html);
         $this->assertStringContainsString(
@@ -103,8 +103,8 @@ class RowsNumberTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('value="15"', $html);
     }
 
@@ -116,8 +116,8 @@ class RowsNumberTest extends LaravelTableTestCase
             ->rowsNumber(15);
         $table->column('name');
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('value="15"', $html);
     }
 
@@ -131,7 +131,7 @@ class RowsNumberTest extends LaravelTableTestCase
             ->request($customRequest);
         $table->column('name')->sortable(true, 'asc');
         $table->column('email');
-        $table->render();
+        $table->configure();
         $this->assertEquals(
             App(User::class)->orderBy('name', 'asc')->paginate(10)->toArray()['data'],
             $table->list->toArray()['data']
@@ -148,8 +148,8 @@ class RowsNumberTest extends LaravelTableTestCase
             ->rowsNumber(null);
         $table->column('name');
         $table->column('email');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('value=""', $html);
         foreach ($users as $user) {
             $this->assertStringContainsString($user->name, $html);

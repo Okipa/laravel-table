@@ -84,8 +84,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->containerClasses($classes);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString('<div class="table-container ' . implode(' ', $classes) . '">', $html);
     }
 
@@ -98,8 +98,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->tableClasses($classes);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
 
         $this->assertStringContainsString('<table class="table ' . implode(' ', $classes) . '">', $html);
     }
@@ -113,8 +113,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->trClasses($classes);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertEquals(substr_count($html, '<tr '), substr_count($html, implode(' ', $classes)));
     }
 
@@ -127,8 +127,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->thClasses($classes);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertEquals(substr_count($html, '<th '), substr_count($html, implode(' ', $classes)));
     }
 
@@ -141,8 +141,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->tdClasses($classes);
         $table->column('name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertEquals(substr_count($html, '<td '), substr_count($html, implode(' ', $classes)));
     }
 
@@ -153,8 +153,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->classes($classes);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
 
@@ -167,8 +167,8 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->result()->classes($classes);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, implode(' ', $classes)));
     }
 
@@ -188,13 +188,13 @@ class ClassesDefinitionTest extends LaravelTableTestCase
         ])->rowsConditionalClasses($closure, $classes);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
+        $table->configure();
         foreach ($table->list->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->conditionnalClasses, $classes)
                 : $this->assertEmpty($user->conditionnalClasses);
         }
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
