@@ -9,59 +9,41 @@ use InvalidArgumentException;
 /** @SuppressWarnings(PHPMD.TooManyFields) */
 class Column
 {
-    /** @property \Okipa\LaravelTable\Table $table */
-    public $table;
+    public Table $table;
 
-    /** @property string $databaseDefaultTable */
-    public $databaseDefaultTable;
+    public string $databaseDefaultTable;
 
-    /** @property string $databaseSearchedTable */
-    public $databaseSearchedTable;
+    public string $databaseSearchedTable;
 
-    /** @property string $databaseDefaultColumn */
-    public $databaseDefaultColumn;
+    public string $databaseDefaultColumn;
 
-    /** @property string $databaseSearchedColumns */
-    public $databaseSearchedColumns;
+    public array $databaseSearchedColumns;
 
-    /** @property bool $isSortable */
-    public $isSortable;
+    public bool $isSortable;
 
-    /** @property string $title */
-    public $title;
+    public string $title;
 
-    /** @property string $dateTimeFormat */
-    public $dateTimeFormat;
+    public string $dateTimeFormat;
 
-    /** @property array $buttonClasses */
-    public $buttonClasses;
+    public array $buttonClasses;
 
-    /** @property int $stringLimit */
-    public $stringLimit;
+    public int $stringLimit;
 
-    /** @property string $url */
-    public $url;
+    public string $url;
 
-    /** @property \Closure $valueClosure */
-    public $valueClosure;
+    public Closure $valueClosure;
 
-    /** @property \Closure $htmlClosure */
-    public $htmlClosure;
+    public Closure $htmlClosure;
 
-    /** @property string $prepend */
-    public $prepend;
+    public string $prepend;
 
-    /** @property string $append */
-    public $append;
+    public string $append;
 
-    /** @property bool $displayPrependEvenIfNoValue */
-    public $displayPrependEvenIfNoValue;
+    public bool $displayPrependEvenIfNoValue;
 
-    /** @property bool $displayAppendEvenIfNoValue */
-    public $displayAppendEvenIfNoValue;
+    public bool $displayAppendEvenIfNoValue;
 
-    /** @property array $classes */
-    public $classes;
+    public array $classes;
 
     /**
      * \Okipa\LaravelTable\Column constructor.
@@ -120,7 +102,7 @@ class Column
      *
      * @throws \ErrorException
      */
-    protected function sortByDefault($sortDirection = 'asc')
+    protected function sortByDefault(string $sortDirection = 'asc')
     {
         if ($this->table->sortBy || $this->table->sortDir) {
             $errorMessage = 'The table is already sorted by the « ' . $this->table->sortBy

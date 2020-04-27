@@ -6,18 +6,12 @@ use Closure;
 
 class Result
 {
-    /** @property string $title */
-    public $title;
+    public string $title;
 
-    /** @property \Closure $htmlClosure */
-    public $htmlClosure;
+    public Closure $htmlClosure;
 
-    /** @property array $classes */
-    public $classes;
+    public array $classes;
 
-    /**
-     * \Okipa\LaravelTable\Column constructor.
-     */
     public function __construct()
     {
         $this->classes = config('laravel-table.classes.results');

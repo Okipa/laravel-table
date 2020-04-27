@@ -6,7 +6,9 @@ use Closure;
 use ErrorException;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -24,54 +26,36 @@ class Table implements Htmlable
     use TableColumnsValidationChecks;
     use TableInteractions;
 
-    /** @property string $identifier */
-    public $identifier;
+    public string $identifier;
 
-    /** @property \Illuminate\Database\Eloquent\Model $model */
-    public $model;
+    public Model $model;
 
-    /** @property bool $rowsNumberSelectionActivation */
-    public $rowsNumberSelectionActivation;
+    public bool $rowsNumberSelectionActivation;
 
-    /** @property \Illuminate\Support\Collection $sortableColumns */
-    public $sortableColumns;
+    public Collection $sortableColumns;
 
-    /** @property \Illuminate\Support\Collection $searchableColumns */
-    public $searchableColumns;
+    public Collection $searchableColumns;
 
-    /** @property \Illuminate\Http\Request $request */
-    public $request;
+    public Request $request;
 
-    /** @property array $routes */
-    public $routes = [];
+    public array $routes = [];
 
-    /** @property \Illuminate\Support\Collection $columns */
-    public $columns;
+    public Collection $columns;
 
-    /** @property \Closure $queryClosure */
-    public $queryClosure;
+    public Closure $queryClosure;
 
-    /** @property \Illuminate\Support\Collection $disableRows */
-    public $disableRows;
+    public Collection $disableRows;
 
-    /** @property \Illuminate\Pagination\LengthAwarePaginator $list */
-    public $list;
+    public LengthAwarePaginator $list;
 
-    /** @property \Closure $destroyConfirmationClosure */
-    public $destroyConfirmationClosure;
+    public Closure $destroyConfirmationClosure;
 
-    /** @property array $appendedValues */
-    public $appendedValues = [];
+    public array $appendedValues = [];
 
-    /** @property array $appendedHiddenFields */
-    public $appendedHiddenFields = [];
+    public array $appendedHiddenFields = [];
 
-    /** @property \Illuminate\Support\Collection $results */
-    public $results;
+    public Collection $results;
 
-    /**
-     * Table constructor.
-     */
     public function __construct()
     {
         $this->initializeDefaultComponents();

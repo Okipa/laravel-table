@@ -8,29 +8,21 @@ use Okipa\LaravelTable\Column;
 
 trait TableInteractions
 {
-    /** @property int $rows */
-    public $rows;
+    public int $rows;
 
-    /** @property bool $rowsField */
-    public $rowsField = 'rows';
+    public string $rowsField = 'rows';
 
-    /** @property string $sortBy */
-    public $sortBy;
+    public string $sortBy;
 
-    /** @property string $sortByField */
-    public $sortByField = 'sort_by';
+    public string $sortByField = 'sort_by';
 
-    /** @property string $sortDir */
-    public $sortDir;
+    public string $sortDir;
 
-    /** @property string $sortDirField */
-    public $sortDirField = 'sort_dir';
+    public string $sortDirField = 'sort_dir';
 
-    /** @property string $search */
-    public $search;
+    public string $search;
 
-    /** @property string $searchField */
-    public $searchField = 'search';
+    public string $searchField = 'search';
 
     /**
      * Redefine table interaction fields from identifier.

@@ -8,26 +8,17 @@ use Okipa\LaravelTable\Table;
 
 trait TableClassesCustomizations
 {
-    /** @property array $containerClasses */
-    public $containerClasses;
+    public array $containerClasses;
 
-    /** @property array $tableClasses */
-    public $tableClasses;
+    public array $tableClasses;
 
-    /** @property array $trClasses */
-    public $trClasses;
+    public array $trClasses;
 
-    /** @property array $thClasses */
-    public $thClasses;
+    public array $thClasses;
 
-    /** @property array $tdClasses */
-    public $tdClasses;
+    public array $tdClasses;
 
-    /** @property array $resultClasses */
-    public $resultClasses;
-
-    /** @property array $rowsConditionalClasses */
-    public $rowsConditionalClasses;
+    public Collection $rowsConditionalClasses;
 
     /**
      * Override default table container classes.
@@ -109,21 +100,6 @@ trait TableClassesCustomizations
     }
 
     /**
-     * Override default table result cells classes.
-     *
-     * @param array $resultClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
-    public function resultClasses(array $resultClasses): Table
-    {
-        $this->resultClasses = $resultClasses;
-
-        /** @var Table $this */
-        return $this;
-    }
-
-    /**
      * Set rows classes when the given conditions are respected.
      * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Model $model.
      *
@@ -134,10 +110,7 @@ trait TableClassesCustomizations
      */
     public function rowsConditionalClasses(Closure $rowClassesClosure, array $rowClasses): Table
     {
-        $this->rowsConditionalClasses->push([
-            'closure' => $rowClassesClosure,
-            'classes' => $rowClasses,
-        ]);
+        $this->rowsConditionalClasses->push(['closure' => $rowClassesClosure, 'classes' => $rowClasses]);
 
         /** @var Table $this */
         return $this;
@@ -155,7 +128,6 @@ trait TableClassesCustomizations
         $this->trClasses = config('laravel-table.classes.tr');
         $this->thClasses = config('laravel-table.classes.th');
         $this->tdClasses = config('laravel-table.classes.td');
-        $this->resultClasses = config('laravel-table.classes.result');
         $this->rowsConditionalClasses = new Collection();
     }
 }

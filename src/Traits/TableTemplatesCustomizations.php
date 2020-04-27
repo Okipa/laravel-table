@@ -6,29 +6,21 @@ use Okipa\LaravelTable\Table;
 
 trait TableTemplatesCustomizations
 {
-    /** @property string $tableTemplatePath */
-    public $tableTemplatePath;
+    public string $tableTemplatePath;
 
-    /** @property string $theadTemplatePath */
-    public $theadTemplatePath;
+    public string $theadTemplatePath;
 
-    /** @property string $tbodyTemplatePath */
-    public $tbodyTemplatePath;
+    public string $tbodyTemplatePath;
 
-    /** @property string $showTemplatePath */
-    public $showTemplatePath;
+    public string $showTemplatePath;
 
-    /** @property string $editTemplatePath */
-    public $editTemplatePath;
+    public string $editTemplatePath;
 
-    /** @property string $destroyTemplatePath */
-    public $destroyTemplatePath;
+    public string $destroyTemplatePath;
 
-    /** @property string $resultsComponentPath */
-    public $resultsComponentPath;
+    public string $resultsComponentPath;
 
-    /** @property string $tfootComponentPath */
-    public $tfootComponentPath;
+    public string $tfootComponentPath;
 
     /**
      * Set a custom template path for the table component.
