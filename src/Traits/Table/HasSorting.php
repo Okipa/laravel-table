@@ -14,29 +14,9 @@ trait HasSorting
 
     protected ?string $sortDirValue = null;
 
-    public function getSortByField(): string
-    {
-        return $this->sortByField;
-    }
-
-    public function getSortDirField(): string
-    {
-        return $this->sortDirField;
-    }
-
-    public function getSortByValue(): ?string
-    {
-        return $this->sortByValue;
-    }
-
     public function defineSortByValue(string $sortByValue): void
     {
         $this->sortByValue = $sortByValue;
-    }
-
-    public function getSortDirValue(): ?string
-    {
-        return $this->sortDirValue;
     }
 
     public function definedSortDirValue(string $sortDirValue): void
@@ -46,12 +26,58 @@ trait HasSorting
 
     protected function applySortingOnQuery(Builder $query): void
     {
-        $this->sortByValue = $this->getRequest()->get($this->getSortByField())
-            ?: ($this->getSortByValue() ?: optional($this->getSortableColumns()->first())->getDbField());
-        $this->sortDirValue = $this->getRequest()->get($this->getSortDirField())
-            ?: ($this->getSortDirValue() ?: 'asc');
+        $this->sortByValue = $this->getProcessedSortByValue();
+        $this->sortDirValue = $this->getProcessedSortDirValue();
         if ($this->getSortByValue() && $this->getSortDirValue()) {
             $query->orderBy($this->getSortByValue(), $this->getSortDirValue());
         }
+    }
+
+    protected function getProcessedSortByValue(): ?string
+    {
+        $requestSortByField = $this->getRequest()->get($this->getSortByField());
+        if ($requestSortByField) {
+            return $requestSortByField;
+        }
+        if ($this->getSortByValue()) {
+            return $this->getSortByValue();
+        }
+
+        return $this->getSortableColumns()->isNotEmpty()
+            ? $this->getSortableColumns()->first()->getDbField()
+            : null;
+    }
+
+    protected function getProcessedSortDirValue(): string
+    {
+        $requestSortDirField = $this->getRequest()->get($this->getSortDirField());
+        if ($requestSortDirField) {
+            return $requestSortDirField;
+        }
+        if ($this->getSortDirValue()) {
+            return $this->getSortDirValue();
+        }
+
+        return 'asc';
+    }
+
+    public function getSortByField(): string
+    {
+        return $this->sortByField;
+    }
+
+    public function getSortByValue(): ?string
+    {
+        return $this->sortByValue;
+    }
+
+    public function getSortDirField(): string
+    {
+        return $this->sortDirField;
+    }
+
+    public function getSortDirValue(): ?string
+    {
+        return $this->sortDirValue;
     }
 }

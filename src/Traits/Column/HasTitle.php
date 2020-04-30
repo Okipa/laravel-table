@@ -8,6 +8,8 @@ trait HasTitle
 {
     protected ?string $title;
 
+    abstract public function getDbField(): ?string;
+
     protected function initializeTitle(): void
     {
         $this->title = $this->getDbField() ? (string) __('validation.attributes.' . $this->getDbField()) : null;
