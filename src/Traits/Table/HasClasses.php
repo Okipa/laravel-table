@@ -152,7 +152,7 @@ trait HasClasses
         $this->rowsConditionalClasses = new Collection();
     }
 
-    protected function addClassesToRow(Model $model)
+    protected function addClassesToRow(Model $model): void
     {
         $this->getRowsConditionalClasses()->each(function ($row) use ($model) {
             $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;

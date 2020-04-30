@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\Traits\Table;
 
+use Closure;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,26 @@ trait HasPagination
     protected ?array $appendedValues = [];
 
     protected ?array $appendedHiddenFields = [];
+
+    abstract public function getRowsNumberValue(): ?int;
+
+    abstract public function getRowsNumberField(): string;
+
+    abstract public function getSearchField(): string;
+
+    abstract public function getSortByField(): string;
+
+    abstract public function getSortByValue(): ?string;
+
+    abstract public function getSortDirField(): string;
+
+    abstract public function getSortDirValue(): ?string;
+
+    abstract protected function addClassesToRow(Model $model): void;
+
+    abstract protected function disableRow(Model $model): void;
+
+    abstract public function getDestroyConfirmationClosure(): ?Closure;
 
     /**
      * Add an array of arguments to append to the paginator and to the following table actions : row number selection,
