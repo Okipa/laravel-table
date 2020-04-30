@@ -20,6 +20,10 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 | ^5.8 | ^7.2 | ^1.3 |
 | ^5.5 | ^7.1 | ^1.0 |
 
+## Upgrade guide
+
+* [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
+
 ## Usage
 
 Create your table class with the following command:
