@@ -6,6 +6,10 @@ use Okipa\LaravelTable\Table;
 
 abstract class AbstractTable
 {
+    /**
+     * @return \Okipa\LaravelTable\Table
+     * @throws \ErrorException
+     */
     public function __invoke(): Table
     {
         $table = $this->table();
