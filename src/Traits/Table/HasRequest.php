@@ -2,19 +2,19 @@
 
 namespace Okipa\LaravelTable\Traits\Table;
 
-use Illuminate\Http\Request as IlluminateRequest;
+use Illuminate\Http\Request;
 use Okipa\LaravelTable\Table;
 
 trait HasRequest
 {
-    protected IlluminateRequest $request;
+    protected Request $request;
 
     public function initializeRequest(): void
     {
         $this->request = request();
     }
 
-    public function request(IlluminateRequest $request): Table
+    public function request(Request $request): Table
     {
         $this->request = $request;
 
@@ -22,7 +22,7 @@ trait HasRequest
         return $this;
     }
 
-    public function getRequest(): IlluminateRequest
+    public function getRequest(): Request
     {
         return $this->request;
     }

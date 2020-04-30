@@ -3,6 +3,8 @@
 namespace Okipa\LaravelTable\Traits\Table;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Column;
 
 trait HasSearching
@@ -10,6 +12,10 @@ trait HasSearching
     protected string $searchField = 'search';
 
     protected ?string $searchValue = null;
+
+    abstract public function getRequest(): Request;
+
+    abstract public function getSearchableColumns(): Collection;
 
     protected function applySearchingOnQuery(Builder $query): void
     {

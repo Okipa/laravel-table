@@ -2,6 +2,8 @@
 
 namespace Okipa\LaravelTable\Traits\Column;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Column;
 
 trait IsSearchable
@@ -9,6 +11,10 @@ trait IsSearchable
     protected ?string $dbSearchedTable;
 
     protected array $dbSearchedFields;
+
+    abstract public function getRequest(): Request;
+
+    abstract public function getSortableColumns(): Collection;
 
     /**
      * Make the table column searchable.
