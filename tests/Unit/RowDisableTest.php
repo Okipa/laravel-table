@@ -106,7 +106,7 @@ class RowDisableTest extends LaravelTableTestCase
     public function testWithNoDisableLinesHtml()
     {
         $classes = ['test-disabled-default-class'];
-        config()->set('laravel-table.value.disabled_line.class', $classes);
+        config()->set('laravel-table.behavior.disabled_line.class', $classes);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
         $table = (new Table)->model(User::class)

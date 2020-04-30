@@ -14,7 +14,7 @@ trait HasRowsNumberDefinition
 
     /**
      * Override the config default number of rows displayed on the table.
-     * The default number of displayed rows is defined in the config('laravel-table.value.rowsNumber') config value.
+     * The default number of displayed rows is defined in the config('laravel-table.behavior.rows_number') config value.
      *
      * @param int|null $rows
      *
@@ -42,7 +42,7 @@ trait HasRowsNumberDefinition
      * Override the default rows number selection activation status.
      * Calling this method displays a rows number input that enable the user to choose how much rows to show.
      * The default rows number selection activation status is defined in the
-     * config('laravel-table.value.activateRowsNumberDefinition') config value.
+     * config('laravel-table.behavior.activate_rows_number_definition') config value.
      *
      * @param bool $activate
      *
@@ -63,7 +63,7 @@ trait HasRowsNumberDefinition
 
     protected function initializeRowsNumberDefinition()
     {
-        $this->rowsNumberValue = config('laravel-table.value.rowsNumber');
-        $this->rowsNumberDefinitionActivated = (bool) config('laravel-table.value.activateRowsNumberDefinition');
+        $this->rowsNumberValue = config('laravel-table.behavior.rows_number');
+        $this->rowsNumberDefinitionActivated = (bool) config('laravel-table.behavior.activate_rows_number_definition');
     }
 }

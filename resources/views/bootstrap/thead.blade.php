@@ -17,7 +17,7 @@
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            {!! config('laravel-table.icon.rowsNumber') !!}
+                                            {!! config('laravel-table.icon.rows_number') !!}
                                         </span>
                                     </div>
                                     <input class="form-control"
@@ -104,10 +104,10 @@
                        title="{{ $column->getTitle() }}">
                         @if($table->getRequest()->get($table->getSortByField()) === $column->getDbField()
                             && $table->getRequest()->get($table->getSortDirField()) === 'asc')
-                            <span class="sort asc">{!! config('laravel-table.icon.sortAsc') !!}</span>
+                            <span class="sort asc">{!! config('laravel-table.icon.sort_asc') !!}</span>
                         @elseif($table->getRequest()->get($table->getSortByField()) === $column->getDbField()
                             && $table->getRequest()->get($table->getSortDirField()) === 'desc')
-                            <span class="sort desc">{!! config('laravel-table.icon.sortDesc') !!}</span>
+                            <span class="sort desc">{!! config('laravel-table.icon.sort_desc') !!}</span>
                         @else
                             <span class="sort">{!! config('laravel-table.icon.sort') !!}</span>
                         @endif

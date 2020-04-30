@@ -3,7 +3,7 @@
 return [
 
     /*
-     * Default classes for each table part.
+     * Set the default classes for each part of the table.
      */
     'classes' => [
         'container' => ['table-responsive'],
@@ -16,13 +16,13 @@ return [
     ],
 
     /*
-     * Table action icons are defined here.
+     * Set all the action icons that are used on the table templates.
      */
     'icon' => [
-        'rowsNumber' => '<i class="fas fa-list"></i>',
+        'rows_number' => '<i class="fas fa-list"></i>',
         'sort' => '<i class="fas fa-sort fa-fw"></i>',
-        'sortAsc' => '<i class="fas fa-sort-up fa-fw"></i>',
-        'sortDesc' => '<i class="fas fa-sort-down fa-fw"></i>',
+        'sort_asc' => '<i class="fas fa-sort-up fa-fw"></i>',
+        'sort_desc' => '<i class="fas fa-sort-down fa-fw"></i>',
         'search' => '<i class="fas fa-search"></i>',
         'validate' => '<i class="fas fa-check"></i>',
         'info' => '<i class="fas fa-info-circle fa-fw"></i>',
@@ -34,15 +34,15 @@ return [
     ],
 
     /*
-     * Default table configuration.
+     * Set the table default behavior.
      */
-    'value' => [
-        'rowsNumber' => 20,
-        'activateRowsNumberDefinition' => true,
+    'behavior' => [
+        'rows_number' => 20,
+        'activate_rows_number_definition' => true,
     ],
 
     /*
-     * Default template path for each table part.
+     * Set the default template path for each part of the table.
      */
     'template' => [
         'table' => 'bootstrap.table',

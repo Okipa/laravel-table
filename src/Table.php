@@ -98,7 +98,7 @@ class Table implements Htmlable
         ]);
         if ($validator->fails()) {
             $this->getRequest()->merge([
-                $this->getRowsNumberField() => $this->getRowsNumberValue() ?? config('laravel-table.value.rows'),
+                $this->getRowsNumberField() => $this->getRowsNumberValue() ?? config('laravel-table.behavior.rows'),
                 $this->getSearchField() => null,
                 $this->getSortByField() => $this->getSortByValue(),
                 $this->getSortDirField() => $this->getSortDirValue(),

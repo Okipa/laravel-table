@@ -31,7 +31,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testDeactivateRowsNumberDefinitionFromConfigHtml()
     {
-        config()->set('laravel-table.value.activateRowsNumberDefinition', false);
+        config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->searchable();
@@ -52,7 +52,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testDeactivateRowsNumberDefinitionFromMethodHtml()
     {
-        config()->set('laravel-table.value.activateRowsNumberDefinition', true);
+        config()->set('laravel-table.behavior.activate_rows_number_definition', true);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -75,7 +75,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testActivateRowsNumberSelectionHtml()
     {
-        config()->set('laravel-table.value.activateRowsNumberDefinition', false);
+        config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -98,7 +98,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testSetCustomRowsNumberFromConfigHtml()
     {
-        config()->set('laravel-table.value.rowsNumber', 15);
+        config()->set('laravel-table.behavior.rows_number', 15);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
@@ -140,7 +140,7 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testSetUnlimitedRowsNumberHtml()
     {
-        config()->set('laravel-table.value.rowsNumber', 5);
+        config()->set('laravel-table.behavior.rows_number', 5);
         $users = $this->createMultipleUsers(20);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)

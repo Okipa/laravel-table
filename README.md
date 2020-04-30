@@ -456,7 +456,7 @@ class UsersTable extends AbstractTable
 <h3 id="table-rowsNumber">->rowsNumber()</h3>
 
 > Override the config default number of rows displayed on the table.  
-> The default number of displayed rows is defined in the `config('laravel-table.value.rowsNumber')` config value.  
+> The default number of displayed rows is defined in the `config('laravel-table.behavior.rows_number')` config value.  
 > Set `false` to display all the models contained in database.
 
 **Note:**
@@ -476,7 +476,7 @@ class UsersTable extends AbstractTable
 
 > Override the default rows number selection activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number selection activation status is managed by the `config('laravel-table.value.activateRowsNumberDefinition')` value.
+> The default rows number selection activation status is managed by the `config('laravel-table.behavior.activate_rows_number_definition')` value.
 
 **Note:**`
 
