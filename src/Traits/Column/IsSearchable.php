@@ -23,10 +23,10 @@ trait IsSearchable
      */
     public function searchable(string $dbSearchedTable = null, array $dbSearchedFields = []): Column
     {
-        /** @var \Okipa\LaravelTable\Column $this */
-        $this->getTable()->addToSearchableColumns($this);
         $this->dbSearchedTable = $dbSearchedTable;
         $this->dbSearchedFields = $dbSearchedFields;
+        /** @var \Okipa\LaravelTable\Column $this */
+        $this->getTable()->addToSearchableColumns($this);
 
         /** @var \Okipa\LaravelTable\Column $this */
         return $this;

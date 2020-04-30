@@ -30,7 +30,6 @@ trait HasColumns
         $this->checkModelIsDefined();
         /** @var \Okipa\LaravelTable\Table $this */
         $column = new Column($this, $dbField);
-        /** @var \Okipa\LaravelTable\Table $this */
         $this->columns->push($column);
 
         return $column;
