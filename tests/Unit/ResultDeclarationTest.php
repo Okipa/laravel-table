@@ -15,7 +15,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class);
         $table->result()->title('Test');
         $this->assertEquals($table->getResults()->count(), 1);
-        $this->assertEquals($table->getResults()->first()->title, 'Test');
+        $this->assertEquals($table->getResults()->first()->getTitle(), 'Test');
     }
 
     public function testSetResultsHtml()
@@ -30,7 +30,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             return $displayedList->sum('turnover');
         });
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('Result !', $html);
         $this->assertStringContainsString((string) $companies->sum('turnover'), $html);
     }
@@ -52,7 +52,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             return (new Company)->all()->sum('turnover');
         });
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('Selected turnover', $html);
         $this->assertStringContainsString((string) $companies->sum('turnover'), $html);
         $this->assertStringContainsString('Total turnover', $html);
@@ -69,7 +69,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('turnover');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString('result', $html);
     }
 
@@ -84,7 +84,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             return $displayedList->sum('turnover');
         });
         $table->configure();
-        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, '<td'));
         $this->assertStringNotContainsString('colspan', $html);
     }
@@ -101,7 +101,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             return $displayedList->sum('turnover');
         });
         $table->configure();
-        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, '<td'));
         $this->assertStringContainsString('colspan="2"', $html);
     }
@@ -122,7 +122,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             return $displayedList->sum('turnover');
         });
         $table->configure();
-        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, '<td'));
         $this->assertStringContainsString('colspan="4"', $html);
     }

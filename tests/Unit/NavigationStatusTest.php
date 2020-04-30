@@ -16,7 +16,7 @@ class NavigationStatusTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->configure();
         $this->assertEquals(
-            $table->navigationStatus(),
+            $table->getNavigationStatus(),
             __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
                 'start' => 1,
                 'stop' => 10,
@@ -31,7 +31,7 @@ class NavigationStatusTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->toHtml();
-        $this->assertStringContainsString($table->navigationStatus(), $html);
+        $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString($table->getNavigationStatus(), $html);
     }
 }

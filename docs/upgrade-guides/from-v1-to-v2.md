@@ -1,14 +1,22 @@
 # Upgrade from v1 to v2
 
+The v2 is a major rewrite of a big part of the package.
+
+Follow the steps below to upgrade the package.
+
 ## Config changes
 
-Some small config changes have been made. You should [re-publish it](../README.md#configuration).
+Some config changes have been made. If you customized it, you should [re-publish it](../../README.md#configuration) and reapply your changes.
 
-## Translations
+## Translations removed
 
 The translations files have been removed and will not be used anymore.
 
-Translations have now to be handled [this way](../README.md#translations).
+Translations have now to be handled [this way](../../README.md#translations).
+
+## Template changes
+
+Some template changes have been made. If you customized them, you should [re-publish them](../../README.md#templates) and reapply your changes.
 
 ## Architecture and usage changes
 
@@ -20,6 +28,15 @@ To follow the package upgrade, you should execute the following steps for each t
 * Move your table configuration in the created table class.
 * Call your table configuration like following (in your controller for example): `$table = new UsersTable;` and pass it to the view.
 * Display your table in your view as following: `$table()` => :warning: do not display it as before just with `$table`, this won't work.
+
+## API changes
+
+There are small changes in the API you will have to report in your code:
+
+* Rename the each use of `->icon(` by `->prependsHtml(`.
+* Rename the each use of `->prepend(` by `->prependsHtml(`.
+* Rename the each use of `->append(` by `->appendsHtml(`.
+* Rename the each use of `->rowsNumberSelectionActivation(` by `->activateRowsNumberDefinition(`.
 
 ## See all changes
 

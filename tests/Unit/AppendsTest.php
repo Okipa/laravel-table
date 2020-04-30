@@ -28,7 +28,7 @@ class AppendsTest extends LaravelTableTestCase
             ->appends($appended);
         $table->column('name');
         $table->configure();
-        $html = $table->getPaginatedList()->links()->toHtml();
+        $html = $table->getPaginator()->links()->toHtml();
         $this->assertStringContainsString('test=testValue', $html);
     }
 
@@ -38,10 +38,10 @@ class AppendsTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $appended = ['test' => 'testValue', 'array' => ['value1', 'value2']];
         $customRequest = (new Request)->merge([
-            (new Table)->rowsField => 20,
-            (new Table)->searchField => 'test',
-            (new Table)->sortByField => 'name',
-            (new Table)->sortDirField => 'desc',
+            (new Table)->getRowsNumberField() => 20,
+            (new Table)->getSearchField() => 'test',
+            (new Table)->getSortByField() => 'name',
+            (new Table)->getSortDirField() => 'desc',
         ]);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -50,18 +50,18 @@ class AppendsTest extends LaravelTableTestCase
             ->appends($appended);
         $table->column('name')->sortable()->searchable();
         $table->configure();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
         $sortingHttpArguments = htmlspecialchars(http_build_query(array_merge([
-            $table->rowsField => 20,
-            $table->searchField => 'test',
-            $table->sortByField => 'name',
-            $table->sortDirField => 'asc',
+            $table->getRowsNumberField() => 20,
+            $table->getSearchField() => 'test',
+            $table->getSortByField() => 'name',
+            $table->getSortDirField() => 'asc',
         ], $appended)));
         $searchCancelingHttpArguments = htmlspecialchars(http_build_query(array_merge([
-            $table->rowsField => 20,
-            $table->searchField => null,
-            $table->sortByField => 'name',
-            $table->sortDirField => 'desc',
+            $table->getRowsNumberField() => 20,
+            $table->getSearchField() => null,
+            $table->getSortByField() => 'name',
+            $table->getSortDirField() => 'desc',
         ], $appended)));
         $this->assertEquals(1, substr_count($html, $sortingHttpArguments));
         $this->assertEquals(1, substr_count($html, $searchCancelingHttpArguments));

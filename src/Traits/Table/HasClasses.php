@@ -1,24 +1,25 @@
 <?php
 
-namespace Okipa\LaravelTable\Traits;
+namespace Okipa\LaravelTable\Traits\Table;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Table;
 
-trait TableClassesCustomizations
+trait HasClasses
 {
-    public array $containerClasses;
+    protected array $containerClasses;
 
-    public array $tableClasses;
+    protected array $tableClasses;
 
-    public array $trClasses;
+    protected array $trClasses;
 
-    public array $thClasses;
+    protected array $thClasses;
 
-    public array $tdClasses;
+    protected array $tdClasses;
 
-    public Collection $rowsConditionalClasses;
+    protected Collection $rowsConditionalClasses;
 
     /**
      * Override default table container classes.
@@ -32,8 +33,13 @@ trait TableClassesCustomizations
     {
         $this->containerClasses = $containerClasses;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getContainerClasses(): array
+    {
+        return $this->containerClasses;
     }
 
     /**
@@ -48,8 +54,13 @@ trait TableClassesCustomizations
     {
         $this->tableClasses = $tableClasses;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getTableClasses(): array
+    {
+        return $this->tableClasses;
     }
 
     /**
@@ -64,8 +75,13 @@ trait TableClassesCustomizations
     {
         $this->trClasses = $trClasses;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getTrClasses(): array
+    {
+        return $this->trClasses;
     }
 
     /**
@@ -80,8 +96,13 @@ trait TableClassesCustomizations
     {
         $this->thClasses = $thClasses;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getThClasses(): array
+    {
+        return $this->thClasses;
     }
 
     /**
@@ -95,8 +116,13 @@ trait TableClassesCustomizations
     {
         $this->tdClasses = $tdClasses;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getTdClasses(): array
+    {
+        return $this->tdClasses;
     }
 
     /**
@@ -112,15 +138,10 @@ trait TableClassesCustomizations
     {
         $this->rowsConditionalClasses->push(['closure' => $rowClassesClosure, 'classes' => $rowClasses]);
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    /**
-     * Initialize the default table classes from the config values.
-     *
-     * @return void
-     */
     protected function initializeTableDefaultClasses(): void
     {
         $this->containerClasses = config('laravel-table.classes.container');
@@ -129,5 +150,17 @@ trait TableClassesCustomizations
         $this->thClasses = config('laravel-table.classes.th');
         $this->tdClasses = config('laravel-table.classes.td');
         $this->rowsConditionalClasses = new Collection();
+    }
+
+    protected function addClassesToRow(Model $model)
+    {
+        $this->getRowsConditionalClasses()->each(function ($row) use ($model) {
+            $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;
+        });
+    }
+
+    public function getRowsConditionalClasses(): Collection
+    {
+        return $this->rowsConditionalClasses;
     }
 }

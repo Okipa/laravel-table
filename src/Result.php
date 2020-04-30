@@ -6,11 +6,11 @@ use Closure;
 
 class Result
 {
-    public string $title;
+    public ?string $title = null;
 
-    public Closure $htmlClosure;
+    public ?Closure $customHtmlClosure = null;
 
-    public array $classes;
+    public array $classes = [];
 
     public function __construct()
     {
@@ -31,19 +31,29 @@ class Result
         return $this;
     }
 
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
     /**
      * Display a HTML output for the result row.
      * The closure let you manipulate the following attributes : \Illuminate\Support\Collection $displayedList.
      *
-     * @param \Closure $htmlClosure
+     * @param \Closure $customHtmlClosure
      *
      * @return \Okipa\LaravelTable\Result
      */
-    public function html(Closure $htmlClosure): Result
+    public function html(Closure $customHtmlClosure): Result
     {
-        $this->htmlClosure = $htmlClosure;
+        $this->customHtmlClosure = $customHtmlClosure;
 
         return $this;
+    }
+
+    public function getCustomHtmlClosure(): ?Closure
+    {
+        return $this->customHtmlClosure;
     }
 
     /**
@@ -59,5 +69,10 @@ class Result
         $this->classes = $classes;
 
         return $this;
+    }
+
+    public function getClasses(): array
+    {
+        return $this->classes;
     }
 }

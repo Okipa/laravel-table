@@ -6,16 +6,18 @@
 
 * Dropped support for PHP versions under 7.4.
 * Dropped support for Laravel versions under 6.0.
+* Restructured configuration file.
+* Removed translation files.
+* Updated templates.
+* Removed the deprecated methods.
+* Refactored the whole architecture to facilitate code comprehension and maintenance.
 * Added a cleaner architecture for tables handling (see documentation):
   * With the new table generation command, execute `php artisan make:table UsersTable --model App/Users` to generate your users table.
   * Tables are now generated in the `app\Tables` directory.
   * Using this new way to manage table, you will have to display the view with `$table()` instead of `$table`.
   * Please note that even if is not documented anymore, the old behaviour is still functional in order to prevent any breaking change.
-* Removed the deprecated `->icon()` table column method.  
-* Removed translation files.
-* Small config changes.
 
-:point_right: [See the upgrade guide](/upgrade-guides/from-v1-to-v2.md)
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v1-to-v2.md)
 
 ## [1.5.0](https://github.com/Okipa/laravel-table/compare/1.4.0...1.5.0)
 
@@ -198,7 +200,7 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
   * `->title()` : Set the result row title.
   * `->html()` : Display a HTML output for the result row. The closure let you manipulate the following attributes : `\Illuminate\Support\Collection $displayedList`.
   * `->classes()` : Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the `config('laravel-table.classes.results')` value.
-* Added the capacity to manage a custom results template path in the config and with the `->$resultsComponentPath()` method.
+* Added the capacity to manage a custom results template path in the config and with the `->resultsTemplatePath()` method.
 
 ## [1.0.6](https://github.com/Okipa/laravel-table/compare/1.0.5...1.0.6)
 

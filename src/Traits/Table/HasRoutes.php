@@ -1,18 +1,34 @@
 <?php
 
-namespace Okipa\LaravelTable\Traits;
+namespace Okipa\LaravelTable\Traits\Table;
 
 use ErrorException;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
+use Okipa\LaravelTable\Table;
 
-trait TableRoutesValidationChecks
+trait HasRoutes
 {
+    protected array $routes = [];
+
     /**
-     * Check routes validity.
-     *
      * @param array $routes
      *
-     * @return void
+     * @return \Okipa\LaravelTable\Table
+     * @throws \ErrorException
+     */
+    public function routes(array $routes): Table
+    {
+        $this->checkRoutesValidity($routes);
+        $this->routes = $routes;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    /**
+     * @param array $routes
+     *
      * @throws \ErrorException
      */
     protected function checkRoutesValidity(array $routes): void
@@ -26,12 +42,9 @@ trait TableRoutesValidationChecks
     }
 
     /**
-     * Check required routes validity.
-     *
      * @param array $routes
      * @param array $requiredRouteKeys
      *
-     * @return void
      * @throws \ErrorException
      */
     protected function checkRequiredRoutesValidity(array $routes, array $requiredRouteKeys): void
@@ -48,12 +61,9 @@ trait TableRoutesValidationChecks
     }
 
     /**
-     * Check allowed routes validity.
-     *
      * @param array $routes
      * @param array $allowedRouteKeys
      *
-     * @return void
      * @throws \ErrorException
      */
     protected function checkAllowedRoutesValidity(array $routes, array $allowedRouteKeys): void
@@ -69,11 +79,8 @@ trait TableRoutesValidationChecks
     }
 
     /**
-     * Check routes structure validity.
-     *
      * @param array $routes
      *
-     * @return void
      * @throws \ErrorException
      */
     protected function checkRoutesStructureValidity(array $routes): void
@@ -93,13 +100,33 @@ trait TableRoutesValidationChecks
         }
     }
 
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    public function getRoute(string $routeKey, array $params = []): string
+    {
+        $this->checkRouteIsDefined($routeKey);
+
+        return route(
+            $this->routes[$routeKey]['name'],
+            array_merge($params, Arr::get($this->routes[$routeKey], 'params', []))
+        );
+    }
+
     protected function checkRouteIsDefined(string $routeKey)
     {
-        if (! isset($this->routes[$routeKey]) || empty($this->routes[$routeKey])) {
+        if (! $this->isRouteDefined($routeKey)) {
             throw new InvalidArgumentException(
                 'Invalid « $routeKey » argument for the « route() » method. The route key « '
                 . $routeKey . ' » has not been found in the routes stack.'
             );
         }
+    }
+
+    public function isRouteDefined(string $routeKey): bool
+    {
+        return ! empty($this->routes[$routeKey]);
     }
 }

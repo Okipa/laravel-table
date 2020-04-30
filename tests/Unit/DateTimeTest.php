@@ -13,7 +13,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->dateTimeFormat('d/m/Y H:i:s');
-        $this->assertEquals('d/m/Y H:i:s', $table->getColumns()->first()->dateTimeFormat);
+        $this->assertEquals('d/m/Y H:i:s', $table->getColumns()->first()->getDateTimeFormat());
     }
 
     public function testDateFormatHtml()
@@ -24,7 +24,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('d/m/Y');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('d/m/Y'), $html);
     }
 
@@ -32,7 +32,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->dateTimeFormat('H:i');
-        $this->assertEquals('H:i', $table->getColumns()->first()->dateTimeFormat);
+        $this->assertEquals('H:i', $table->getColumns()->first()->getDateTimeFormat());
     }
 
     public function testSetColumnDateTimeToDateFormatHtml()
@@ -43,7 +43,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('d/m');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('d/m'), $html);
     }
 
@@ -55,7 +55,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('H\h i\m\i\n');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('H\h i\m\i\n'), $html);
     }
 
@@ -67,7 +67,7 @@ class DateTimeTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('d/m/Y H:i');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(Carbon::parse($user->updated_at)->format('d/m/Y H:i'), $html);
     }
 }

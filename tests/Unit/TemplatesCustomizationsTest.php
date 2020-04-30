@@ -12,56 +12,56 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
     {
         $templatePath = 'table-test';
         $table = (new Table)->model(User::class)->tableTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->tableTemplatePath);
+        $this->assertEquals($templatePath, $table->getTableTemplatePath());
     }
 
     public function testSetTheadTemplateAttribute()
     {
         $templatePath = 'thead-test';
         $table = (new Table)->model(User::class)->theadTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->theadTemplatePath);
+        $this->assertEquals($templatePath, $table->getTheadTemplatePath());
     }
 
     public function testSetTbodyTemplateAttribute()
     {
         $templatePath = 'tbody-test';
         $table = (new Table)->model(User::class)->tbodyTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->tbodyTemplatePath);
+        $this->assertEquals($templatePath, $table->getTbodyTemplatePath());
     }
 
     public function testSetShowTemplateAttribute()
     {
         $templatePath = 'show-test';
         $table = (new Table)->model(User::class)->showTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->showTemplatePath);
+        $this->assertEquals($templatePath, $table->getShowTemplatePath());
     }
 
     public function testSetEditTemplateAttribute()
     {
         $templatePath = 'edit-test';
         $table = (new Table)->model(User::class)->editTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->editTemplatePath);
+        $this->assertEquals($templatePath, $table->getEditTemplatePath());
     }
 
     public function testSetDestroyTemplateAttribute()
     {
         $templatePath = 'edit-test';
         $table = (new Table)->model(User::class)->destroyTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->destroyTemplatePath);
+        $this->assertEquals($templatePath, $table->getDestroyTemplatePath());
     }
 
     public function testSetResultsTemplateAttribute()
     {
         $templatePath = 'results-test';
         $table = (new Table)->model(User::class)->resultsTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->resultsComponentPath);
+        $this->assertEquals($templatePath, $table->getResultsTemplatePath());
     }
 
     public function testSetTfootTemplateAttribute()
     {
         $templatePath = 'tfoot-test';
         $table = (new Table)->model(User::class)->tfootTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->tfootComponentPath);
+        $this->assertEquals($templatePath, $table->getTfootTemplatePath());
     }
 
     public function testSetTableTemplateHtml()
@@ -74,7 +74,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->tableTemplate('table-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<table id="table-test">', $html);
     }
 
@@ -88,7 +88,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->theadTemplate('thead-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<thead id="thead-test">', $html);
     }
 
@@ -102,7 +102,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->tbodyTemplate('tbody-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<tbody id="tbody-test">', $html);
     }
 
@@ -116,7 +116,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->showTemplate('show-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->showTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getShowTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<form id="show-test">', $html);
     }
 
@@ -130,7 +130,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->editTemplate('edit-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->editTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getEditTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<form id="edit-test">', $html);
     }
 
@@ -144,7 +144,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->destroyTemplate('destroy-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->destroyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getDestroyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<form id="destroy-test">', $html);
     }
 
@@ -158,7 +158,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->resultsTemplate('results-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->resultsComponentPath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<tr id="results-test"><td></td></tr>', $html);
     }
 
@@ -172,7 +172,7 @@ class TemplatesCustomizationTest extends LaravelTableTestCase
             ->tfootTemplate('tfoot-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<tfoot id="tfoot-test">', $html);
     }
 }

@@ -38,7 +38,7 @@ return [
      */
     'value' => [
         'rowsNumber' => 20,
-        'rowsNumberSelectionActivation' => true,
+        'activateRowsNumberDefinition' => true,
     ],
 
     /*

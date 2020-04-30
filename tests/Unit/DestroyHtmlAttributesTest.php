@@ -21,7 +21,7 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $this->assertEquals($closure, $table->getDestroyConfirmationClosure());
-        foreach ($table->getPaginatedList() as $model) {
+        foreach ($table->getPaginator() as $model) {
             $this->assertEquals([
                 'data-confirm' => __('Are you sure you want to delete the user :name ?', [
                     'name' => $model->name,
@@ -46,9 +46,9 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
         $table->column('name');
         $table->column('email');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(5, substr_count($html, 'data-confirm'));
-        foreach ($table->getPaginatedList() as $model) {
+        foreach ($table->getPaginator() as $model) {
             $this->assertStringContainsString(__('Are you sure you want to delete the user :name ?', [
                 'name' => $model->name,
             ]), $html);

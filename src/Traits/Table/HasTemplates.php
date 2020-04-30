@@ -1,26 +1,26 @@
 <?php
 
-namespace Okipa\LaravelTable\Traits;
+namespace Okipa\LaravelTable\Traits\Table;
 
 use Okipa\LaravelTable\Table;
 
-trait TableTemplatesCustomizations
+trait HasTemplates
 {
-    public string $tableTemplatePath;
+    protected string $tableTemplatePath;
 
-    public string $theadTemplatePath;
+    protected string $theadTemplatePath;
 
-    public string $tbodyTemplatePath;
+    protected string $tbodyTemplatePath;
 
-    public string $showTemplatePath;
+    protected string $showTemplatePath;
 
-    public string $editTemplatePath;
+    protected string $editTemplatePath;
 
-    public string $destroyTemplatePath;
+    protected string $destroyTemplatePath;
 
-    public string $resultsComponentPath;
+    protected string $resultsTemplatePath;
 
-    public string $tfootComponentPath;
+    protected string $tfootTemplatePath;
 
     /**
      * Set a custom template path for the table component.
@@ -34,8 +34,13 @@ trait TableTemplatesCustomizations
     {
         $this->tableTemplatePath = $tableTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getTableTemplatePath(): string
+    {
+        return $this->tableTemplatePath;
     }
 
     /**
@@ -50,8 +55,13 @@ trait TableTemplatesCustomizations
     {
         $this->theadTemplatePath = $theadTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getTheadTemplatePath(): string
+    {
+        return $this->theadTemplatePath;
     }
 
     /**
@@ -66,8 +76,13 @@ trait TableTemplatesCustomizations
     {
         $this->tbodyTemplatePath = $tbodyTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getTbodyTemplatePath(): string
+    {
+        return $this->tbodyTemplatePath;
     }
 
     /**
@@ -82,8 +97,13 @@ trait TableTemplatesCustomizations
     {
         $this->showTemplatePath = $showTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getShowTemplatePath(): string
+    {
+        return $this->showTemplatePath;
     }
 
     /**
@@ -98,8 +118,13 @@ trait TableTemplatesCustomizations
     {
         $this->editTemplatePath = $editTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getEditTemplatePath(): string
+    {
+        return $this->editTemplatePath;
     }
 
     /**
@@ -114,48 +139,58 @@ trait TableTemplatesCustomizations
     {
         $this->destroyTemplatePath = $destroyTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getDestroyTemplatePath(): string
+    {
+        return $this->destroyTemplatePath;
     }
 
     /**
      * Set a custom template path for the results component.
      * The default results template path is defined in the config('laravel-table.template.results') config value.
      *
-     * @param string $resultsComponentPath
+     * @param string $resultsTemplatePath
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function resultsTemplate(string $resultsComponentPath): Table
+    public function resultsTemplate(string $resultsTemplatePath): Table
     {
-        $this->resultsComponentPath = $resultsComponentPath;
+        $this->resultsTemplatePath = $resultsTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function getResultsTemplatePath(): string
+    {
+        return $this->resultsTemplatePath;
     }
 
     /**
      * Set a custom template path for the tfoot component.
      * The default tfoot template path is defined in the config('laravel-table.template.tfoot') config value.
      *
-     * @param string $tfootComponentPath
+     * @param string $tfootTemplatePath
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function tfootTemplate(string $tfootComponentPath): Table
+    public function tfootTemplate(string $tfootTemplatePath): Table
     {
-        $this->tfootComponentPath = $tfootComponentPath;
+        $this->tfootTemplatePath = $tfootTemplatePath;
 
-        /** @var Table $this */
+        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    /**
-     * Initialize the default components from the config values.
-     *
-     * @return void
-     */
-    protected function initializeDefaultComponents(): void
+    public function getTfootTemplatePath(): string
+    {
+        return $this->tfootTemplatePath;
+    }
+
+    protected function initializeDefaultTemplates(): void
     {
         $this->tableTemplatePath = config('laravel-table.template.table', 'bootstrap.table');
         $this->theadTemplatePath = config('laravel-table.template.thead', 'bootstrap.thead');
@@ -163,7 +198,7 @@ trait TableTemplatesCustomizations
         $this->showTemplatePath = config('laravel-table.template.show', 'bootstrap.show');
         $this->editTemplatePath = config('laravel-table.template.edit', 'bootstrap.edit');
         $this->destroyTemplatePath = config('laravel-table.template.destroy', 'bootstrap.destroy');
-        $this->resultsComponentPath = config('laravel-table.template.results', 'bootstrap.results');
-        $this->tfootComponentPath = config('laravel-table.template.tfoot', 'bootstrap.tfoot');
+        $this->resultsTemplatePath = config('laravel-table.template.results', 'bootstrap.results');
+        $this->tfootTemplatePath = config('laravel-table.template.tfoot', 'bootstrap.tfoot');
     }
 }

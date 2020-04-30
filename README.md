@@ -16,6 +16,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 | Laravel version | PHP version | Package version |
 |---|---|---|
+| ^6.0 | ^7.4 | ^2.0 |
 | ^5.8 | ^7.2 | ^1.3 |
 | ^5.5 | ^7.1 | ^1.0 |
 
@@ -100,7 +101,7 @@ And display it the view:
   * [->routes()](#table-routes)
   * [->destroyConfirmationHtmlAttributes()](#table-destroyConfirmationHtmlAttributes)
   * [->rowsNumber()](#table-rowsNumber)
-  * [->rowsNumberSelectionActivation()](#table-rowsNumberSelectionActivation)
+  * [->activateRowsNumberDefinition()](#table-activateRowsNumberDefinition)
   * [->query()](#table-query)
   * [->appends()](#table-appends)
   * [->containerClasses()](#table-containerClasses)
@@ -128,8 +129,8 @@ And display it the view:
   * [->dateTimeFormat()](#column-dateTimeFormat)
   * [->button()](#column-button)
   * [->link()](#column-link)
-  * [->prepend()](#column-prepend)
-  * [->append()](#column-append)
+  * [->prependsHtml()](#column-prependsHtml)
+  * [->appendsHtml()](#column-appendsHtml)
   * [->stringLimit()](#column-stringLimit)
   * [->value()](#-value)
   * [->html()](#-html)
@@ -223,7 +224,7 @@ class NewsTable extends AbstractTable
                 'show' => ['name' => 'news.show'],
             ])
             ->rowsNumber(50) // or set `false` to get all the items contained in database
-            ->rowsNumberSelectionActivation(false)
+            ->activateRowsNumberDefinition(false)
             ->query(function (Builder $query) {
                 // some examples of what you can do
                 $query->select('news.*');
@@ -253,8 +254,8 @@ class NewsTable extends AbstractTable
     protected function columns(Table $table): void
     {
         $table->column('image')->html(function (News $news, Column $column) {
-            return $news->{$column->databaseDefaultColumn}
-                ? '<img src="' . $news->{$column->databaseDefaultColumn} . '" alt="' .  $news->title . '">'
+            return $news->{$column->getDbField()}
+                ? '<img src="' . $news->{$column->getDbField()} . '" alt="' .  $news->title . '">'
                 : null;
         });
         $table->column('title')->sortable()->searchable();
@@ -262,11 +263,11 @@ class NewsTable extends AbstractTable
         $table->column('author')->sortable(true)->searchable('user', ['name']);
         $table->column('category_id')
             ->title('Category custom name')
-            ->prepend('your-icon')
-            ->append('your-other-icon')
+            ->prependsHtml('prepended-html')
+            ->appendsHtml('appended-html')
             ->button(['btn', 'btn-sm', 'btn-outline-primary'])
             ->value(function (News $news, Column $column) {
-                return config('news.category.' . $news->{$column->databaseDefaultColumn});
+                return config('news.category.' . $news->{$column->getDbField()});
             });
         $table->column()->link(function(News $news){
             return route('news.show', $news);
@@ -288,8 +289,8 @@ class NewsTable extends AbstractTable
 * **Columns displaying combination:** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
   * `->button()`
   * `->link()`
-  * `->prepend()`
-  * `->append()`
+  * `->prependsHtml()`
+  * `->appendsHtml()`
   * `->stringLimit()`
   * `->value()`
 
@@ -471,21 +472,21 @@ class UsersTable extends AbstractTable
 (new Table)->rowsNumber(null);
 ```
 
-<h3 id="table-rowsNumberSelectionActivation">->rowsNumberSelectionActivation()</h3>
+<h3 id="table-activateRowsNumberDefinition">->activateRowsNumberDefinition()</h3>
 
 > Override the default rows number selection activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number selection activation status is managed by the `config('laravel-table.value.rowsNumberSelectionActivation')` value.
+> The default rows number selection activation status is managed by the `config('laravel-table.value.activateRowsNumberDefinition')` value.
 
 **Note:**`
 
-* Signature: `rowsNumberSelectionActivation($activate = true): \Okipa\LaravelTable\Table`
+* Signature: `activateRowsNumberDefinition($activate = true): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->rowsNumberSelectionActivation(false);
+(new Table)->activateRowsNumberDefinition(false);
 ```
 
 <h3 id="table-query">->query()</h3>
@@ -496,7 +497,7 @@ class UsersTable extends AbstractTable
 
 **Note:**
 
-* Signature: `query(Closure $queryClosure): \Okipa\LaravelTable\Table`
+* Signature: `query(Closure $additionalQueriesClosure): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
@@ -789,13 +790,13 @@ destroyButton.click((e) => {
 
 **Note:**
 
-* Signature: `resultsTemplate(string $resultsComponentPath): \Okipa\LaravelTable\Table`
+* Signature: `resultsTemplate(string $resultsTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->resultsComponentPath('tailwindCss.results');
+(new Table)->resultsTemplate('tailwindCss.results');
 ```
 
 <h3 id="table-tfootTemplate">->tfootTemplate()</h3>
@@ -805,7 +806,7 @@ destroyButton.click((e) => {
 
 **Note:**
 
-* Signature: `tfootTemplate(string $tfootComponentPath): \Okipa\LaravelTable\Table`
+* Signature: `tfootTemplate(string $tfootTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
@@ -821,7 +822,7 @@ destroyButton.click((e) => {
 
 **Note:**
 
-* Signature: `column(string $databaseColumn = null): \Okipa\LaravelTable\Column`
+* Signature: `column(string $dbField = null): \Okipa\LaravelTable\Column`
 * Required
 * **Warning:** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Column` object. See the use case examples to check how to use this method.
 
@@ -909,7 +910,7 @@ $table->column('email')->sortable(true, 'desc');
 
 **Note:**
 
-* Signature: `public function searchable(string $databaseSearchedTable = null, array $databaseSearchedColumns = []): \Okipa\LaravelTable\Column`
+* Signature: `public function searchable(string $dbSearchedTable = null, array $dbSearchedFields = []): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
@@ -970,7 +971,7 @@ $table->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
 
 > Wrap the column value into a `<a></a>` component.  
 > You can declare the link as a string or as a closure which will let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.  
-> If no url is declared, it will be set with the column value.
+> If no url is declared, the url will be generated using the column value.
 
 **Note:**
 
@@ -992,36 +993,36 @@ $table->column()->link(function(News $news) {
 });
 ```
 
-<h3 id="column-prepend">->prepend()</h3>
+<h3 id="column-prependsHtml">->prependsHtml()</h3>
 
 > Prepend HTML to the displayed value.  
 > Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
 
 **Note:**
 
-* Signature: `prepend(string $prependicon, bool $displayPrependEvenIfNoValue = false): \Okipa\LaravelTable\Column`
+* Signature: `prependsHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
 
 ```php
-$table->column('email')->prepend('<i class="fas fa-envelope"></i>', true);
+$table->column('email')->prependsHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
-<h3 id="column-append">->append()</h3>
+<h3 id="column-appendsHtml">->appendsHtml()</h3>
 
 > Append HTML to the displayed value.  
 > Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
 
 **Note:**
 
-* Signature: `append(string $prependicon, bool $displayAppendEvenIfNoValue = false): \Okipa\LaravelTable\Column`
+* Signature: `appendsHtml(string $appendedHtml, bool $forceAppendedHtmlDisplay = false): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
 
 ```php
-$table->column('email')->append('<i class="fas fa-envelope"></i>', true);
+$table->column('email')->appendsHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
 <h3 id="column-stringLimit">->stringLimit()</h3>
@@ -1047,7 +1048,7 @@ $table->column('email')->stringLimit(30);
 
 **Note:**
 
-* Signature: `value(Closure $valueClosure): \Okipa\LaravelTable\Column`
+* Signature: `value(Closure $customValueClosure): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
@@ -1065,7 +1066,7 @@ $table->column()->value(function(User $user) {
 
 **Note:**
 
-* Signature: `html(Closure $htmlClosure): \Okipa\LaravelTable\Column`
+* Signature: `html(Closure $customHtmlClosure): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
@@ -1102,7 +1103,7 @@ $table->result()->title('Turnover total');
 
 **Note:**
 
-* Signature: `html(Closure $htmlClosure): \Okipa\LaravelTable\Result`
+* Signature: `html(Closure $customHtmlClosure): \Okipa\LaravelTable\Result`
 * Optional
 
 **Use case example:**

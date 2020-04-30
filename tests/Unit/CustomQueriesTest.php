@@ -8,14 +8,14 @@ use Okipa\LaravelTable\Test\Models\Company;
 use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
-class SetCustomTableTest extends LaravelTableTestCase
+class CustomQueriesTest extends LaravelTableTestCase
 {
     public function testSetAddQueryInstructionsAttribute()
     {
-        $queryClosure = function ($query) {
+        $additionalQueriesClosure = function ($query) {
             $query->select('users.*')->where('users.activated');
         };
-        $table = (new Table)->query($queryClosure);
-        $this->assertEquals($queryClosure, $table->getQueryClosure());
+        $table = (new Table)->query($additionalQueriesClosure);
+        $this->assertEquals($additionalQueriesClosure, $table->getAdditionalQueriesClosure());
     }
 }

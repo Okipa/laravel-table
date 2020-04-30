@@ -37,7 +37,7 @@ class ConfigTest extends LaravelTableTestCase
         $this->assertTrue(array_key_exists('show', config('laravel-table.icon')));
         // laravel-table.value
         $this->assertTrue(array_key_exists('rowsNumber', config('laravel-table.value')));
-        $this->assertTrue(array_key_exists('rowsNumberSelectionActivation', config('laravel-table.value')));
+        $this->assertTrue(array_key_exists('activateRowsNumberDefinition', config('laravel-table.value')));
         // laravel-table.template
         $this->assertTrue(array_key_exists('table', config('laravel-table.template')));
         $this->assertTrue(array_key_exists('thead', config('laravel-table.template')));
@@ -66,8 +66,8 @@ class ConfigTest extends LaravelTableTestCase
             ->searchable()
             ->sortable();
         $table->configure();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->toHtml();
-        $this->assertEquals(9999, $table->rowsValue);
+        $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
+        $this->assertEquals(9999, $table->getRowsNumberValue());
         $this->assertStringContainsString('value="9999"', $html);
         $this->assertStringContainsString('rows=9999', $html);
     }

@@ -13,7 +13,7 @@ class StringLimitTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->stringLimit(10);
-        $this->assertEquals(10, $table->getColumns()->first()->stringLimit);
+        $this->assertEquals(10, $table->getColumns()->first()->getStringLimit());
     }
 
     public function testSetStringLimitHtml()

@@ -11,17 +11,17 @@ class AppendTest extends LaravelTableTestCase
     public function testSetAppendAttribute()
     {
         $table = (new Table)->model(User::class);
-        $table->column('name')->append('icon');
-        $this->assertEquals('icon', $table->getColumns()->first()->append);
-        $this->assertEquals(false, $table->getColumns()->first()->displayAppendEvenIfNoValue);
+        $table->column('name')->appendsHtml('html');
+        $this->assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        $this->assertEquals(false, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
     }
 
     public function testSetAppendAttributeAndSetShowWithNoValue()
     {
         $table = (new Table)->model(User::class);
-        $table->column('name')->append('icon', true);
-        $this->assertEquals('icon', $table->getColumns()->first()->append);
-        $this->assertEquals(true, $table->getColumns()->first()->displayAppendEvenIfNoValue);
+        $table->column('name')->appendsHtml('html', true);
+        $this->assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        $this->assertEquals(true, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
     }
 
     public function testSetAppendHtml()
@@ -29,10 +29,10 @@ class AppendTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->append('icon');
+        $table->column('name')->appendsHtml('html');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
-        $this->assertStringContainsString('icon', $html);
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('html', $html);
     }
 
     public function testSetAppendWithCustomValueHtml()
@@ -40,12 +40,12 @@ class AppendTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->append('icon')->value(function () {
+        $table->column('name')->appendsHtml('html')->value(function () {
             return 'test';
         });
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
-        $this->assertStringContainsString('icon', $html);
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('html', $html);
     }
 
     public function testSetAppendWithNoValueHtml()
@@ -54,10 +54,10 @@ class AppendTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->append('icon');
+        $table->column('name')->appendsHtml('html');
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
-        $this->assertStringNotContainsString('icon', $html);
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringNotContainsString('html', $html);
     }
 
     public function testSetAppendWithNoValueButShowAnywayValueHtml()
@@ -66,9 +66,9 @@ class AppendTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->append('icon', true);
+        $table->column('name')->appendsHtml('html', true);
         $table->configure();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->toHtml();
-        $this->assertStringContainsString('icon', $html);
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('html', $html);
     }
 }

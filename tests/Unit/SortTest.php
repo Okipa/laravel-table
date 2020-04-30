@@ -21,7 +21,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         foreach ($users as $key => $user) {
-            $this->assertEquals($user->name, $table->getPaginatedList()->items()[$key]['name']);
+            $this->assertEquals($user->name, $table->getPaginator()->items()[$key]['name']);
         }
     }
 
@@ -29,9 +29,9 @@ class SortTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->sortable();
-        $this->assertTrue($table->getColumns()->first()->isSortable);
+        $this->assertTrue($table->getColumns()->first()->getIsSortable());
         $this->assertEquals(1, $table->getSortableColumns()->count());
-        $this->assertEquals('name', $table->getSortableColumns()->first()->databaseDefaultColumn);
+        $this->assertEquals('name', $table->getSortableColumns()->first()->getDbField());
     }
 
     public function testSetSortByDefaultAttribute()
@@ -57,7 +57,7 @@ class SortTest extends LaravelTableTestCase
         $table->configure();
         $this->assertEquals(
             $users->sortBy('email')->values()->toArray(),
-            $table->getPaginatedList()->toArray()['data']
+            $table->getPaginator()->toArray()['data']
         );
     }
 
@@ -91,7 +91,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->sortable();
         $table->column('email')->sortable();
         $table->configure();
-        $this->assertEquals($table->getSortByValue(), $table->getColumns()->first()->databaseDefaultColumn);
+        $this->assertEquals($table->getSortByValue(), $table->getColumns()->first()->getDbField());
         $this->assertEquals($table->getSortDirValue(), 'asc');
     }
 
@@ -112,9 +112,9 @@ class SortTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(3);
         $customRequest = (new Request)->merge([
-            (new Table)->rowsField => 20,
-            (new Table)->sortByField => 'email',
-            (new Table)->sortDirField => 'desc',
+            (new Table)->getRowsNumberField() => 20,
+            (new Table)->getSortByField() => 'email',
+            (new Table)->getSortDirField() => 'desc',
         ]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
@@ -127,7 +127,7 @@ class SortTest extends LaravelTableTestCase
         $this->assertEquals('desc', $table->getSortDirValue());
         $this->assertEquals(
             $users->sortByDesc('email')->values()->toArray(),
-            $table->getPaginatedList()->toArray()['data']
+            $table->getPaginator()->toArray()['data']
         );
     }
 
@@ -137,9 +137,9 @@ class SortTest extends LaravelTableTestCase
         $companies = $this->createMultipleCompanies(5);
         $this->routes(['companies'], ['index']);
         $customRequest = (new Request)->merge([
-            (new Table)->rowsField => 20,
-            (new Table)->sortByField => 'owner',
-            (new Table)->sortDirField => 'desc',
+            (new Table)->getRowsNumberField() => 20,
+            (new Table)->getSortByField() => 'owner',
+            (new Table)->getSortDirField() => 'desc',
         ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
@@ -152,7 +152,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('owner')->sortable();
         $table->configure();
         foreach ($companies->load('owner')->sortByDesc('owner.name')->values() as $key => $company) {
-            $this->assertEquals($company->owner->name, $table->getPaginatedList()->toArray()['data'][$key]['owner']);
+            $this->assertEquals($company->owner->name, $table->getPaginator()->toArray()['data'][$key]['owner']);
         }
     }
 
@@ -162,9 +162,9 @@ class SortTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $customRequest = (new Request)->merge([
-            (new Table)->rowsField => 5,
-            (new Table)->sortByField => 'owner',
-            (new Table)->sortDirField => 'desc',
+            (new Table)->getRowsNumberField() => 5,
+            (new Table)->getSortByField() => 'owner',
+            (new Table)->getSortDirField() => 'desc',
         ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
@@ -182,7 +182,7 @@ class SortTest extends LaravelTableTestCase
             ->with('owner')
             ->paginate(5);
         foreach ($paginatedCompanies as $key => $company) {
-            $this->assertEquals($company->owner->name, $table->getPaginatedList()->toArray()['data'][$key]['owner']);
+            $this->assertEquals($company->owner->name, $table->getPaginator()->toArray()['data'][$key]['owner']);
         }
     }
 
@@ -193,15 +193,15 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email');
         $table->configure();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(
-            'href="http://localhost/users/index?' . $table->rowsField . '=20&amp;' . $table->sortByField . '=name&amp;'
-            . $table->sortDirField . '=desc"',
+            'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;' . $table->getSortByField() . '=name&amp;'
+            . $table->getSortDirField() . '=desc"',
             $html
         );
         $this->assertStringNotContainsString(
-            'href="http://localhost/users/index?' . $table->rowsField . '=20&amp;' . $table->sortByField . '=email&amp;'
-            . $table->sortDirField . '=desc"',
+            'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;' . $table->getSortByField() . '=email&amp;'
+            . $table->getSortDirField() . '=desc"',
             $html
         );
     }
