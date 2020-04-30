@@ -19,7 +19,7 @@ trait PrependsHtml
      *
      * @return \Okipa\LaravelTable\Column
      */
-    public function prependsHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): Column
+    public function prependHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): Column
     {
         $this->prependedHtml = $prependedHtml;
         $this->forcePrependedHtmlDisplay = $forcePrependedHtmlDisplay;

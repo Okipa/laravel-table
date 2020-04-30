@@ -33,10 +33,29 @@ To follow the package upgrade, you should execute the following steps for each t
 
 There are small changes in the API you will have to report in your code:
 
-* Rename the each use of `->icon(` by `->prependsHtml(`.
-* Rename the each use of `->prepend(` by `->prependsHtml(`.
+* Rename the each use of `->resultsComponentPath(` by `->resultsTemplatePath(`.
+* Rename the each use of `->icon(` by `->prependHtml(`.
+* Rename the each use of `->prepend(` by `->prependHtml(`.
 * Rename the each use of `->append(` by `->appendsHtml(`.
 * Rename the each use of `->rowsNumberSelectionActivation(` by `->activateRowsNumberDefinition(`.
+
+## Accessing table rows
+
+If for any reason you need to work with the table rows, you now will have to do it this way:
+
+```php
+$table = new UsersTable;
+$rows = $table->getPaginator()->getCollection();
+```
+
+Instead of this way in previous versions:
+
+```php
+$table = (new Table);
+// ... any table configuration
+$table->render();
+$table->list->getCollection();
+```
 
 ## See all changes
 

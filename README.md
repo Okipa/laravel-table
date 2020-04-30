@@ -129,7 +129,7 @@ And display it the view:
   * [->dateTimeFormat()](#column-dateTimeFormat)
   * [->button()](#column-button)
   * [->link()](#column-link)
-  * [->prependsHtml()](#column-prependsHtml)
+  * [->prependHtml()](#column-prependHtml)
   * [->appendsHtml()](#column-appendsHtml)
   * [->stringLimit()](#column-stringLimit)
   * [->value()](#-value)
@@ -162,11 +162,11 @@ php artisan vendor:publish --tag=laravel-table:config
 
 ## Translations
 
-All captions are translatable.
+All words and sentences used in this package are translatable.
 
 See how to translate them on the Laravel official documentation: https://laravel.com/docs/localization#using-translation-strings-as-keys.
 
-Here is the list of the sentences available for translation:
+Here is the list of the words and sentences available for translation:
 
 * `Create`
 * `Show`
@@ -263,7 +263,7 @@ class NewsTable extends AbstractTable
         $table->column('author')->sortable(true)->searchable('user', ['name']);
         $table->column('category_id')
             ->title('Category custom name')
-            ->prependsHtml('prepended-html')
+            ->prependHtml('prepended-html')
             ->appendsHtml('appended-html')
             ->button(['btn', 'btn-sm', 'btn-outline-primary'])
             ->value(function (News $news, Column $column) {
@@ -285,11 +285,10 @@ class NewsTable extends AbstractTable
 ```
 
 ## Tips
-
 * **Columns displaying combination:** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
   * `->button()`
   * `->link()`
-  * `->prependsHtml()`
+  * `->prependHtml()`
   * `->appendsHtml()`
   * `->stringLimit()`
   * `->value()`
@@ -993,20 +992,20 @@ $table->column()->link(function(News $news) {
 });
 ```
 
-<h3 id="column-prependsHtml">->prependsHtml()</h3>
+<h3 id="column-prependHtml">->prependHtml()</h3>
 
 > Prepend HTML to the displayed value.  
 > Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
 
 **Note:**
 
-* Signature: `prependsHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): \Okipa\LaravelTable\Column`
+* Signature: `prependHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
 
 ```php
-$table->column('email')->prependsHtml('<i class="fas fa-envelope"></i>', true);
+$table->column('email')->prependHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
 <h3 id="column-appendsHtml">->appendsHtml()</h3>

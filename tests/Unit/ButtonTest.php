@@ -47,7 +47,7 @@ class ButtonTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->button(['btn', 'btn-primary'])->prependsHtml('html', true);
+        $table->column('name')->button(['btn', 'btn-primary'])->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<button class="btn btn-primary', $html);

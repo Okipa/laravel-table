@@ -38,6 +38,8 @@ class Table implements Htmlable
     use HasPagination;
     use HasDestroyConfirmation;
 
+    protected bool $configured = false;
+
     public function __construct()
     {
         $this->initializeDefaultTemplates();
@@ -49,6 +51,11 @@ class Table implements Htmlable
         $this->initializeRowsNumberDefinition();
     }
 
+    public function hasBeenConfigured(): bool
+    {
+        return $this->configured;
+    }
+
     /**
      * Get content as a string of HTML.
      *
@@ -57,7 +64,9 @@ class Table implements Htmlable
      */
     public function toHtml(): string
     {
-        $this->configure();
+        if (! $this->configured) {
+            $this->configure();
+        }
 
         return view('laravel-table::' . $this->getTableTemplatePath(), ['table' => $this])->toHtml();
     }
@@ -77,6 +86,7 @@ class Table implements Htmlable
         $this->applySortingOnQuery($query);
         $this->paginateFromQuery($query);
         $this->transformPaginatedRows();
+        $this->configured = true;
     }
 
     protected function defineInteractionsFromRequest(): void

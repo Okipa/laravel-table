@@ -11,6 +11,7 @@ abstract class AbstractTable
         $table = $this->table();
         $this->columns($table);
         $this->resultLines($table);
+        $table->configure();
 
         return $table;
     }

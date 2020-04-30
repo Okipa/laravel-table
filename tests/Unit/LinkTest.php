@@ -95,7 +95,7 @@ class LinkTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link()->prependsHtml('html', true);
+        $table->column('name')->link()->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString('<a href="', $html);

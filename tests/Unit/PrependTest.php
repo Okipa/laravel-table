@@ -11,7 +11,7 @@ class PrependTest extends LaravelTableTestCase
     public function testSetPrependAttribute()
     {
         $table = (new Table)->model(User::class);
-        $table->column('name')->prependsHtml('html');
+        $table->column('name')->prependHtml('html');
         $this->assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
         $this->assertEquals(false, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
     }
@@ -19,7 +19,7 @@ class PrependTest extends LaravelTableTestCase
     public function testSetPrependAttributeAndSetShowWithNoValue()
     {
         $table = (new Table)->model(User::class);
-        $table->column('name')->prependsHtml('html', true);
+        $table->column('name')->prependHtml('html', true);
         $this->assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
         $this->assertEquals(true, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
     }
@@ -29,7 +29,7 @@ class PrependTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prependsHtml('html');
+        $table->column('name')->prependHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('html', $html);
@@ -40,7 +40,7 @@ class PrependTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prependsHtml('html')->value(function () {
+        $table->column('name')->prependHtml('html')->value(function () {
             return 'test';
         });
         $table->configure();
@@ -54,7 +54,7 @@ class PrependTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prependsHtml('html');
+        $table->column('name')->prependHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString('html', $html);
@@ -66,7 +66,7 @@ class PrependTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prependsHtml('html', true);
+        $table->column('name')->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('html', $html);
