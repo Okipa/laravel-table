@@ -18,6 +18,21 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->assertEquals($table->getResults()->first()->getTitle(), 'Test');
     }
 
+    public function testResultRowsGivePaginatedRowsToManipulate()
+    {
+        $this->createMultipleUsers(10);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->rowsNumber(5);
+        $table->column('name');
+        $table->result()->title('Test')->html(function (Collection $paginatedRows) {
+            $this->assertCount(5, $paginatedRows);
+        });
+        $table->configure();
+        view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+    }
+
     public function testSetResultsHtml()
     {
         $this->createMultipleUsers(10);
@@ -26,8 +41,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Result !')->html(function (Collection $displayedList) {
-            return $displayedList->sum('turnover');
+        $table->result()->title('Result !')->html(function (Collection $paginatedRows) {
+            return $paginatedRows->sum('turnover');
         });
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -45,8 +60,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->rowsNumber(2);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
-            return $displayedList->sum('turnover');
+        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
+            return $paginatedRows->sum('turnover');
         });
         $table->result()->title('Total turnover')->html(function () {
             return (new Company)->all()->sum('turnover');
@@ -80,8 +95,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
-            return $displayedList->sum('turnover');
+        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
+            return $paginatedRows->sum('turnover');
         });
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
@@ -97,8 +112,8 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
-            return $displayedList->sum('turnover');
+        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
+            return $paginatedRows->sum('turnover');
         });
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
@@ -113,13 +128,13 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index', 'edit']);
         $table = (new Table)->model(Company::class)->routes([
             'index' => ['name' => 'users.index'],
-            'edit'  => ['name' => 'users.edit'],
+            'edit' => ['name' => 'users.edit'],
         ]);
         $table->column('owner_id');
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function (Collection $displayedList) {
-            return $displayedList->sum('turnover');
+        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
+            return $paginatedRows->sum('turnover');
         });
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();

@@ -194,7 +194,7 @@ route('user.edit', ['id' => $user->id, 'foo' => 'bar']);
 * **Possible breaking change:** reverted last tag features => removed the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
 * Added the capacity to append some results objects to the table with the `->result()` method with the following methods:
   * `->title()`: Set the result row title.
-  * `->html()`: Display a HTML output for the result row. The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $displayedList`.
+  * `->html()`: Display a HTML output for the result row. The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $paginatedRows`.
   * `->classes()`: Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the `config('laravel-table.classes.results')` value.
 * Added the capacity to manage a custom results template path in the config and with the `->resultsTemplatePath()` method.
 

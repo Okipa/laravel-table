@@ -3,7 +3,6 @@
 namespace Okipa\LaravelTable\Traits\Result;
 
 use Closure;
-use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Result;
 
 trait HasCustomHtml
@@ -12,7 +11,7 @@ trait HasCustomHtml
 
     /**
      * Display a HTML output for the result row.
-     * The closure let you manipulate the following attributes: \Illuminate\Support\Collection $displayedList.
+     * The closure let you manipulate the following attributes: \Illuminate\Support\Collection $paginatedRows.
      *
      * @param \Closure $customHtmlClosure
      *

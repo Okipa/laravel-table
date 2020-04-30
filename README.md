@@ -277,8 +277,8 @@ class NewsTable extends AbstractTable
 
     protected function resultLines(Table $table): void
     {
-        $table->result()->title('Comments')->html(function(Collection $displayedList){
-            return $displayedList->sum('comments_count');
+        $table->result()->title('Comments')->html(function(Collection $paginatedRows){
+            return $paginatedRows->sum('comments_count');
         });
     }
 }
@@ -1098,7 +1098,7 @@ $table->result()->title('Turnover total');
 <h3 id="result-html">->html()</h3>
 
 > Display a HTML output for the result row.  
-> The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $displayedList`.
+> The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $paginatedRows`.
 
 **Note:**
 
@@ -1108,8 +1108,8 @@ $table->result()->title('Turnover total');
 **Use case example:**
 
 ```php
-$table->result()->html(function(Collection $displayedList) {
-    return $displayedList->sum('turnover');
+$table->result()->html(function(Collection $paginatedRows) {
+    return $paginatedRows->sum('turnover');
 });
 ```
 
