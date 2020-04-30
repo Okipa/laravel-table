@@ -195,12 +195,14 @@ class SortTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(
-            'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;' . $table->getSortByField() . '=name&amp;'
+            'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;'
+            . $table->getSortByField() . '=name&amp;'
             . $table->getSortDirField() . '=desc"',
             $html
         );
         $this->assertStringNotContainsString(
-            'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;' . $table->getSortByField() . '=email&amp;'
+            'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;'
+            . $table->getSortByField() . '=email&amp;'
             . $table->getSortDirField() . '=desc"',
             $html
         );

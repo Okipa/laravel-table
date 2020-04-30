@@ -13,7 +13,7 @@ class ConfigTest extends LaravelTableTestCase
         // laravel-table
         $this->assertTrue(array_key_exists('classes', config('laravel-table')));
         $this->assertTrue(array_key_exists('icon', config('laravel-table')));
-        $this->assertTrue(array_key_exists('value', config('laravel-table')));
+        $this->assertTrue(array_key_exists('behavior', config('laravel-table')));
         $this->assertTrue(array_key_exists('template', config('laravel-table')));
         // laravel-table.classes
         $this->assertTrue(array_key_exists('container', config('laravel-table.classes')));

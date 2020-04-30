@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\Tests\Unit;
 
+use DB;
 use ErrorException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -219,7 +220,11 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = $users->first()->name;
-        $customRequest = (new Request)->merge([(new Table)->getRowsNumberField() => 5, 'search' => $searchedValue, 'page' => 2]);
+        $customRequest = (new Request)->merge([
+            (new Table)->getRowsNumberField() => 5,
+            'search' => $searchedValue,
+            'page' => 2,
+        ]);
         $table = (new Table)->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
@@ -247,7 +252,7 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest)
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
-                $query->addSelect(\DB::raw('users_test.name || " "|| users_test.email as owner'));
+                $query->addSelect(DB::raw('users_test.name || " "|| users_test.email as owner'));
                 $query->leftJoin('users_test', 'users_test.id', '=', 'companies_test.owner_id');
             });
         $table->column('name')->sortable(true);
@@ -271,7 +276,7 @@ class SearchTest extends LaravelTableTestCase
             ->request($customRequest)
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
-                $query->addSelect(\DB::raw('userAliasedTable.name || " "|| userAliasedTable.email as owner'));
+                $query->addSelect(DB::raw('userAliasedTable.name || " "|| userAliasedTable.email as owner'));
                 $query->leftJoin('users_test as unusedAlias', 'unusedAlias.id', '=', 'companies_test.owner_id');
                 $query->leftJoin(
                     'users_test as userAliasedTable',
@@ -298,7 +303,7 @@ class SearchTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
-                $query->addSelect(\DB::raw('userAliasedTable.name || " "|| userAliasedTable.email as owner'));
+                $query->addSelect(DB::raw('userAliasedTable.name || " "|| userAliasedTable.email as owner'));
                 $query->leftJoin('users_test as unusedAlias', 'unusedAlias.id', '=', 'companies_test.owner_id');
                 $query->leftJoin(
                     'users_test as userAliasedTable',
@@ -353,33 +358,33 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchWrappedInSubWhereQuery()
     {
         $userAlpha = (new User)->create([
-            'name'     => 'User Alpha',
-            'email'    => 'alpha@test.fr',
+            'name' => 'User Alpha',
+            'email' => 'alpha@test.fr',
             'password' => Hash::make('secret'),
         ]);
         $userBeta = (new User)->create([
-            'name'     => 'User Beta',
-            'email'    => 'beta@test.fr',
+            'name' => 'User Beta',
+            'email' => 'beta@test.fr',
             'password' => Hash::make('secret'),
         ]);
         $userCharlie = (new User)->create([
-            'name'     => 'User Charlie',
-            'email'    => 'charlie@test.fr',
+            'name' => 'User Charlie',
+            'email' => 'charlie@test.fr',
             'password' => Hash::make('secret'),
         ]);
         $companyAlpha = (new Company)->create([
             'owner_id' => $userAlpha->id,
-            'name'     => 'Company Alpha',
+            'name' => 'Company Alpha',
             'turnover' => rand(1000, 99999),
         ]);
         $companyBeta = (new Company)->create([
             'owner_id' => $userBeta->id,
-            'name'     => 'Company Beta',
+            'name' => 'Company Beta',
             'turnover' => rand(1000, 99999),
         ]);
         $companyCharlie = (new Company)->create([
             'owner_id' => $userCharlie->id,
-            'name'     => 'Company Charlie',
+            'name' => 'Company Charlie',
             'turnover' => rand(1000, 99999),
         ]);
         $this->createMultipleCompanies(3);
