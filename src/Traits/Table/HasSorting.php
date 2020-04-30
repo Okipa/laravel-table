@@ -3,6 +3,8 @@
 namespace Okipa\LaravelTable\Traits\Table;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 trait HasSorting
 {
@@ -13,6 +15,10 @@ trait HasSorting
     protected string $sortDirField = 'sort_dir';
 
     protected ?string $sortDirValue = null;
+
+    abstract public function getRequest(): Request;
+
+    abstract public function getSortableColumns(): Collection;
 
     public function defineSortByValue(string $sortByValue): void
     {
