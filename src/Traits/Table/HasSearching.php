@@ -13,35 +13,40 @@ trait HasSearching
 
     protected function applySearchingOnQuery(Builder $query): void
     {
-        $searched = $this->getRequest()->get($this->getSearchField());
-        if ($searched) {
-            $query->where(function (Builder $subQuery) use ($searched) {
-                $this->getSearchableColumns()->map(function (
-                    Column $column,
-                    int $columnKey
-                ) use (
-                    $subQuery,
-                    $searched
-                ) {
-                    $dbSearchedTable = $column->getDbSearchedTable() ?: $column->getDbTable();
-                    $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
-                    $dbSearchedFields = $column->getDbSearchedFields() ?: [$column->getDbField()];
-                    foreach ($dbSearchedFields as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
-                        $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
-                        $subQuery->{$whereOperator}(
-                            $dbSearchedTable . '.' . $searchedDatabaseColumn,
-                            $this->getCaseInsensitiveSearchingLikeOperator(),
-                            '%' . $searched . '%'
-                        );
-                    }
-                });
-            });
+        $searchedValue = $this->getRequest()->get($this->getSearchField());
+        if (! $searchedValue) {
+            return;
         }
+        $query->where(function (Builder $subQuery) use ($searchedValue) {
+            $this->searchOnColumns($subQuery, $searchedValue);
+        });
     }
 
     public function getSearchField(): string
     {
         return $this->searchField;
+    }
+
+    protected function searchOnColumns(Builder $query, string $searchedValue): void
+    {
+        $this->getSearchableColumns()->each(function (Column $column, int $columnKey) use ($query, $searchedValue) {
+            $this->searchOnDbFields($query, $column, $columnKey, $searchedValue);
+        });
+    }
+
+    protected function searchOnDbFields(Builder $query, Column $column, int $columnKey, string $searchedValue): void
+    {
+        $dbSearchedTable = $column->getDbSearchedTable() ?: $column->getDbTable();
+        $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
+        $dbSearchedFields = $column->getDbSearchedFields() ?: [$column->getDbField()];
+        foreach ($dbSearchedFields as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
+            $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
+            $query->{$whereOperator}(
+                $dbSearchedTable . '.' . $searchedDatabaseColumn,
+                $this->getCaseInsensitiveSearchingLikeOperator(),
+                '%' . $searchedValue . '%'
+            );
+        }
     }
 
     protected function getCaseInsensitiveSearchingLikeOperator(): string
