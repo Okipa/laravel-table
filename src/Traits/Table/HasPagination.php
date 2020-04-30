@@ -14,7 +14,7 @@ trait HasPagination
 
     protected array $appendedToPaginator = [];
 
-    protected array $appendedHiddenFields = [];
+    protected array $generatedHiddenFields = [];
 
     /**
      * Add an array of arguments to append to the paginator and to the following table actions: row number selection,
@@ -27,7 +27,7 @@ trait HasPagination
     public function appendData(array $appendedToPaginator): Table
     {
         $this->appendedToPaginator = $appendedToPaginator;
-        $this->appendedHiddenFields = $this->extractHiddenFieldsToGenerate($appendedToPaginator);
+        $this->generatedHiddenFields = $this->extractHiddenFieldsToGenerate($appendedToPaginator);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
@@ -36,18 +36,18 @@ trait HasPagination
     protected function extractHiddenFieldsToGenerate(array $appendedToPaginator): array
     {
         $httpArguments = explode('&', http_build_query($appendedToPaginator));
-        $appendedHiddenFields = [];
+        $generatedHiddenFields = [];
         foreach ($httpArguments as $httpArgument) {
             $argument = explode('=', $httpArgument);
-            $appendedHiddenFields[urldecode(head($argument))] = last($argument);
+            $generatedHiddenFields[urldecode(head($argument))] = last($argument);
         }
 
-        return $appendedHiddenFields;
+        return $generatedHiddenFields;
     }
 
-    public function getAppendedHiddenFields(): array
+    public function getGeneratedHiddenFields(): array
     {
-        return $this->appendedHiddenFields;
+        return $this->generatedHiddenFields;
     }
 
     public function getNavigationStatus(): string
@@ -64,6 +64,8 @@ trait HasPagination
     {
         return $this->paginator;
     }
+
+    abstract public function getDestroyConfirmationClosure(): ?Closure;
 
     protected function paginateFromQuery(Builder $query): void
     {
@@ -111,6 +113,4 @@ trait HasPagination
     abstract protected function addClassesToRow(Model $model): void;
 
     abstract protected function disableRow(Model $model): void;
-
-    abstract public function getDestroyConfirmationClosure(): ?Closure;
 }

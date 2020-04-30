@@ -11,7 +11,7 @@
                                 <input type="hidden" name="{{ $table->getSearchField() }}" value="{{ $table->getRequest()->get($table->getSearchField()) }}">
                                 <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
                                 <input type="hidden" name="{{ $table->getSortDirField() }}" value="{{ $table->getRequest()->get($table->getSortDirField()) }}">
-                                @foreach($table->getAppendedHiddenFields() as $appendedKey => $appendedValue)
+                                @foreach($table->getGeneratedHiddenFields() as $appendedKey => $appendedValue)
                                     <input type="hidden" name="{{ $appendedKey }}" value="{{ $appendedValue }}">
                                 @endforeach
                                 <div class="input-group">
@@ -44,7 +44,7 @@
                                 <input type="hidden" name="{{ $table->getRowsNumberField() }}" value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}">
                                 <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
                                 <input type="hidden" name="{{ $table->getSortDirField() }}" value="{{ $table->getRequest()->get($table->getSortDirField()) }}">
-                                @foreach($table->getAppendedHiddenFields() as $appendedKey => $appendedValue)
+                                @foreach($table->getGeneratedHiddenFields() as $appendedKey => $appendedValue)
                                     <input type="hidden" name="{{ $appendedKey }}" value="{{ $appendedValue }}">
                                 @endforeach
                                 <div class="input-group">
