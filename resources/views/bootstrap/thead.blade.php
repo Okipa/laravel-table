@@ -67,7 +67,7 @@
                                                     $table->getRowsNumberField() => $table->getRequest()->get($table->getRowsNumberField()),
                                                     $table->getSortByField() => $table->getRequest()->get($table->getSortByField()),
                                                     $table->getSortDirField() => $table->getRequest()->get($table->getSortDirField())
-                                                ], $table->getAppendedValues())) }}"
+                                                ], $table->getAppendedToPaginator())) }}"
                                                title="@lang('Reset research')">
                                                 <span>{!! config('laravel-table.icon.reset') !!}</span>
                                             </a>
@@ -100,7 +100,7 @@
                             $table->getSearchField() => $table->getRequest()->get($table->getSearchField()),
                             $table->getSortByField() => $column->getDbField(),
                             $table->getSortDirField() => $table->getRequest()->get($table->getSortDirField()) === 'desc' ? 'asc' : 'desc',
-                        ], $table->getAppendedValues())) }}"
+                        ], $table->getAppendedToPaginator())) }}"
                        title="{{ $column->getTitle() }}">
                         @if($table->getRequest()->get($table->getSortByField()) === $column->getDbField()
                             && $table->getRequest()->get($table->getSortDirField()) === 'asc')

@@ -38,6 +38,7 @@ There are small changes in the API you will have to report in your code:
 * Rename the each use of `->prepend(` by `->prependHtml(`.
 * Rename the each use of `->append(` by `->appendsHtml(`.
 * Rename the each use of `->rowsNumberSelectionActivation(` by `->activateRowsNumberDefinition(`.
+* Rename the each use of `->appends(` by `->appendData(`.
 
 ## Accessing table rows
 

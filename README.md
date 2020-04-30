@@ -103,7 +103,7 @@ And display it the view:
   * [->rowsNumber()](#table-rowsNumber)
   * [->activateRowsNumberDefinition()](#table-activateRowsNumberDefinition)
   * [->query()](#table-query)
-  * [->appends()](#table-appends)
+  * [->appendData()](#table-appendData)
   * [->containerClasses()](#table-containerClasses)
   * [->tableClasses()](#table-tableClasses)
   * [->trClasses()](#table-trClasses)
@@ -248,7 +248,7 @@ class NewsTable extends AbstractTable
                 return $news->id === 3;
             }, ['highlighted', 'bg-success'])
             // append all request params to the paginator
-            ->appends($this->request->all());
+            ->appendData($this->request->all());
     }
     
     protected function columns(Table $table): void
@@ -509,7 +509,7 @@ class UsersTable extends AbstractTable
 });
 ```
 
-<h3 id="table-appends">->appends()</h3>
+<h3 id="table-appendData">->appendData()</h3>
 
 > Add an array of arguments to append to the paginator and to the following table actions:
 >
@@ -520,13 +520,13 @@ class UsersTable extends AbstractTable
 
 **Note:**
 
-* Signature: `appends(array $appendedValues): \Okipa\LaravelTable\Table`
+* Signature: `appendData(array $appendedToPaginator): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->appends(request()->only('status'));
+(new Table)->appendData(request()->only('status'));
 ```
 
 <h3 id="table-containerClasses">->containerClasses()</h3>

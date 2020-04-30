@@ -12,7 +12,7 @@ trait HasPagination
 {
     protected LengthAwarePaginator $paginator;
 
-    protected array $appendedValues = [];
+    protected array $appendedToPaginator = [];
 
     protected array $appendedHiddenFields = [];
 
@@ -20,22 +20,22 @@ trait HasPagination
      * Add an array of arguments to append to the paginator and to the following table actions: row number selection,
      * searching, search canceling, sorting.
      *
-     * @param array $appendedValues
+     * @param array $appendedToPaginator
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function appends(array $appendedValues): Table
+    public function appendData(array $appendedToPaginator): Table
     {
-        $this->appendedValues = $appendedValues;
-        $this->appendedHiddenFields = $this->extractHiddenFieldsToGenerate($appendedValues);
+        $this->appendedToPaginator = $appendedToPaginator;
+        $this->appendedHiddenFields = $this->extractHiddenFieldsToGenerate($appendedToPaginator);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    protected function extractHiddenFieldsToGenerate(array $appendedValues): array
+    protected function extractHiddenFieldsToGenerate(array $appendedToPaginator): array
     {
-        $httpArguments = explode('&', http_build_query($appendedValues));
+        $httpArguments = explode('&', http_build_query($appendedToPaginator));
         $appendedHiddenFields = [];
         foreach ($httpArguments as $httpArgument) {
             $argument = explode('=', $httpArgument);
@@ -75,7 +75,7 @@ trait HasPagination
             $this->getSearchField() => $this->searchValue,
             $this->getSortByField() => $this->getSortByValue(),
             $this->getSortDirField() => $this->getSortDirValue(),
-        ], $this->getAppendedValues()));
+        ], $this->getAppendedToPaginator()));
     }
 
     abstract public function getRowsNumberValue(): ?int;
@@ -92,9 +92,9 @@ trait HasPagination
 
     abstract public function getSortDirValue(): ?string;
 
-    public function getAppendedValues(): array
+    public function getAppendedToPaginator(): array
     {
-        return $this->appendedValues;
+        return $this->appendedToPaginator;
     }
 
     protected function transformPaginatedRows(): void
@@ -102,9 +102,7 @@ trait HasPagination
         $this->getPaginator()->getCollection()->transform(function (Model $model) {
             $this->addClassesToRow($model);
             $this->disableRow($model);
-            if ($this->getDestroyConfirmationClosure()) {
-                $model->destroyConfirmationAttributes = ($this->getDestroyConfirmationClosure())($model);
-            }
+            $this->defineRowConfirmationHtmlAttributes($model);
 
             return $model;
         });

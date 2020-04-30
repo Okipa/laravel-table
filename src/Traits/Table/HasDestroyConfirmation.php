@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Traits\Table;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Table;
 
 trait HasDestroyConfirmation
@@ -25,6 +26,13 @@ trait HasDestroyConfirmation
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    public function defineRowConfirmationHtmlAttributes(Model $model): void
+    {
+        if ($this->getDestroyConfirmationClosure()) {
+            $model->destroyConfirmationAttributes = ($this->getDestroyConfirmationClosure())($model);
+        }
     }
 
     public function getDestroyConfirmationClosure(): ?Closure
