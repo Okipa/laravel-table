@@ -76,7 +76,7 @@ class UsersController
 {
     public function index(): View
     {
-        $table = new UsersTable;
+        $table = (new UsersTable)->setup();
     
         return view('templates.users.index', compact('table'));
     }
@@ -87,7 +87,7 @@ class UsersController
 And display it the view:
 
 ```blade
-{{ $table() }}
+{{ $table }}
 ```
 
 ## Table of contents

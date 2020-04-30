@@ -10,7 +10,7 @@ abstract class AbstractTable
      * @return \Okipa\LaravelTable\Table
      * @throws \ErrorException
      */
-    public function __invoke(): Table
+    public function setup(): Table
     {
         $table = $this->table();
         $this->columns($table);
