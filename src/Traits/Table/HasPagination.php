@@ -12,9 +12,9 @@ trait HasPagination
 {
     protected LengthAwarePaginator $paginator;
 
-    protected ?array $appendedValues = [];
+    protected array $appendedValues = [];
 
-    protected ?array $appendedHiddenFields = [];
+    protected array $appendedHiddenFields = [];
 
     /**
      * Add an array of arguments to append to the paginator and to the following table actions : row number selection,
@@ -45,7 +45,7 @@ trait HasPagination
         return $appendedHiddenFields;
     }
 
-    public function getAppendedHiddenFields(): ?array
+    public function getAppendedHiddenFields(): array
     {
         return $this->appendedHiddenFields;
     }
