@@ -28,7 +28,7 @@
                                            aria-label="@lang('Number of rows')">
                                     <div class="input-group-append">
                                         <div class="input-group-text py-0">
-                                            <button class="btn btn-link p-0 text-primary" type="submit">
+                                            <button class="btn btn-link p-0 text-primary" type="submit" title="@lang('Number of rows')">
                                                 {!! config('laravel-table.icon.validate') !!}
                                             </button>
                                         </div>
@@ -75,7 +75,7 @@
                                     @else
                                         <div class="input-group-append">
                                             <span class="input-group-text py-0">
-                                                <button class="btn btn-link p-0 text-primary" type="submit">
+                                                <button class="btn btn-link p-0 text-primary" type="submit" title="@lang('Search by:') {{ $table->getSearchableTitles() }}">
                                                     {!! config('laravel-table.icon.validate') !!}
                                                 </button>
                                             </span>
