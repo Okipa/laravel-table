@@ -13,7 +13,6 @@ class DummyClass extends AbstractTable
      *
      * @return \Okipa\LaravelTable\Table
      * @throws \ErrorException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function table(): Table
     {

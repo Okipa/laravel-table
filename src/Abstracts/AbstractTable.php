@@ -21,7 +21,6 @@ abstract class AbstractTable
      *
      * @return \Okipa\LaravelTable\Table
      * @throws \ErrorException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     abstract protected function table(): Table;
 
