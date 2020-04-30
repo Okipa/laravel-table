@@ -456,7 +456,7 @@ class UsersTable extends AbstractTable
 
 > Override the config default number of rows displayed on the table.  
 > The default number of displayed rows is defined in the `config('laravel-table.behavior.rows_number')` config value.  
-> Set `false` to display all the models contained in database.
+> Set `null` to display all the models contained in database.
 
 **Note:**
 

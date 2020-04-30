@@ -16,26 +16,6 @@ trait HasPagination
 
     protected ?array $appendedHiddenFields = [];
 
-    abstract public function getRowsNumberValue(): ?int;
-
-    abstract public function getRowsNumberField(): string;
-
-    abstract public function getSearchField(): string;
-
-    abstract public function getSortByField(): string;
-
-    abstract public function getSortByValue(): ?string;
-
-    abstract public function getSortDirField(): string;
-
-    abstract public function getSortDirValue(): ?string;
-
-    abstract protected function addClassesToRow(Model $model): void;
-
-    abstract protected function disableRow(Model $model): void;
-
-    abstract public function getDestroyConfirmationClosure(): ?Closure;
-
     /**
      * Add an array of arguments to append to the paginator and to the following table actions : row number selection,
      * searching, search canceling, sorting.
@@ -80,9 +60,16 @@ trait HasPagination
         ]);
     }
 
+    public function getPaginator(): LengthAwarePaginator
+    {
+        return $this->paginator;
+    }
+
     protected function paginateFromQuery(Builder $query): void
     {
-        $this->paginator = $query->paginate($this->getRowsNumberValue() ?: $query->count());
+        /** @var int|null $perPage */
+        $perPage = $this->getRowsNumberValue() ?: $query->count();
+        $this->paginator = $query->paginate($perPage);
         $this->getPaginator()->appends(array_merge([
             $this->getRowsNumberField() => $this->getRowsNumberValue(),
             $this->getSearchField() => $this->searchValue,
@@ -91,10 +78,19 @@ trait HasPagination
         ], $this->getAppendedValues()));
     }
 
-    public function getPaginator(): LengthAwarePaginator
-    {
-        return $this->paginator;
-    }
+    abstract public function getRowsNumberValue(): ?int;
+
+    abstract public function getRowsNumberField(): string;
+
+    abstract public function getSearchField(): string;
+
+    abstract public function getSortByField(): string;
+
+    abstract public function getSortByValue(): ?string;
+
+    abstract public function getSortDirField(): string;
+
+    abstract public function getSortDirValue(): ?string;
 
     public function getAppendedValues(): array
     {
@@ -113,4 +109,10 @@ trait HasPagination
             return $model;
         });
     }
+
+    abstract protected function addClassesToRow(Model $model): void;
+
+    abstract protected function disableRow(Model $model): void;
+
+    abstract public function getDestroyConfirmationClosure(): ?Closure;
 }

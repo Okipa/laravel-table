@@ -34,9 +34,17 @@ trait HasIdentifier
 
     abstract protected function reDefineRowsNumberField(string $rowsNumberField): void;
 
+    abstract public function getRowsNumberField(): string;
+
     abstract protected function reDefineSearchField(string $searchField): void;
+
+    abstract public function getSearchField(): string;
 
     abstract protected function reDefineSortByField(string $sortByField): void;
 
+    abstract public function getSortByField(): string;
+
     abstract protected function reDefineSortDirField(string $sortDirField): void;
+
+    abstract public function getSortDirField(): string;
 }
