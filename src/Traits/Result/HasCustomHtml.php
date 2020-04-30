@@ -1,28 +1,28 @@
 <?php
 
-namespace Okipa\LaravelTable\Traits\Column;
+namespace Okipa\LaravelTable\Traits\Result;
 
 use Closure;
 use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Result;
 
 trait HasCustomHtml
 {
     protected ?Closure $customHtmlClosure = null;
 
     /**
-     * Display a custom HTML for the column.
-     * The closure let you manipulate the following attributes: \Illuminate\Database\Eloquent\Model $model,
-     * \Okipa\LaravelTable\Column $column.
+     * Display a HTML output for the result row.
+     * The closure let you manipulate the following attributes: \Illuminate\Support\Collection $displayedList.
      *
      * @param \Closure $customHtmlClosure
      *
-     * @return \Okipa\LaravelTable\Column
+     * @return \Okipa\LaravelTable\Result
      */
-    public function html(Closure $customHtmlClosure): Column
+    public function html(Closure $customHtmlClosure): Result
     {
         $this->customHtmlClosure = $customHtmlClosure;
 
-        /** @var \Okipa\LaravelTable\Column $this */
+        /** @var \Okipa\LaravelTable\Result $this */
         return $this;
     }
 

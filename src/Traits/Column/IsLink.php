@@ -13,8 +13,8 @@ trait IsLink
 
     /**
      * Wrap the column value into a <a></a> component.
-     * You can declare the link as a string or as a closure which will let you manipulate the following attributes :
-     * `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
+     * You can declare the link as a string or as a closure which will let you manipulate the following attributes:
+     * \Illuminate\Database\Eloquent\Model $model, \Okipa\LaravelTable\Column $column.
      * If no url is declared, the url will be generated using the column value.
      *
      * @param string|Closure $url

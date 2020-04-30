@@ -17,7 +17,7 @@ trait HasPagination
     protected array $appendedHiddenFields = [];
 
     /**
-     * Add an array of arguments to append to the paginator and to the following table actions : row number selection,
+     * Add an array of arguments to append to the paginator and to the following table actions: row number selection,
      * searching, search canceling, sorting.
      *
      * @param array $appendedValues

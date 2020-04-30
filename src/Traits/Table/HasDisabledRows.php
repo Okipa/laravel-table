@@ -14,7 +14,7 @@ trait HasDisabledRows
     /**
      * Set the disable lines closure that will be executed during the table generation.
      * The optional second param let you override the classes that will be applied for the disabled lines.
-     * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Model $model.
+     * The closure let you manipulate the following attribute: \Illuminate\Database\Eloquent\Model $model.
      *
      * @param \Closure $rowDisableClosure
      * @param array $classes

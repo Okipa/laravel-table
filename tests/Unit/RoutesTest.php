@@ -48,7 +48,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The « name » key is missing from the « create » route definition. Each route '
-            . 'definition should follow this structure : '
+            . 'definition should follow this structure: '
             . '["index" => ["name" => "news.index"]. Fix your routes declaration in the '
             . '« routes() » method.');
         (new Table)->routes([

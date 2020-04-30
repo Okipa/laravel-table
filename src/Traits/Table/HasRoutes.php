@@ -91,7 +91,7 @@ trait HasRoutes
                 if (! in_array($requiredRouteParam, array_keys($route))) {
                     throw new ErrorException(
                         'The « ' . $requiredRouteParam . ' » key is missing from the « ' . $routeKey
-                        . ' » route definition. Each route definition should follow this structure : '
+                        . ' » route definition. Each route definition should follow this structure: '
                         . '["index" => ["name" => "news.index"]. '
                         . 'Fix your routes declaration in the « routes() » method.'
                     );

@@ -12,7 +12,7 @@ trait HasAdditionalQueries
 
     /**
      * Set the query closure that will be executed during the table generation.
-     * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Builder $query.
+     * The closure let you manipulate the following attribute: \Illuminate\Database\Eloquent\Builder $query.
      *
      * @param \Closure $additionalQueriesClosure
      *

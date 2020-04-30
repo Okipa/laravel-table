@@ -127,7 +127,7 @@ trait HasClasses
 
     /**
      * Set rows classes when the given conditions are respected.
-     * The closure let you manipulate the following attribute : \Illuminate\Database\Eloquent\Model $model.
+     * The closure let you manipulate the following attribute: \Illuminate\Database\Eloquent\Model $model.
      *
      * @param \Closure $rowClassesClosure
      * @param array $rowClasses
