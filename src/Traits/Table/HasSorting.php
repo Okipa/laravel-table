@@ -67,6 +67,11 @@ trait HasSorting
         return 'asc';
     }
 
+    protected function reDefineSortByField(string $sortByField): void
+    {
+        $this->sortByField = $sortByField;
+    }
+
     public function getSortByField(): string
     {
         return $this->sortByField;
@@ -75,6 +80,11 @@ trait HasSorting
     public function getSortByValue(): ?string
     {
         return $this->sortByValue;
+    }
+
+    protected function reDefineSortDirField(string $sortDirField): void
+    {
+        $this->sortDirField = $sortDirField;
     }
 
     public function getSortDirField(): string

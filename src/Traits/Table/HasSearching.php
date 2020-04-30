@@ -28,6 +28,11 @@ trait HasSearching
         });
     }
 
+    protected function reDefineSearchField(string $searchField): void
+    {
+        $this->searchField = $searchField;
+    }
+
     public function getSearchField(): string
     {
         return $this->searchField;

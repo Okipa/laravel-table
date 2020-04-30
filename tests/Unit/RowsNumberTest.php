@@ -17,16 +17,16 @@ class RowsNumberTest extends LaravelTableTestCase
 
     public function testSetRowsNumberAttribute()
     {
-        $rows = 10;
-        $table = (new Table)->rowsNumber($rows);
-        $this->assertEquals($rows, $table->getRowsNumberValue());
+        $rowsNumber = 10;
+        $table = (new Table)->rowsNumber($rowsNumber);
+        $this->assertEquals($rowsNumber, $table->getRowsNumberValue());
     }
 
     public function testSetUnlimitedRowsNumberAttribute()
     {
-        $rows = false;
+        $rowsNumber = false;
         $table = (new Table)->rowsNumber(false);
-        $this->assertEquals($rows, $table->getRowsNumberValue());
+        $this->assertEquals($rowsNumber, $table->getRowsNumberValue());
     }
 
     public function testDeactivateRowsNumberDefinitionFromConfigHtml()

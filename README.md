@@ -460,7 +460,7 @@ class UsersTable extends AbstractTable
 
 **Note:**
 
-* Signature: `rowsNumber(?int $rows): \Okipa\LaravelTable\Table`
+* Signature: `rowsNumber(?int $rowsNumber): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**

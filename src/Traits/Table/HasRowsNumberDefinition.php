@@ -16,16 +16,21 @@ trait HasRowsNumberDefinition
      * Override the config default number of rows displayed on the table.
      * The default number of displayed rows is defined in the config('laravel-table.behavior.rows_number') config value.
      *
-     * @param int|null $rows
+     * @param int|null $rowsNumber
      *
      * @return \Okipa\LaravelTable\Table
      */
-    public function rowsNumber(?int $rows): Table
+    public function rowsNumber(?int $rowsNumber): Table
     {
-        $this->rowsNumberValue = $rows;
+        $this->rowsNumberValue = $rowsNumber;
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    protected function reDefineRowsNumberField(string $rowsNumberField): void
+    {
+        $this->rowsNumberField = $rowsNumberField;
     }
 
     public function getRowsNumberField(): string

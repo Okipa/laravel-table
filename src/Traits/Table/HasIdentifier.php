@@ -21,14 +21,22 @@ trait HasIdentifier
     protected function redefineInteractionFieldsFromIdentifier(): void
     {
         $underscoredIdentifier = $this->getIdentifier() ? str_replace('-', '_', $this->getIdentifier()) . '_' : '';
-        $this->rowsNumberField = $underscoredIdentifier . $this->getRowsNumberField();
-        $this->searchField = $underscoredIdentifier . $this->getSearchField();
-        $this->sortByField = $underscoredIdentifier . $this->getSortByField();
-        $this->sortDirField = $underscoredIdentifier . $this->getSortDirField();
+        $this->reDefineRowsNumberField($underscoredIdentifier . $this->getRowsNumberField());
+        $this->reDefineSearchField($underscoredIdentifier . $this->getSearchField());
+        $this->reDefineSortByField($underscoredIdentifier . $this->getSortByField());
+        $this->reDefineSortDirField($underscoredIdentifier . $this->getSortDirField());
     }
 
     public function getIdentifier(): ?string
     {
         return $this->identifier;
     }
+
+    abstract protected function reDefineRowsNumberField(string $rowsNumberField): void;
+
+    abstract protected function reDefineSearchField(string $searchField): void;
+
+    abstract protected function reDefineSortByField(string $sortByField): void;
+
+    abstract protected function reDefineSortDirField(string $sortDirField): void;
 }
