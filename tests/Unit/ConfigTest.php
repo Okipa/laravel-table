@@ -13,7 +13,7 @@ class ConfigTest extends LaravelTableTestCase
         // laravel-table
         $this->assertTrue(array_key_exists('classes', config('laravel-table')));
         $this->assertTrue(array_key_exists('icon', config('laravel-table')));
-        $this->assertTrue(array_key_exists('value', config('laravel-table')));
+        $this->assertTrue(array_key_exists('behavior', config('laravel-table')));
         $this->assertTrue(array_key_exists('template', config('laravel-table')));
         // laravel-table.classes
         $this->assertTrue(array_key_exists('container', config('laravel-table.classes')));
@@ -24,20 +24,20 @@ class ConfigTest extends LaravelTableTestCase
         $this->assertTrue(array_key_exists('results', config('laravel-table.classes')));
         $this->assertTrue(array_key_exists('disabled', config('laravel-table.classes')));
         // laravel-table.icon
-        $this->assertTrue(array_key_exists('rowsNumber', config('laravel-table.icon')));
+        $this->assertTrue(array_key_exists('rows_number', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('sort', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('sortAsc', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('sortDesc', config('laravel-table.icon')));
+        $this->assertTrue(array_key_exists('sort_asc', config('laravel-table.icon')));
+        $this->assertTrue(array_key_exists('sort_desc', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('search', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('validate', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('cancel', config('laravel-table.icon')));
+        $this->assertTrue(array_key_exists('reset', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('create', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('edit', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('destroy', config('laravel-table.icon')));
         $this->assertTrue(array_key_exists('show', config('laravel-table.icon')));
-        // laravel-table.value
-        $this->assertTrue(array_key_exists('rowsNumber', config('laravel-table.value')));
-        $this->assertTrue(array_key_exists('rowsNumberSelectionActivation', config('laravel-table.value')));
+        // laravel-table.behavior
+        $this->assertTrue(array_key_exists('rows_number', config('laravel-table.behavior')));
+        $this->assertTrue(array_key_exists('activate_rows_number_definition', config('laravel-table.behavior')));
         // laravel-table.template
         $this->assertTrue(array_key_exists('table', config('laravel-table.template')));
         $this->assertTrue(array_key_exists('thead', config('laravel-table.template')));
@@ -47,7 +47,7 @@ class ConfigTest extends LaravelTableTestCase
 
     public function testCustomDefaultValueRowsNumber()
     {
-        config()->set('laravel-table.value.rowsNumber', 9999);
+        config()->set('laravel-table.behavior.rows_number', 9999);
         $this->createMultipleUsers(3);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy', 'show']);
         $table = (new Table)->model(User::class)->routes([
@@ -65,9 +65,9 @@ class ConfigTest extends LaravelTableTestCase
             ->title('Email')
             ->searchable()
             ->sortable();
-        $table->render();
-        $html = view('laravel-table::' . $table->tableTemplatePath, compact('table'))->render();
-        $this->assertEquals(9999, $table->rows);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
+        $this->assertEquals(9999, $table->getRowsNumberValue());
         $this->assertStringContainsString('value="9999"', $html);
         $this->assertStringContainsString('rows=9999', $html);
     }

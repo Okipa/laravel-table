@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.0.0](https://github.com/Okipa/laravel-table/compare/1.5.0...2.0.0)
+
+2020-04-30
+
+* Dropped support for PHP versions under 7.4.
+* Dropped support for Laravel versions under 6.0.
+* Restructured configuration file.
+* Removed translation files.
+* Updated templates.
+* Removed the deprecated methods.
+* Refactored the whole architecture to facilitate code comprehension and maintenance.
+* New architecture and usage.
+  
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v1-to-v2.md)
+
 ## [1.5.0](https://github.com/Okipa/laravel-table/compare/1.4.0...1.5.0)
 
 2020-04-26
@@ -44,10 +59,10 @@
 
 2019-10-15
 
-* Fixed the translations publication and overriding as specified on the Laravel documentation : https://laravel.com/docs/packages#translations.
-* Changed the command to publish the translations to : `php artisan vendor:publish --tag=laravel-table:translations`
-* Changed the command to publish the configuration to : `php artisan vendor:publish --tag=laravel-table:config`
-* Changed the command to publish the views to : `php artisan vendor:publish --tag=laravel-table:views`
+* Fixed the translations publication and overriding as specified on the Laravel documentation: https://laravel.com/docs/packages#translations.
+* Changed the command to publish the translations to: `php artisan vendor:publish --tag=laravel-table:translations`
+* Changed the command to publish the configuration to: `php artisan vendor:publish --tag=laravel-table:config`
+* Changed the command to publish the views to: `php artisan vendor:publish --tag=laravel-table:views`
 * Improved testing with Travis CI (added some tests with `--prefer-lowest` composer tag to check the package compatibility with the lowest dependencies versions).
 
 ## [1.2.4](https://github.com/Okipa/laravel-table/compare/1.2.3...1.2.4)
@@ -64,16 +79,16 @@
 
 * The model is now directly passed to the route during the table `show`, `edit` and `destroy` routes generation instead of its id.
 ```php
-// assuming your declared your edit route like this :
+// assuming your declared your edit route like this:
 (new Table)->model(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...
-])
-// the route will be generated like this during the table instantiation :
-route('user.edit, [$user, 'foo' => 'bar']);
+]);
+// the route will be generated like this during the table instantiation:
+route('user.edit', [$user, 'foo' => 'bar']);
 // instead of this way
-route('user.edit, [$user->id, 'foo' => 'bar']);
+route('user.edit', [$user->id, 'foo' => 'bar']);
 ```
 
 ## [1.2.2](https://github.com/Okipa/laravel-table/compare/1.2.1...1.2.2)
@@ -82,33 +97,33 @@ route('user.edit, [$user->id, 'foo' => 'bar']);
 
 * Fixed params order when generating the table routes. The table model id was not positioned at first when declaring other parameters.
 ```php
-// with a route declared like this :
+// with a route declared like this:
 Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
-// and a table routes declaration like this :
+// and a table routes declaration like this:
 (new Table)->model(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['bar']],
     //...
-])
-// the route is now correctly generated and gives : /user/edit/1/bar instead of /user/edit/bar/1
+]);
+// the route is now correctly generated and gives: /user/edit/1/bar instead of /user/edit/bar/1
 ```
 
 ## [1.2.1](https://github.com/Okipa/laravel-table/compare/1.2.0...1.2.1)
 
 2019-09-13
 
-* Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the `route()` helper call :
+* Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the `route()` helper:
 ```php
-// assuming your declared your edit route like this :
+// assuming your declared your edit route like this:
 (new Table)->model(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...
-])
-// the route will be generated like this during the table instantiation :
-route('user.edit, [$user->id, 'foo' => 'bar']);
+]);
+// the route will be generated like this during the table instantiation:
+route('user.edit', [$user->id, 'foo' => 'bar']);
 // instead of this way
-route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
+route('user.edit', ['id' => $user->id, 'foo' => 'bar']);
 ```
 
 ## [1.2.0](https://github.com/Okipa/laravel-table/compare/1.1.0...1.2.0)
@@ -121,9 +136,9 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 
 2019-08-02
 
-* Added the possibility to add an identifier to a table with `->identifier('your identifier')`. This identifier will be used for several things :
+* Added the possibility to add an identifier to a table with `->identifier('your identifier')`. This identifier will be used for several things:
   * It will be added as an id (formatted as a slug string) to the table itself.
-  * It will be used to automatically customize the following interaction fields sent to the table, in order to be able to interact with a specific table if you have several of them on a single view : `rows`, `search`, `sort_by`, `sort_dir`.
+  * It will be used to automatically customize the following interaction fields sent to the table, in order to be able to interact with a specific table if you have several of them on a single view: `rows`, `search`, `sort_by`, `sort_dir`.
 * :warning: if you have published the views, you will have to re-publish them.  
 
 ## [1.0.13](https://github.com/Okipa/laravel-table/compare/1.0.12...1.0.13)
@@ -168,20 +183,20 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 
 2019-02-21
 
-* Updated the result displaying in one and only `td` html tag : the title is displayed on the left and the result html on the right.
+* Updated the result displaying in one and only `td` html tag: the title is displayed on the left and the result html on the right.
 * Also fixed the result classes rendering location, which is now on the `tr` html tag and no more on the `td` html tags.
 
 ## [1.0.7](https://github.com/Okipa/laravel-table/compare/1.0.6...1.0.7)
 
 2019-02-19
 
-* **Possible breaking change :** reverted last tag features => removed the capacity to add some result outputs with the `->result()` method the Column objects.
-* **Possible breaking change :** reverted last tag features => removed the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
-* Added the capacity to append some results objects to the table with the `->result()` method with the following methods :
-  * `->title()` : Set the result row title.
-  * `->html()` : Display a HTML output for the result row. The closure let you manipulate the following attributes : `\Illuminate\Support\Collection $displayedList`.
-  * `->classes()` : Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the `config('laravel-table.classes.results')` value.
-* Added the capacity to manage a custom results template path in the config and with the `->$resultsComponentPath()` method.
+* **Possible breaking change:** reverted last tag features => removed the capacity to add some result outputs with the `->result()` method the Column objects.
+* **Possible breaking change:** reverted last tag features => removed the capacity to override default classes (config) for the results cells with the Table `->resultClasses()` method.
+* Added the capacity to append some results objects to the table with the `->result()` method with the following methods:
+  * `->title()`: Set the result row title.
+  * `->html()`: Display a HTML output for the result row. The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $paginatedRows`.
+  * `->classes()`: Override the default results classes and apply the given classes only on this result row. The default result classes are managed by the `config('laravel-table.classes.results')` value.
+* Added the capacity to manage a custom results template path in the config and with the `->resultsTemplatePath()` method.
 
 ## [1.0.6](https://github.com/Okipa/laravel-table/compare/1.0.5...1.0.6)
 
@@ -219,4 +234,4 @@ route('user.edit, ['id' => $user->id, 'foo' => 'bar']);
 
 2019-02-13
 
-* Merged pull request https://github.com/Okipa/laravel-table/pull/2 : wrapped searching queries into a `->where()` clause to avoid wrong behaviours when searching values. Thanks to https://github.com/costeirs for the PR.
+* Merged pull request https://github.com/Okipa/laravel-table/pull/2: wrapped searching queries into a `->where()` clause to avoid wrong behaviours when searching values. Thanks to https://github.com/costeirs for the PR.

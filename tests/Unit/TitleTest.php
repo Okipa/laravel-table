@@ -12,7 +12,7 @@ class TitleTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->title('Name');
-        $this->assertEquals('Name', $table->columns->first()->title);
+        $this->assertEquals('Name', $table->getColumns()->first()->getTitle());
     }
 
     public function testTitleHtml()
@@ -21,8 +21,8 @@ class TitleTest extends LaravelTableTestCase
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
-        $html = view('laravel-table::' . $table->theadTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('Name', $html);
         $this->assertStringContainsString('Email', $html);
     }

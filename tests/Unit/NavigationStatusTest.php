@@ -3,8 +3,8 @@
 namespace Okipa\LaravelTable\Tests\Unit;
 
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Test\Models\User;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
+use Okipa\LaravelTable\Test\Models\User;
 
 class NavigationStatusTest extends LaravelTableTestCase
 {
@@ -14,12 +14,15 @@ class NavigationStatusTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $this->assertEquals($table->navigationStatus(), __('laravel-table::laravel-table.navigation', [
-            'start' => 1,
-            'stop'  => 10,
-            'total' => 10,
-        ]));
+        $table->configure();
+        $this->assertEquals(
+            $table->getNavigationStatus(),
+            __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
+                'start' => 1,
+                'stop' => 10,
+                'total' => 10,
+            ])
+        );
     }
 
     public function testNavigationStatusHtml()
@@ -27,8 +30,8 @@ class NavigationStatusTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
-        $table->render();
-        $html = view('laravel-table::' . $table->tfootComponentPath, compact('table'))->render();
-        $this->assertStringContainsString($table->navigationStatus(), $html);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString($table->getNavigationStatus(), $html);
     }
 }

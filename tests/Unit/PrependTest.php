@@ -11,17 +11,17 @@ class PrependTest extends LaravelTableTestCase
     public function testSetPrependAttribute()
     {
         $table = (new Table)->model(User::class);
-        $table->column('name')->prepend('icon');
-        $this->assertEquals('icon', $table->columns->first()->prepend);
-        $this->assertEquals(false, $table->columns->first()->displayPrependEvenIfNoValue);
+        $table->column('name')->prependHtml('html');
+        $this->assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
+        $this->assertEquals(false, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
     }
 
     public function testSetPrependAttributeAndSetShowWithNoValue()
     {
         $table = (new Table)->model(User::class);
-        $table->column('name')->prepend('icon', true);
-        $this->assertEquals('icon', $table->columns->first()->prepend);
-        $this->assertEquals(true, $table->columns->first()->displayPrependEvenIfNoValue);
+        $table->column('name')->prependHtml('html', true);
+        $this->assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
+        $this->assertEquals(true, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
     }
 
     public function testSetPrependHtml()
@@ -29,10 +29,10 @@ class PrependTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prepend('icon');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
-        $this->assertStringContainsString('icon', $html);
+        $table->column('name')->prependHtml('html');
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('html', $html);
     }
 
     public function testSetPrependWithCustomValueHtml()
@@ -40,12 +40,12 @@ class PrependTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prepend('icon')->value(function () {
+        $table->column('name')->prependHtml('html')->value(function () {
             return 'test';
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
-        $this->assertStringContainsString('icon', $html);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('html', $html);
     }
 
     public function testSetPrependWithNoValueHtml()
@@ -54,10 +54,10 @@ class PrependTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prepend('icon');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
-        $this->assertStringNotContainsString('icon', $html);
+        $table->column('name')->prependHtml('html');
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringNotContainsString('html', $html);
     }
 
     public function testSetPrependWithNoValueButShowAnywayValueHtml()
@@ -66,9 +66,9 @@ class PrependTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prepend('icon', true);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
-        $this->assertStringContainsString('icon', $html);
+        $table->column('name')->prependHtml('html', true);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('html', $html);
     }
 }

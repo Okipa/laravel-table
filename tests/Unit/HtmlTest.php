@@ -14,6 +14,6 @@ class CustomHtmlElementTest extends LaravelTableTestCase
         $closure = function ($model, $column) {
         };
         $table->column('name')->html($closure);
-        $this->assertEquals($closure, $table->columns->first()->htmlClosure);
+        $this->assertEquals($closure, $table->getColumns()->first()->getCustomHtmlClosure());
     }
 }

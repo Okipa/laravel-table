@@ -15,8 +15,8 @@ class RowDisableTest extends LaravelTableTestCase
         };
         $classes = ['test-disabled-custom-class'];
         $table = (new Table)->disableRows($rowDisableClosure, $classes);
-        $this->assertEquals($rowDisableClosure, $table->disableRows->first()['closure']);
-        $this->assertEquals($classes, $table->disableRows->first()['classes']);
+        $this->assertEquals($rowDisableClosure, $table->getDisabledRows()->first()['closure']);
+        $this->assertEquals($classes, $table->getDisabledRows()->first()['classes']);
     }
 
     public function testDisableLineWithDefaultClassHtml()
@@ -38,13 +38,13 @@ class RowDisableTest extends LaravelTableTestCase
             ->disableRows($closure);
         $table->column('name');
         $table->column('email');
-        $table->render();
-        foreach ($table->list->getCollection() as $user) {
+        $table->configure();
+        foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
         }
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
@@ -81,13 +81,13 @@ class RowDisableTest extends LaravelTableTestCase
             ->disableRows($closure, $classes);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
-        foreach ($table->list->getCollection() as $user) {
+        $table->configure();
+        foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
                 ? $this->assertEquals($user->disabledClasses, $classes)
                 : $this->assertEmpty($user->disabledClasses);
         }
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
         foreach ($users as $user) {
             if ($user->id === 1 || $user->id === 2) {
@@ -106,7 +106,7 @@ class RowDisableTest extends LaravelTableTestCase
     public function testWithNoDisableLinesHtml()
     {
         $classes = ['test-disabled-default-class'];
-        config()->set('laravel-table.value.disabled_line.class', $classes);
+        config()->set('laravel-table.behavior.disabled_line.class', $classes);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
         $table = (new Table)->model(User::class)
@@ -118,8 +118,8 @@ class RowDisableTest extends LaravelTableTestCase
             ]);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString(implode(' ', $classes), $html);
         $this->assertStringNotContainsString('disabled="disabled"', $html);
     }

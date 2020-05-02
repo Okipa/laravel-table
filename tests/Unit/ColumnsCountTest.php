@@ -14,7 +14,7 @@ class ColumnsCountTest extends LaravelTableTestCase
         $table->column('id');
         $table->column('name');
         $table->column('email');
-        $this->assertEquals(3, $table->columnsCount());
+        $this->assertEquals(3, $table->getColumnsCount());
     }
 
     public function testGetColumnsCountWithEditRouteDefined()
@@ -27,6 +27,6 @@ class ColumnsCountTest extends LaravelTableTestCase
         $table->column('id');
         $table->column('name');
         $table->column('email');
-        $this->assertEquals(4, $table->columnsCount());
+        $this->assertEquals(4, $table->getColumnsCount());
     }
 }

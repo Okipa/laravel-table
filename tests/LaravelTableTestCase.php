@@ -25,7 +25,7 @@ abstract class LaravelTableTestCase extends TestCase
      *
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testing');
@@ -43,11 +43,9 @@ abstract class LaravelTableTestCase extends TestCase
      *
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
-        return [
-            LaravelTableServiceProvider::class,
-        ];
+        return [LaravelTableServiceProvider::class];
     }
 
     /**

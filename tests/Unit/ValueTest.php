@@ -14,7 +14,7 @@ class CustomValueTest extends LaravelTableTestCase
         $closure = function ($model, $column) {
         };
         $table->column('name')->value($closure);
-        $this->assertEquals($closure, $table->columns->first()->valueClosure);
+        $this->assertEquals($closure, $table->getColumns()->first()->getCustomValueClosure());
     }
 
     public function testIsCustomValueHtml()
@@ -26,8 +26,8 @@ class CustomValueTest extends LaravelTableTestCase
         $table->column('updated_at')->value(function ($model) {
             return 'user name = ' . $model->name;
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('user name = ' . $user->name, $html);
     }
 }

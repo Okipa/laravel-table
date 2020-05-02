@@ -12,14 +12,14 @@ class LinkTest extends LaravelTableTestCase
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->link();
-        $this->assertEquals(true, $table->columns->first()->url);
+        $this->assertEquals('__VALUE__', $table->getColumns()->first()->getUrl());
     }
 
     public function testSetIsLinkAttributeString()
     {
         $table = (new Table)->model(User::class);
         $table->column('name')->link('link');
-        $this->assertEquals('link', $table->columns->first()->url);
+        $this->assertEquals('link', $table->getColumns()->first()->getUrl());
     }
 
     public function testSetIsLinkAttributeClosure()
@@ -28,7 +28,7 @@ class LinkTest extends LaravelTableTestCase
         $closure = function ($model, $column) {
         };
         $table->column('name')->link($closure);
-        $this->assertEquals($closure, $table->columns->first()->url);
+        $this->assertEquals($closure, $table->getColumns()->first()->getUrlClosure());
     }
 
     public function testIsLinkEmptyHtml()
@@ -37,8 +37,8 @@ class LinkTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link();
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
     }
 
@@ -48,8 +48,8 @@ class LinkTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link('test');
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="test" title="' . $user->name . '">', $html);
     }
 
@@ -61,8 +61,8 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link(function () {
             return 'url';
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="url" title="' . $user->name . '">', $html);
     }
 
@@ -72,8 +72,8 @@ class LinkTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link();
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
     }
 
@@ -84,8 +84,8 @@ class LinkTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link();
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString('<a href="', $html);
     }
 
@@ -95,9 +95,9 @@ class LinkTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link()->prepend('icon', true);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->column('name')->link()->prependHtml('html', true);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString('<a href="', $html);
     }
 
@@ -107,9 +107,9 @@ class LinkTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link()->append('icon', true);
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->column('name')->link()->appendsHtml('icon', true);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringNotContainsString('<a href="', $html);
     }
 
@@ -122,8 +122,8 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link('url')->value(function () {
             return 'test';
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="url" title="test">', $html);
     }
 
@@ -136,8 +136,8 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link()->value(function () {
             return 'test';
         });
-        $table->render();
-        $html = view('laravel-table::' . $table->tbodyTemplatePath, compact('table'))->render();
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="test" title="test">', $html);
     }
 }
