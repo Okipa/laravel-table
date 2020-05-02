@@ -33,12 +33,12 @@ To follow the package upgrade, you should execute the following steps for each t
 
 There are small changes in the API you will have to report in your code:
 
-* Rename the each use of `->resultsComponentPath(` by `->resultsTemplatePath(`.
-* Rename the each use of `->icon(` by `->prependHtml(`.
-* Rename the each use of `->prepend(` by `->prependHtml(`.
-* Rename the each use of `->append(` by `->appendsHtml(`.
-* Rename the each use of `->appends(` by `->appendData(`.
-* Rename the each use of `->rowsNumberSelectionActivation(` by `->activateRowsNumberDefinition(`.
+* Rename each `Table` use of `->resultsComponentPath(` by `->resultsTemplatePath(`.
+* Rename each `Table` use of `->icon(` by `->prependHtml(`.
+* Rename each `Table` use of `->appends(` by `->appendData(`.
+* Rename each `Table` use of `->rowsNumberSelectionActivation(` by `->activateRowsNumberDefinition(`.
+* Rename each `Column` use of `->prepend(` by `->prependHtml(`.
+* Rename each `Column` use of `->append(` by `->appendsHtml(`.
 
 ## Accessing table rows
 
@@ -57,6 +57,8 @@ $table = (new Table);
 $table->render();
 $table->list->getCollection();
 ```
+
+As so, you should search for all `$table->list` use in your code and make the necessary replacements.
 
 ## See all changes
 
