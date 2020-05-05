@@ -153,7 +153,7 @@ And display it the view:
 * Install the package with composer:
 
 ```bash
-composer require "okipa/laravel-table:^1.0"
+composer require "okipa/laravel-table:^2.0"
 ```
 
 ## Configuration
