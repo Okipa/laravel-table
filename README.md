@@ -1,4 +1,4 @@
-![Laravel table](/docs/laravel-table-preview.png)
+![Laravel table](https://github.com/Okipa/laravel-table/blob/master/docs/laravel-table-preview.png?raw=true)
 
 # Generate tables from Eloquent models
 
