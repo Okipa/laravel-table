@@ -1,3 +1,5 @@
+![Laravel table](./docs/images/v2.png)
+
 # Generate tables from Eloquent models
 
 [![Source Code](https://img.shields.io/badge/source-okipa/laravel--table-blue.svg)](https://github.com/Okipa/laravel-table)
