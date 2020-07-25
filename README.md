@@ -1,4 +1,4 @@
-![Laravel table](./docs/images/v2.png)
+![Laravel table](docs/images/v2.png)
 
 # Generate tables from Eloquent models
 
