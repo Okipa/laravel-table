@@ -1,6 +1,6 @@
-![Laravel table](https://github.com/Okipa/laravel-table/blob/master/docs/laravel-table-preview.png?raw=true)
-
 # Generate tables from Eloquent models
+
+![Laravel table](https://github.com/Okipa/laravel-table/blob/master/docs/laravel-table-preview.png?raw=true)
 
 [![Source Code](https://img.shields.io/badge/source-okipa/laravel--table-blue.svg)](https://github.com/Okipa/laravel-table)
 [![Latest Version](https://img.shields.io/github/release/okipa/laravel-table.svg?style=flat-square)](https://github.com/Okipa/laravel-table/releases)
@@ -31,7 +31,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 Create your table class with the following command:
 
 ```bash
-php artisan make:table UsersTable --model=App/Users
+php artisan make:table UsersTable --model=App/User
 ```
 
 Set your table configuration in the generated file, which can be found in the `app\Tables` directory:
@@ -41,7 +41,7 @@ namespace App\Tables;
 
 use Okipa\LaravelTable\Abstracts\AbstractTable;
 use Okipa\LaravelTable\Table;
-use App\Users;
+use App\User;
 
 class UsersTable extends AbstractTable
 {
@@ -119,12 +119,22 @@ And display it the view:
   * [->disableRows()](#table-disableRows)
   * [->tableTemplate()](#table-tableTemplate)
   * [->theadTemplate()](#table-theadTemplate)
+  
+  * [->rowsSearchingTemplate()](#table-rowsSearchingTemplate)
+  * [->rowsNumberSelectionTemplate()](#table-rowsNumberSelectionTemplate)
+  * [->createActionTemplate()](#table-createActionTemplate)
+  * [->columnTitlesTemplate()](#table-columnTitlesTemplate)
+  
   * [->tbodyTemplate()](#table-tbodyTemplate)
-  * [->showTemplate()](#table-showTemplate)
-  * [->editTemplate()](#table-editTemplate)
-  * [->destroyTemplate()](#table-destroyTemplate)
+  * [->showActionTemplate()](#table-showActionTemplate)
+  * [->editActionTemplate()](#table-editActionTemplate)
+  * [->destroyActionTemplate()](#table-destroyActionTemplate)
   * [->resultsTemplate()](#table-resultsTemplate)
   * [->tfootTemplate()](#table-tfootTemplate)
+  
+  * [->navigationStatusTemplate()](#table-navigationStatusTemplate)
+  * [->paginationTemplate()](#table-paginationTemplate)
+  
   * [->column()](#table-column)
   * [->result()](#table-result)
 * [Column API](#column-api)
@@ -174,6 +184,7 @@ See how to translate them on the Laravel official documentation: https://laravel
 
 Here is the list of the words and sentences available for translation:
 
+* `Actions`
 * `Create`
 * `Show`
 * `Edit`
@@ -481,7 +492,7 @@ class UsersTable extends AbstractTable
 
 > Override the default rows number selection activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number selection activation status is managed by the `config('laravel-table.behavior.activate_rows_number_definition')` value.
+> The default rows number selection activation status is managed by the `config('laravel-table.behavior.activate_rows_number_selection')` value.
 
 **Note:**`
 
@@ -740,52 +751,52 @@ destroyButton.click((e) => {
 (new Table)->tbodyTemplate('tailwindCss.tbody');
 ```
 
-<h3 id="table-showTemplate">->showTemplate()</h3>
+<h3 id="table-showActionTemplate">->showActionTemplate()</h3>
 
-> Set a custom template path for the show component.  
-> The default show template path is defined in the `config('laravel-table.template.show')` config value.
+> Set a custom view path for the show template.  
+> The default view path is defined in the `config('laravel-table.template.show_action')` config value.
 
 **Note:**
 
-* Signature: `showTemplate(string $showTemplatePath): \Okipa\LaravelTable\Table`
+* Signature: `showActionTemplate(string $showActionTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->showTemplate('tailwindCss.show');
+(new Table)->showActionTemplate('tailwindCss.show-action');
 ```
 
-<h3 id="table-editTemplate">->editTemplate()</h3>
+<h3 id="table-editActionTemplate">->editActionTemplate()</h3>
 
-> Set a custom template path for the edit component.  
-> The default edit template path is defined in the `config('laravel-table.template.edit')` config value.
+> Set a custom view path for the edit template.  
+> The default view path is defined in the `config('laravel-table.template.edit_action')` config value.
 
 **Note:**
 
-* Signature: `editTemplate(string $editTemplatePath): \Okipa\LaravelTable\Table`
+* Signature: `editActionTemplate(string $editActionTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->editTemplate('tailwindCss.edit');
+(new Table)->editActionTemplate('tailwindCss.edit-action');
 ```
 
-<h3 id="table-destroyTemplate">->destroyTemplate()</h3>
+<h3 id="table-destroyActionTemplate">->destroyActionTemplate()</h3>
 
-> Set a custom template path for the destroy component.  
-> The default destroy template path is defined in the `config('laravel-table.template.destroy')` config value.
+> Set a custom view path for the destroy template.  
+> The default view path path is defined in the `config('laravel-table.template.destroy_action')` config value.
 
 **Note:**
 
-* Signature: `destroyTemplate(string $destroyTemplatePath): \Okipa\LaravelTable\Table`
+* Signature: `destroyActionTemplate(string $destroyActionTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->destroyTemplate('tailwindCss.destroy');
+(new Table)->destroyActionTemplate('tailwindCss.destroy-action');
 ```
 
 <h3 id="table-resultsTemplate">->resultsTemplate()</h3>

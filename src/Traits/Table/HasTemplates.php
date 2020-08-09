@@ -10,26 +10,30 @@ trait HasTemplates
 
     protected string $theadTemplatePath;
 
+    protected string $rowsSearchingTemplatePath;
+
+    protected string $rowsNumberSelectionTemplatePath;
+
+    protected string $createActionTemplatePath;
+
+    protected string $columnTitlesTemplatePath;
+
     protected string $tbodyTemplatePath;
 
-    protected string $showTemplatePath;
+    protected string $showActionTemplatePath;
 
-    protected string $editTemplatePath;
+    protected string $editActionTemplatePath;
 
-    protected string $destroyTemplatePath;
+    protected string $destroyActionTemplatePath;
 
     protected string $resultsTemplatePath;
 
     protected string $tfootTemplatePath;
 
-    /**
-     * Set a custom template path for the table component.
-     * The default table template path is defined in the config('laravel-table.template.table') config value.
-     *
-     * @param string $tableTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
+    protected string $navigationStatusTemplatePath;
+
+    protected string $paginationTemplatePath;
+
     public function tableTemplate(string $tableTemplatePath): Table
     {
         $this->tableTemplatePath = $tableTemplatePath;
@@ -43,14 +47,6 @@ trait HasTemplates
         return $this->tableTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the thead component.
-     * The default thead template path is defined in the config('laravel-table.template.thead') config value.
-     *
-     * @param string $theadTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function theadTemplate(string $theadTemplatePath): Table
     {
         $this->theadTemplatePath = $theadTemplatePath;
@@ -64,14 +60,58 @@ trait HasTemplates
         return $this->theadTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the tbody component.
-     * The default tbody template path is defined in the config('laravel-table.template.tbody') config value.
-     *
-     * @param string $tbodyTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
+    public function rowsSearchingTemplate(string $rowsSearchingTemplatePath): Table
+    {
+        $this->rowsSearchingTemplatePath = $rowsSearchingTemplatePath;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    public function getRowsSearchingTemplatePath(): string
+    {
+        return $this->rowsSearchingTemplatePath;
+    }
+
+    public function rowsNumberSelectionTemplate(string $rowsNumberSelectionTemplatePath): Table
+    {
+        $this->rowsNumberSelectionTemplatePath = $rowsNumberSelectionTemplatePath;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    public function getRowsNumberSelectionTemplatePath(): string
+    {
+        return $this->rowsNumberSelectionTemplatePath;
+    }
+
+    public function createActionTemplate(string $createActionTemplatePath): Table
+    {
+        $this->createActionTemplatePath = $createActionTemplatePath;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    public function getCreateActionTemplatePath(): string
+    {
+        return $this->createActionTemplatePath;
+    }
+
+    public function columnTitlesTemplate(string $columnTitlesTemplatePath): Table
+    {
+        $this->columnTitlesTemplatePath = $columnTitlesTemplatePath;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    public function getColumnTitlesTemplatePath(): string
+    {
+        return $this->columnTitlesTemplatePath;
+    }
+
     public function tbodyTemplate(string $tbodyTemplatePath): Table
     {
         $this->tbodyTemplatePath = $tbodyTemplatePath;
@@ -85,77 +125,45 @@ trait HasTemplates
         return $this->tbodyTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the show component.
-     * The default show template path is defined in the config('laravel-table.template.show') config value.
-     *
-     * @param string $showTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
-    public function showTemplate(string $showTemplatePath): Table
+    public function showActionTemplate(string $showActionTemplatePath): Table
     {
-        $this->showTemplatePath = $showTemplatePath;
+        $this->showActionTemplatePath = $showActionTemplatePath;
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    public function getShowTemplatePath(): string
+    public function getShowActionTemplatePath(): string
     {
-        return $this->showTemplatePath;
+        return $this->showActionTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the edit component.
-     * The default edit template path is defined in the config('laravel-table.template.edit') config value.
-     *
-     * @param string $editTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
-    public function editTemplate(string $editTemplatePath): Table
+    public function editActionTemplate(string $editActionTemplatePath): Table
     {
-        $this->editTemplatePath = $editTemplatePath;
+        $this->editActionTemplatePath = $editActionTemplatePath;
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    public function getEditTemplatePath(): string
+    public function getEditActionTemplatePath(): string
     {
-        return $this->editTemplatePath;
+        return $this->editActionTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the destroy component.
-     * The default destroy template path is defined in the config('laravel-table.template.destroy') config value.
-     *
-     * @param string $destroyTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
-    public function destroyTemplate(string $destroyTemplatePath): Table
+    public function destroyActionTemplate(string $destroyActionTemplatePath): Table
     {
-        $this->destroyTemplatePath = $destroyTemplatePath;
+        $this->destroyActionTemplatePath = $destroyActionTemplatePath;
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    public function getDestroyTemplatePath(): string
+    public function getDestroyActionTemplatePath(): string
     {
-        return $this->destroyTemplatePath;
+        return $this->destroyActionTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the results component.
-     * The default results template path is defined in the config('laravel-table.template.results') config value.
-     *
-     * @param string $resultsTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function resultsTemplate(string $resultsTemplatePath): Table
     {
         $this->resultsTemplatePath = $resultsTemplatePath;
@@ -169,14 +177,6 @@ trait HasTemplates
         return $this->resultsTemplatePath;
     }
 
-    /**
-     * Set a custom template path for the tfoot component.
-     * The default tfoot template path is defined in the config('laravel-table.template.tfoot') config value.
-     *
-     * @param string $tfootTemplatePath
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function tfootTemplate(string $tfootTemplatePath): Table
     {
         $this->tfootTemplatePath = $tfootTemplatePath;
@@ -190,15 +190,47 @@ trait HasTemplates
         return $this->tfootTemplatePath;
     }
 
+    public function navigationStatusTemplate(string $navigationStatusTemplatePath): Table
+    {
+        $this->navigationStatusTemplatePath = $navigationStatusTemplatePath;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    public function getNavigationStatusTemplatePath(): string
+    {
+        return $this->navigationStatusTemplatePath;
+    }
+
+    public function paginationTemplate(string $paginationTemplatePath): Table
+    {
+        $this->paginationTemplatePath = $paginationTemplatePath;
+
+        /** @var \Okipa\LaravelTable\Table $this */
+        return $this;
+    }
+
+    public function getPaginationTemplatePath(): string
+    {
+        return $this->paginationTemplatePath;
+    }
+
     protected function initializeDefaultTemplates(): void
     {
-        $this->tableTemplatePath = config('laravel-table.template.table', 'bootstrap.table');
-        $this->theadTemplatePath = config('laravel-table.template.thead', 'bootstrap.thead');
-        $this->tbodyTemplatePath = config('laravel-table.template.tbody', 'bootstrap.tbody');
-        $this->showTemplatePath = config('laravel-table.template.show', 'bootstrap.show');
-        $this->editTemplatePath = config('laravel-table.template.edit', 'bootstrap.edit');
-        $this->destroyTemplatePath = config('laravel-table.template.destroy', 'bootstrap.destroy');
-        $this->resultsTemplatePath = config('laravel-table.template.results', 'bootstrap.results');
-        $this->tfootTemplatePath = config('laravel-table.template.tfoot', 'bootstrap.tfoot');
+        $this->tableTemplatePath = config('laravel-table.template.table');
+        $this->theadTemplatePath = config('laravel-table.template.thead');
+        $this->rowsSearchingTemplatePath = config('laravel-table.template.rows_searching');
+        $this->rowsNumberSelectionTemplatePath = config('laravel-table.template.rows_number_selection');
+        $this->createActionTemplatePath = config('laravel-table.template.create_action');
+        $this->columnTitlesTemplatePath = config('laravel-table.template.column_titles');
+        $this->tbodyTemplatePath = config('laravel-table.template.tbody');
+        $this->showActionTemplatePath = config('laravel-table.template.show_action');
+        $this->editActionTemplatePath = config('laravel-table.template.edit_action');
+        $this->destroyActionTemplatePath = config('laravel-table.template.destroy_action');
+        $this->resultsTemplatePath = config('laravel-table.template.results');
+        $this->tfootTemplatePath = config('laravel-table.template.tfoot');
+        $this->navigationStatusTemplatePath = config('laravel-table.template.navigation_status');
+        $this->paginationTemplatePath = config('laravel-table.template.pagination');
     }
 }

@@ -116,7 +116,7 @@ class RoutesTest extends LaravelTableTestCase
         ])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
-        $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('creation-container', $html);
         $this->assertStringContainsString('href="http://localhost/users/create"', $html);
         $this->assertStringContainsString('title="Create"', $html);

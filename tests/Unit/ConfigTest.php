@@ -37,12 +37,22 @@ class ConfigTest extends LaravelTableTestCase
         $this->assertTrue(array_key_exists('show', config('laravel-table.icon')));
         // laravel-table.behavior
         $this->assertTrue(array_key_exists('rows_number', config('laravel-table.behavior')));
-        $this->assertTrue(array_key_exists('activate_rows_number_definition', config('laravel-table.behavior')));
+        $this->assertTrue(array_key_exists('activate_rows_number_selection', config('laravel-table.behavior')));
         // laravel-table.template
         $this->assertTrue(array_key_exists('table', config('laravel-table.template')));
         $this->assertTrue(array_key_exists('thead', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('rows_searching', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('rows_number_selection', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('create_action', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('column_titles', config('laravel-table.template')));
         $this->assertTrue(array_key_exists('tbody', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('show_action', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('edit_action', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('destroy_action', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('results', config('laravel-table.template')));
         $this->assertTrue(array_key_exists('tfoot', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('navigation_status', config('laravel-table.template')));
+        $this->assertTrue(array_key_exists('pagination', config('laravel-table.template')));
     }
 
     public function testCustomDefaultValueRowsNumber()

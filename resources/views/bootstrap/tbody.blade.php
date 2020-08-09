@@ -80,9 +80,9 @@
                     <td{{ classTag($table->getTdClasses(), 'text-right') }}>
                         @if(! $model->disabledClasses)
                             <div class="d-flex justify-content-end">
-                                @include('laravel-table::' . $table->getShowTemplatePath())
-                                @include('laravel-table::' . $table->getEditTemplatePath())
-                                @include('laravel-table::' . $table->getDestroyTemplatePath())
+                                @include('laravel-table::' . $table->getShowActionTemplatePath())
+                                @include('laravel-table::' . $table->getEditActionTemplatePath())
+                                @include('laravel-table::' . $table->getDestroyActionTemplatePath())
                             </div>
                         @endif
                     </td>

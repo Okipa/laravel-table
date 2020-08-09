@@ -34,7 +34,7 @@
     },
     "require-dev": {
         "nunomaduro/larastan": "^0.5",
-        "orchestra/testbench": "^4.0||^5.0",
+        "orchestra/testbench": "^4.0||^6.0",
         "phpmd/phpmd": "^2.8",
         "squizlabs/php_codesniffer": "^3.5"
     },
@@ -53,7 +53,7 @@
             "vendor/bin/phpcbf",
             "vendor/bin/phpcs",
             "vendor/bin/phpmd config,src text phpmd.xml",
-            "vendor/bin/phpstan analyse",
+            "vendor/bin/phpstan analyse --error-format=table --memory-limit=2048M",
             "vendor/bin/phpunit"
         ]
     },

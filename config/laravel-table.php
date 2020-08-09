@@ -2,9 +2,7 @@
 
 return [
 
-    /*
-     * Set the default classes for each part of the table.
-     */
+    /** Set the default classes for each part of the table. */
     'classes' => [
         'container' => ['table-responsive'],
         'table' => ['table-striped', 'table-hover'],
@@ -15,9 +13,7 @@ return [
         'disabled' => ['table-danger', 'disabled'],
     ],
 
-    /*
-     * Set all the action icons that are used on the table templates.
-     */
+    /** Set all the action icons that are used on the table templates. */
     'icon' => [
         'rows_number' => '<i class="fas fa-list"></i>',
         'sort' => '<i class="fas fa-sort fa-fw"></i>',
@@ -33,26 +29,28 @@ return [
         'destroy' => '<i class="fas fa-trash fa-fw"></i>',
     ],
 
-    /*
-     * Set the table default behavior.
-     */
+    /** Set the table default behavior. */
     'behavior' => [
         'rows_number' => 20,
-        'activate_rows_number_definition' => true,
+        'activate_rows_number_selection' => true,
     ],
 
-    /*
-     * Set the default template path for each part of the table.
-     */
+    /** Set the default view path for each component of the table. */
     'template' => [
         'table' => 'bootstrap.table',
         'thead' => 'bootstrap.thead',
+        'rows_searching' => 'bootstrap.rows-searching',
+        'rows_number_selection' => 'bootstrap.rows-number-selection',
+        'create_action' => 'bootstrap.create-action',
+        'column_titles' => 'bootstrap.column-titles',
         'tbody' => 'bootstrap.tbody',
-        'show' => 'bootstrap.show',
-        'edit' => 'bootstrap.edit',
-        'destroy' => 'bootstrap.destroy',
+        'show_action' => 'bootstrap.show-action',
+        'edit_action' => 'bootstrap.edit-action',
+        'destroy_action' => 'bootstrap.destroy-action',
         'results' => 'bootstrap.results',
         'tfoot' => 'bootstrap.tfoot',
+        'navigation_status' => 'bootstrap.navigation-status',
+        'pagination' => 'bootstrap.pagination',
     ],
 
 ];
