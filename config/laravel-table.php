@@ -32,7 +32,7 @@ return [
     /** Set the table default behavior. */
     'behavior' => [
         'rows_number' => 20,
-        'activate_rows_number_selection' => true,
+        'activate_rows_number_definition' => true,
     ],
 
     /** Set the default view path for each component of the table. */

@@ -101,59 +101,55 @@ And display it the view:
 * [Advanced configuration example](#advanced-configuration-example)
 * [Tips](#tips)
 * [Table API](#table-api)
-  * [->model()](#table-model)
-  * [->identifier()](#table-identifier)
-  * [->request()](#table-request)
-  * [->routes()](#table-routes)
-  * [->destroyConfirmationHtmlAttributes()](#table-destroyConfirmationHtmlAttributes)
-  * [->rowsNumber()](#table-rowsNumber)
-  * [->activateRowsNumberDefinition()](#table-activateRowsNumberDefinition)
-  * [->query()](#table-query)
-  * [->appendData()](#table-appendData)
-  * [->containerClasses()](#table-containerClasses)
-  * [->tableClasses()](#table-tableClasses)
-  * [->trClasses()](#table-trClasses)
-  * [->thClasses()](#table-thClasses)
-  * [->tdClasses()](#table-tdClasses)
-  * [->rowsConditionalClasses()](#table-rowsConditionalClasses)
-  * [->disableRows()](#table-disableRows)
-  * [->tableTemplate()](#table-tableTemplate)
-  * [->theadTemplate()](#table-theadTemplate)
-  
-  * [->rowsSearchingTemplate()](#table-rowsSearchingTemplate)
-  * [->rowsNumberSelectionTemplate()](#table-rowsNumberSelectionTemplate)
-  * [->createActionTemplate()](#table-createActionTemplate)
-  * [->columnTitlesTemplate()](#table-columnTitlesTemplate)
-  
-  * [->tbodyTemplate()](#table-tbodyTemplate)
-  * [->showActionTemplate()](#table-showActionTemplate)
-  * [->editActionTemplate()](#table-editActionTemplate)
-  * [->destroyActionTemplate()](#table-destroyActionTemplate)
-  * [->resultsTemplate()](#table-resultsTemplate)
-  * [->tfootTemplate()](#table-tfootTemplate)
-  
-  * [->navigationStatusTemplate()](#table-navigationStatusTemplate)
-  * [->paginationTemplate()](#table-paginationTemplate)
-  
-  * [->column()](#table-column)
-  * [->result()](#table-result)
+  * [model](#table-model)
+  * [identifier](#table-identifier)
+  * [request](#table-request)
+  * [routes](#table-routes)
+  * [destroyConfirmationHtmlAttributes](#table-destroyConfirmationHtmlAttributes)
+  * [rowsNumber](#table-rowsNumber)
+  * [activateRowsNumberDefinition](#table-activateRowsNumberDefinition)
+  * [query](#table-query)
+  * [appendData](#table-appendData)
+  * [containerClasses](#table-containerClasses)
+  * [tableClasses](#table-tableClasses)
+  * [trClasses](#table-trClasses)
+  * [thClasses](#table-thClasses)
+  * [tdClasses](#table-tdClasses)
+  * [rowsConditionalClasses](#table-rowsConditionalClasses)
+  * [disableRows](#table-disableRows)
+  * [tableTemplate](#table-tableTemplate)
+  * [theadTemplate](#table-theadTemplate)
+  * [rowsSearchingTemplate](#table-rowsSearchingTemplate)
+  * [rowsNumberSelectionTemplate](#table-rowsNumberSelectionTemplate)
+  * [createActionTemplate](#table-createActionTemplate)
+  * [columnTitlesTemplate](#table-columnTitlesTemplate)
+  * [tbodyTemplate](#table-tbodyTemplate)
+  * [showActionTemplate](#table-showActionTemplate)
+  * [editActionTemplate](#table-editActionTemplate)
+  * [destroyActionTemplate](#table-destroyActionTemplate)
+  * [resultsTemplate](#table-resultsTemplate)
+  * [tfootTemplate](#table-tfootTemplate)
+  * [navigationStatusTemplate](#table-navigationStatusTemplate)
+  * [paginationTemplate](#table-paginationTemplate)
+  * [column](#table-column)
+  * [result](#table-result)
 * [Column API](#column-api)
-  * [->classes()](#column-classes)
-  * [->title()](#column-title)
-  * [->sortable()](#column-sortable)
-  * [->searchable()](#column-searchable)
-  * [->dateTimeFormat()](#column-dateTimeFormat)
-  * [->button()](#column-button)
-  * [->link()](#column-link)
-  * [->prependHtml()](#column-prependHtml)
-  * [->appendsHtml()](#column-appendsHtml)
-  * [->stringLimit()](#column-stringLimit)
-  * [->value()](#-value)
-  * [->html()](#-html)
+  * [classes](#column-classes)
+  * [title](#column-title)
+  * [sortable](#column-sortable)
+  * [searchable](#column-searchable)
+  * [dateTimeFormat](#column-dateTimeFormat)
+  * [button](#column-button)
+  * [link](#column-link)
+  * [prependHtml](#column-prependHtml)
+  * [appendsHtml](#column-appendsHtml)
+  * [stringLimit](#column-stringLimit)
+  * [value](#-value)
+  * [html](#-html)
 * [Result API](#result-api)
-  * [->title()](#result-title)
-  * [->html()](#result-html)
-  * [->classes()](#result-classes)
+  * [title](#result-title)
+  * [html](#result-html)
+  * [classes](#result-classes)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -314,7 +310,7 @@ class NewsTable extends AbstractTable
 
 :warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#table-column) and the [->result()](#table-result) methods** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
 
-<h3 id="table-model">->model()</h3>
+<h3 id="table-model">model</h3>
 
 > Set the model used during the table generation.
 
@@ -329,7 +325,7 @@ class NewsTable extends AbstractTable
 (new Table)->model(User::class);
 ```
 
-<h3 id="table-identifier">->identifier()</h3>
+<h3 id="table-identifier">identifier</h3>
 
 > Set the table identifier, in order to automatically generate its id and to customize all the interaction fields in case of multiple tables used on a single view: the interactions with the table like sorting, searching an more will only have an impact on the identified table.
 
@@ -344,7 +340,7 @@ class NewsTable extends AbstractTable
 (new Table)->identifier('Your identifier');
 ```
 
-<h3 id="table-request">->request()</h3>
+<h3 id="table-request">request</h3>
 
 > Set the request used for the table generation.
 
@@ -382,7 +378,7 @@ class UsersTable extends AbstractTable
 {
     protected Request $request;
 
-    public function __construct()
+    public function __construct(Request $request)
     {
         parent::__construct();
         $this->request = $request;
@@ -397,7 +393,7 @@ class UsersTable extends AbstractTable
 }
 ```
 
-<h3 id="table-routes">->routes()</h3>
+<h3 id="table-routes">routes</h3>
 
 > Set the routes used during the table generation.  
 > The routes declarations will be used for the following features:
@@ -469,7 +465,7 @@ class UsersTable extends AbstractTable
 ]);
 ```
 
-<h3 id="table-rowsNumber">->rowsNumber()</h3>
+<h3 id="table-rowsNumber">rowsNumber</h3>
 
 > Override the config default number of rows displayed on the table.  
 > The default number of displayed rows is defined in the `config('laravel-table.behavior.rows_number')` config value.  
@@ -488,11 +484,11 @@ class UsersTable extends AbstractTable
 (new Table)->rowsNumber(null);
 ```
 
-<h3 id="table-activateRowsNumberDefinition">->activateRowsNumberDefinition()</h3>
+<h3 id="table-activateRowsNumberDefinition">activateRowsNumberDefinition</h3>
 
 > Override the default rows number selection activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number selection activation status is managed by the `config('laravel-table.behavior.activate_rows_number_selection')` value.
+> The default rows number selection activation status is managed by the `config('laravel-table.behavior.activate_rows_number_definition')` value.
 
 **Note:**`
 
@@ -505,7 +501,7 @@ class UsersTable extends AbstractTable
 (new Table)->activateRowsNumberDefinition(false);
 ```
 
-<h3 id="table-query">->query()</h3>
+<h3 id="table-query">query</h3>
 
 > Set the query closure that will be executed during the table generation.  
 > For example, you can define your joined tables here.  
@@ -526,7 +522,7 @@ class UsersTable extends AbstractTable
 });
 ```
 
-<h3 id="table-appendData">->appendData()</h3>
+<h3 id="table-appendData">appendData</h3>
 
 > Add an array of arguments to append to the paginator and to the following table actions:
 >
@@ -546,7 +542,7 @@ class UsersTable extends AbstractTable
 (new Table)->appendData(request()->only('status'));
 ```
 
-<h3 id="table-containerClasses">->containerClasses()</h3>
+<h3 id="table-containerClasses">containerClasses</h3>
 
 > Override default table container classes.  
 > The default container classes are defined in the `config('laravel-table.classes.container')` config value.
@@ -562,7 +558,7 @@ class UsersTable extends AbstractTable
 (new Table)->containerClasses(['set', 'your', 'classes']);
 ```
 
-<h3 id="table-tableClasses">->tableClasses()</h3>
+<h3 id="table-tableClasses">tableClasses</h3>
 
 > Override default table classes.  
 > The default table classes are defined in the `config('laravel-table.classes.table')` config value.
@@ -578,7 +574,7 @@ class UsersTable extends AbstractTable
 (new Table)->tableClasses(['set', 'your', 'classes']);
 ```
 
-<h3 id="table-trClasses">->trClasses()</h3>
+<h3 id="table-trClasses">trClasses</h3>
 
 > Override default table tr classes.  
 > The default tr classes are defined in the `config('laravel-table.classes.tr')` config value.
@@ -594,7 +590,7 @@ class UsersTable extends AbstractTable
 (new Table)->trClasses(['set', 'your', 'classes']);
 ```
 
-<h3 id="table-thClasses">->thClasses()</h3>
+<h3 id="table-thClasses">thClasses</h3>
 
 > Override default table tr classes.  
 > The default th classes are defined in the `config('laravel-table.classes.th')` config value.
@@ -610,7 +606,7 @@ class UsersTable extends AbstractTable
 (new Table)->thClasses(['set', 'your', 'classes']);
 ```
 
-<h3 id="table-tdClasses">->tdClasses()</h3>
+<h3 id="table-tdClasses">tdClasses</h3>
 
 > Override default table td classes.  
 > The default td classes are defined in the `config('laravel-table.classes.td')` config value.
@@ -626,7 +622,7 @@ class UsersTable extends AbstractTable
 (new Table)->tdClasses(['set', 'your', 'classes']);
 ```
 
-<h3 id="table-rowsConditionalClasses">->rowsConditionalClasses()</h3>
+<h3 id="table-rowsConditionalClasses">rowsConditionalClasses</h3>
 
 > Set rows classes when the given conditions are respected.  
 > The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
@@ -644,7 +640,7 @@ class UsersTable extends AbstractTable
 }, ['set', 'your', 'classes']);
 ```
 
-<h3 id="table-destroyConfirmationHtmlAttributes">->destroyConfirmationHtmlAttributes()</h3>
+<h3 id="table-destroyConfirmationHtmlAttributes">destroyConfirmationHtmlAttributes</h3>
 
 > Define html attributes on the destroy buttons to handle dynamic javascript destroy confirmations.  
 > The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.  
@@ -668,21 +664,20 @@ class UsersTable extends AbstractTable
 **Javascript snippet example:**
 
 ```javascript
-// example of javascript snippet to ask a confirmation before executing the action
-// this example assume that a bootstrap modal component has been included in your view
-// https://getbootstrap.com/docs/4.3/components/modal/#modal-components
+// example of javascript snippet to ask a confirmation before executing the destroy action
+// disclaimer: this has not been tested should be adapted according to your needs
 const destroyButton = $('form.destroy button[type="submit"]');
 destroyButton.click((e) => {
-  e.preventDefault();
-  const $this = $(e.target);
-  const message = $this.data("confirm");
-  const confirmationModal = $("#confirmationModal");
-  confirmationModal.find(".modal-body").text(message);
-  confirmationModal.modal("show");
+    e.preventDefault();
+    const $this = $(e.target);
+    const form = $this.closest('form');
+    if(confirm("Are you sure you want to destroy this entry?")) {
+        form.submit();
+    }
 });
 ```
 
-<h3 id="table-disableRows">->disableRows()</h3>
+<h3 id="table-disableRows">disableRows</h3>
 
 > Set the disable lines closure that will be executed during the table generation.  
 > The optional second param let you override the classes that will be applied for the disabled lines.  
@@ -703,10 +698,10 @@ destroyButton.click((e) => {
 }, ['bg-danger', 'text-primary']);
 ```
 
-<h3 id="table-tableTemplate">->tableTemplate()</h3>
+<h3 id="table-tableTemplate">tableTemplate</h3>
 
-> Set a custom template path for the table component.  
-> The default table template path is defined in the `config('laravel-table.template.table')` config value.
+> Set a custom view path for the table template.  
+> The default view path is defined in the `config('laravel-table.template.table')` config value.
 
 **Note:**
 
@@ -719,10 +714,10 @@ destroyButton.click((e) => {
 (new Table)->tableTemplate('tailwindCss.table');
 ```
 
-<h3 id="table-theadTemplate">->theadTemplate()</h3>
+<h3 id="table-theadTemplate">theadTemplate</h3>
 
-> Set a custom template path for the thead component.  
-> The default thead template path is defined in the `config('laravel-table.template.thead')` config value.
+> Set a custom view path for the thead template.  
+> The default view path is defined in the `config('laravel-table.template.thead')` config value.
 
 **Note:**
 
@@ -735,10 +730,74 @@ destroyButton.click((e) => {
 (new Table)->theadTemplate('tailwindCss.thead');
 ```
 
-<h3 id="table-tbodyTemplate">->tbodyTemplate()</h3>
+<h3 id="table-rowsSearchingTemplate">rowsSearchingTemplate</h3>
 
-> Set a custom template path for the tbody component.  
-> The default tbody template path is defined in the `config('laravel-table.template.tbody')` config value.
+> Set a custom view path for the rows searching template.  
+> The default view path is defined in the `config('laravel-table.template.rows_searching')` config value.
+
+**Note:**
+
+* Signature: `rowsSearchingTemplate(string $rowsSearchingTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->rowsSearchingTemplate('tailwindCss.rows-searching');
+```
+
+<h3 id="table-rowsNumberSelectionTemplate">rowsNumberSelectionTemplate</h3>
+
+> Set a custom view path for the rows number selection template.  
+> The default view path is defined in the `config('laravel-table.template.rows_number_selection')` config value.
+
+**Note:**
+
+* Signature: `rowsNumberSelectionTemplate(string $rowsNumberSelectionTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->rowsSearchingTemplate('tailwindCss.rows-number-selection');
+```
+
+<h3 id="table-createActionTemplate">createActionTemplate</h3>
+
+> Set a custom view path for the create action template.  
+> The default view path is defined in the `config('laravel-table.template.create_action')` config value.
+
+**Note:**
+
+* Signature: `createActionTemplate(string $createActionTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->createActionTemplate('tailwindCss.create-action');
+```
+
+<h3 id="table-columnTitlesTemplate">columnTitlesTemplate</h3>
+
+> Set a custom view path for the column titles template.  
+> The default view path is defined in the `config('laravel-table.template.column_titles')` config value.
+
+**Note:**
+
+* Signature: `columnTitlesTemplate(string $columnTitlesTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->columnTitlesTemplate('tailwindCss.column-titles');
+```
+
+<h3 id="table-tbodyTemplate">tbodyTemplate</h3>
+
+> Set a custom view path for the tbody template.  
+> The default view path is defined in the `config('laravel-table.template.tbody')` config value.
 
 **Note:**
 
@@ -751,7 +810,7 @@ destroyButton.click((e) => {
 (new Table)->tbodyTemplate('tailwindCss.tbody');
 ```
 
-<h3 id="table-showActionTemplate">->showActionTemplate()</h3>
+<h3 id="table-showActionTemplate">showActionTemplate</h3>
 
 > Set a custom view path for the show template.  
 > The default view path is defined in the `config('laravel-table.template.show_action')` config value.
@@ -767,7 +826,7 @@ destroyButton.click((e) => {
 (new Table)->showActionTemplate('tailwindCss.show-action');
 ```
 
-<h3 id="table-editActionTemplate">->editActionTemplate()</h3>
+<h3 id="table-editActionTemplate">editActionTemplat</h3>
 
 > Set a custom view path for the edit template.  
 > The default view path is defined in the `config('laravel-table.template.edit_action')` config value.
@@ -783,7 +842,7 @@ destroyButton.click((e) => {
 (new Table)->editActionTemplate('tailwindCss.edit-action');
 ```
 
-<h3 id="table-destroyActionTemplate">->destroyActionTemplate()</h3>
+<h3 id="table-destroyActionTemplate">destroyActionTemplate</h3>
 
 > Set a custom view path for the destroy template.  
 > The default view path path is defined in the `config('laravel-table.template.destroy_action')` config value.
@@ -799,9 +858,9 @@ destroyButton.click((e) => {
 (new Table)->destroyActionTemplate('tailwindCss.destroy-action');
 ```
 
-<h3 id="table-resultsTemplate">->resultsTemplate()</h3>
+<h3 id="table-resultsTemplate">resultsTemplate</h3>
 
-> Set a custom template path for the results component.  
+> Set a custom view path for the results template.  
 > The default results template path is defined in the `config('laravel-table.template.results')` config value.
 
 **Note:**
@@ -815,9 +874,9 @@ destroyButton.click((e) => {
 (new Table)->resultsTemplate('tailwindCss.results');
 ```
 
-<h3 id="table-tfootTemplate">->tfootTemplate()</h3>
+<h3 id="table-tfootTemplate">tfootTemplate</h3>
 
-> Set a custom template path for the tfoot component.  
+> Set a custom view path for the tfoot template.  
 > The default tfoot template path is defined in the `config('laravel-table.template.tfoot')` config value.
 
 **Note:**
@@ -831,7 +890,39 @@ destroyButton.click((e) => {
 (new Table)->tfootTemplate('tailwindCss.tfoot');
 ```
 
-<h3 id="table-column">->column()</h3>
+<h3 id="table-navigationStatusTemplate">navigationStatusTemplate</h3>
+
+> Set a custom view path for the navigation status template.  
+> The default tfoot template path is defined in the `config('laravel-table.template.navigation_status')` config value.
+
+**Note:**
+
+* Signature: `navigationStatusTemplate(string $navigationStatusTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->navigationStatusTemplate('tailwindCss.navigation-status');
+```
+
+<h3 id="table-paginationTemplate">paginationTemplate</h3>
+
+> Set a custom view path for the pagination template.  
+> The default tfoot template path is defined in the `config('laravel-table.template.pagination')` config value.
+
+**Note:**
+
+* Signature: `paginationTemplate(string $paginationTemplatePath): \Okipa\LaravelTable\Table`
+* Optional
+
+**Use case example:**
+
+```php
+(new Table)->paginationTemplate('tailwindCss.pagination');
+```
+
+<h3 id="table-column">column</h3>
 
 > Add a column that will be displayed in the table.  
 > The column key is optional if the column is not declared as sortable or searchable.
@@ -848,7 +939,7 @@ destroyButton.click((e) => {
 $table->column('name');
 ```
 
-<h3 id="table-result">->result()</h3>
+<h3 id="table-result">result</h3>
 
 > Add a result row that will be displayed at the bottom of the table.
 
@@ -868,7 +959,7 @@ $table->result();
 
 :warning: All the column methods are chainable with `\Okipa\LaravelTable\Column` object.
 
-<h3 id="column-classes">->classes()</h3>
+<h3 id="column-classes">classes</h3>
 
 > Set the custom classes that will be applied on this column only.
 
@@ -883,7 +974,7 @@ $table->result();
 $table->column()->classes(['font-weight-bold']);
 ```
 
-<h3 id="column-title">->title()</h3>
+<h3 id="column-title">title</h3>
 
 > Set a custom column title and override the default `__('validation.attributes.[$database_column])` one.
 
@@ -898,7 +989,7 @@ $table->column()->classes(['font-weight-bold']);
 $table->column()->title('E-mail');
 ```
 
-<h3 id="column-sortable">->sortable()</h3>
+<h3 id="column-sortable">sortable</h3>
 
 > Make the column sortable.  
 > You also can choose to set the column sorted by default.  
@@ -918,7 +1009,7 @@ $table->column('email')->sortable();
 $table->column('email')->sortable(true, 'desc');
 ```
 
-<h3 id="column-searchable">->searchable()</h3>
+<h3 id="column-searchable">searchable</h3>
 
 > Make the column searchable.  
 > The first param allows you to precise the searched database table (can references a database table alias).  
@@ -952,7 +1043,7 @@ $table = (new Table)->model(User::class)->query(function(Builder $query) {
 $table->column('company')->searchable('companiesAliasedTable', ['name', 'activity']);
 ```
 
-<h3 id="column-dateTimeFormat">->dateTimeFormat()</h3>
+<h3 id="column-dateTimeFormat">dateTimeFormat</h3>
 
 > Set the format for a datetime, date or time database column (optional).  
 > (Carbon::parse($value)->format($format) method is used under the hood).
@@ -968,7 +1059,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 $table->column('created_at')->dateTimeFormat('d/m/Y H:i');
 ```
 
-<h3 id="column-button">->button()</h3>
+<h3 id="column-button">button</h3>
 
 > Display the column as a button with the given classes.
 
@@ -983,9 +1074,9 @@ $table->column('created_at')->dateTimeFormat('d/m/Y H:i');
 $table->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
 ```
 
-<h3 id="column-link">->link()</h3>
+<h3 id="column-link">link</h3>
 
-> Wrap the column value into a `<a></a>` component.  
+> Wrap the column value into a `<a></a>` HTML tag.  
 > You can declare the link as a string or as a closure which will let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.  
 > If no url is declared, the url will be generated using the column value.
 
@@ -1009,7 +1100,7 @@ $table->column()->link(function(News $news) {
 });
 ```
 
-<h3 id="column-prependHtml">->prependHtml()</h3>
+<h3 id="column-prependHtml">prependHtml</h3>
 
 > Prepend HTML to the displayed value.  
 > Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
@@ -1025,7 +1116,7 @@ $table->column()->link(function(News $news) {
 $table->column('email')->prependHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
-<h3 id="column-appendsHtml">->appendsHtml()</h3>
+<h3 id="column-appendsHtml">appendsHtml</h3>
 
 > Append HTML to the displayed value.  
 > Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
@@ -1041,7 +1132,7 @@ $table->column('email')->prependHtml('<i class="fas fa-envelope"></i>', true);
 $table->column('email')->appendsHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
-<h3 id="column-stringLimit">->stringLimit()</h3>
+<h3 id="column-stringLimit">stringLimit</h3>
 
 > Set the string value display limitation.  
 > Shows "..." when the limit is reached.
@@ -1057,7 +1148,7 @@ $table->column('email')->appendsHtml('<i class="fas fa-envelope"></i>', true);
 $table->column('email')->stringLimit(30);
 ```
 
-<h3 id="column-value">->value()</h3>
+<h3 id="column-value">value</h3>
 
 > Display a custom value for the column.  
 > The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
@@ -1075,7 +1166,7 @@ $table->column()->value(function(User $user) {
 });
 ```
 
-<h3 id="column-html">->html()</h3>
+<h3 id="column-html">html</h3>
 
 > Display a custom HTML for the column.  
 > The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
@@ -1097,7 +1188,7 @@ $table->column()->html(function(User $user) {
 
 :warning: All the result methods are chainable with `\Okipa\LaravelTable\Result` object.
 
-<h3 id="result-title">->title()</h3>
+<h3 id="result-title">title</h3>
 
 > Set the result row title.
 
@@ -1112,7 +1203,7 @@ $table->column()->html(function(User $user) {
 $table->result()->title('Turnover total');
 ```
 
-<h3 id="result-html">->html()</h3>
+<h3 id="result-html">html</h3>
 
 > Display a HTML output for the result row.  
 > The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $paginatedRows`.
@@ -1130,7 +1221,7 @@ $table->result()->html(function(Collection $paginatedRows) {
 });
 ```
 
-<h3 id="result-classes">->classes()</h3>
+<h3 id="result-classes">classes</h3>
 
 > Override the default results classes and apply the given classes only on this result row.  
 > The default result classes are managed by the `config('laravel-table.classes.results')` value.

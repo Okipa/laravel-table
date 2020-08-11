@@ -4,14 +4,15 @@
 
 2020-08-09
 
-* Added template customization methods for the `Table` :
-  * `->rowsSearchingTemplate(string)`
-  * `->rowsNumberSelectionTemplate()`
-  * `->createActionTemplate()`
-  * `->columnTitlesTemplate(()`
-  * `->navigationStatusTemplate()`
-  * `->paginationTemplate()`
-* Updated templates.
+* Added Laravel 8 support
+* Added template customization methods for `Table` instances :
+  * `rowsSearchingTemplate`
+  * `rowsNumberSelectionTemplate`
+  * `createActionTemplate`
+  * `columnTitlesTemplate`
+  * `navigationStatusTemplate`
+  * `paginationTemplate`
+* Updated templates
 
 :point_right: [See the upgrade guide](/docs/upgrade-guides/from-v2-to-v3.md)
 
