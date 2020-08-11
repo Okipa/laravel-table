@@ -5,6 +5,7 @@
 2020-08-09
 
 * Added Laravel 8 support
+* Dropped Laravel 6 support
 * Added template customization methods for `Table` instances :
   * `rowsSearchingTemplate`
   * `rowsNumberSelectionTemplate`
