@@ -57,7 +57,9 @@ class UsersTable extends AbstractTable
                 'destroy' => ['name' => 'user.destroy'],
             ])
             ->destroyConfirmationHtmlAttributes(fn(User $user) => [
-                'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])
+                'data-confirm' => __('Are you sure you want to delete the user :name ?', [
+                    'name' => $user->name
+                ])
             ]);
     }
 
