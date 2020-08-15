@@ -74,7 +74,7 @@ class UsersTable extends AbstractTable
 }
 ```
 
-Finally, send your table to your view:
+Send the table to your view:
 
 ```php
 use \Illuminate\View\View;
@@ -92,7 +92,7 @@ class UsersController
 
 ```
 
-And display it the view:
+Finally, display it the view:
 
 ```blade
 {{ $table }}
