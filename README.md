@@ -403,7 +403,7 @@ class UsersTable extends AbstractTable
 > Set the routes used during the table generation.  
 > The routes declarations will be used for the following features:
 >
-> * `index` (required): used for the rows number definition, sort and search features. This is where the user will be redirected when the number of rows will be changed, when the table will be sorted or when a search request will be executed.
+> * `index` (required): this is where the user will be redirected when the number of rows will be changed, when the table will be sorted or when a search request will be executed.
 > * `create` (optional): if declared, the **create** button will be displayed and will trigger this route on click.
 > * `show` (optional): if declared, the **show** button will be displayed on each row (unless it is a disabled row) and will trigger this route on click.
 > * `edit` (optional): if declared, the **edit** button will be displayed for each row (unless it is a disabled row) and will trigger this route on click.
