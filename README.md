@@ -281,13 +281,11 @@ class NewsTable extends AbstractTable
         $table->column('content')->stringLimit(30);
         $table->column('author')->sortable(true)->searchable('user', ['name']);
         $table->column('category_id')
-            ->title('Category custom name')
-            ->prependHtml('prepended-html')
-            ->appendsHtml('appended-html')
+            ->title(__('Category'))
+            ->prependHtml('<i class="fas fa-hand-point-right"></i>')
+            ->appendsHtml('<i class="fas fa-hand-point-left"></i>')
             ->button(['btn', 'btn-sm', 'btn-outline-primary'])
-            ->value(function (News $news, Column $column) {
-                return config('news.category.' . $news->{$column->getDbField()});
-            });
+            ->value(fn(News $news) => config('news.category.' . $news->category_id))
         $table->column()
             ->title(__('Display'))
             ->link(fn(News $news) => route('news.show', $news))
