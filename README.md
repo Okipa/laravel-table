@@ -403,17 +403,17 @@ class UsersTable extends AbstractTable
 > Set the routes used during the table generation.  
 > The routes declarations will be used for the following features:
 >
-> * `index` (required): used for the rows number definition, sort and search features.
-> * `create` (optional): the **create** button is displayed if this route is declared. The button used this route to redirect to the model creation page.
-> * `edit` (optional): the **edit** button is displayed on each row if this route is declared. The route is used to redirect to the model edition page.
-> * `show` (optional): the **show** button is displayed on each row if this route is declared. The route is used to redirect to the model show page.
-> * `destroy` (optional): the **destroy** button is displayed on each row if this route is declared. The route is used to trigger the model destroy action.
+> * `index` (required): used for the rows number definition, sort and search features. This is where the user will be redirected when the number of rows will be changed, when the table will be sorted or when a search request will be executed.
+> * `create` (optional): if declared, the **create** button will be displayed and will trigger this route on click.
+> * `show` (optional): if declared, the **show** button will be displayed on each row (unless it is a disabled row) and will trigger this route on click.
+> * `edit` (optional): if declared, the **edit** button will be displayed for each row (unless it is a disabled row) and will trigger this route on click.
+> * `destroy` (optional): if declared, the **destroy** button will be displayed on each row (unless it is a disabled row) and will trigger this route on click.
 
 **Note:**
 
 * Signature: `routes(array $routes): \Okipa\LaravelTable\Table`
 * Required
-* Each route have to be defined with the following structure:
+* Routes have to be defined with the following structure:
 
 ```php
 // example
@@ -423,14 +423,15 @@ class UsersTable extends AbstractTable
         'name' => 'users.index',
         // optional
         'params' => [
-            // set route params
-            // or do not declare it
+            // set route params (or not)
         ]
     ]
+    // same structure for `create`, `show`, `edit` or `destroy` route
 ];
 ```
 
-* :warning: As the current model is always provided as a param to the `edit`, `destroy` and `show` routes, you do not have to define it in the `->routes()` call. You also should declare your routes carefully to avoid errors. See the examples bellow:
+* As the current model instance is always provided as a param to the `show`, `edit` and `destroy` routes, you do not have to pass it to the params.
+* You also should declare your routes carefully to avoid errors. See the examples bellow:
 
 ```php
     // assuming your declared your route with implicit binding:
@@ -451,11 +452,11 @@ class UsersTable extends AbstractTable
     // in this case only, you will be able to declare your routes without keys:
     (new Table)->model(User::class)->routes([
         // ...
-        'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherValue']],
+        'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherParam']],
         // ...
     ]);
     // because the route params are given in the same order as the route declaration:
-    route('user.edit', [$user, $child, 'otherValue']);
+    route('user.edit', [$user, $child, 'otherParam']);
 ```
 
 **Use case example:**
