@@ -49,28 +49,30 @@ class UsersTable extends AbstractTable
 {
     protected function table(): Table
     {
-        return (new Table)->model(User::class)->routes([
-            'index' => ['name' => 'users.index'],
-            'create' => ['name' => 'user.create'],
-            'edit' => ['name' => 'user.edit'],
-            'destroy' => ['name' => 'user.destroy'],
-        ])->destroyConfirmationHtmlAttributes(function (User $user) {
-            return [
-                'data-confirm' => 'Are you sure you want to delete the user ' . $user->name . ' ?',
-            ];
-        });
+        return (new Table)->model(User::class)
+            ->routes([
+                'index' => ['name' => 'users.index'],
+                'create' => ['name' => 'user.create'],
+                'edit' => ['name' => 'user.edit'],
+                'destroy' => ['name' => 'user.destroy'],
+            ])
+            ->destroyConfirmationHtmlAttributes(fn(User $user) => [
+                'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])
+            ]);
     }
 
     protected function columns(Table $table): void
     {
-        $table->column('first_name')->sortable(true)->searchable();
-        $table->column('last_name')->sortable()->searchable();
+        $table->column('id')->sortable(true);
+        $table->column('name')->sortable()->searchable();
         $table->column('email')->sortable()->searchable();
+        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable();
     }
 }
 ```
 
-Send your table to your view:
+Finally, send your table to your view:
 
 ```php
 use \Illuminate\View\View;
@@ -98,8 +100,8 @@ And display it the view:
 
 * [Installation](#installation)
 * [Configuration](#configuration)
-* [Translations](#translations)
 * [Templates](#templates)
+* [Translations](#translations)
 * [Advanced configuration example](#advanced-configuration-example)
 * [Tips](#tips)
 * [Table API](#table-api)
@@ -163,15 +165,23 @@ And display it the view:
 * Install the package with composer:
 
 ```bash
-composer require "okipa/laravel-table:^2.0"
+composer require "okipa/laravel-table:^3.0"
 ```
 
 ## Configuration
 
-Optionally Publish the package configuration:
+Optionally publish the package configuration:
 
 ```bash
 php artisan vendor:publish --tag=laravel-table:config
+```
+
+## Templates
+
+Optionally publish the package templates:
+
+```bash
+php artisan vendor:publish --tag=laravel-table:views
 ```
 
 ## Translations
@@ -182,7 +192,6 @@ See how to translate them on the Laravel official documentation: https://laravel
 
 Here is the list of the words and sentences available for translation:
 
-* `Actions`
 * `Create`
 * `Show`
 * `Edit`
@@ -194,24 +203,16 @@ Here is the list of the words and sentences available for translation:
 * `No results were found.`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
-## Templates
-
-Optionally Publish the package templates:
-
-```bash
-php artisan vendor:publish --tag=laravel-table:views
-```
-
 ## Advanced configuration example
 
 ```php
 namespace App\Tables;
 
-use Okipa\LaravelTable\Abstracts\AbstractTable;
-use Illuminate\Http\Request;
-use Okipa\LaravelTable\Table;
 use App\News;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTable;
 
 class NewsTable extends AbstractTable
 {
@@ -229,7 +230,7 @@ class NewsTable extends AbstractTable
     protected function table(): Table
     {
         return (new Table)->model(News::class)
-            ->identifier('News table')
+            ->identifier('news-table')
             ->request($this->request)
             ->routes([
                 'index' => ['name' => 'news.index'],
@@ -238,7 +239,7 @@ class NewsTable extends AbstractTable
                 'destroy' => ['name' => 'news.destroy'],
                 'show' => ['name' => 'news.show'],
             ])
-            ->rowsNumber(50) // or set `false` to get all the items contained in database
+            ->rowsNumber(50) // or set `null` to display all the items contained in database
             ->activateRowsNumberDefinition(false)
             ->query(function (Builder $query) {
                 // some examples of what you can do
@@ -247,7 +248,7 @@ class NewsTable extends AbstractTable
                 $query->where('category_id', $this->categoryId);
                 // get value stored in a json field
                 $query->addSelect('news.json_field->>json_attribute as json_attribute');
-                // get a formatted value form a pivot table
+                // get a formatted value from a pivot table
                 $query->selectRaw('count(comments.id) as comments_count');
                 $query->leftJoin('news_commment', 'news_commment.news_id', '=', 'news.id');
                 $query->leftJoin('comments', 'comments.id', '=', 'news_commment.comment_id');
@@ -256,23 +257,18 @@ class NewsTable extends AbstractTable
                 $query->addSelect('users.name as author');
                 $query->join('users', 'users.id', '=', 'news.author_id');
             })
-            ->disableRows(function(News $news){
-                return $news->id === 1 || $news->id === 2;
-            }, ['disabled', 'bg-secondary'])
-            ->rowsConditionalClasses(function(News $news){
-                return $news->id === 3;
-            }, ['highlighted', 'bg-success'])
+            ->disableRows(fn(News $news) => in_array($news->id, [1, 2]), ['disabled', 'bg-secondary'])
+            ->rowsConditionalClasses(fn(News $news) => $news->id === 3, ['highlighted', 'bg-success'])
             // append all request params to the paginator
             ->appendData($this->request->all());
     }
     
     protected function columns(Table $table): void
     {
-        $table->column('image')->html(function (News $news, Column $column) {
-            return $news->{$column->getDbField()}
-                ? '<img src="' . $news->{$column->getDbField()} . '" alt="' .  $news->title . '">'
-                : null;
-        });
+        $table->column('id')->sortable(true);
+        $table->column()->title(__('Illustration'))->html(fn(News $news) => $news->image_src
+            ? '<img src="' . $news->image_src . '" alt="' .  $news->title . '">'
+            : null);
         $table->column('title')->sortable()->searchable();
         $table->column('content')->stringLimit(30);
         $table->column('author')->sortable(true)->searchable('user', ['name']);
@@ -284,17 +280,20 @@ class NewsTable extends AbstractTable
             ->value(function (News $news, Column $column) {
                 return config('news.category.' . $news->{$column->getDbField()});
             });
-        $table->column()->link(function(News $news){
-            return route('news.show', $news);
-        })->button(['btn', 'btn-sm', 'btn-primary']);
-        $table->column('released_at')->sortable()->dateTimeFormat('d/m/Y H:i:s');
+        $table->column()
+            ->title(__('Display'))
+            ->link(fn(News $news) => route('news.show', $news))
+            ->button(['btn', 'btn-sm', 'btn-primary']);
+        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('published_at')->dateTimeFormat('d/m/Y H:i')->sortable(true, 'desc');
     }
 
     protected function resultLines(Table $table): void
     {
-        $table->result()->title('Comments')->html(function(Collection $paginatedRows){
-            return $paginatedRows->sum('comments_count');
-        });
+        $table->result()
+            ->title('Total of comments')
+            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('comments_count'));
     }
 }
 ```
