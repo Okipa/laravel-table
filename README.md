@@ -224,7 +224,6 @@ class NewsTable extends AbstractTable
 
     public function __construct(Request $request, int $categoryId)
     {
-        parent::__construct();
         $this->request = $request;
         $this->categoryId = $categoryId;
     }
@@ -376,10 +375,10 @@ Then, use the custom request in your table:
 ```php
 namespace App\Tables;
 
-use Okipa\LaravelTable\Abstracts\AbstractTable;
-use Illuminate\Http\Request;
-use Okipa\LaravelTable\Table;
 use App\Users;
+use Illuminate\Http\Request;
+use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Okipa\LaravelTable\Table;
 
 class UsersTable extends AbstractTable
 {
@@ -387,7 +386,6 @@ class UsersTable extends AbstractTable
 
     public function __construct(Request $request)
     {
-        parent::__construct();
         $this->request = $request;
     }
 
