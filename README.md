@@ -656,24 +656,21 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->destroyHtmlAttributes(function(User $user){
-    return ['data-confirm' => __('Are you sure you want to delete the user :name ?', [
-        'name' => $model->name
-    ])];
-});
+(new Table)->destroyHtmlAttributes(fn(User $user) => ['data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])]);
 ```
 
 **Javascript snippet example:**
 
 ```javascript
-// example of javascript snippet to ask a confirmation before executing the destroy action
-// disclaimer: this has not been tested should be adapted according to your needs
+// example of javascript snippet to ask a confirmation before executing the destroy action.
+// this js snippet uses the `data-confirm` attribute value provided in the use case example above
 const destroyButton = $('form.destroy button[type="submit"]');
 destroyButton.click((e) => {
     e.preventDefault();
     const $this = $(e.target);
+    const message = $this.data('confirm');
     const form = $this.closest('form');
-    if(confirm("Are you sure you want to destroy this entry?")) {
+    if(confirm(message)) {
         form.submit();
     }
 });
@@ -681,8 +678,8 @@ destroyButton.click((e) => {
 
 <h3 id="table-disableRows">disableRows</h3>
 
-> Set the disable lines closure that will be executed during the table generation.  
-> The optional second param let you override the classes that will be applied for the disabled lines.  
+> Set the disableRows closure that will be executed during the table generation.  
+> The optional second param let you override the classes that will be applied for the disabled rows.  
 > By default, the « config('laravel-table.classes.disabled') » config value is applied.  
 > For example, you can disable the current logged user to prevent him being edited or deleted from the table.  
 > The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
@@ -695,9 +692,7 @@ destroyButton.click((e) => {
 **Use case example:**
 
 ```php
-(new Table)->disableRows(function(User $user){
-    return $user->id = auth()->id;
-}, ['bg-danger', 'text-primary']);
+(new Table)->disableRows(fn(User $user) => $user->id = auth()->id(), ['bg-danger', 'text-primary']);
 ```
 
 <h3 id="table-tableTemplate">tableTemplate</h3>
