@@ -531,11 +531,11 @@ class UsersTable extends AbstractTable
 
 <h3 id="table-appendData">appendData</h3>
 
-> Add an array of arguments to append to the paginator and to the following table actions:
+> Add an array of arguments that will be appended to the paginator and to the following table actions:
 >
 > * row number selection
 > * searching
-> * search canceling
+> * search cancelling
 > * sorting.
 
 **Note:**
@@ -1079,7 +1079,7 @@ $table->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
 <h3 id="column-link">link</h3>
 
 > Wrap the column value into a `<a></a>` HTML tag.  
-> You can declare the link as a string or as a closure which will let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.  
+> You can declare the link as a string or as a closure which will let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.  
 > If no url is declared, the url will be generated using the column value.
 
 **Note:**
@@ -1153,7 +1153,7 @@ $table->column('email')->stringLimit(30);
 <h3 id="column-value">value</h3>
 
 > Display a custom value for the column.  
-> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
+> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`.
 
 **Note:**
 
@@ -1171,7 +1171,7 @@ $table->column()->value(function(User $user) {
 <h3 id="column-html">html</h3>
 
 > Display a custom HTML for the column.  
-> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`, `\Okipa\LaravelTable\Column $column`.
+> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`.
 
 **Note:**
 

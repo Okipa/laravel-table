@@ -56,7 +56,7 @@ trait IsSortable
         /** @var \Okipa\LaravelTable\Column $this */
         $this->getTable()->defineSortByValue($this->getDbField());
         $acceptedDirections = ['asc', 'desc'];
-        $errorMessage = 'Invalid « $sortDirection » second argument for « sortable() » method. Has to be « asc » or '
+        $errorMessage = 'Invalid « $sortDirection » second argument for the « sortable » method. Has to be « asc » or '
             . '« desc ». « ' . $sortDirection . ' » given.';
         if (! in_array($sortDirection, $acceptedDirections)) {
             throw new InvalidArgumentException($errorMessage);

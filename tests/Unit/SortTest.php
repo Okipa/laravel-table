@@ -100,7 +100,7 @@ class SortTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the sortable table columns has no defined database column. '
             . 'You have to define a database column for each sortable table columns by '
-            . 'setting a string parameter in the « column() » method.');
+            . 'setting a string parameter in the « column » method.');
         $this->createMultipleUsers(5);
         $this->routes(['companies'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'companies.index']])->model(User::class);

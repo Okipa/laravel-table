@@ -26,7 +26,7 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
                 'data-confirm' => __('Are you sure you want to delete the user :name ?', [
                     'name' => $model->name,
                 ]),
-            ], $model->destroyConfirmationAttributes);
+            ], $model->destroy_confirmation_attributes);
         }
     }
 

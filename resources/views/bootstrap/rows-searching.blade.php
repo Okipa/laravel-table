@@ -14,20 +14,20 @@
                     </span>
                 </div>
                 <input class="form-control"
-                       type="text"
-                       name="{{ $table->getSearchField() }}"
-                       value="{{ $table->getRequest()->get($table->getSearchField()) }}"
-                       placeholder="@lang('Search by:') {{ $table->getSearchableTitles() }}"
-                       aria-label="@lang('Search by:') {{ $table->getSearchableTitles() }}">
+                   type="text"
+                   name="{{ $table->getSearchField() }}"
+                   value="{{ $table->getRequest()->get($table->getSearchField()) }}"
+                   placeholder="@lang('Search by:') {{ $table->getSearchableTitles() }}"
+                   aria-label="@lang('Search by:') {{ $table->getSearchableTitles() }}">
                 @if($table->getRequest()->get($table->getSearchField()))
                     <div class="input-group-append">
                         <a class="input-group-text btn btn-link text-danger reset-research"
                            href="{{ $table->getRoute('index', array_merge([
-                                                    $table->getSearchField() => null,
-                                                    $table->getRowsNumberField() => $table->getRequest()->get($table->getRowsNumberField()),
-                                                    $table->getSortByField() => $table->getRequest()->get($table->getSortByField()),
-                                                    $table->getSortDirField() => $table->getRequest()->get($table->getSortDirField())
-                                                ], $table->getAppendedToPaginator())) }}"
+                                $table->getSearchField() => null,
+                                $table->getRowsNumberField() => $table->getRequest()->get($table->getRowsNumberField()),
+                                $table->getSortByField() => $table->getRequest()->get($table->getSortByField()),
+                                $table->getSortDirField() => $table->getRequest()->get($table->getSortDirField())
+                            ], $table->getAppendedToPaginator())) }}"
                            title="@lang('Reset research')">
                             <span>{!! config('laravel-table.icon.reset') !!}</span>
                         </a>

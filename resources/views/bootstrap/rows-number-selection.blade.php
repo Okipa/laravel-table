@@ -1,4 +1,4 @@
-@if($table->getRowsNumberSelectionActivation())
+@if($table->getRowsNumberDefinitionActivation())
     <div class="px-3 py-1 rows-number-selection">
         <form role="form" method="GET" action="{{ $table->getRoute('index') }}">
             <input type="hidden" name="{{ $table->getSearchField() }}" value="{{ $table->getRequest()->get($table->getSearchField()) }}">
@@ -14,11 +14,11 @@
                     </span>
                 </div>
                 <input class="form-control"
-                       type="number"
-                       name="{{ $table->getRowsNumberField() }}"
-                       value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}"
-                       placeholder="@lang('Number of rows')"
-                       aria-label="@lang('Number of rows')">
+                   type="number"
+                   name="{{ $table->getRowsNumberField() }}"
+                   value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}"
+                   placeholder="@lang('Number of rows')"
+                   aria-label="@lang('Number of rows')">
                 <div class="input-group-append">
                     <div class="input-group-text py-0">
                         <button class="btn btn-link p-0 text-primary" type="submit" title="@lang('Number of rows')">

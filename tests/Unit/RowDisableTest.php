@@ -41,8 +41,8 @@ class RowDisableTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
-                ? $this->assertEquals($user->disabledClasses, $classes)
-                : $this->assertEmpty($user->disabledClasses);
+                ? $this->assertEquals($user->disabled_classes, $classes)
+                : $this->assertEmpty($user->disabled_classes);
         }
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
@@ -84,8 +84,8 @@ class RowDisableTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
-                ? $this->assertEquals($user->disabledClasses, $classes)
-                : $this->assertEmpty($user->disabledClasses);
+                ? $this->assertEquals($user->disabled_classes, $classes)
+                : $this->assertEmpty($user->disabled_classes);
         }
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);

@@ -23,9 +23,7 @@ trait HasModel
         return $this->model;
     }
 
-    /**
-     * @throws \ErrorException
-     */
+    /** @throws \ErrorException */
     protected function checkModelIsDefined(): void
     {
         if (! $this->getModel() instanceof Model) {

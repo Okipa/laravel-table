@@ -12,14 +12,6 @@ trait HasRowsNumberDefinition
 
     protected bool $rowsNumberDefinitionActivated;
 
-    /**
-     * Override the config default number of rows displayed on the table.
-     * The default number of displayed rows is defined in the config('laravel-table.behavior.rows_number') config value.
-     *
-     * @param int|null $rowsNumber
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function rowsNumber(?int $rowsNumber): Table
     {
         $this->rowsNumberValue = $rowsNumber;
@@ -43,16 +35,6 @@ trait HasRowsNumberDefinition
         return $this->rowsNumberValue;
     }
 
-    /**
-     * Override the default rows number selection activation status.
-     * Calling this method displays a rows number input that enable the user to choose how much rows to show.
-     * The default rows number selection activation status is defined in the
-     * config('laravel-table.behavior.activate_rows_number_definition') config value.
-     *
-     * @param bool $activate
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function activateRowsNumberDefinition(bool $activate = true): Table
     {
         $this->rowsNumberDefinitionActivated = $activate;
@@ -61,7 +43,7 @@ trait HasRowsNumberDefinition
         return $this;
     }
 
-    public function getRowsNumberSelectionActivation(): bool
+    public function getRowsNumberDefinitionActivation(): bool
     {
         return $this->rowsNumberDefinitionActivated;
     }

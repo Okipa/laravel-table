@@ -43,7 +43,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table column with related « not_existing_column » database column is '
             . 'searchable and does not exist in the « users_test » table. Set the database '
-            . 'searched table and (optionally) columns with the « sortable() » '
+            . 'searched table and (optionally) columns with the « sortable » '
             . 'method arguments.');
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
@@ -118,7 +118,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table column with related « owner » database column is searchable and does '
             . 'not exist in the « companies_test » table. Set the database searched table '
-            . 'and (optionally) columns with the « sortable() » method arguments.');
+            . 'and (optionally) columns with the « sortable » method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -138,7 +138,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the searchable table columns has no defined database column. You have '
             . 'to define a database column for each searchable table columns by setting a '
-            . 'string parameter in the « column() » method.');
+            . 'string parameter in the « column » method.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -152,7 +152,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table column with related « owner » database column is searchable and does '
             . 'not exist in the « users_test » table. Set the database searched table and '
-            . '(optionally) columns with the « sortable() » method arguments.');
+            . '(optionally) columns with the « sortable » method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -173,7 +173,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectExceptionMessage('The table column with related « nonExistent » database column is searchable '
             . 'and does not exist in the « aliasesUserTable » (aliased as « users_test ») '
             . 'table. Set the database searched table and (optionally) columns with the '
-            . '« sortable() » method arguments.');
+            . '« sortable » method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);

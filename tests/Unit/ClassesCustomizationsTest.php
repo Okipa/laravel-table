@@ -191,8 +191,8 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
-                ? $this->assertEquals($user->conditionnalClasses, $classes)
-                : $this->assertEmpty($user->conditionnalClasses);
+                ? $this->assertEquals($user->conditionnal_classes, $classes)
+                : $this->assertEmpty($user->conditionnal_classes);
         }
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);

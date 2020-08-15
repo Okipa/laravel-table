@@ -1,5 +1,5 @@
 <thead>
-    @if($table->getRowsNumberSelectionActivation() || ! $table->getSearchableColumns()->isEmpty())
+    @if($table->getRowsNumberDefinitionActivation() || ! $table->getSearchableColumns()->isEmpty())
         <tr{{ classTag($table->getTrClasses()) }}>
             <td{{ classTag('bg-light', $table->getTdClasses()) }}{{ htmlAttributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }}>
                 <div class="d-flex flex-wrap justify-content-between py-2">
