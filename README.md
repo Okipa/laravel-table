@@ -305,17 +305,17 @@ class NewsTable extends AbstractTable
 ```
 
 ## Tips
-* **Columns displaying combination:** The following table column methods can be combined to display a result as wished. If you can't get the wanted result, you should use the `->html()` method to build a custom display.
-  * `->button()`
-  * `->link()`
-  * `->prependHtml()`
-  * `->appendsHtml()`
-  * `->stringLimit()`
-  * `->value()`
+* **Columns displaying combination:** The following table column methods can be chained to display a result as wished. If you can't get the wanted result, you should use the `html` method to build a custom display.
+  * `button`
+  * `link`
+  * `prependHtml`
+  * `appendsHtml`
+  * `stringLimit`
+  * `value`
 
 ## Table API
 
-:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [->column()](#table-column) and the [->result()](#table-result) methods** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
+:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [column](#table-column) and the [result](#table-result) methods** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
 
 <h3 id="table-model">model</h3>
 
