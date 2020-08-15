@@ -426,7 +426,7 @@ class UsersTable extends AbstractTable
             // set route params (or not)
         ]
     ]
-    // same structure for `create`, `show`, `edit` or `destroy` route
+    // you will have to respect the same structure for the `create`, `show`, `edit` or `destroy` routes.
 ];
 ```
 
