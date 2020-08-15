@@ -323,7 +323,7 @@ class NewsTable extends AbstractTable
 
 **Notes:**
 
-* Signature: `model(string $tableModel): \Okipa\LaravelTable\Table`
+* Signature: `model(string $tableModelNamespace): \Okipa\LaravelTable\Table`
 * Required
 
 **Use case example:**
