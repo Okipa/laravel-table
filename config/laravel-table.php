@@ -9,7 +9,7 @@ return [
         'tr' => [],
         'th' => ['align-middle'],
         'td' => ['align-middle'],
-        'results' => ['table-dark', 'font-weight-bold'],
+        'results' => ['bg-secondary', 'text-white', 'font-weight-bold'],
         'disabled' => ['table-danger', 'disabled'],
     ],
 
