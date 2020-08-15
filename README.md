@@ -259,8 +259,14 @@ class NewsTable extends AbstractTable
                 $query->addSelect('users.name as author');
                 $query->join('users', 'users.id', '=', 'news.author_id');
             })
-            ->disableRows(fn(News $news) => in_array($news->id, [1, 2]), ['disabled', 'bg-secondary'])
-            ->rowsConditionalClasses(fn(News $news) => $news->id === 3, ['highlighted', 'bg-success'])
+            ->disableRows(
+                fn(News $news) => in_array($news->id, [1, 2]),
+                ['disabled', 'bg-secondary']
+            )
+            ->rowsConditionalClasses(
+                fn(News $news) => $news->id === 3,
+                ['highlighted', 'bg-success']
+            )
             // append all request params to the paginator
             ->appendData($this->request->all());
     }
