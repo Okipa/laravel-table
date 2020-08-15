@@ -167,9 +167,10 @@ trait HasColumns
             $dbAliases = [];
             preg_match_all('/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/', $fromSqlStatement, $dbAliases);
             if (! empty(array_filter($dbAliases))) {
-                $position = array_keys(Arr::where(array_shift($dbAliases), function ($alias) use ($dbTable) {
-                    return Str::contains($alias, $dbTable);
-                }));
+                $position = array_keys(Arr::where(
+                    array_shift($dbAliases),
+                    fn($alias) => Str::contains($alias, $dbTable)
+                ));
                 $dbAlias = head($dbAliases)[head($position)];
                 $dbColumns = Schema::getColumnListing($dbAlias);
 

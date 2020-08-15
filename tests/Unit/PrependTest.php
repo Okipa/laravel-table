@@ -40,9 +40,7 @@ class PrependTest extends LaravelTableTestCase
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->prependHtml('html')->value(function () {
-            return 'test';
-        });
+        $table->column('name')->prependHtml('html')->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('html', $html);

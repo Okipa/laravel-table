@@ -66,9 +66,7 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
 
     public function testRowConditionalClassesAttribute()
     {
-        $closure = function ($model) {
-            return $model->id === 1;
-        };
+        $closure = fn($model) => $model->id === 1;
         $classes = ['test-custom-class'];
         $table = (new Table)->rowsConditionalClasses($closure, $classes);
         $this->assertEquals($closure, $table->getRowsConditionalClasses()->first()['closure']);
@@ -176,9 +174,7 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
-        $closure = function ($model) {
-            return $model->id === 1 || $model->id === 2;
-        };
+        $closure = fn($model) => $model->id === 1 || $model->id === 2;
         $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
         $table = (new Table)->model(User::class)->routes([
             'index'   => ['name' => 'users.index'],

@@ -10,9 +10,7 @@ class RowDisableTest extends LaravelTableTestCase
 {
     public function testRowDisableAttribute()
     {
-        $rowDisableClosure = function ($model) {
-            return $model->id === 1;
-        };
+        $rowDisableClosure = fn(User $user) => $user->id === 1;
         $classes = ['test-disabled-custom-class'];
         $table = (new Table)->disableRows($rowDisableClosure, $classes);
         $this->assertEquals($rowDisableClosure, $table->getDisabledRows()->first()['closure']);
@@ -23,9 +21,7 @@ class RowDisableTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $users = $this->createMultipleUsers(5);
-        $closure = function ($model) use ($users) {
-            return $model->id === 1 || $model->id === 2;
-        };
+        $closure = fn(User $user) => $user->id === 1 || $user->id === 2;
         $classes = ['test-disabled-default-class'];
         config()->set('laravel-table.classes.disabled', $classes);
         $table = (new Table)->model(User::class)
@@ -67,9 +63,7 @@ class RowDisableTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $users = $this->createMultipleUsers(5);
-        $closure = function ($model) use ($users) {
-            return $model->id === 1 || $model->id === 2;
-        };
+        $closure = fn(User $user) => $user->id === 1 || $user->id === 2;
         $classes = ['test-disabled-custom-class'];
         $table = (new Table)->model(User::class)
             ->routes([

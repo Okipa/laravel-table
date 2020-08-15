@@ -394,7 +394,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest)
-            ->query(function ($query) use ($companyBeta) {
+            ->query(function (Builder $query) use ($companyBeta) {
                 $query->select('users_test.*');
                 $query->join('companies_test', 'companies_test.owner_id', '=', 'users_test.id');
                 $query->where('companies_test.id', $companyBeta->id);
@@ -408,7 +408,7 @@ class SearchTest extends LaravelTableTestCase
     public function testSqliteCaseInsensitiveTestHtml()
     {
         $users = $this->createMultipleUsers(10);
-        $users->each(function ($user, $key) {
+        $users->each(function (User $user, int $key) {
             if ($key === 0) {
                 $user->update(['name' => 'alpha']);
             } elseif ($key === 1) {
@@ -426,9 +426,10 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
-        $this->assertEquals($users->filter(function ($user) {
-            return in_array($user->name, ['alpha', 'ALPHA']);
-        })->toArray(), $table->getPaginator()->toArray()['data']);
+        $this->assertEquals(
+            $users->filter(fn($user) => in_array($user->name, ['alpha', 'ALPHA']))->toArray(),
+            $table->getPaginator()->toArray()['data']
+        );
     }
 
     public function testPostgresCaseInsensitiveTestHtml()

@@ -230,26 +230,10 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetRouteDefinitionWithProvidedId()
     {
         $user = $this->createUniqueUser();
-        app('router')->get('/users', [
-            'as' => 'users.index', function () {
-                return null;
-            },
-        ]);
-        app('router')->get('/user/edit/{id}', [
-            'as' => 'user.edit', function () {
-                return null;
-            },
-        ]);
-        app('router')->post('/user/destroy/{id}', [
-            'as' => 'user.destroy', function () {
-                return null;
-            },
-        ]);
-        app('router')->get('/user/show/{id}', [
-            'as' => 'user.show', function () {
-                return null;
-            },
-        ]);
+        app('router')->get('/users', ['as' => 'users.index', fn() => null]);
+        app('router')->get('/user/edit/{id}', ['as' => 'user.edit', fn() => null]);
+        app('router')->post('/user/destroy/{id}', ['as' => 'user.destroy', fn() => null]);
+        app('router')->get('/user/show/{id}', ['as' => 'user.show', fn() => null]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit'],
@@ -267,26 +251,10 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetImplicitBindingRoutes()
     {
         $user = $this->createUniqueUser();
-        app('router')->get('/users', [
-            'as' => 'users.index', function () {
-                return null;
-            },
-        ]);
-        app('router')->get('/user/edit/{user}', [
-            'as' => 'user.edit', function () {
-                return null;
-            },
-        ]);
-        app('router')->post('/user/destroy/{user}', [
-            'as' => 'user.destroy', function () {
-                return null;
-            },
-        ]);
-        app('router')->get('/user/show/{user}', [
-            'as' => 'user.show', function () {
-                return null;
-            },
-        ]);
+        app('router')->get('/users', ['as' => 'users.index', fn() => null]);
+        app('router')->get('/user/edit/{user}', ['as' => 'user.edit', fn() => null]);
+        app('router')->post('/user/destroy/{user}', ['as' => 'user.destroy', fn() => null]);
+        app('router')->get('/user/show/{user}', ['as' => 'user.show', fn() => null]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit'],
@@ -304,26 +272,12 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetRouteDefinitionWithProvidedIdAndOtherRouteParams()
     {
         $user = $this->createUniqueUser();
-        app('router')->get('/users', [
-            'as' => 'users.index', function () {
-                return null;
-            },
-        ]);
-        app('router')->get('/parent/{parentId}/user/edit/{id}/child/{childId}', [
-            'as' => 'user.edit', function () {
-                return null;
-            },
-        ]);
+        app('router')->get('/users', ['as' => 'users.index', fn() => null]);
+        app('router')->get('/parent/{parentId}/user/edit/{id}/child/{childId}', ['as' => 'user.edit', fn() => null]);
         app('router')->post('/parent/{parentId}/user/destroy/{id}/child/{childId}', [
-            'as' => 'user.destroy', function () {
-                return null;
-            },
+            'as' => 'user.destroy', fn() => null
         ]);
-        app('router')->get('/parent/{parentId}/user/show/{id}/child/{childId}', [
-            'as' => 'user.show', function () {
-                return null;
-            },
-        ]);
+        app('router')->get('/parent/{parentId}/user/show/{id}/child/{childId}', ['as' => 'user.show', fn() => null]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit', 'params' => ['parentId' => 11, 'childId' => 33]],
@@ -350,26 +304,12 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetImplicitBindingRoutesWithOtherRouteParams()
     {
         $user = $this->createUniqueUser();
-        app('router')->get('/users', [
-            'as' => 'users.index', function () {
-                return null;
-            },
-        ]);
-        app('router')->get('/parent/{parent}/user/edit/{user}/child/{child}', [
-            'as' => 'user.edit', function () {
-                return null;
-            },
-        ]);
+        app('router')->get('/users', ['as' => 'users.index', fn() => null]);
+        app('router')->get('/parent/{parent}/user/edit/{user}/child/{child}', ['as' => 'user.edit', fn() => null]);
         app('router')->post('/parent/{parent}/user/destroy/{user}/child/{child}', [
-            'as' => 'user.destroy', function () {
-                return null;
-            },
+            'as' => 'user.destroy', fn () => null
         ]);
-        app('router')->get('/parent/{parent}/user/show/{user}/child/{child}', [
-            'as' => 'user.show', function () {
-                return null;
-            },
-        ]);
+        app('router')->get('/parent/{parent}/user/show/{user}/child/{child}', ['as' => 'user.show', fn() => null]);
         $table = (new Table)->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit', 'params' => ['parent' => 11, 'child' => 33]],

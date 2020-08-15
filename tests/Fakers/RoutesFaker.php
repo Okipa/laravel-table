@@ -9,9 +9,8 @@ trait RoutesFaker
         foreach ($entities as $model) {
             foreach ($routes as $route) {
                 app('router')->get('/' . $model . '/' . $route, [
-                    'as' => $model . '.' . $route, function () use ($model, $route) {
-                        return $model . '.' . $route . ' route.';
-                    },
+                    'as' => $model . '.' . $route,
+                    fn() => $model . '.' . $route . ' route.',
                 ]);
             }
         }
