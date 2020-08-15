@@ -344,7 +344,7 @@ class NewsTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->identifier('Your identifier');
+(new Table)->identifier('users-table');
 ```
 
 <h3 id="table-request">request</h3>
