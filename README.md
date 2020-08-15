@@ -1018,7 +1018,7 @@ $table->column('email')->sortable(true, 'desc');
 
 **Note:**
 
-* Signature: `public function searchable(string $dbSearchedTable = null, array $dbSearchedFields = []): \Okipa\LaravelTable\Column`
+* Signature: `searchable(string $dbSearchedTable = null, array $dbSearchedFields = []): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**

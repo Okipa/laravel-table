@@ -11,10 +11,6 @@ trait IsSortable
     protected bool $isSortable = false;
 
     /**
-     * Make the column sortable.
-     * You also can choose to set the column sorted by default.
-     * If no column is sorted by default, the first one will be automatically sorted.
-     *
      * @param bool $sortByDefault
      * @param string $sortDirection
      *
@@ -35,8 +31,6 @@ trait IsSortable
     }
 
     /**
-     * Sort the column by default.
-     *
      * @param string $sortDirection
      *
      * @throws \ErrorException

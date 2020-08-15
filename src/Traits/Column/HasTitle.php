@@ -8,21 +8,7 @@ trait HasTitle
 {
     protected ?string $title;
 
-    abstract public function getDbField(): ?string;
-
-    protected function initializeTitle(): void
-    {
-        $this->title = $this->getDbField() ? (string) __('validation.attributes.' . $this->getDbField()) : null;
-    }
-
-    /**
-     * Set a custom column title and override the default `__('validation.attributes.[$database_column])` one.
-     *
-     * @param string|null $title
-     *
-     * @return \Okipa\LaravelTable\Column
-     */
-    public function title(string $title = null): Column
+    public function title(?string $title): Column
     {
         $this->title = $title;
 
@@ -34,4 +20,11 @@ trait HasTitle
     {
         return $this->title;
     }
+
+    protected function initializeTitle(): void
+    {
+        $this->title = $this->getDbField() ? (string) __('validation.attributes.' . $this->getDbField()) : null;
+    }
+
+    abstract public function getDbField(): ?string;
 }

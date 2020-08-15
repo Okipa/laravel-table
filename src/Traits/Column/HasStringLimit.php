@@ -8,14 +8,6 @@ trait HasStringLimit
 {
     protected ?int $stringLimit = null;
 
-    /**
-     * Set the string value display limitation (optional).
-     * Shows "..." when the limit is reached.
-     *
-     * @param int $stringLimit
-     *
-     * @return \Okipa\LaravelTable\Column
-     */
     public function stringLimit(int $stringLimit): Column
     {
         $this->stringLimit = $stringLimit;

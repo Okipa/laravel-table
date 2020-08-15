@@ -10,15 +10,6 @@ trait AppendsHtml
 
     protected bool $forceAppendedHtmlDisplay;
 
-    /**
-     * Append HTML to the displayed value.
-     * Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
-     *
-     * @param string $appendedHtml
-     * @param bool $forceAppendedHtmlDisplay
-     *
-     * @return \Okipa\LaravelTable\Column
-     */
     public function appendsHtml(string $appendedHtml, bool $forceAppendedHtmlDisplay = false): Column
     {
         $this->appendedHtml = $appendedHtml;

@@ -10,15 +10,6 @@ trait PrependsHtml
 
     protected bool $forcePrependedHtmlDisplay;
 
-    /**
-     * Prepend HTML to the displayed value.
-     * Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
-     *
-     * @param string $prependedHtml
-     * @param bool $forcePrependedHtmlDisplay
-     *
-     * @return \Okipa\LaravelTable\Column
-     */
     public function prependHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): Column
     {
         $this->prependedHtml = $prependedHtml;
