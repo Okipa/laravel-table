@@ -1,5 +1,5 @@
 @if($table->getSearchableColumns()->count())
-    <div class="flex-fill px-3 py-1 searching">
+    <div class="flex-fill px-3 py-1 searching" style="min-width: 40rem;">
         <form role="form" method="GET" action="{{ $table->getRoute('index') }}">
             <input type="hidden" name="{{ $table->getRowsNumberField() }}" value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}">
             <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
