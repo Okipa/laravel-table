@@ -1,6 +1,6 @@
 @if($table->isRouteDefined('destroy'))
     <form id="destroy-{{ $model->getKey() }}"
-        class="ml-2 destroy"
+        class="ml-2 destroy-action"
         role="form"
         method="POST"
         action="{{ $table->getRoute('destroy', [$model]) }}">

@@ -26,9 +26,9 @@ class RowDisableTest extends LaravelTableTestCase
         config()->set('laravel-table.classes.disabled', $classes);
         $table = (new Table)->model(User::class)
             ->routes([
-                'index'   => ['name' => 'users.index'],
-                'create'  => ['name' => 'users.create'],
-                'edit'    => ['name' => 'users.edit'],
+                'index' => ['name' => 'users.index'],
+                'create' => ['name' => 'users.create'],
+                'edit' => ['name' => 'users.edit'],
                 'destroy' => ['name' => 'users.destroy'],
             ])
             ->disableRows($closure);
@@ -67,9 +67,9 @@ class RowDisableTest extends LaravelTableTestCase
         $classes = ['test-disabled-custom-class'];
         $table = (new Table)->model(User::class)
             ->routes([
-                'index'   => ['name' => 'users.index'],
-                'create'  => ['name' => 'users.create'],
-                'edit'    => ['name' => 'users.edit'],
+                'index' => ['name' => 'users.index'],
+                'create' => ['name' => 'users.create'],
+                'edit' => ['name' => 'users.edit'],
                 'destroy' => ['name' => 'users.destroy'],
             ])
             ->disableRows($closure, $classes);
@@ -105,9 +105,9 @@ class RowDisableTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $table = (new Table)->model(User::class)
             ->routes([
-                'index'   => ['name' => 'users.index'],
-                'create'  => ['name' => 'users.create'],
-                'edit'    => ['name' => 'users.edit'],
+                'index' => ['name' => 'users.index'],
+                'create' => ['name' => 'users.create'],
+                'edit' => ['name' => 'users.edit'],
                 'destroy' => ['name' => 'users.destroy'],
             ]);
         $table->column('name')->title('Name');

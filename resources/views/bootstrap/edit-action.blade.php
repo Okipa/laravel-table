@@ -1,6 +1,6 @@
 @if($table->isRouteDefined('edit'))
     <form id="edit-{{ $model->getKey() }}"
-        class="ml-2"
+        class="ml-2 edit-action"
         role="form"
         method="GET"
         action="{{ $table->getRoute('edit', [$model]) }}">

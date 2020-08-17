@@ -117,7 +117,7 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('creation-container', $html);
+        $this->assertStringContainsString('create-action', $html);
         $this->assertStringContainsString('href="http://localhost/users/create"', $html);
         $this->assertStringContainsString('title="Create"', $html);
     }
@@ -129,7 +129,7 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('<div class="creation-container', $html);
+        $this->assertStringNotContainsString('<div class="create-action', $html);
         $this->assertStringNotContainsString('href="http://localhost/users/create"', $html);
         $this->assertStringNotContainsString('title="Add"', $html);
     }

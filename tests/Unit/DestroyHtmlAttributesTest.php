@@ -13,7 +13,7 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
         $closure = fn(User $user) => [
-            'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])
+            'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name]),
         ];
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
@@ -33,13 +33,13 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
     public function testSetDestroyConfirmationClosureHtml()
     {
         $closure = fn(User $user) => [
-            'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])
+            'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name]),
         ];
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'destroy']);
         $table = (new Table)->model(User::class)
             ->routes([
-                'index'   => ['name' => 'users.index'],
+                'index' => ['name' => 'users.index'],
                 'destroy' => ['name' => 'users.destroy'],
             ])
             ->destroyConfirmationHtmlAttributes($closure);

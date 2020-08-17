@@ -61,11 +61,11 @@ class ConfigTest extends LaravelTableTestCase
         $this->createMultipleUsers(3);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy', 'show']);
         $table = (new Table)->model(User::class)->routes([
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
-            'show'    => ['name' => 'users.show'],
+            'show' => ['name' => 'users.show'],
         ]);
         $table->column('name')
             ->title('Name')

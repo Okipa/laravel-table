@@ -177,9 +177,9 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $closure = fn($model) => $model->id === 1 || $model->id === 2;
         $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
         $table = (new Table)->model(User::class)->routes([
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
         ])->rowsConditionalClasses($closure, $classes);
         $table->column('name')->title('Name');
