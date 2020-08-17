@@ -16,14 +16,6 @@ trait HasPagination
 
     protected array $generatedHiddenFields = [];
 
-    /**
-     * Add an array of arguments to append to the paginator and to the following table actions: row number selection,
-     * searching, search canceling, sorting.
-     *
-     * @param array $appendedToPaginator
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function appendData(array $appendedToPaginator): Table
     {
         $this->appendedToPaginator = $appendedToPaginator;

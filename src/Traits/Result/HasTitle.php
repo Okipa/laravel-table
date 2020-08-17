@@ -8,13 +8,6 @@ trait HasTitle
 {
     public ?string $title = null;
 
-    /**
-     * Set the result row title.
-     *
-     * @param string $title
-     *
-     * @return \Okipa\LaravelTable\Result
-     */
     public function title(string $title): Result
     {
         $this->title = $title;

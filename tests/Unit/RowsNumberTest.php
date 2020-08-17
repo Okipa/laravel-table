@@ -12,7 +12,7 @@ class RowsNumberTest extends LaravelTableTestCase
     public function testSetRowsNumberSelectionActivationAttribute()
     {
         $table = (new Table)->activateRowsNumberDefinition();
-        $this->assertTrue($table->getRowsNumberSelectionActivation());
+        $this->assertTrue($table->getRowsNumberDefinitionActivation());
     }
 
     public function testSetRowsNumberAttribute()

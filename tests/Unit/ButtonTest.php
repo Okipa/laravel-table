@@ -73,9 +73,7 @@ class ButtonTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->column()->button(['buttonClass'])->value(function ($model) {
-            return 'user name = ' . $model->name;
-        });
+        $table->column()->button(['buttonClass'])->value(fn(User $user) => 'user name = ' . $user->name);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(

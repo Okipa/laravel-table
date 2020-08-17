@@ -25,8 +25,7 @@ class LinkTest extends LaravelTableTestCase
     public function testSetIsLinkAttributeClosure()
     {
         $table = (new Table)->model(User::class);
-        $closure = function ($model, $column) {
-        };
+        $closure = fn() => null;
         $table->column('name')->link($closure);
         $this->assertEquals($closure, $table->getColumns()->first()->getUrlClosure());
     }
@@ -58,9 +57,7 @@ class LinkTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link(function () {
-            return 'url';
-        });
+        $table->column('name')->link(fn() => 'url');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="url" title="' . $user->name . '">', $html);
@@ -119,9 +116,7 @@ class LinkTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link('url')->value(function () {
-            return 'test';
-        });
+        $table->column('name')->link('url')->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="url" title="test">', $html);
@@ -133,9 +128,7 @@ class LinkTest extends LaravelTableTestCase
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link()->value(function () {
-            return 'test';
-        });
+        $table->column('name')->link()->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('<a href="test" title="test">', $html);

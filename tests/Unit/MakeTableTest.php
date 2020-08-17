@@ -32,7 +32,7 @@ class MakeTableTest extends LaravelTableTestCase
         $this->assertStringContainsString('class UsersTable', $fileContent);
         $this->assertStringContainsString('protected function table(): Table', $fileContent);
         $this->assertStringContainsString('(new Table)->model(User::class)', $fileContent);
-        $this->assertStringContainsString('function (User $user)', $fileContent);
+        $this->assertStringContainsString('fn(User $user)', $fileContent);
         $this->assertStringContainsString('[\'name\' => \'users.index\']', $fileContent);
         $this->assertStringContainsString('[\'name\' => \'user.create\']', $fileContent);
         $this->assertStringContainsString('[\'name\' => \'user.edit\']', $fileContent);

@@ -24,7 +24,7 @@ trait HasColumns
      * @return \Okipa\LaravelTable\Column
      * @throws \ErrorException
      */
-    public function column(string $dbField = null): Column
+    public function column(?string $dbField = null): Column
     {
         /** @var \Okipa\LaravelTable\Table $this */
         $this->checkModelIsDefined();
@@ -45,13 +45,6 @@ trait HasColumns
         return $this->getColumns()->count() + $extraColumnsCount;
     }
 
-    /**
-     * Check if a route is defined from its key.
-     *
-     * @param string $routeKey
-     *
-     * @return bool
-     */
     abstract public function isRouteDefined(string $routeKey): bool;
 
     public function getColumns(): Collection
@@ -121,7 +114,7 @@ trait HasColumns
         if (! $column->getDbField() && $column->getIsSortable()) {
             $errorMessage = 'One of the sortable table columns has no defined database column. You have to define a '
                 . 'database column for each sortable table columns by setting a string parameter in the '
-                . '« column() » method.';
+                . '« column » method.';
             throw new ErrorException($errorMessage);
         }
     }
@@ -136,7 +129,7 @@ trait HasColumns
         if (! $column->getDbField()) {
             $errorMessage = 'One of the searchable table columns has no defined database column. You have to define '
                 . 'a database column for each searchable table columns by setting a string parameter in '
-                . 'the « column() » method.';
+                . 'the « column » method.';
             throw new ErrorException($errorMessage);
         }
     }
@@ -159,7 +152,7 @@ trait HasColumns
                     : '« ' . $tableDbData['table'] . ' » table';
                 $errorMessage = 'The table column with related « ' . $searchedDatabaseColumn . ' » database column is '
                     . 'searchable and does not exist in the ' . $dynamicMessagePart
-                    . '. Set the database searched table and (optionally) columns with the « sortable() » '
+                    . '. Set the database searched table and (optionally) columns with the « sortable » '
                     . 'method arguments.';
                 throw new ErrorException($errorMessage);
             }
@@ -174,9 +167,10 @@ trait HasColumns
             $dbAliases = [];
             preg_match_all('/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/', $fromSqlStatement, $dbAliases);
             if (! empty(array_filter($dbAliases))) {
-                $position = array_keys(Arr::where(array_shift($dbAliases), function ($alias) use ($dbTable) {
-                    return Str::contains($alias, $dbTable);
-                }));
+                $position = array_keys(Arr::where(
+                    array_shift($dbAliases),
+                    fn($alias) => Str::contains($alias, $dbTable)
+                ));
                 $dbAlias = head($dbAliases)[head($position)];
                 $dbColumns = Schema::getColumnListing($dbAlias);
 
@@ -189,9 +183,7 @@ trait HasColumns
         return ['table' => $dbTable, 'alias' => $dbAlias, 'columns' => $dbColumns];
     }
 
-    /**
-     * @throws \ErrorException
-     */
+    /** @throws \ErrorException */
     protected function checkIfAtLeastOneColumnIsDeclared(): void
     {
         if ($this->getColumns()->isEmpty()) {

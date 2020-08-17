@@ -9,14 +9,6 @@ trait HasCustomHtml
 {
     protected ?Closure $customHtmlClosure = null;
 
-    /**
-     * Display a HTML output for the result row.
-     * The closure let you manipulate the following attributes: \Illuminate\Support\Collection $paginatedRows.
-     *
-     * @param \Closure $customHtmlClosure
-     *
-     * @return \Okipa\LaravelTable\Result
-     */
     public function html(Closure $customHtmlClosure): Result
     {
         $this->customHtmlClosure = $customHtmlClosure;

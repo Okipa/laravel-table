@@ -10,9 +10,9 @@ trait HasModel
 {
     protected ?Model $model = null;
 
-    public function model(string $tableModelClass): Table
+    public function model(string $tableModelNamespaceClass): Table
     {
-        $this->model = app($tableModelClass);
+        $this->model = app($tableModelNamespaceClass);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
@@ -23,9 +23,7 @@ trait HasModel
         return $this->model;
     }
 
-    /**
-     * @throws \ErrorException
-     */
+    /** @throws \ErrorException */
     protected function checkModelIsDefined(): void
     {
         if (! $this->getModel() instanceof Model) {

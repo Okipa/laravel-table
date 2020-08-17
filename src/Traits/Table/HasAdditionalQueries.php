@@ -10,14 +10,6 @@ trait HasAdditionalQueries
 {
     protected ?Closure $additionalQueriesClosure = null;
 
-    /**
-     * Set the query closure that will be executed during the table generation.
-     * The closure let you manipulate the following attribute: \Illuminate\Database\Eloquent\Builder $query.
-     *
-     * @param \Closure $additionalQueriesClosure
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function query(Closure $additionalQueriesClosure): Table
     {
         $this->additionalQueriesClosure = $additionalQueriesClosure;

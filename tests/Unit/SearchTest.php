@@ -43,7 +43,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table column with related « not_existing_column » database column is '
             . 'searchable and does not exist in the « users_test » table. Set the database '
-            . 'searched table and (optionally) columns with the « sortable() » '
+            . 'searched table and (optionally) columns with the « sortable » '
             . 'method arguments.');
         $this->routes(['users'], ['index']);
         $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
@@ -118,7 +118,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table column with related « owner » database column is searchable and does '
             . 'not exist in the « companies_test » table. Set the database searched table '
-            . 'and (optionally) columns with the « sortable() » method arguments.');
+            . 'and (optionally) columns with the « sortable » method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -138,7 +138,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the searchable table columns has no defined database column. You have '
             . 'to define a database column for each searchable table columns by setting a '
-            . 'string parameter in the « column() » method.');
+            . 'string parameter in the « column » method.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -152,7 +152,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table column with related « owner » database column is searchable and does '
             . 'not exist in the « users_test » table. Set the database searched table and '
-            . '(optionally) columns with the « sortable() » method arguments.');
+            . '(optionally) columns with the « sortable » method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -173,7 +173,7 @@ class SearchTest extends LaravelTableTestCase
         $this->expectExceptionMessage('The table column with related « nonExistent » database column is searchable '
             . 'and does not exist in the « aliasesUserTable » (aliased as « users_test ») '
             . 'table. Set the database searched table and (optionally) columns with the '
-            . '« sortable() » method arguments.');
+            . '« sortable » method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
@@ -394,7 +394,7 @@ class SearchTest extends LaravelTableTestCase
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest)
-            ->query(function ($query) use ($companyBeta) {
+            ->query(function (Builder $query) use ($companyBeta) {
                 $query->select('users_test.*');
                 $query->join('companies_test', 'companies_test.owner_id', '=', 'users_test.id');
                 $query->where('companies_test.id', $companyBeta->id);
@@ -408,7 +408,7 @@ class SearchTest extends LaravelTableTestCase
     public function testSqliteCaseInsensitiveTestHtml()
     {
         $users = $this->createMultipleUsers(10);
-        $users->each(function ($user, $key) {
+        $users->each(function (User $user, int $key) {
             if ($key === 0) {
                 $user->update(['name' => 'alpha']);
             } elseif ($key === 1) {
@@ -426,9 +426,10 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
-        $this->assertEquals($users->filter(function ($user) {
-            return in_array($user->name, ['alpha', 'ALPHA']);
-        })->toArray(), $table->getPaginator()->toArray()['data']);
+        $this->assertEquals(
+            $users->filter(fn($user) => in_array($user->name, ['alpha', 'ALPHA']))->toArray(),
+            $table->getPaginator()->toArray()['data']
+        );
     }
 
     public function testPostgresCaseInsensitiveTestHtml()

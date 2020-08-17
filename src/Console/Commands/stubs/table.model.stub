@@ -16,16 +16,16 @@ class DummyClass extends AbstractTable
      */
     protected function table(): Table
     {
-        return (new Table)->model(DummyModelClass::class)->routes([
-            'index'   => ['name' => 'dummyRoutes.index'],
-            'create'  => ['name' => 'dummyRoute.create'],
-            'edit'    => ['name' => 'dummyRoute.edit'],
-            'destroy' => ['name' => 'dummyRoute.destroy'],
-        ])->destroyConfirmationHtmlAttributes(function (DummyModelClass $dummyModel) {
-            return [
+        return (new Table)->model(DummyModelClass::class)
+            ->routes([
+                'index'   => ['name' => 'dummyRoutes.index'],
+                'create'  => ['name' => 'dummyRoute.create'],
+                'edit'    => ['name' => 'dummyRoute.edit'],
+                'destroy' => ['name' => 'dummyRoute.destroy'],
+            ])
+            ->destroyConfirmationHtmlAttributes(fn(DummyModelClass $dummyModel) => [
                 'data-confirm' => __('Are you sure you want to delete the line ' . $dummyModel->database_attribute . ' ?'),
-            ];
-        });
+            ]);
     }
 
     /**

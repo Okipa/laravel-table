@@ -15,3 +15,5 @@ parameters:
 
     excludes_analyse:
         - ./*/*/FileToBeExcluded.php
+
+    checkMissingIterableValueType: true

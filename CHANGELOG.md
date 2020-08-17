@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.0.0](https://github.com/Okipa/laravel-table/compare/2.0.0...3.0.0)
+
+2020-08-09
+
+* Added Laravel 8 support
+* Dropped Laravel 6 support
+* Added template customization methods for `Table` instances :
+  * `rowsSearchingTemplate`
+  * `rowsNumberSelectionTemplate`
+  * `createActionTemplate`
+  * `columnTitlesTemplate`
+  * `navigationStatusTemplate`
+  * `paginationTemplate`
+* Updated templates
+
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v2-to-v3.md)
+
 ## [2.0.0](https://github.com/Okipa/laravel-table/compare/1.5.0...2.0.0)
 
 2020-04-30
@@ -41,7 +58,7 @@
 * Added Laravel 7 support.
 * Dropped Laravel support before 5.8 version.
 * Dropped PHP support before 7.2 version.
-* Reworked documentation.
+* Reworked the documentation.
 
 ## [1.2.7](https://github.com/Okipa/laravel-table/compare/1.2.6...1.2.7)
 

@@ -12,9 +12,7 @@ class CustomQueriesTest extends LaravelTableTestCase
 {
     public function testSetAddQueryInstructionsAttribute()
     {
-        $additionalQueriesClosure = function ($query) {
-            $query->select('users.*')->where('users.activated');
-        };
+        $additionalQueriesClosure = fn ($query) => $query->select('users.*')->where('users.activated');
         $table = (new Table)->query($additionalQueriesClosure);
         $this->assertEquals($additionalQueriesClosure, $table->getAdditionalQueriesClosure());
     }

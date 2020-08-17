@@ -26,9 +26,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(5);
         $table->column('name');
-        $table->result()->title('Test')->html(function (Collection $paginatedRows) {
-            $this->assertCount(5, $paginatedRows);
-        });
+        $table->result()->title('Test')->html(fn(Collection $paginatedRows) => $this->assertCount(5, $paginatedRows));
         $table->configure();
         view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
     }
@@ -41,9 +39,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Result !')->html(function (Collection $paginatedRows) {
-            return $paginatedRows->sum('turnover');
-        });
+        $table->result()->title('Result !')->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('Result !', $html);
@@ -60,12 +56,10 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->rowsNumber(2);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
-            return $paginatedRows->sum('turnover');
-        });
-        $table->result()->title('Total turnover')->html(function () {
-            return (new Company)->all()->sum('turnover');
-        });
+        $table->result()
+            ->title('Selected turnover')
+            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
+        $table->result()->title('Total turnover')->html(fn() => (new Company)->all()->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString('Selected turnover', $html);
@@ -95,9 +89,9 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
-            return $paginatedRows->sum('turnover');
-        });
+        $table->result()
+            ->title('Selected turnover')
+            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, '<td'));
@@ -112,9 +106,9 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table = (new Table)->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
-            return $paginatedRows->sum('turnover');
-        });
+        $table->result()
+            ->title('Selected turnover')
+            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, '<td'));
@@ -133,9 +127,9 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->column('owner_id');
         $table->column('name');
         $table->column('turnover');
-        $table->result()->title('Selected turnover')->html(function (Collection $paginatedRows) {
-            return $paginatedRows->sum('turnover');
-        });
+        $table->result()
+            ->title('Selected turnover')
+            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
         $this->assertEquals(1, substr_count($html, '<td'));

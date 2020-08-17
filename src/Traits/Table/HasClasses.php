@@ -21,14 +21,6 @@ trait HasClasses
 
     protected Collection $rowsConditionalClasses;
 
-    /**
-     * Override default table container classes.
-     * The default container classes are defined in the config('laravel-table.classes.container') config value.
-     *
-     * @param array $containerClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function containerClasses(array $containerClasses): Table
     {
         $this->containerClasses = $containerClasses;
@@ -42,14 +34,6 @@ trait HasClasses
         return $this->containerClasses;
     }
 
-    /**
-     * Override default table classes.
-     * The default table classes are defined in the config('laravel-table.classes.table') config value.
-     *
-     * @param array $tableClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function tableClasses(array $tableClasses): Table
     {
         $this->tableClasses = $tableClasses;
@@ -63,14 +47,6 @@ trait HasClasses
         return $this->tableClasses;
     }
 
-    /**
-     * Override default table tr classes.
-     * The default tr classes are defined in the config('laravel-table.classes.tr') config value.
-     *
-     * @param array $trClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function trClasses(array $trClasses): Table
     {
         $this->trClasses = $trClasses;
@@ -84,14 +60,6 @@ trait HasClasses
         return $this->trClasses;
     }
 
-    /**
-     * Override default table th classes.
-     * The default th classes are defined in the config('laravel-table.classes.th') config value.
-     *
-     * @param array $thClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function thClasses(array $thClasses): Table
     {
         $this->thClasses = $thClasses;
@@ -105,13 +73,6 @@ trait HasClasses
         return $this->thClasses;
     }
 
-    /**
-     * Override default table td classes.
-     *
-     * @param array $tdClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function tdClasses(array $tdClasses): Table
     {
         $this->tdClasses = $tdClasses;
@@ -125,15 +86,6 @@ trait HasClasses
         return $this->tdClasses;
     }
 
-    /**
-     * Set rows classes when the given conditions are respected.
-     * The closure let you manipulate the following attribute: \Illuminate\Database\Eloquent\Model $model.
-     *
-     * @param \Closure $rowClassesClosure
-     * @param array $rowClasses
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function rowsConditionalClasses(Closure $rowClassesClosure, array $rowClasses): Table
     {
         $this->rowsConditionalClasses->push(['closure' => $rowClassesClosure, 'classes' => $rowClasses]);
@@ -154,9 +106,11 @@ trait HasClasses
 
     protected function addClassesToRow(Model $model): void
     {
-        $this->getRowsConditionalClasses()->each(function ($row) use ($model) {
-            $model->conditionnalClasses = ($row['closure'])($model) ? $row['classes'] : null;
-        });
+        $this->getRowsConditionalClasses()->each(
+            fn($row) => $model->conditionnal_classes = (($row['closure'])($model)
+                ? $row['classes']
+                : null)
+        );
     }
 
     public function getRowsConditionalClasses(): Collection

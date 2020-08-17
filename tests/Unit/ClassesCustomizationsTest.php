@@ -66,9 +66,7 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
 
     public function testRowConditionalClassesAttribute()
     {
-        $closure = function ($model) {
-            return $model->id === 1;
-        };
+        $closure = fn($model) => $model->id === 1;
         $classes = ['test-custom-class'];
         $table = (new Table)->rowsConditionalClasses($closure, $classes);
         $this->assertEquals($closure, $table->getRowsConditionalClasses()->first()['closure']);
@@ -176,14 +174,12 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
-        $closure = function ($model) {
-            return $model->id === 1 || $model->id === 2;
-        };
+        $closure = fn($model) => $model->id === 1 || $model->id === 2;
         $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
         $table = (new Table)->model(User::class)->routes([
-            'index'   => ['name' => 'users.index'],
-            'create'  => ['name' => 'users.create'],
-            'edit'    => ['name' => 'users.edit'],
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+            'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
         ])->rowsConditionalClasses($closure, $classes);
         $table->column('name')->title('Name');
@@ -191,8 +187,8 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
-                ? $this->assertEquals($user->conditionnalClasses, $classes)
-                : $this->assertEmpty($user->conditionnalClasses);
+                ? $this->assertEquals($user->conditionnal_classes, $classes)
+                : $this->assertEmpty($user->conditionnal_classes);
         }
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(implode(' ', $classes), $html);
