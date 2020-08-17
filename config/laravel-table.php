@@ -15,7 +15,7 @@ return [
 
     /** Set all the action icons that are used on the table templates. */
     'icon' => [
-        'rows_number' => '<i class="fas fa-list"></i>',
+        'rows_number' => '<i class="fas fa-table"></i>',
         'sort' => '<i class="fas fa-sort fa-fw"></i>',
         'sort_asc' => '<i class="fas fa-sort-up fa-fw"></i>',
         'sort_desc' => '<i class="fas fa-sort-down fa-fw"></i>',
