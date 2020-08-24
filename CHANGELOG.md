@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.1](https://github.com/Okipa/laravel-table/compare/3.0.1...3.0.1)
+
+2020-08-24
+
+* Fixed Column `button` method behaviour which is supposed to allow usage without arguments.
+
 ## [3.0.0](https://github.com/Okipa/laravel-table/compare/2.0.0...3.0.0)
 
 2020-08-09
