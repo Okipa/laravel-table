@@ -6,6 +6,7 @@
 
 * Reverted the previous change (3.0.1) as the `button` method without arguments has no visual effect: added instructions in the upgrade-guide to take care of this new behaviour.
 * Fixed create action button which was not displayed when searching and rows number definition were not activated.
+* Reverted a v3 regression 
 * Minor default templates changes.
 * Minor default config value changes.
 

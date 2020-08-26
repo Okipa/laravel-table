@@ -9,7 +9,7 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class RowsNumberTest extends LaravelTableTestCase
 {
-    public function testSetRowsNumberSelectionActivationAttribute()
+    public function testSetRowsNumberDefinitionActivationAttribute()
     {
         $table = (new Table)->activateRowsNumberDefinition();
         $this->assertTrue($table->getRowsNumberDefinitionActivation());
@@ -61,7 +61,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('rows-number-selection', $html);
+        $this->assertStringNotContainsString('rows-number-definition', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString(
             'placeholder="Number of rows"',
@@ -73,7 +73,7 @@ class RowsNumberTest extends LaravelTableTestCase
         );
     }
 
-    public function testActivateRowsNumberSelectionHtml()
+    public function testActivateRowsNumberDefinitionHtml()
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
@@ -84,7 +84,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('rows-number-selection', $html);
+        $this->assertStringContainsString('rows-number-definition', $html);
         $this->assertStringContainsString('type="hidden" name="search"', $html);
         $this->assertStringContainsString(
             'placeholder="Number of rows"',

@@ -40,7 +40,7 @@ return [
         'table' => 'bootstrap.table',
         'thead' => 'bootstrap.thead',
         'rows_searching' => 'bootstrap.rows-searching',
-        'rows_number_selection' => 'bootstrap.rows-number-selection',
+        'rows_number_definition' => 'bootstrap.rows-number-definition',
         'create_action' => 'bootstrap.create-action',
         'column_titles' => 'bootstrap.column-titles',
         'tbody' => 'bootstrap.tbody',

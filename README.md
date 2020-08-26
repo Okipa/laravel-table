@@ -492,9 +492,9 @@ class UsersTable extends AbstractTable
 
 <h3 id="table-activateRowsNumberDefinition">activateRowsNumberDefinition</h3>
 
-> Override the default rows number selection activation status.  
+> Override the default rows number definition activation status.  
 > Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number selection activation status is managed by the `config('laravel-table.behavior.activate_rows_number_definition')` value.
+> The default rows number definition activation status is managed by the `config('laravel-table.behavior.activate_rows_number_definition')` value.
 
 **Note:**`
 
@@ -532,7 +532,7 @@ class UsersTable extends AbstractTable
 
 > Add an array of arguments that will be appended to the paginator and to the following table actions:
 >
-> * row number selection
+> * row number definition
 > * searching
 > * search cancelling
 > * sorting.
@@ -749,7 +749,7 @@ destroyButton.click((e) => {
 
 <h3 id="table-rowsNumberDefinitionTemplate">rowsNumberDefinitionTemplate</h3>
 
-> Set a custom view path for the rows number selection template.  
+> Set a custom view path for the rows number definition template.  
 > The default view path is defined in the `config('laravel-table.template.rows_number_definition')` config value.
 
 **Note:**
