@@ -122,6 +122,21 @@ class RoutesTest extends LaravelTableTestCase
         $this->assertStringContainsString('title="Create"', $html);
     }
 
+    public function testSetCreateRouteWillShowCreateActionEventIfSearchingAndRowsNumberDefinitionAreDisabledHtml()
+    {
+        $this->routes(['users'], ['index', 'create']);
+        $table = (new Table)->routes([
+            'index' => ['name' => 'users.index'],
+            'create' => ['name' => 'users.create'],
+        ])->model(User::class)->activateRowsNumberDefinition(false);
+        $table->column('name')->title('Name');
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('create-action', $html);
+        $this->assertStringContainsString('href="http://localhost/users/create"', $html);
+        $this->assertStringContainsString('title="Create"', $html);
+    }
+
     public function testSetNoCreateRouteHtml()
     {
         $this->routes(['users'], ['index', 'create']);

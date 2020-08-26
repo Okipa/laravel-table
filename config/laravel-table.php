@@ -5,11 +5,11 @@ return [
     /** Set the default classes for each part of the table. */
     'classes' => [
         'container' => ['table-responsive'],
-        'table' => ['table-striped', 'table-hover'],
-        'tr' => [],
+        'table' => ['table-borderless'],
+        'tr' => ['border-bottom'],
         'th' => ['align-middle'],
         'td' => ['align-middle'],
-        'results' => ['bg-light', 'font-weight-bold'],
+        'results' => ['table-secondary'],
         'disabled' => ['table-danger', 'disabled'],
     ],
 

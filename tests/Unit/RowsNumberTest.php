@@ -38,7 +38,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('rows-number-selection', $html);
+        $this->assertStringNotContainsString('rows-number-definition', $html);
         $this->assertStringNotContainsString('type="hidden" name="search"', $html);
         $this->assertStringNotContainsString(
             'placeholder="Number of rows"',

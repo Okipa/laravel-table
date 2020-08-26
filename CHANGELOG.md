@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.2](https://github.com/Okipa/laravel-table/compare/3.0.1...3.0.2)
+
+2020-08-24
+
+* Reverted the previous change (3.0.1) as the `button` method without arguments has no visual effect: added instructions in the upgrade-guide to take care of this new behaviour.
+* Fixed create action button which was not displayed when searching and rows number definition were not activated.
+* Minor default templates changes.
+* Minor default config value changes.
+
 ## [3.0.1](https://github.com/Okipa/laravel-table/compare/3.0.1...3.0.1)
 
 2020-08-24
@@ -14,7 +23,7 @@
 * Dropped Laravel 6 support
 * Added template customization methods for `Table` instances :
   * `rowsSearchingTemplate`
-  * `rowsNumberSelectionTemplate`
+  * `rowsNumberDefinitionTemplate`
   * `createActionTemplate`
   * `columnTitlesTemplate`
   * `navigationStatusTemplate`

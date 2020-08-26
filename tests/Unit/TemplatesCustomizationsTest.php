@@ -29,11 +29,11 @@ class TemplatesCustomizationsTest extends LaravelTableTestCase
         $this->assertEquals($templatePath, $table->getRowsSearchingTemplatePath());
     }
 
-    public function testSetRowsNumberSelectionTemplateAttribute()
+    public function testSetrowsNumberDefinitionTemplateAttribute()
     {
-        $templatePath = 'rows-number-selection-test';
-        $table = (new Table)->model(User::class)->rowsNumberSelectionTemplate($templatePath);
-        $this->assertEquals($templatePath, $table->getRowsNumberSelectionTemplatePath());
+        $templatePath = 'rows-number-definition-test';
+        $table = (new Table)->model(User::class)->rowsNumberDefinitionTemplate($templatePath);
+        $this->assertEquals($templatePath, $table->getrowsNumberDefinitionTemplatePath());
     }
 
     public function testSetCreateTemplateAttribute()
@@ -148,18 +148,18 @@ class TemplatesCustomizationsTest extends LaravelTableTestCase
         $this->assertStringContainsString('<form id="rows-searching-test"></form>', $html);
     }
 
-    public function testSetRowsNumberSelectionTemplateHtml()
+    public function testSetrowsNumberDefinitionTemplateHtml()
     {
         view()->addNamespace('laravel-table', 'tests/views');
         $this->createMultipleUsers(2);
         $this->routes(['users'], ['index']);
         $table = (new Table)->model(User::class)
             ->routes(['index' => ['name' => 'users.index']])
-            ->rowsNumberSelectionTemplate('rows-number-selection-test');
+            ->rowsNumberDefinitionTemplate('rows-number-definition-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->getRowsNumberSelectionTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<form id="rows-number-selection-test"></form>', $html);
+        $html = view('laravel-table::' . $table->getrowsNumberDefinitionTemplatePath(), compact('table'))->toHtml();
+        $this->assertStringContainsString('<form id="rows-number-definition-test"></form>', $html);
     }
 
     public function testSetCreateTemplateHtml()

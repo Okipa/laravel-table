@@ -126,7 +126,7 @@ Finally, display it in the view:
   * [tableTemplate](#table-tableTemplate)
   * [theadTemplate](#table-theadTemplate)
   * [rowsSearchingTemplate](#table-rowsSearchingTemplate)
-  * [rowsNumberSelectionTemplate](#table-rowsNumberSelectionTemplate)
+  * [rowsNumberDefinitionTemplate](#table-rowsNumberDefinitionTemplate)
   * [createActionTemplate](#table-createActionTemplate)
   * [columnTitlesTemplate](#table-columnTitlesTemplate)
   * [tbodyTemplate](#table-tbodyTemplate)
@@ -260,7 +260,7 @@ class NewsTable extends AbstractTable
             })
             ->disableRows(
                 fn(News $news) => in_array($news->id, [1, 2]),
-                ['disabled', 'bg-secondary']
+                ['disabled', 'bg-secondary', 'text-white']
             )
             ->rowsConditionalClasses(
                 fn(News $news) => $news->id === 3,
@@ -747,20 +747,20 @@ destroyButton.click((e) => {
 (new Table)->rowsSearchingTemplate('tailwindCss.rows-searching');
 ```
 
-<h3 id="table-rowsNumberSelectionTemplate">rowsNumberSelectionTemplate</h3>
+<h3 id="table-rowsNumberDefinitionTemplate">rowsNumberDefinitionTemplate</h3>
 
 > Set a custom view path for the rows number selection template.  
-> The default view path is defined in the `config('laravel-table.template.rows_number_selection')` config value.
+> The default view path is defined in the `config('laravel-table.template.rows_number_definition')` config value.
 
 **Note:**
 
-* Signature: `rowsNumberSelectionTemplate(string $rowsNumberSelectionTemplatePath): \Okipa\LaravelTable\Table`
+* Signature: `rowsNumberDefinitionTemplate(string $rowsNumberDefinitionTemplatePath): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table)->rowsSearchingTemplate('tailwindCss.rows-number-selection');
+(new Table)->rowsSearchingTemplate('tailwindCss.rows-number-definition');
 ```
 
 <h3 id="table-createActionTemplate">createActionTemplate</h3>
