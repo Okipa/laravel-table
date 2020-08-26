@@ -12,7 +12,7 @@ trait HasTemplates
 
     protected string $rowsSearchingTemplatePath;
 
-    protected string $rowsNumberSelectionTemplatePath;
+    protected string $rowsNumberDefinitionTemplatePath;
 
     protected string $createActionTemplatePath;
 
@@ -73,17 +73,17 @@ trait HasTemplates
         return $this->rowsSearchingTemplatePath;
     }
 
-    public function rowsNumberSelectionTemplate(string $rowsNumberSelectionTemplatePath): Table
+    public function rowsNumberDefinitionTemplate(string $rowsNumberDefinitionTemplatePath): Table
     {
-        $this->rowsNumberSelectionTemplatePath = $rowsNumberSelectionTemplatePath;
+        $this->rowsNumberDefinitionTemplatePath = $rowsNumberDefinitionTemplatePath;
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    public function getRowsNumberSelectionTemplatePath(): string
+    public function getrowsNumberDefinitionTemplatePath(): string
     {
-        return $this->rowsNumberSelectionTemplatePath;
+        return $this->rowsNumberDefinitionTemplatePath;
     }
 
     public function createActionTemplate(string $createActionTemplatePath): Table
@@ -221,7 +221,7 @@ trait HasTemplates
         $this->tableTemplatePath = config('laravel-table.template.table');
         $this->theadTemplatePath = config('laravel-table.template.thead');
         $this->rowsSearchingTemplatePath = config('laravel-table.template.rows_searching');
-        $this->rowsNumberSelectionTemplatePath = config('laravel-table.template.rows_number_selection');
+        $this->rowsNumberDefinitionTemplatePath = config('laravel-table.template.rows_number_definition');
         $this->createActionTemplatePath = config('laravel-table.template.create_action');
         $this->columnTitlesTemplatePath = config('laravel-table.template.column_titles');
         $this->tbodyTemplatePath = config('laravel-table.template.tbody');

@@ -1,5 +1,5 @@
 @if($table->getSearchableColumns()->count())
-    <div class="flex-fill px-3 py-1 searching">
+    <div class="flex-fill pr-xl-3 py-1 searching">
         <form role="form" method="GET" action="{{ $table->getRoute('index') }}">
             <input type="hidden" name="{{ $table->getRowsNumberField() }}" value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}">
             <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
@@ -14,11 +14,11 @@
                     </span>
                 </div>
                 <input class="form-control"
-                   type="text"
-                   name="{{ $table->getSearchField() }}"
-                   value="{{ $table->getRequest()->get($table->getSearchField()) }}"
-                   placeholder="@lang('Search by:') {{ $table->getSearchableTitles() }}"
-                   aria-label="@lang('Search by:') {{ $table->getSearchableTitles() }}">
+                       type="text"
+                       name="{{ $table->getSearchField() }}"
+                       value="{{ $table->getRequest()->get($table->getSearchField()) }}"
+                       placeholder="@lang('Search by:') {{ $table->getSearchableTitles() }}"
+                       aria-label="@lang('Search by:') {{ $table->getSearchableTitles() }}">
                 @if($table->getRequest()->get($table->getSearchField()))
                     <div class="input-group-append">
                         <a class="input-group-text btn btn-link text-danger reset-research"

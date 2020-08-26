@@ -17,6 +17,7 @@ There are small changes in the API you will have to report in your code:
 * Search and replace each `Table` use of `->showTemplate(` by `->showActionTemplate(`.
 * Search and replace each `Table` use of `->editTemplate(` by `->editActionTemplate(`.
 * Search and replace each `Table` use of `->destroyTemplate(` by `->destroyActionTemplate(`.
+* The use of the `button` method on `Column` class should not be used without argument and will now trigger an error if no array is given.
 
 ## See all changes
 

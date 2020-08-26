@@ -1,18 +1,20 @@
 <thead>
-    @if($table->getRowsNumberDefinitionActivation() || ! $table->getSearchableColumns()->isEmpty())
-        <tr{{ classTag($table->getTrClasses()) }}>
-            <td{{ classTag('bg-light', $table->getTdClasses()) }}{{ htmlAttributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }}>
-                <div class="d-flex flex-column flex-xl-row py-2">
-                    <div class="flex-fill">
+    <tr{{ classTag('bg-white', $table->getTrClasses()) }}>
+        <td{{ classTag('px-0', $table->getTdClasses()) }}{{ htmlAttributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }}>
+            <div class="d-flex flex-column flex-xl-row">
+                <div class="flex-fill">
+                    @if($table->getSearchableColumns()->isNotEmpty())
                         @include('laravel-table::' . $table->getRowsSearchingTemplatePath())
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        @include('laravel-table::' . $table->getRowsNumberSelectionTemplatePath())
-                        @include('laravel-table::' . $table->getCreateActionTemplatePath())
-                    </div>
+                    @endif
                 </div>
-            </td>
-        </tr>
-    @endif
+                <div class="d-flex justify-content-between">
+                    @if($table->getRowsNumberDefinitionActivation())
+                        @include('laravel-table::' . $table->getrowsNumberDefinitionTemplatePath())
+                    @endif
+                    @include('laravel-table::' . $table->getCreateActionTemplatePath())
+                </div>
+            </div>
+        </td>
+    </tr>
     @include('laravel-table::' . $table->getColumnTitlesTemplatePath())
 </thead>

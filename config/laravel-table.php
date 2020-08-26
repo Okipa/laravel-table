@@ -5,11 +5,11 @@ return [
     /** Set the default classes for each part of the table. */
     'classes' => [
         'container' => ['table-responsive'],
-        'table' => ['table-striped', 'table-hover'],
-        'tr' => [],
+        'table' => ['table-borderless'],
+        'tr' => ['border-bottom'],
         'th' => ['align-middle'],
         'td' => ['align-middle'],
-        'results' => ['bg-light', 'font-weight-bold'],
+        'results' => ['table-secondary'],
         'disabled' => ['table-danger', 'disabled'],
     ],
 
@@ -40,7 +40,7 @@ return [
         'table' => 'bootstrap.table',
         'thead' => 'bootstrap.thead',
         'rows_searching' => 'bootstrap.rows-searching',
-        'rows_number_selection' => 'bootstrap.rows-number-selection',
+        'rows_number_definition' => 'bootstrap.rows-number-definition',
         'create_action' => 'bootstrap.create-action',
         'column_titles' => 'bootstrap.column-titles',
         'tbody' => 'bootstrap.tbody',

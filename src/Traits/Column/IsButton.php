@@ -8,7 +8,7 @@ trait IsButton
 {
     protected array $buttonClasses = [];
 
-    public function button(array $buttonClasses = []): Column
+    public function button(array $buttonClasses): Column
     {
         $this->buttonClasses = $buttonClasses;
 

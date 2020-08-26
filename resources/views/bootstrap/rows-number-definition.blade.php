@@ -1,5 +1,5 @@
 @if($table->getRowsNumberDefinitionActivation())
-    <div class="px-3 py-1 rows-number-selection" style="width: 12rem;">
+    <div class="px-xl-3 py-1 rows-number-definition">
         <form role="form" method="GET" action="{{ $table->getRoute('index') }}">
             <input type="hidden" name="{{ $table->getSearchField() }}" value="{{ $table->getRequest()->get($table->getSearchField()) }}">
             <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">

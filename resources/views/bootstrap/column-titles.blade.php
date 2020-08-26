@@ -1,4 +1,4 @@
-<tr{{ classTag($table->getTrClasses()) }}>
+<tr{{ classTag('bg-light', $table->getTrClasses()) }}>
     @foreach($table->getColumns() as $column)
         <th{{ classTag($table->getThClasses()) }} scope="col">
         @if($column->getIsSortable())
@@ -23,14 +23,14 @@
                     {!! str_replace(' ', '&nbsp;', $column->getTitle()) !!}
                 </span>
             </a>
-            @else
-                {!! str_replace(' ', '&nbsp;', $column->getTitle()) !!}
-            @endif
-                </th>
-            @endforeach
-            @if($table->isRouteDefined('show') || $table->isRouteDefined('edit') || $table->isRouteDefined('destroy'))
-                <th{{ classTag('text-right', $table->getThClasses()) }} scope="col">
-                    @lang('Actions')
-                </th>
-            @endif
+        @else
+            {!! str_replace(' ', '&nbsp;', $column->getTitle()) !!}
+        @endif
+        </th>
+    @endforeach
+    @if($table->isRouteDefined('show') || $table->isRouteDefined('edit') || $table->isRouteDefined('destroy'))
+        <th{{ classTag('text-right', $table->getThClasses()) }} scope="col">
+            @lang('Actions')
+        </th>
+    @endif
 </tr>
