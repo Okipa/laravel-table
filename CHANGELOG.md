@@ -6,7 +6,7 @@
 
 * Reverted the previous change (3.0.1) as the `button` method without arguments has no visual effect: added instructions in the upgrade-guide to take care of this new behaviour.
 * Fixed create action button which was not displayed when searching and rows number definition were not activated.
-* Reverted a v3 regression 
+* Fixed a v3 regression where `rows number definition` was named `rows number selection` at different places (config, templates, methods, ...): this is an unfortunately breaking change if you published config or templates but I take advantage of the early release of the V3 and from the fact that Laravel 8 is not released to do it.
 * Minor default templates changes.
 * Minor default config value changes.
 
