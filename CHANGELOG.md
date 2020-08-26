@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.2](https://github.com/Okipa/laravel-table/compare/3.0.1...3.0.2)
+## [3.1.0](https://github.com/Okipa/laravel-table/compare/3.0.1...3.1.0)
 
 2020-08-24
 
