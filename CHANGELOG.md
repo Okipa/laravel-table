@@ -7,6 +7,7 @@
 * Reverted the previous change (3.0.1) as the `button` method without arguments has no visual effect: added instructions in V2 to v3 the upgrade-guide to take care of this new behaviour.
 * Fixed an issue where create action button was not displayed when searching and rows number definition were disabled.
 * Fixed a v3 regression where `rows number definition` was wrongly named `rows number selection` at different places (config, templates, methods, ...): this is an unfortunately breaking change if you published config or templates but I take advantage of the early release of the V3 and from the fact that Laravel 8 is not released to do it.
+* Show and edit actions are now triggered by a simple link rather than a form, which was useless as these routes are called with a `GET` http request.
 * Minor default templates changes in order to give laravel-table a prettier look.
 * Minor default config value changes in order to give laravel-table a prettier look.
 

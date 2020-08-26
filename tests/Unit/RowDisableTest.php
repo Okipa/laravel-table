@@ -46,13 +46,13 @@ class RowDisableTest extends LaravelTableTestCase
             if ($user->id === 1 || $user->id === 2) {
                 $this->assertStringNotContainsString('edit-' . $user->id, $html);
                 $this->assertStringNotContainsString(
-                    'action="http://localhost/users/edit?' . $user->id . '"',
+                    'href="http://localhost/users/edit?' . $user->id . '"',
                     $html
                 );
             } else {
                 $this->assertStringContainsString('edit-' . $user->id, $html);
                 $this->assertStringContainsString(
-                    'action="http://localhost/users/edit?' . $user->id . '"',
+                    'href="http://localhost/users/edit?' . $user->id . '"',
                     $html
                 );
             }
@@ -87,12 +87,12 @@ class RowDisableTest extends LaravelTableTestCase
             if ($user->id === 1 || $user->id === 2) {
                 $this->assertStringNotContainsString('edit-' . $user->id, $html);
                 $this->assertStringNotContainsString(
-                    'action="http://localhost/users/edit?' . $user->id . '"',
+                    'href="http://localhost/users/edit?' . $user->id . '"',
                     $html
                 );
             } else {
                 $this->assertStringContainsString('edit-' . $user->id, $html);
-                $this->assertStringContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
+                $this->assertStringContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
             }
         }
     }

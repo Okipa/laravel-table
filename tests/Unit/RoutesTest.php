@@ -162,7 +162,7 @@ class RoutesTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringContainsString('edit-' . $user->id, $html);
-            $this->assertStringContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
+            $this->assertStringContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
         }
     }
 
@@ -176,7 +176,7 @@ class RoutesTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="edit-' . $user->id, $html);
-            $this->assertStringNotContainsString('action="http://localhost/users/edit?' . $user->id . '"', $html);
+            $this->assertStringNotContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
         }
     }
 
@@ -224,7 +224,7 @@ class RoutesTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringContainsString('show-' . $user->id, $html);
-            $this->assertStringContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
+            $this->assertStringContainsString('href="http://localhost/users/show?' . $user->id . '"', $html);
         }
     }
 
@@ -238,7 +238,7 @@ class RoutesTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
             $this->assertStringNotContainsString('<form class="show-' . $user->id, $html);
-            $this->assertStringNotContainsString('action="http://localhost/users/show?' . $user->id . '"', $html);
+            $this->assertStringNotContainsString('href="http://localhost/users/show?' . $user->id . '"', $html);
         }
     }
 
@@ -258,9 +258,9 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
+        $this->assertStringContainsString('href="http://localhost/user/show/' . $user->id . '"', $html);
+        $this->assertStringContainsString('href="http://localhost/user/edit/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
-        $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '"', $html);
     }
 
     public function testSetImplicitBindingRoutes()
@@ -279,9 +279,9 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('action="http://localhost/user/edit/' . $user->id . '"', $html);
+        $this->assertStringContainsString('href="http://localhost/user/show/' . $user->id . '"', $html);
+        $this->assertStringContainsString('href="http://localhost/user/edit/' . $user->id . '"', $html);
         $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
-        $this->assertStringContainsString('action="http://localhost/user/show/' . $user->id . '"', $html);
     }
 
     public function testSetRouteDefinitionWithProvidedIdAndOtherRouteParams()
@@ -303,7 +303,7 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(
-            'action="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
+            'href="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html
         );
         $this->assertStringContainsString(
@@ -311,7 +311,7 @@ class RoutesTest extends LaravelTableTestCase
             $html
         );
         $this->assertStringContainsString(
-            'action="http://localhost/parent/11/user/show/' . $user->id . '/child/33',
+            'href="http://localhost/parent/11/user/show/' . $user->id . '/child/33',
             $html
         );
     }
@@ -335,7 +335,7 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         $this->assertStringContainsString(
-            'action="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
+            'href="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html
         );
         $this->assertStringContainsString(
@@ -343,7 +343,7 @@ class RoutesTest extends LaravelTableTestCase
             $html
         );
         $this->assertStringContainsString(
-            'action="http://localhost/parent/11/user/show/' . $user->id . '/child/33',
+            'href="http://localhost/parent/11/user/show/' . $user->id . '/child/33',
             $html
         );
     }
