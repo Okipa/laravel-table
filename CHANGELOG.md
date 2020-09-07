@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.2](https://github.com/Okipa/laravel-table/compare/3.1.1...3.1.2)
+
+2020-08-24
+
+* Fixed doc js snippet given in [destroyConfirmationHtmlAttributes](./README.md#table-destroyConfirmationHtmlAttributes).
+
 ## [3.1.1](https://github.com/Okipa/laravel-table/compare/3.1.0...3.1.1)
 
 2020-08-24
