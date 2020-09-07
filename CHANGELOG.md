@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.1](https://github.com/Okipa/laravel-table/compare/3.1.0...3.1.1)
+
+2020-08-24
+
+* Fixed column cell value not escaped when using `$column->value()` method (https://github.com/Okipa/laravel-table/issues/54).
+
 ## [3.1.0](https://github.com/Okipa/laravel-table/compare/3.0.1...3.1.0)
 
 2020-08-24

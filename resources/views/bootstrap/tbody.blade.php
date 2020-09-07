@@ -58,7 +58,7 @@
                                         : null }}
                                 {{-- basic value --}}
                                 @else
-                                    {!! $value !!}
+                                    {{ $value }}
                                 @endif
                                 {{-- append --}}
                                 @if($showAppend)
