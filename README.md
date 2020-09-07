@@ -240,21 +240,21 @@ class NewsTable extends AbstractTable
                 'destroy' => ['name' => 'news.destroy'],
                 'show' => ['name' => 'news.show'],
             ])
-            ->rowsNumber(50) // or set `null` to display all the items contained in database
+            ->rowsNumber(50) // Or set `null` to display all the items contained in database
             ->activateRowsNumberDefinition(false)
             ->query(function (Builder $query) {
-                // some examples of what you can do
+                // Some examples of what you can do
                 $query->select('news.*');
-                // add a constraint
+                // Add a constraint
                 $query->where('category_id', $this->categoryId);
-                // get value stored in a json field
+                // Get value stored in a json field
                 $query->addSelect('news.json_field->>json_attribute as json_attribute');
-                // get a formatted value from a pivot table
+                // Get a formatted value from a pivot table
                 $query->selectRaw('count(comments.id) as comments_count');
                 $query->leftJoin('news_commment', 'news_commment.news_id', '=', 'news.id');
                 $query->leftJoin('comments', 'comments.id', '=', 'news_commment.comment_id');
                 $query->groupBy('comments.id');
-                // alias a value to make it available from the column model
+                // Alias a value to make it available from the column model
                 $query->addSelect('users.name as author');
                 $query->join('users', 'users.id', '=', 'news.author_id');
             })
@@ -266,7 +266,7 @@ class NewsTable extends AbstractTable
                 fn(News $news) => $news->id === 3,
                 ['highlighted', 'bg-success']
             )
-            // append all request params to the paginator
+            // Append all request params to the paginator
             ->appendData($this->request->all());
     }
     
@@ -416,17 +416,17 @@ class UsersTable extends AbstractTable
 * Routes have to be defined with the following structure:
 
 ```php
-// example
+// Example
 [
     'index' => [
-        // required
+        // Required
         'name' => 'users.index',
-        // optional
+        // Optional
         'params' => [
-            // set route params (or not)
+            // Set route params (or not)
         ]
     ]
-    // you will have to respect the same structure for any declared route.
+    // You will have to respect the same structure for any declared route.
 ];
 ```
 
@@ -434,28 +434,28 @@ class UsersTable extends AbstractTable
 * You also should declare your routes carefully to avoid errors. See the examples bellow:
 
 ```php
-    // assuming your declared your route with implicit binding:
+    // Assuming your declared your route with implicit binding:
     Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
-    // you will have to declare your params with keys as following:
+    // You will have to declare your params with keys as following:
     (new Table)->model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
     ]);
-    // because the route will be generated with the table related model as first param (the params order differs from the declaration):
+    // Because the route will be generated with the table related model as first param (the params order differs from the declaration):
     route('user.edit', [$user, 'parent' => $parent, 'child' => $child]);
 ```
 
 ```php
-    // now imagine your route is declared with the table related model as first param like this:
+    // Now imagine your route is declared with the table related model as first param like this:
     Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
-    // in this case only, you will be able to declare your routes without keys:
+    // In this case only, you will be able to declare your routes without keys:
     (new Table)->model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherParam']],
         // ...
     ]);
-    // because the route params are given in the same order as the route declaration:
+    // Because the route params are given in the same order as the route declaration:
     route('user.edit', [$user, $child, 'otherParam']);
 ```
 
@@ -486,7 +486,7 @@ class UsersTable extends AbstractTable
 
 ```php
 (new Table)->rowsNumber(50);
-// or
+// Or
 (new Table)->rowsNumber(null);
 ```
 
@@ -666,15 +666,16 @@ class UsersTable extends AbstractTable
 **Javascript snippet example:**
 
 ```javascript
-// example of javascript snippet to ask a confirmation before executing the destroy action.
-// this js snippet uses the `data-confirm` attribute value provided in the use case example above
-const destroyButton = $('form.destroy button[type="submit"]');
-destroyButton.click((e) => {
-    e.preventDefault();
-    const $this = $(e.target);
-    const message = $this.data('confirm');
-    const form = $this.closest('form');
-    if(confirm(message)) {
+// Example of javascript snippet to ask a confirmation before executing the destroy action
+// This js snippet uses the `data-confirm` attribute value provided in the use case example above
+const destroyButtons = $('table form.destroy-action button[data-confirm]');
+destroyButtons.click((event) => {
+    event.preventDefault();
+    const $this = $(event.target);
+    const $destroyButton = $this.is('button') ? $this : $this.closest('button');
+    const message = $destroyButton.data('confirm');
+    const form = $destroyButton.closest('form');
+    if (message && confirm(message)) {
         form.submit();
     }
 });
@@ -1006,7 +1007,7 @@ $table->column()->title('E-mail');
 ```php
 $table->column('email')->sortable();
 
-// alternative
+// Alternative
 $table->column('email')->sortable(true, 'desc');
 ```
 
@@ -1024,10 +1025,10 @@ $table->column('email')->sortable(true, 'desc');
 **Use case example:**
 
 ```php
-// example 1
+// Example 1
 $table->column('email')->searchable();
 
-// example 2
+// Example 2
 $table = (new Table)->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
@@ -1035,7 +1036,7 @@ $table = (new Table)->model(User::class)->query(function(Builder $query) {
 });
 $table->column('company')->searchable('companies', ['name']);
 
-// example 3
+// Example 3
 $table = (new Table)->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
@@ -1089,13 +1090,13 @@ $table->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
 **Use case example:**
 
 ```php
-// example 1
+// Example 1
 $table->column('url')->link();
 
-// example 2
+// Example 2
 $table->column()->link(route('news.index'));
 
-// example 3
+// Example 3
 $table->column()->link(function(News $news) {
     return route('news.show', $news);
 });
