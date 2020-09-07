@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.2](https://github.com/Okipa/laravel-table/compare/3.1.1...3.1.2)
+
+2020-08-24
+
+* Fixed doc js snippet given in [destroyConfirmationHtmlAttributes](./README.md#table-destroyConfirmationHtmlAttributes).
+
 ## [3.1.1](https://github.com/Okipa/laravel-table/compare/3.1.0...3.1.1)
 
 2020-08-24
@@ -119,15 +125,15 @@
 
 * The model is now directly passed to the route during the table `show`, `edit` and `destroy` routes generation instead of its id.
 ```php
-// assuming your declared your edit route like this:
+// Assuming your declared your edit route like this:
 (new Table)->model(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...
 ]);
-// the route will be generated like this during the table instantiation:
+// The route will be generated like this during the table instantiation:
 route('user.edit', [$user, 'foo' => 'bar']);
-// instead of this way
+// Instead of this way:
 route('user.edit', [$user->id, 'foo' => 'bar']);
 ```
 
@@ -137,15 +143,15 @@ route('user.edit', [$user->id, 'foo' => 'bar']);
 
 * Fixed params order when generating the table routes. The table model id was not positioned at first when declaring other parameters.
 ```php
-// with a route declared like this:
+// With a route declared like this:
 Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
-// and a table routes declaration like this:
+// And a table routes declaration like this:
 (new Table)->model(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['bar']],
     //...
 ]);
-// the route is now correctly generated and gives: /user/edit/1/bar instead of /user/edit/bar/1
+// The route is now correctly generated and gives: /user/edit/1/bar instead of /user/edit/bar/1
 ```
 
 ## [1.2.1](https://github.com/Okipa/laravel-table/compare/1.2.0...1.2.1)
@@ -154,15 +160,15 @@ Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
 
 * Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the `route()` helper:
 ```php
-// assuming your declared your edit route like this:
+// Assuming your declared your edit route like this:
 (new Table)->model(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...
 ]);
-// the route will be generated like this during the table instantiation:
+// The route will be generated like this during the table instantiation:
 route('user.edit', [$user->id, 'foo' => 'bar']);
-// instead of this way
+// Instead of this way
 route('user.edit', ['id' => $user->id, 'foo' => 'bar']);
 ```
 

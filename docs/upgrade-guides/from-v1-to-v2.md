@@ -53,7 +53,7 @@ Instead of this way in previous versions:
 
 ```php
 $table = (new Table);
-// ... any table configuration
+// ... Any table configuration
 $table->render();
 $table->list->getCollection();
 ```

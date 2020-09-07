@@ -17,8 +17,7 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/laravel-table'),
         ], 'laravel-table:views');
-        // we load the laravel html helper package
-        // https://github.com/Okipa/laravel-html-helper
+        // We load the laravel HTML helper package : https://github.com/Okipa/laravel-html-helper
         $this->app->register(HtmlHelperServiceProvider::class);
     }
 
