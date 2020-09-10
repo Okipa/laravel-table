@@ -463,14 +463,7 @@ class SearchTest extends LaravelTableTestCase
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->searchable();
-        //        \DB::enableQueryLog();
         $table->configure();
-        //        $query = \DB::getQueryLog();
-        //        dd($query);
-        //        dd($user->toArray(), $table->getPaginator()->getCollection()->toArray());
-
-        //        dd($user, $table->getPaginator()->getCollection()->first());
-
         $this->assertTrue($user->is($table->getPaginator()->getCollection()->first()));
     }
 }
