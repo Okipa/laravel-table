@@ -14,17 +14,8 @@ abstract class LaravelTableTestCase extends TestCase
     /** @var \Faker\Factory $faker */
     protected $faker;
 
-    use RoutesFaker;
-    use UsersFaker;
-    use CompaniesFaker;
+    use RoutesFaker, UsersFaker, CompaniesFaker;
 
-    /**
-     * Define environment setup.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return void
-     */
     protected function getEnvironmentSetUp($app): void
     {
         // Setup default database to use sqlite :memory:
@@ -36,21 +27,11 @@ abstract class LaravelTableTestCase extends TestCase
         ]);
     }
 
-    /**
-     * Get package providers.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
-     */
     protected function getPackageProviders($app): array
     {
         return [LaravelTableServiceProvider::class];
     }
 
-    /**
-     * Setup the test environment.
-     */
     protected function setUp(): void
     {
         parent::setUp();
