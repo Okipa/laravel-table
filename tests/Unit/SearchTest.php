@@ -11,6 +11,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\Company;
 use Okipa\LaravelTable\Test\Models\User;
+use Okipa\LaravelTable\Test\Models\UserJsonFields;
 use PDOException;
 
 class SearchTest extends LaravelTableTestCase
@@ -432,12 +433,12 @@ class SearchTest extends LaravelTableTestCase
         );
     }
 
-    public function testPostgresCaseInsensitiveTestHtml()
+    public function testPostgresCaseInsensitiveHtml()
     {
         $this->expectException(PDOException::class);
         $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: select '
-            . 'count(*) as aggregate from "users_test" where ("users_test"."name" ILIKE '
-            . '%alpha% or "users_test"."email" ILIKE %alpha%))');
+            . 'count(*) as aggregate from "users_test" where (LOWER(users_test.name) ILIKE '
+            . '%alpha% or LOWER(users_test.email) ILIKE %alpha%))');
         $connection = config('database.default');
         config()->set('database.connections.' . $connection . '.driver', 'pgsql');
         $this->createMultipleUsers(10);
@@ -450,5 +451,26 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
+    }
+
+    public function testJsonFieldCaseInsensitiveHtml()
+    {
+        $user = (new UserJsonFields)->create(['name' => ['fr' => 'Name FR', 'en' => 'Name EN']]);
+        $searchedValue = 'nAME fr';
+        $customRequest = (new Request)->merge([(new Table)->getRowsNumberField() => 20, 'search' => $searchedValue]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table)->model(UserJsonFields::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->request($customRequest);
+        $table->column('name')->searchable();
+        //        \DB::enableQueryLog();
+        $table->configure();
+        //        $query = \DB::getQueryLog();
+        //        dd($query);
+        //        dd($user->toArray(), $table->getPaginator()->getCollection()->toArray());
+
+        //        dd($user, $table->getPaginator()->getCollection()->first());
+
+        $this->assertTrue($user->is($table->getPaginator()->getCollection()->first()));
     }
 }

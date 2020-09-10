@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable\Traits\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Okipa\LaravelTable\Column;
 
 trait HasSearching
@@ -53,9 +54,10 @@ trait HasSearching
         foreach ($dbSearchedFields as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
             $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
             $query->{$whereOperator}(
-                $dbSearchedTable . '.' . $searchedDatabaseColumn,
+                // Allow to keep the case insensitive search with MySQL in case of JSON database field
+                DB::raw('LOWER(' . $dbSearchedTable . '.' . $searchedDatabaseColumn . ')'),
                 $this->getCaseInsensitiveSearchingLikeOperator(),
-                '%' . $searchedValue . '%'
+                '%' . mb_strtolower($searchedValue) . '%'
             );
         }
     }
