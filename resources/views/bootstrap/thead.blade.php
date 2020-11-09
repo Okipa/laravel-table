@@ -1,6 +1,6 @@
 <thead>
-    <tr{{ classTag('bg-white', $table->getTrClasses()) }}>
-        <td{{ classTag('px-0', $table->getTdClasses()) }}{{ htmlAttributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }}>
+    <tr{{ html_classes('bg-white', $table->getTrClasses()) }}>
+        <td{{ html_classes('px-0', $table->getTdClasses()) }}{{ html_attributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }}>
             <div class="d-flex flex-column flex-xl-row">
                 <div class="flex-fill">
                     @if($table->getSearchableColumns()->isNotEmpty())

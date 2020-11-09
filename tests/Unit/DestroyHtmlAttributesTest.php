@@ -8,7 +8,7 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class DestroyHtmlAttributesTest extends LaravelTableTestCase
 {
-    public function testSetDestroyConfirmationClosure()
+    public function testSetDestroyConfirmationClosure(): void
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
@@ -20,9 +20,9 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
             ->destroyConfirmationHtmlAttributes($closure);
         $table->column('name');
         $table->configure();
-        $this->assertEquals($closure, $table->getDestroyConfirmationClosure());
+        self::assertEquals($closure, $table->getDestroyConfirmationClosure());
         foreach ($table->getPaginator() as $model) {
-            $this->assertEquals([
+            self::assertEquals([
                 'data-confirm' => __('Are you sure you want to delete the user :name ?', [
                     'name' => $model->name,
                 ]),
@@ -30,7 +30,7 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
         }
     }
 
-    public function testSetDestroyConfirmationClosureHtml()
+    public function testSetDestroyConfirmationClosureHtml(): void
     {
         $closure = fn(User $user) => [
             'data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name]),
@@ -47,9 +47,9 @@ class DestroyHtmlAttributesTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(5, substr_count($html, 'data-confirm'));
+        self::assertEquals(5, substr_count($html, 'data-confirm'));
         foreach ($table->getPaginator() as $model) {
-            $this->assertStringContainsString(__('Are you sure you want to delete the user :name ?', [
+            self::assertStringContainsString(__('Are you sure you want to delete the user :name ?', [
                 'name' => $model->name,
             ]), $html);
         }

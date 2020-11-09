@@ -8,23 +8,23 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class AppendTest extends LaravelTableTestCase
 {
-    public function testSetAppendAttribute()
+    public function testSetAppendAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->appendsHtml('html');
-        $this->assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
-        $this->assertEquals(false, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
+        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        self::assertEquals(false, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
     }
 
-    public function testSetAppendAttributeAndSetShowWithNoValue()
+    public function testSetAppendAttributeAndSetShowWithNoValue(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->appendsHtml('html', true);
-        $this->assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
-        $this->assertEquals(true, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
+        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        self::assertEquals(true, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
     }
 
-    public function testSetAppendHtml()
+    public function testSetAppendHtml(): void
     {
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
@@ -32,10 +32,10 @@ class AppendTest extends LaravelTableTestCase
         $table->column('name')->appendsHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('html', $html);
+        self::assertStringContainsString('html', $html);
     }
 
-    public function testSetAppendWithCustomValueHtml()
+    public function testSetAppendWithCustomValueHtml(): void
     {
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
@@ -43,10 +43,10 @@ class AppendTest extends LaravelTableTestCase
         $table->column('name')->appendsHtml('html')->value(fn() =>'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('html', $html);
+        self::assertStringContainsString('html', $html);
     }
 
-    public function testSetAppendWithNoValueHtml()
+    public function testSetAppendWithNoValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -55,10 +55,10 @@ class AppendTest extends LaravelTableTestCase
         $table->column('name')->appendsHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('html', $html);
+        self::assertStringNotContainsString('html', $html);
     }
 
-    public function testSetAppendWithNoValueButShowAnywayValueHtml()
+    public function testSetAppendWithNoValueButShowAnywayValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -67,6 +67,6 @@ class AppendTest extends LaravelTableTestCase
         $table->column('name')->appendsHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('html', $html);
+        self::assertStringContainsString('html', $html);
     }
 }

@@ -9,27 +9,27 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ColumnDeclarationTest extends LaravelTableTestCase
 {
-    public function testAddColumn()
+    public function testAddColumn(): void
     {
         $columnAttribute = 'name';
         $table = (new Table())->model(User::class);
         $table->column($columnAttribute);
-        $this->assertEquals($table->getColumns()->count(), 1);
-        $this->assertEquals($table->getColumns()->first()->getTable(), $table);
-        $this->assertEquals($table->getColumns()->first()->getDbTable(), app(User::class)->getTable());
-        $this->assertEquals($table->getColumns()->first()->getDbField(), $columnAttribute);
+        self::assertEquals(1, $table->getColumns()->count());
+        self::assertEquals($table, $table->getColumns()->first()->getTable());
+        self::assertEquals(app(User::class)->getTable(), $table->getColumns()->first()->getDbTable());
+        self::assertEquals($columnAttribute, $table->getColumns()->first()->getDbField());
     }
 
-    public function testAddColumnWithAttributeAndNoTitleHtml()
+    public function testAddColumnWithAttributeAndNoTitleHtml(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $html = $table->toHtml();
-        $this->assertStringContainsString('validation.attributes.name', $html);
+        self::assertStringContainsString('validation.attributes.name', $html);
     }
 
-    public function testAddColumnWithNoDefinedModel()
+    public function testAddColumnWithNoDefinedModel(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table model has not been defined or is not an instance of '
@@ -37,7 +37,7 @@ class ColumnDeclarationTest extends LaravelTableTestCase
         (new Table())->column('name');
     }
 
-    public function testNoDeclaredColumn()
+    public function testNoDeclaredColumn(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('No column has been added to the table. Please add at least one column by '

@@ -8,18 +8,18 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class EmptyStatusTest extends LaravelTableTestCase
 {
-    public function testEmptyListHtml()
+    public function testEmptyListHtml(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString(config('laravel-table.icon.info'), $html);
-        $this->assertStringContainsString('No results were found.', $html);
+        self::assertStringContainsString(config('laravel-table.icon.info'), $html);
+        self::assertStringContainsString('No results were found.', $html);
     }
 
-    public function testFilledListHtml()
+    public function testFilledListHtml(): void
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
@@ -28,7 +28,7 @@ class EmptyStatusTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString(config('laravel-table.icon.info'), $html);
-        $this->assertStringNotContainsString('No results were found.', $html);
+        self::assertStringNotContainsString(config('laravel-table.icon.info'), $html);
+        self::assertStringNotContainsString('No results were found.', $html);
     }
 }

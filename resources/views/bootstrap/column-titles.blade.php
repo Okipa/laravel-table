@@ -1,6 +1,6 @@
-<tr{{ classTag('bg-light', $table->getTrClasses()) }}>
+<tr{{ html_classes('bg-light', $table->getTrClasses()) }}>
     @foreach($table->getColumns() as $column)
-        <th{{ classTag($table->getThClasses()) }} scope="col">
+        <th{{ html_classes($table->getThClasses()) }} scope="col">
         @if($column->getIsSortable())
             <a class="d-flex"
                href="{{ $table->getRoute('index', array_merge([
@@ -29,7 +29,7 @@
         </th>
     @endforeach
     @if($table->isRouteDefined('show') || $table->isRouteDefined('edit') || $table->isRouteDefined('destroy'))
-        <th{{ classTag('text-right', $table->getThClasses()) }} scope="col">
+        <th{{ html_classes('text-right', $table->getThClasses()) }} scope="col">
             @lang('Actions')
         </th>
     @endif

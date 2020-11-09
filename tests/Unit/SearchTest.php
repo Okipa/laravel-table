@@ -11,6 +11,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\Company;
 use Okipa\LaravelTable\Test\Models\User;
+use Okipa\LaravelTable\Test\Models\UserJsonFields;
 use PDOException;
 
 class SearchTest extends LaravelTableTestCase
@@ -19,23 +20,23 @@ class SearchTest extends LaravelTableTestCase
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->searchable();
-        $this->assertEquals('name', $table->getSearchableColumns()->first()->getDbField());
+        self::assertEquals('name', $table->getSearchableColumns()->first()->getDbField());
     }
 
     public function testSetSearchedDatabaseTableAttributeOnly(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->searchable('dbSearchedTable');
-        $this->assertEquals('dbSearchedTable', $table->getColumns()->first()->getDbSearchedTable());
-        $this->assertEquals([], $table->getColumns()->first()->getDbSearchedFields());
+        self::assertEquals('dbSearchedTable', $table->getColumns()->first()->getDbSearchedTable());
+        self::assertEquals([], $table->getColumns()->first()->getDbSearchedFields());
     }
 
     public function testSetSearchedDatabaseTableAndSearchedDatabaseColumns(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->searchable('dbSearchedTable', ['searchedField']);
-        $this->assertEquals('dbSearchedTable', $table->getColumns()->first()->getDbSearchedTable());
-        $this->assertEquals(['searchedField'], $table->getColumns()->first()->getDbSearchedFields());
+        self::assertEquals('dbSearchedTable', $table->getColumns()->first()->getDbSearchedTable());
+        self::assertEquals(['searchedField'], $table->getColumns()->first()->getDbSearchedFields());
     }
 
     public function testNotExistingSearchableColumn(): void
@@ -66,7 +67,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email');
         $table->configure();
-        $this->assertEquals(
+        self::assertEquals(
             $users->sortBy('name')->where('name', $searchedValue)->values()->toArray(),
             $table->getPaginator()->toArray()['data']
         );
@@ -87,7 +88,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->sortable(true);
         $table->column('email')->searchable();
         $table->configure();
-        $this->assertEquals(
+        self::assertEquals(
             App(User::class)
                 ->orderBy('name', 'asc')
                 ->where('email', 'like', '%' . $searchedValue . '%')
@@ -105,7 +106,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->searchable();
         $table->column('email');
         $table->configure();
-        $this->assertEquals('Name', $table->getSearchableTitles());
+        self::assertEquals('Name', $table->getSearchableTitles());
     }
 
     public function testGetSearchableTitlesMultiple(): void
@@ -116,7 +117,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->searchable();
         $table->column('email')->title('Email')->searchable();
         $table->configure();
-        $this->assertEquals('Name, Email', $table->getSearchableTitles());
+        self::assertEquals('Name, Email', $table->getSearchableTitles());
     }
 
     public function testSearchFieldFromOnOtherTableWithoutDeclaringSearchedDatabaseTable(): void
@@ -199,8 +200,10 @@ class SearchTest extends LaravelTableTestCase
         $companies = $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
         $searchedValue = $companies->first()->owner->name;
-        $customRequest =
-            (new Request())->merge([(new Table())->getRowsNumberField() => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request())->merge([
+            (new Table())->getRowsNumberField() => 20,
+            'search' => $searchedValue,
+        ]);
         $table = (new Table())->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
@@ -214,9 +217,9 @@ class SearchTest extends LaravelTableTestCase
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($companies as $company) {
             if ($company->owner->name === $searchedValue) {
-                $this->assertStringContainsString($company->owner->name, $html);
+                self::assertStringContainsString($company->owner->name, $html);
             } else {
-                $this->assertStringNotContainsString($company->owner->name, $html);
+                self::assertStringNotContainsString($company->owner->name, $html);
             }
         }
     }
@@ -243,7 +246,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('owner')->searchable('users_test', ['name']);
         $table->configure();
         foreach (App(Company::class)->paginate(5) as $key => $company) {
-            $this->assertEquals($company->name, $table->getPaginator()->toArray()['data'][$key]['name']);
+            self::assertEquals($company->name, $table->getPaginator()->toArray()['data'][$key]['name']);
         }
     }
 
@@ -253,8 +256,11 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = '@';
-        $customRequest =
-            (new Request())->merge([(new Table())->getRowsNumberField() => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request())->merge([
+            (
+            new Table())->getRowsNumberField() => 20,
+            'search' => $searchedValue,
+        ]);
         $table = (new Table())->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
@@ -268,7 +274,7 @@ class SearchTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator() as $company) {
             $owner = app(User::class)->find($company->owner_id);
-            $this->assertEquals($company->owner, $owner->name . ' ' . $owner->email);
+            self::assertEquals($company->owner, $owner->name . ' ' . $owner->email);
         }
     }
 
@@ -278,8 +284,10 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
         $searchedValue = '@';
-        $customRequest =
-            (new Request())->merge([(new Table())->getRowsNumberField() => 20, 'search' => $searchedValue]);
+        $customRequest = (new Request())->merge([
+            (new Table())->getRowsNumberField() => 20,
+            'search' => $searchedValue,
+        ]);
         $table = (new Table())->model(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
@@ -299,7 +307,7 @@ class SearchTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator() as $company) {
             $owner = app(User::class)->find($company->owner_id);
-            $this->assertEquals($company->owner, $owner->name . ' ' . $owner->email);
+            self::assertEquals($company->owner, $owner->name . ' ' . $owner->email);
         }
     }
 
@@ -324,7 +332,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->configure();
         foreach ($table->getPaginator() as $company) {
-            $this->assertEquals($company->name, $companies->where('id', $company->id)->first()->name);
+            self::assertEquals($company->name, $companies->where('id', $company->id)->first()->name);
         }
     }
 
@@ -336,10 +344,10 @@ class SearchTest extends LaravelTableTestCase
         $table->column('email')->searchable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('searching', $html);
-        $this->assertStringContainsString('type="hidden" name="rows"', $html);
-        $this->assertStringContainsString('placeholder="Search by: ' . $table->getSearchableTitles() . '"', $html);
-        $this->assertStringContainsString('aria-label="Search by: ' . $table->getSearchableTitles() . '"', $html);
+        self::assertStringContainsString('searching', $html);
+        self::assertStringContainsString('type="hidden" name="rows"', $html);
+        self::assertStringContainsString('placeholder="Search by: ' . $table->getSearchableTitles() . '"', $html);
+        self::assertStringContainsString('aria-label="Search by: ' . $table->getSearchableTitles() . '"', $html);
     }
 
     public function testNoSearchableHtml(): void
@@ -350,14 +358,14 @@ class SearchTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('searching', $html);
-        $this->assertStringNotContainsString('type="hidden" name="rows"', $html);
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString('searching', $html);
+        self::assertStringNotContainsString('type="hidden" name="rows"', $html);
+        self::assertStringNotContainsString(
             'placeholder="' . __('laravel-table::laravel-table.thead.search') . ' '
             . $table->getSearchableTitles() . '"',
             $html
         );
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString(
             'title="' . __('laravel-table::laravel-table.thead.search') . ' '
             . $table->getSearchableTitles() . '"',
             $html
@@ -414,7 +422,7 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
-        $this->assertEmpty($table->getPaginator()->toArray()['data']);
+        self::assertEmpty($table->getPaginator()->toArray()['data']);
     }
 
     public function testSqliteCaseInsensitiveTestHtml(): void
@@ -441,18 +449,18 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
-        $this->assertEquals(
+        self::assertEquals(
             $users->filter(fn($user) => in_array($user->name, ['alpha', 'ALPHA']))->toArray(),
             $table->getPaginator()->toArray()['data']
         );
     }
 
-    public function testPostgresCaseInsensitiveTestHtml(): void
+    public function testPostgresCaseInsensitiveHtml(): void
     {
         $this->expectException(PDOException::class);
         $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: select '
-            . 'count(*) as aggregate from "users_test" where ("users_test"."name" ILIKE '
-            . '%alpha% or "users_test"."email" ILIKE %alpha%))');
+            . 'count(*) as aggregate from "users_test" where (LOWER(users_test.name) ILIKE '
+            . '%alpha% or LOWER(users_test.email) ILIKE %alpha%))');
         $connection = config('database.default');
         config()->set('database.connections.' . $connection . '.driver', 'pgsql');
         $this->createMultipleUsers(10);
@@ -468,5 +476,22 @@ class SearchTest extends LaravelTableTestCase
         $table->column('name')->searchable();
         $table->column('email')->searchable();
         $table->configure();
+    }
+
+    public function testJsonFieldCaseInsensitiveHtml(): void
+    {
+        $user = (new UserJsonFields())->create(['name' => ['fr' => 'Name FR', 'en' => 'Name EN']]);
+        $searchedValue = 'nAME fr';
+        $customRequest = (new Request())->merge([
+            (new Table())->getRowsNumberField() => 20,
+            'search' => $searchedValue,
+        ]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->model(UserJsonFields::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->request($customRequest);
+        $table->column('name')->searchable();
+        $table->configure();
+        self::assertTrue($user->is($table->getPaginator()->getCollection()->first()));
     }
 }

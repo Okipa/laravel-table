@@ -6,17 +6,17 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\User;
 
-class CustomValueTest extends LaravelTableTestCase
+class ValueTest extends LaravelTableTestCase
 {
-    public function testSetIsCustomValueAttribute()
+    public function testSetIsCustomValueAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $closure = fn(User $user) => null;
         $table->column('name')->value($closure);
-        $this->assertEquals($closure, $table->getColumns()->first()->getCustomValueClosure());
+        self::assertEquals($closure, $table->getColumns()->first()->getCustomValueClosure());
     }
 
-    public function testIsCustomValueHtml()
+    public function testIsCustomValueHtml(): void
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
@@ -25,6 +25,6 @@ class CustomValueTest extends LaravelTableTestCase
         $table->column('updated_at')->value(fn($model) => 'user name = ' . $model->name);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('user name = ' . $user->name, $html);
+        self::assertStringContainsString('user name = ' . $user->name, $html);
     }
 }

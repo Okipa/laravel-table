@@ -12,7 +12,7 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class SortTest extends LaravelTableTestCase
 {
-    public function testNoSortableAttribute()
+    public function testNoSortableAttribute(): void
     {
         $users = $this->createMultipleUsers(2);
         $this->routes(['users'], ['index']);
@@ -21,33 +21,33 @@ class SortTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         foreach ($users as $key => $user) {
-            $this->assertEquals($user->name, $table->getPaginator()->items()[$key]['name']);
+            self::assertEquals($user->name, $table->getPaginator()->items()[$key]['name']);
         }
     }
 
-    public function testSetSortableAttribute()
+    public function testSetSortableAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->sortable();
-        $this->assertTrue($table->getColumns()->first()->getIsSortable());
-        $this->assertEquals(1, $table->getSortableColumns()->count());
-        $this->assertEquals('name', $table->getSortableColumns()->first()->getDbField());
+        self::assertTrue($table->getColumns()->first()->getIsSortable());
+        self::assertEquals(1, $table->getSortableColumns()->count());
+        self::assertEquals('name', $table->getSortableColumns()->first()->getDbField());
     }
 
-    public function testSetSortByDefaultAttribute()
+    public function testSetSortByDefaultAttribute(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email')->sortable(true, 'desc');
-        $this->assertEquals('email', $table->getSortByValue());
-        $this->assertEquals('desc', $table->getSortDirValue());
+        self::assertEquals('email', $table->getSortByValue());
+        self::assertEquals('desc', $table->getSortDirValue());
         $table->configure();
-        $this->assertEquals('email', $table->getSortByValue());
-        $this->assertEquals('desc', $table->getSortDirValue());
+        self::assertEquals('email', $table->getSortByValue());
+        self::assertEquals('desc', $table->getSortDirValue());
     }
 
-    public function testSortByDefault()
+    public function testSortByDefault(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
@@ -55,13 +55,13 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->column('email')->title('Email')->sortable(true);
         $table->configure();
-        $this->assertEquals(
+        self::assertEquals(
             $users->sortBy('email')->values()->toArray(),
             $table->getPaginator()->toArray()['data']
         );
     }
 
-    public function testSortByDefaultCalledMultiple()
+    public function testSortByDefaultCalledMultiple(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The table is already sorted by the « name » database column. You only can sort '
@@ -71,7 +71,7 @@ class SortTest extends LaravelTableTestCase
         $table->column('email')->sortable(true);
     }
 
-    public function testNoSortableColumnDefined()
+    public function testNoSortableColumnDefined(): void
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
@@ -80,10 +80,10 @@ class SortTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $this->assertNull($table->getSortByValue());
-        $this->assertEquals($table->getSortDirValue(), 'asc');
+        self::assertEquals($table->getSortDirValue(), 'asc');
     }
 
-    public function testSortableColumnDefinedWithNoDefaultSort()
+    public function testSortableColumnDefinedWithNoDefaultSort(): void
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
@@ -91,11 +91,11 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->sortable();
         $table->column('email')->sortable();
         $table->configure();
-        $this->assertEquals($table->getSortByValue(), $table->getColumns()->first()->getDbField());
-        $this->assertEquals($table->getSortDirValue(), 'asc');
+        self::assertEquals($table->getSortByValue(), $table->getColumns()->first()->getDbField());
+        self::assertEquals($table->getSortDirValue(), 'asc');
     }
 
-    public function testSortByColumnWithoutAttribute()
+    public function testSortByColumnWithoutAttribute(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the sortable table columns has no defined database column. '
@@ -108,7 +108,7 @@ class SortTest extends LaravelTableTestCase
         $table->configure();
     }
 
-    public function testSortByColumn()
+    public function testSortByColumn(): void
     {
         $users = $this->createMultipleUsers(3);
         $customRequest = (new Request())->merge([
@@ -123,15 +123,15 @@ class SortTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email')->sortable();
         $table->configure();
-        $this->assertEquals('email', $table->getSortByValue());
-        $this->assertEquals('desc', $table->getSortDirValue());
-        $this->assertEquals(
+        self::assertEquals('email', $table->getSortByValue());
+        self::assertEquals('desc', $table->getSortDirValue());
+        self::assertEquals(
             $users->sortByDesc('email')->values()->toArray(),
             $table->getPaginator()->toArray()['data']
         );
     }
 
-    public function testSortOnOtherTableFieldWithoutCustomTableDeclaration()
+    public function testSortOnOtherTableFieldWithoutCustomTableDeclaration(): void
     {
         $this->createMultipleUsers(5);
         $companies = $this->createMultipleCompanies(5);
@@ -152,11 +152,11 @@ class SortTest extends LaravelTableTestCase
         $table->column('owner')->sortable();
         $table->configure();
         foreach ($companies->load('owner')->sortByDesc('owner.name')->values() as $key => $company) {
-            $this->assertEquals($company->owner->name, $table->getPaginator()->toArray()['data'][$key]['owner']);
+            self::assertEquals($company->owner->name, $table->getPaginator()->toArray()['data'][$key]['owner']);
         }
     }
 
-    public function testPaginateSortOnOtherTableField()
+    public function testPaginateSortOnOtherTableField(): void
     {
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(10);
@@ -182,11 +182,11 @@ class SortTest extends LaravelTableTestCase
             ->with('owner')
             ->paginate(5);
         foreach ($paginatedCompanies as $key => $company) {
-            $this->assertEquals($company->owner->name, $table->getPaginator()->toArray()['data'][$key]['owner']);
+            self::assertEquals($company->owner->name, $table->getPaginator()->toArray()['data'][$key]['owner']);
         }
     }
 
-    public function testSortableColumnHtml()
+    public function testSortableColumnHtml(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
@@ -194,13 +194,13 @@ class SortTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;'
             . $table->getSortByField() . '=name&amp;'
             . $table->getSortDirField() . '=desc"',
             $html
         );
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString(
             'href="http://localhost/users/index?' . $table->getRowsNumberField() . '=20&amp;'
             . $table->getSortByField() . '=email&amp;'
             . $table->getSortDirField() . '=desc"',

@@ -30,7 +30,7 @@
         "ext-pdo": "*",
         "php": "^7.4||^8.0",
         "illuminate/support": "^7.0||^8.0",
-        "okipa/laravel-html-helper": "^1.4"
+        "okipa/laravel-html-helper": "dev-php8-support"
     },
     "require-dev": {
         "nunomaduro/larastan": "^0.6",

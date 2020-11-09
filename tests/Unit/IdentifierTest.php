@@ -9,42 +9,42 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class IdentifierTest extends LaravelTableTestCase
 {
-    public function testSetIdentifierAttribute()
+    public function testSetIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
         $table = (new Table())->model(User::class)->identifier($identifier);
-        $this->assertEquals('identifier-test', $table->getIdentifier());
+        self::assertEquals('identifier-test', $table->getIdentifier());
     }
 
-    public function testRowsFieldWithIdentifierAttribute()
+    public function testRowsFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
         $table = (new Table())->model(User::class)->identifier($identifier);
-        $this->assertEquals('identifier_test_rows', $table->getRowsNumberField());
+        self::assertEquals('identifier_test_rows', $table->getRowsNumberField());
     }
 
-    public function testSearchFieldWithIdentifierAttribute()
+    public function testSearchFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
         $table = (new Table())->model(User::class)->identifier($identifier);
-        $this->assertEquals('identifier_test_search', $table->getSearchField());
+        self::assertEquals('identifier_test_search', $table->getSearchField());
     }
 
-    public function testSortByFieldWithIdentifierAttribute()
+    public function testSortByFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
         $table = (new Table())->model(User::class)->identifier($identifier);
-        $this->assertEquals('identifier_test_sort_by', $table->getSortByField());
+        self::assertEquals('identifier_test_sort_by', $table->getSortByField());
     }
 
-    public function testSortDirFieldWithIdentifierAttribute()
+    public function testSortDirFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
         $table = (new Table())->model(User::class)->identifier($identifier);
-        $this->assertEquals('identifier_test_sort_dir', $table->getSortDirField());
+        self::assertEquals('identifier_test_sort_dir', $table->getSortDirField());
     }
 
-    public function testSetIdentifierHtml()
+    public function testSetIdentifierHtml(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -55,10 +55,10 @@ class IdentifierTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(1, substr_count($html, '<table id="identifier-test"'));
+        self::assertEquals(1, substr_count($html, '<table id="identifier-test"'));
     }
 
-    public function testRowsFieldWithIdentifierHtml()
+    public function testRowsFieldWithIdentifierHtml(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -69,10 +69,10 @@ class IdentifierTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(2, substr_count($html, 'name="identifier_test_rows"'));
+        self::assertEquals(2, substr_count($html, 'name="identifier_test_rows"'));
     }
 
-    public function testSearchFieldWithIdentifierHtml()
+    public function testSearchFieldWithIdentifierHtml(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -83,10 +83,10 @@ class IdentifierTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(2, substr_count($html, 'name="identifier_test_search"'));
+        self::assertEquals(2, substr_count($html, 'name="identifier_test_search"'));
     }
 
-    public function testSortByFieldWithIdentifierHtml()
+    public function testSortByFieldWithIdentifierHtml(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -97,10 +97,10 @@ class IdentifierTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(2, substr_count($html, 'name="identifier_test_sort_by"'));
+        self::assertEquals(2, substr_count($html, 'name="identifier_test_sort_by"'));
     }
 
-    public function testSortDirFieldWithIdentifierHtml()
+    public function testSortDirFieldWithIdentifierHtml(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -111,6 +111,6 @@ class IdentifierTest extends LaravelTableTestCase
         $table->column('name')->sortable()->searchable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(2, substr_count($html, 'name="identifier_test_sort_dir"'));
+        self::assertEquals(2, substr_count($html, 'name="identifier_test_sort_dir"'));
     }
 }

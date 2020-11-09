@@ -10,15 +10,15 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ResultDeclarationTest extends LaravelTableTestCase
 {
-    public function testSetResultsAttribute()
+    public function testSetResultsAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->result()->title('Test');
-        $this->assertEquals($table->getResults()->count(), 1);
-        $this->assertEquals($table->getResults()->first()->getTitle(), 'Test');
+        self::assertEquals($table->getResults()->count(), 1);
+        self::assertEquals($table->getResults()->first()->getTitle(), 'Test');
     }
 
-    public function testResultRowsGivePaginatedRowsToManipulate()
+    public function testResultRowsGivePaginatedRowsToManipulate(): void
     {
         $this->createMultipleUsers(10);
         $this->routes(['users'], ['index']);
@@ -31,7 +31,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
     }
 
-    public function testSetResultsHtml()
+    public function testSetResultsHtml(): void
     {
         $this->createMultipleUsers(10);
         $companies = $this->createMultipleCompanies(5);
@@ -42,11 +42,11 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->result()->title('Result !')->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('Result !', $html);
-        $this->assertStringContainsString((string) $companies->sum('turnover'), $html);
+        self::assertStringContainsString('Result !', $html);
+        self::assertStringContainsString((string) $companies->sum('turnover'), $html);
     }
 
-    public function testSetResultsMultipleHtml()
+    public function testSetResultsMultipleHtml(): void
     {
         $this->createMultipleUsers(10);
         $companies = $this->createMultipleCompanies(5);
@@ -62,12 +62,12 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->result()->title('Total turnover')->html(fn() => (new Company())->all()->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('Selected turnover', $html);
-        $this->assertStringContainsString((string) $companies->sum('turnover'), $html);
-        $this->assertStringContainsString('Total turnover', $html);
+        self::assertStringContainsString('Selected turnover', $html);
+        self::assertStringContainsString((string) $companies->sum('turnover'), $html);
+        self::assertStringContainsString('Total turnover', $html);
     }
 
-    public function testSetNoResult()
+    public function testSetNoResult(): void
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
@@ -79,10 +79,10 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $table->column('turnover');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('result', $html);
+        self::assertStringNotContainsString('result', $html);
     }
 
-    public function testResultColspanWithSingleColumn()
+    public function testResultColspanWithSingleColumn(): void
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
@@ -94,11 +94,11 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(1, substr_count($html, '<td'));
-        $this->assertStringNotContainsString('colspan', $html);
+        self::assertEquals(1, substr_count($html, '<td'));
+        self::assertStringNotContainsString('colspan', $html);
     }
 
-    public function testResultColspanWithMultipleColumns()
+    public function testResultColspanWithMultipleColumns(): void
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
@@ -111,11 +111,11 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(1, substr_count($html, '<td'));
-        $this->assertStringContainsString('colspan="2"', $html);
+        self::assertEquals(1, substr_count($html, '<td'));
+        self::assertStringContainsString('colspan="2"', $html);
     }
 
-    public function testResultColspanTestWithEditRoute()
+    public function testResultColspanTestWithEditRoute(): void
     {
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
@@ -132,7 +132,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
             ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
         $table->configure();
         $html = view('laravel-table::' . $table->getResultsTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(1, substr_count($html, '<td'));
-        $this->assertStringContainsString('colspan="4"', $html);
+        self::assertEquals(1, substr_count($html, '<td'));
+        self::assertStringContainsString('colspan="4"', $html);
     }
 }

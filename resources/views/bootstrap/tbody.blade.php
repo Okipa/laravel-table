@@ -1,7 +1,7 @@
 <tbody>
     @if($table->getPaginator()->isEmpty())
-        <tr{{ classTag($table->getTrClasses()) }}>
-            <td{{ classTag($table->getTdClasses(), 'text-center', 'p-3') }}{{ htmlAttributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }} scope="row">
+        <tr{{ html_classes($table->getTrClasses()) }}>
+            <td{{ html_classes($table->getTdClasses(), 'text-center', 'p-3') }}{{ html_attributes($table->getColumnsCount() > 1 ? ['colspan' => $table->getColumnsCount()] : null) }} scope="row">
                 <span class="text-info">
                     {!! config('laravel-table.icon.info') !!}
                 </span>
@@ -10,7 +10,7 @@
         </tr>
     @else
         @foreach($table->getPaginator() as $model)
-            <tr{{ classTag($table->getTrClasses(), $model->conditionnal_classes, $model->disabled_classes) }}>
+            <tr{{ html_classes($table->getTrClasses(), $model->conditionnal_classes, $model->disabled_classes) }}>
                 @foreach($table->getColumns() as $columnKey => $column)
                     @php
                         $value = $model->{$column->getDbField()};
@@ -24,7 +24,7 @@
                         $showLink = $url && ($customValue || $value || $showPrepend || $showAppend);
                         $showButton = $column->getButtonClasses() && ($value || $customValue || $showPrepend || $showAppend);
                     @endphp
-                    <td{{ classTag($table->getTdClasses(), $column->getClasses()) }}{{ htmlAttributes($columnKey === 0 ? ['scope' => 'row'] : null) }}>
+                    <td{{ html_classes($table->getTdClasses(), $column->getClasses()) }}{{ html_attributes($columnKey === 0 ? ['scope' => 'row'] : null) }}>
                         {{-- custom html element --}}
                         @if($html)
                             {!! $html !!}
@@ -35,7 +35,7 @@
                             @endif
                             {{-- button start--}}
                             @if($showButton)
-                                <button{{ classTag(
+                                <button{{ html_classes(
                                     $column->getButtonClasses(),
                                     $value ? Str::slug(strip_tags($value), '-') : null,
                                     $customValue ? Str::slug(strip_tags($customValue), '-') : null
@@ -77,7 +77,7 @@
                 @endforeach
                 {{-- actions --}}
                 @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') || $table->isRouteDefined('show')))
-                    <td{{ classTag($table->getTdClasses(), 'text-right') }}>
+                    <td{{ html_classes($table->getTdClasses(), 'text-right') }}>
                         @if(! $model->disabled_classes)
                             <div class="d-flex justify-content-end">
                                 @include('laravel-table::' . $table->getShowActionTemplatePath())

@@ -9,14 +9,14 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ButtonTest extends LaravelTableTestCase
 {
-    public function testSetButtonAttribute()
+    public function testSetButtonAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->button(['buttonClass']);
-        $this->assertEquals(['buttonClass'], $table->getColumns()->first()->getButtonClasses());
+        self::assertEquals(['buttonClass'], $table->getColumns()->first()->getButtonClasses());
     }
 
-    public function testIsButtonHtml()
+    public function testIsButtonHtml(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -24,11 +24,11 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<button class="btn btn-primary', $html);
-        $this->assertStringContainsString('</button>', $html);
+        self::assertStringContainsString('<button class="btn btn-primary', $html);
+        self::assertStringContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueHtml()
+    public function testIsButtonWithNoValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -37,11 +37,11 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('<button class="btn btn-primary', $html);
-        $this->assertStringNotContainsString('</button>', $html);
+        self::assertStringNotContainsString('<button class="btn btn-primary', $html);
+        self::assertStringNotContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueWithPrependedHtml()
+    public function testIsButtonWithNoValueWithPrependedHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -50,11 +50,11 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary'])->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<button class="btn btn-primary', $html);
-        $this->assertStringContainsString('</button>', $html);
+        self::assertStringContainsString('<button class="btn btn-primary', $html);
+        self::assertStringContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueWithAppendedHtml()
+    public function testIsButtonWithNoValueWithAppendedHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -63,11 +63,11 @@ class ButtonTest extends LaravelTableTestCase
         $table->column('name')->button(['btn', 'btn-primary'])->appendsHtml('icon', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<button class="btn btn-primary', $html);
-        $this->assertStringContainsString('</button>', $html);
+        self::assertStringContainsString('<button class="btn btn-primary', $html);
+        self::assertStringContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithCustomValueHtml()
+    public function testIsButtonWithCustomValueHtml(): void
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
@@ -76,10 +76,10 @@ class ButtonTest extends LaravelTableTestCase
         $table->column()->button(['buttonClass'])->value(fn(User $user) => 'user name = ' . $user->name);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             '<button class="buttonClass user-name-' . Str::slug(strip_tags($user->name)) . '">',
             $html
         );
-        $this->assertStringContainsString('</button>', $html);
+        self::assertStringContainsString('</button>', $html);
     }
 }

@@ -9,27 +9,27 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class RowsNumberTest extends LaravelTableTestCase
 {
-    public function testSetRowsNumberDefinitionActivationAttribute()
+    public function testSetRowsNumberDefinitionActivationAttribute(): void
     {
         $table = (new Table())->activateRowsNumberDefinition();
-        $this->assertTrue($table->getRowsNumberDefinitionActivation());
+        self::assertTrue($table->getRowsNumberDefinitionActivation());
     }
 
-    public function testSetRowsNumberAttribute()
+    public function testSetRowsNumberAttribute(): void
     {
         $rowsNumber = 10;
         $table = (new Table())->rowsNumber($rowsNumber);
-        $this->assertEquals($rowsNumber, $table->getRowsNumberValue());
+        self::assertEquals($rowsNumber, $table->getRowsNumberValue());
     }
 
-    public function testSetUnlimitedRowsNumberAttribute()
+    public function testSetUnlimitedRowsNumberAttribute(): void
     {
         $rowsNumber = false;
         $table = (new Table())->rowsNumber(false);
-        $this->assertEquals($rowsNumber, $table->getRowsNumberValue());
+        self::assertEquals($rowsNumber, $table->getRowsNumberValue());
     }
 
-    public function testDeactivateRowsNumberDefinitionFromConfigHtml()
+    public function testDeactivateRowsNumberDefinitionFromConfigHtml(): void
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
@@ -38,19 +38,19 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('rows-number-definition', $html);
-        $this->assertStringNotContainsString('type="hidden" name="search"', $html);
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString('rows-number-definition', $html);
+        self::assertStringNotContainsString('type="hidden" name="search"', $html);
+        self::assertStringNotContainsString(
             'placeholder="Number of rows"',
             $html
         );
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString(
             'aria-label="Number of rows"',
             $html
         );
     }
 
-    public function testDeactivateRowsNumberDefinitionFromMethodHtml()
+    public function testDeactivateRowsNumberDefinitionFromMethodHtml(): void
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', true);
         $this->routes(['users'], ['index']);
@@ -61,19 +61,19 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('rows-number-definition', $html);
-        $this->assertStringNotContainsString('type="hidden" name="search"', $html);
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString('rows-number-definition', $html);
+        self::assertStringNotContainsString('type="hidden" name="search"', $html);
+        self::assertStringNotContainsString(
             'placeholder="Number of rows"',
             $html
         );
-        $this->assertStringNotContainsString(
+        self::assertStringNotContainsString(
             'aria-label="Number of rows"',
             $html
         );
     }
 
-    public function testActivateRowsNumberDefinitionHtml()
+    public function testActivateRowsNumberDefinitionHtml(): void
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
@@ -84,19 +84,19 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('rows-number-definition', $html);
-        $this->assertStringContainsString('type="hidden" name="search"', $html);
-        $this->assertStringContainsString(
+        self::assertStringContainsString('rows-number-definition', $html);
+        self::assertStringContainsString('type="hidden" name="search"', $html);
+        self::assertStringContainsString(
             'placeholder="Number of rows"',
             $html
         );
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'aria-label="Number of rows"',
             $html
         );
     }
 
-    public function testSetCustomRowsNumberFromConfigHtml()
+    public function testSetCustomRowsNumberFromConfigHtml(): void
     {
         config()->set('laravel-table.behavior.rows_number', 15);
         $this->routes(['users'], ['index']);
@@ -105,10 +105,10 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('value="15"', $html);
+        self::assertStringContainsString('value="15"', $html);
     }
 
-    public function testSetCustomRowsNumberFromMethodHtml()
+    public function testSetCustomRowsNumberFromMethodHtml(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->model(User::class)
@@ -118,10 +118,10 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('value="15"', $html);
+        self::assertStringContainsString('value="15"', $html);
     }
 
-    public function testSetCustomRowsNumberFromRequest()
+    public function testSetCustomRowsNumberFromRequest(): void
     {
         $this->createMultipleUsers(20);
         $customRequest = (new Request())->merge([(new Table())->getRowsNumberField() => 10]);
@@ -132,13 +132,13 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('name')->sortable(true, 'asc');
         $table->column('email');
         $table->configure();
-        $this->assertEquals(
+        self::assertEquals(
             App(User::class)->orderBy('name', 'asc')->paginate(10)->toArray()['data'],
             $table->getPaginator()->toArray()['data']
         );
     }
 
-    public function testSetUnlimitedRowsNumberHtml()
+    public function testSetUnlimitedRowsNumberHtml(): void
     {
         config()->set('laravel-table.behavior.rows_number', 5);
         $users = $this->createMultipleUsers(20);
@@ -150,10 +150,10 @@ class RowsNumberTest extends LaravelTableTestCase
         $table->column('email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('value=""', $html);
+        self::assertStringContainsString('value=""', $html);
         foreach ($users as $user) {
-            $this->assertStringContainsString($user->name, $html);
-            $this->assertStringContainsString($user->email, $html);
+            self::assertStringContainsString($user->name, $html);
+            self::assertStringContainsString($user->email, $html);
         }
     }
 }

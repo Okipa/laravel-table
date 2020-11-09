@@ -8,23 +8,23 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class PrependTest extends LaravelTableTestCase
 {
-    public function testSetPrependAttribute()
+    public function testSetPrependAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->prependHtml('html');
-        $this->assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
-        $this->assertEquals(false, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
+        self::assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
+        self::assertEquals(false, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
     }
 
-    public function testSetPrependAttributeAndSetShowWithNoValue()
+    public function testSetPrependAttributeAndSetShowWithNoValue(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->prependHtml('html', true);
-        $this->assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
-        $this->assertEquals(true, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
+        self::assertEquals('html', $table->getColumns()->first()->getPrependedHtml());
+        self::assertEquals(true, $table->getColumns()->first()->shouldForcePrependedHtmlDisplay());
     }
 
-    public function testSetPrependHtml()
+    public function testSetPrependHtml(): void
     {
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
@@ -32,10 +32,10 @@ class PrependTest extends LaravelTableTestCase
         $table->column('name')->prependHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('html', $html);
+        self::assertStringContainsString('html', $html);
     }
 
-    public function testSetPrependWithCustomValueHtml()
+    public function testSetPrependWithCustomValueHtml(): void
     {
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
@@ -43,10 +43,10 @@ class PrependTest extends LaravelTableTestCase
         $table->column('name')->prependHtml('html')->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('html', $html);
+        self::assertStringContainsString('html', $html);
     }
 
-    public function testSetPrependWithNoValueHtml()
+    public function testSetPrependWithNoValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -55,10 +55,10 @@ class PrependTest extends LaravelTableTestCase
         $table->column('name')->prependHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('html', $html);
+        self::assertStringNotContainsString('html', $html);
     }
 
-    public function testSetPrependWithNoValueButShowAnywayValueHtml()
+    public function testSetPrependWithNoValueButShowAnywayValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -67,6 +67,6 @@ class PrependTest extends LaravelTableTestCase
         $table->column('name')->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('html', $html);
+        self::assertStringContainsString('html', $html);
     }
 }

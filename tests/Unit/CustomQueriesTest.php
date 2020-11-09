@@ -10,10 +10,10 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class CustomQueriesTest extends LaravelTableTestCase
 {
-    public function testSetAddQueryInstructionsAttribute()
+    public function testSetAddQueryInstructionsAttribute(): void
     {
         $additionalQueriesClosure = fn ($query) => $query->select('users.*')->where('users.activated');
         $table = (new Table())->query($additionalQueriesClosure);
-        $this->assertEquals($additionalQueriesClosure, $table->getAdditionalQueriesClosure());
+        self::assertEquals($additionalQueriesClosure, $table->getAdditionalQueriesClosure());
     }
 }

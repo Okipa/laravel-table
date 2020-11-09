@@ -9,14 +9,14 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class StringLimitTest extends LaravelTableTestCase
 {
-    public function testSetStringLimitAttribute()
+    public function testSetStringLimitAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->stringLimit(10);
-        $this->assertEquals(10, $table->getColumns()->first()->getStringLimit());
+        self::assertEquals(10, $table->getColumns()->first()->getStringLimit());
     }
 
-    public function testSetStringLimitHtml()
+    public function testSetStringLimitHtml(): void
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
@@ -24,6 +24,6 @@ class StringLimitTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->column('email')->title('Email')->stringLimit(2);
         $html = $table->toHtml();
-        $this->assertStringContainsString(Str::limit($user->email, 2), $html);
+        self::assertStringContainsString(Str::limit($user->email, 2), $html);
     }
 }

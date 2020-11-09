@@ -8,11 +8,11 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class CustomHtmlElementTest extends LaravelTableTestCase
 {
-    public function testHtmlAttribute()
+    public function testHtmlAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $closure = fn(User $user) => null;
         $table->column('name')->html($closure);
-        $this->assertEquals($closure, $table->getColumns()->first()->getCustomHtmlClosure());
+        self::assertEquals($closure, $table->getColumns()->first()->getCustomHtmlClosure());
     }
 }

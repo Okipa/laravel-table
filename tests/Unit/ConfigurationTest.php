@@ -9,7 +9,7 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ConfigurationTest extends LaravelTableTestCase
 {
-    public function testToHtmlTriggersConfiguration()
+    public function testToHtmlTriggersConfiguration(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -17,10 +17,10 @@ class ConfigurationTest extends LaravelTableTestCase
         $table->column('name');
         $this->assertFalse($table->hasBeenConfigured());
         $table->toHtml();
-        $this->assertTrue($table->hasBeenConfigured());
+        self::assertTrue($table->hasBeenConfigured());
     }
 
-    public function testConfigureTriggersConfiguration()
+    public function testConfigureTriggersConfiguration(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -28,10 +28,10 @@ class ConfigurationTest extends LaravelTableTestCase
         $table->column('name');
         $this->assertFalse($table->hasBeenConfigured());
         $table->configure();
-        $this->assertTrue($table->hasBeenConfigured());
+        self::assertTrue($table->hasBeenConfigured());
     }
 
-    public function testConfigurationIsNotExecutedTwice()
+    public function testConfigurationIsNotExecutedTwice(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -40,7 +40,7 @@ class ConfigurationTest extends LaravelTableTestCase
         $table->configure();
         $table->column('email');
         $table->toHtml();
-        $this->assertEquals('name', $table->getColumns()->first()->getDbField());
+        self::assertEquals('name', $table->getColumns()->first()->getDbField());
         $this->assertNotEquals('email', $table->getColumns()->first()->getDbField());
     }
 }

@@ -8,14 +8,14 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class NavigationStatusTest extends LaravelTableTestCase
 {
-    public function testNavigationStatus()
+    public function testNavigationStatus(): void
     {
         $this->createMultipleUsers(10);
         $this->routes(['users'], ['index']);
         $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
-        $this->assertEquals(
+        self::assertEquals(
             $table->getNavigationStatus(),
             __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
                 'start' => 1,
@@ -25,13 +25,13 @@ class NavigationStatusTest extends LaravelTableTestCase
         );
     }
 
-    public function testNavigationStatusHtml()
+    public function testNavigationStatusHtml(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString($table->getNavigationStatus(), $html);
+        self::assertStringContainsString($table->getNavigationStatus(), $html);
     }
 }

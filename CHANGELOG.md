@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.3](https://github.com/Okipa/laravel-table/compare/3.1.2...3.1.3)
+
+2020-09-10
+
+* Fixed wrong sensitive case searching which was involuntarily executed for JSON database fields instead of insensitive case searching as normal.
+
 ## [3.1.2](https://github.com/Okipa/laravel-table/compare/3.1.1...3.1.2)
 
 2020-08-24

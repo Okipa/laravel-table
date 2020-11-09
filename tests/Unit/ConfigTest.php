@@ -8,54 +8,54 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ConfigTest extends LaravelTableTestCase
 {
-    public function testConfigStructure()
+    public function testConfigStructure(): void
     {
         // laravel-table
-        $this->assertTrue(array_key_exists('classes', config('laravel-table')));
-        $this->assertTrue(array_key_exists('icon', config('laravel-table')));
-        $this->assertTrue(array_key_exists('behavior', config('laravel-table')));
-        $this->assertTrue(array_key_exists('template', config('laravel-table')));
+        self::assertArrayHasKey('classes', config('laravel-table'));
+        self::assertArrayHasKey('icon', config('laravel-table'));
+        self::assertArrayHasKey('behavior', config('laravel-table'));
+        self::assertArrayHasKey('template', config('laravel-table'));
         // laravel-table.classes
-        $this->assertTrue(array_key_exists('container', config('laravel-table.classes')));
-        $this->assertTrue(array_key_exists('table', config('laravel-table.classes')));
-        $this->assertTrue(array_key_exists('tr', config('laravel-table.classes')));
-        $this->assertTrue(array_key_exists('th', config('laravel-table.classes')));
-        $this->assertTrue(array_key_exists('td', config('laravel-table.classes')));
-        $this->assertTrue(array_key_exists('results', config('laravel-table.classes')));
-        $this->assertTrue(array_key_exists('disabled', config('laravel-table.classes')));
+        self::assertArrayHasKey('container', config('laravel-table.classes'));
+        self::assertArrayHasKey('table', config('laravel-table.classes'));
+        self::assertArrayHasKey('tr', config('laravel-table.classes'));
+        self::assertArrayHasKey('th', config('laravel-table.classes'));
+        self::assertArrayHasKey('td', config('laravel-table.classes'));
+        self::assertArrayHasKey('results', config('laravel-table.classes'));
+        self::assertArrayHasKey('disabled', config('laravel-table.classes'));
         // laravel-table.icon
-        $this->assertTrue(array_key_exists('rows_number', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('sort', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('sort_asc', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('sort_desc', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('search', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('validate', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('reset', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('create', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('edit', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('destroy', config('laravel-table.icon')));
-        $this->assertTrue(array_key_exists('show', config('laravel-table.icon')));
+        self::assertArrayHasKey('rows_number', config('laravel-table.icon'));
+        self::assertArrayHasKey('sort', config('laravel-table.icon'));
+        self::assertArrayHasKey('sort_asc', config('laravel-table.icon'));
+        self::assertArrayHasKey('sort_desc', config('laravel-table.icon'));
+        self::assertArrayHasKey('search', config('laravel-table.icon'));
+        self::assertArrayHasKey('validate', config('laravel-table.icon'));
+        self::assertArrayHasKey('reset', config('laravel-table.icon'));
+        self::assertArrayHasKey('create', config('laravel-table.icon'));
+        self::assertArrayHasKey('edit', config('laravel-table.icon'));
+        self::assertArrayHasKey('destroy', config('laravel-table.icon'));
+        self::assertArrayHasKey('show', config('laravel-table.icon'));
         // laravel-table.behavior
-        $this->assertTrue(array_key_exists('rows_number', config('laravel-table.behavior')));
-        $this->assertTrue(array_key_exists('activate_rows_number_definition', config('laravel-table.behavior')));
+        self::assertArrayHasKey('rows_number', config('laravel-table.behavior'));
+        self::assertArrayHasKey('activate_rows_number_definition', config('laravel-table.behavior'));
         // laravel-table.template
-        $this->assertTrue(array_key_exists('table', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('thead', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('rows_searching', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('rows_number_definition', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('create_action', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('column_titles', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('tbody', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('show_action', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('edit_action', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('destroy_action', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('results', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('tfoot', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('navigation_status', config('laravel-table.template')));
-        $this->assertTrue(array_key_exists('pagination', config('laravel-table.template')));
+        self::assertArrayHasKey('table', config('laravel-table.template'));
+        self::assertArrayHasKey('thead', config('laravel-table.template'));
+        self::assertArrayHasKey('rows_searching', config('laravel-table.template'));
+        self::assertArrayHasKey('rows_number_definition', config('laravel-table.template'));
+        self::assertArrayHasKey('create_action', config('laravel-table.template'));
+        self::assertArrayHasKey('column_titles', config('laravel-table.template'));
+        self::assertArrayHasKey('tbody', config('laravel-table.template'));
+        self::assertArrayHasKey('show_action', config('laravel-table.template'));
+        self::assertArrayHasKey('edit_action', config('laravel-table.template'));
+        self::assertArrayHasKey('destroy_action', config('laravel-table.template'));
+        self::assertArrayHasKey('results', config('laravel-table.template'));
+        self::assertArrayHasKey('tfoot', config('laravel-table.template'));
+        self::assertArrayHasKey('navigation_status', config('laravel-table.template'));
+        self::assertArrayHasKey('pagination', config('laravel-table.template'));
     }
 
-    public function testCustomDefaultValueRowsNumber()
+    public function testCustomDefaultValueRowsNumber(): void
     {
         config()->set('laravel-table.behavior.rows_number', 9999);
         $this->createMultipleUsers(3);
@@ -77,8 +77,8 @@ class ConfigTest extends LaravelTableTestCase
             ->sortable();
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(9999, $table->getRowsNumberValue());
-        $this->assertStringContainsString('value="9999"', $html);
-        $this->assertStringContainsString('rows=9999', $html);
+        self::assertEquals(9999, $table->getRowsNumberValue());
+        self::assertStringContainsString('value="9999"', $html);
+        self::assertStringContainsString('rows=9999', $html);
     }
 }

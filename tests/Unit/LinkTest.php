@@ -8,29 +8,29 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class LinkTest extends LaravelTableTestCase
 {
-    public function testSetIsLinkAttributeEmpty()
+    public function testSetIsLinkAttributeEmpty(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->link();
-        $this->assertEquals('__VALUE__', $table->getColumns()->first()->getUrl());
+        self::assertEquals('__VALUE__', $table->getColumns()->first()->getUrl());
     }
 
-    public function testSetIsLinkAttributeString()
+    public function testSetIsLinkAttributeString(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->link('link');
-        $this->assertEquals('link', $table->getColumns()->first()->getUrl());
+        self::assertEquals('link', $table->getColumns()->first()->getUrl());
     }
 
-    public function testSetIsLinkAttributeClosure()
+    public function testSetIsLinkAttributeClosure(): void
     {
         $table = (new Table())->model(User::class);
         $closure = fn() => null;
         $table->column('name')->link($closure);
-        $this->assertEquals($closure, $table->getColumns()->first()->getUrlClosure());
+        self::assertEquals($closure, $table->getColumns()->first()->getUrlClosure());
     }
 
-    public function testIsLinkEmptyHtml()
+    public function testIsLinkEmptyHtml(): void
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -38,10 +38,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link();
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
+        self::assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
     }
 
-    public function testIsLinkStringHtml()
+    public function testIsLinkStringHtml(): void
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -49,10 +49,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link('test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<a href="test" title="' . $user->name . '">', $html);
+        self::assertStringContainsString('<a href="test" title="' . $user->name . '">', $html);
     }
 
-    public function testIsLinkClosureHtml()
+    public function testIsLinkClosureHtml(): void
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -60,10 +60,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link(fn() => 'url');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<a href="url" title="' . $user->name . '">', $html);
+        self::assertStringContainsString('<a href="url" title="' . $user->name . '">', $html);
     }
 
-    public function testIsLinkWithDefaultValueHtml()
+    public function testIsLinkWithDefaultValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -71,10 +71,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link();
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
+        self::assertStringContainsString('<a href="' . $user->name . '" title="' . $user->name . '">', $html);
     }
 
-    public function testIsLinkWithNoValueHtml()
+    public function testIsLinkWithNoValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -83,10 +83,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link();
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('<a href="', $html);
+        self::assertStringNotContainsString('<a href="', $html);
     }
 
-    public function testIsLinkWithNoValueWithPrependedHtml()
+    public function testIsLinkWithNoValueWithPrependedHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -95,10 +95,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link()->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('<a href="', $html);
+        self::assertStringNotContainsString('<a href="', $html);
     }
 
-    public function testIsLinkWithNoValueWithAppendedHtml()
+    public function testIsLinkWithNoValueWithAppendedHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -107,10 +107,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link()->appendsHtml('icon', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('<a href="', $html);
+        self::assertStringNotContainsString('<a href="', $html);
     }
 
-    public function testIsLinkWithCustomValueHtml()
+    public function testIsLinkWithCustomValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -119,10 +119,10 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link('url')->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<a href="url" title="test">', $html);
+        self::assertStringContainsString('<a href="url" title="test">', $html);
     }
 
-    public function testIsLinkWithNoValueCustomValueHtml()
+    public function testIsLinkWithNoValueCustomValueHtml(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
@@ -131,6 +131,6 @@ class LinkTest extends LaravelTableTestCase
         $table->column('name')->link()->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<a href="test" title="test">', $html);
+        self::assertStringContainsString('<a href="test" title="test">', $html);
     }
 }

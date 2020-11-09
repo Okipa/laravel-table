@@ -10,7 +10,7 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class RoutesTest extends LaravelTableTestCase
 {
-    public function testNoDeclaredRoutes()
+    public function testNoDeclaredRoutes(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » method to '
@@ -19,7 +19,7 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
     }
 
-    public function testSetRoutesSuccess()
+    public function testSetRoutesSuccess(): void
     {
         $routes = [
             'index' => ['name' => 'users.index'],
@@ -29,10 +29,10 @@ class RoutesTest extends LaravelTableTestCase
             'show' => ['name' => 'users.show'],
         ];
         $table = (new Table())->routes($routes);
-        $this->assertEquals($routes, $table->getRoutes());
+        self::assertEquals($routes, $table->getRoutes());
     }
 
-    public function testSetRoutesWithMissingIndex()
+    public function testSetRoutesWithMissingIndex(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » '
@@ -44,7 +44,7 @@ class RoutesTest extends LaravelTableTestCase
         ]);
     }
 
-    public function testSetRoutesWithWrongStructure()
+    public function testSetRoutesWithWrongStructure(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The « name » key is missing from the « create » route definition. Each route '
@@ -57,7 +57,7 @@ class RoutesTest extends LaravelTableTestCase
         ]);
     }
 
-    public function testSetRoutesWithNotAllowedKey()
+    public function testSetRoutesWithNotAllowedKey(): void
     {
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The « activate » key is not an authorized route key '
@@ -69,7 +69,7 @@ class RoutesTest extends LaravelTableTestCase
         ]);
     }
 
-    public function testGetRouteSuccess()
+    public function testGetRouteSuccess(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->routes([
@@ -79,10 +79,10 @@ class RoutesTest extends LaravelTableTestCase
             'destroy' => ['name' => 'users.destroy'],
             'show' => ['name' => 'show.destroy'],
         ]);
-        $this->assertEquals('http://localhost/users/index', $table->getRoute('index'));
+        self::assertEquals('http://localhost/users/index', $table->getRoute('index'));
     }
 
-    public function testGetRouteOnNotExistingRoute()
+    public function testGetRouteOnNotExistingRoute(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid « $routeKey » argument for the « route() » method. The route key '
@@ -92,7 +92,7 @@ class RoutesTest extends LaravelTableTestCase
         $table->getRoute('create');
     }
 
-    public function testGetRouteWithNoDeclaredRouteStack()
+    public function testGetRouteWithNoDeclaredRouteStack(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid « $routeKey » argument for the « route() » method. The route key '
@@ -100,14 +100,14 @@ class RoutesTest extends LaravelTableTestCase
         (new Table())->getRoute('update');
     }
 
-    public function testIsRouteDefined()
+    public function testIsRouteDefined(): void
     {
         $table = (new Table())->routes(['index' => ['name' => 'users.index']]);
-        $this->assertTrue($table->isRouteDefined('index'));
+        self::assertTrue($table->isRouteDefined('index'));
         $this->assertFalse($table->isRouteDefined('update'));
     }
 
-    public function testSetCreateRouteHtml()
+    public function testSetCreateRouteHtml(): void
     {
         $this->routes(['users'], ['index', 'create']);
         $table = (new Table())->routes([
@@ -117,12 +117,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('create-action', $html);
-        $this->assertStringContainsString('href="http://localhost/users/create"', $html);
-        $this->assertStringContainsString('title="Create"', $html);
+        self::assertStringContainsString('create-action', $html);
+        self::assertStringContainsString('href="http://localhost/users/create"', $html);
+        self::assertStringContainsString('title="Create"', $html);
     }
 
-    public function testSetCreateRouteWillShowCreateActionEventIfSearchingAndRowsNumberDefinitionAreDisabledHtml()
+    public function testSetCreateRouteWillShowCreateActionEventIfSearchingAndRowsNumberDefinitionAreDisabledHtml(): void
     {
         $this->routes(['users'], ['index', 'create']);
         $table = (new Table())->routes([
@@ -132,24 +132,24 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('create-action', $html);
-        $this->assertStringContainsString('href="http://localhost/users/create"', $html);
-        $this->assertStringContainsString('title="Create"', $html);
+        self::assertStringContainsString('create-action', $html);
+        self::assertStringContainsString('href="http://localhost/users/create"', $html);
+        self::assertStringContainsString('title="Create"', $html);
     }
 
-    public function testSetNoCreateRouteHtml()
+    public function testSetNoCreateRouteHtml(): void
     {
         $this->routes(['users'], ['index', 'create']);
         $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringNotContainsString('<div class="create-action', $html);
-        $this->assertStringNotContainsString('href="http://localhost/users/create"', $html);
-        $this->assertStringNotContainsString('title="Add"', $html);
+        self::assertStringNotContainsString('<div class="create-action', $html);
+        self::assertStringNotContainsString('href="http://localhost/users/create"', $html);
+        self::assertStringNotContainsString('title="Add"', $html);
     }
 
-    public function testSetEditRouteHtml()
+    public function testSetEditRouteHtml(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'edit']);
@@ -161,12 +161,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
-            $this->assertStringContainsString('edit-' . $user->id, $html);
-            $this->assertStringContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
+            self::assertStringContainsString('edit-' . $user->id, $html);
+            self::assertStringContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
         }
     }
 
-    public function testSetNoEditRouteHtml()
+    public function testSetNoEditRouteHtml(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'edit']);
@@ -175,12 +175,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
-            $this->assertStringNotContainsString('<form class="edit-' . $user->id, $html);
-            $this->assertStringNotContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
+            self::assertStringNotContainsString('<form class="edit-' . $user->id, $html);
+            self::assertStringNotContainsString('href="http://localhost/users/edit?' . $user->id . '"', $html);
         }
     }
 
-    public function testSetDestroyRouteHtml()
+    public function testSetDestroyRouteHtml(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'destroy']);
@@ -192,12 +192,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
-            $this->assertStringContainsString('destroy-' . $user->id, $html);
-            $this->assertStringContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
+            self::assertStringContainsString('destroy-' . $user->id, $html);
+            self::assertStringContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
         }
     }
 
-    public function testSetNoDestroyRouteHtml()
+    public function testSetNoDestroyRouteHtml(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'destroy']);
@@ -206,12 +206,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
-            $this->assertStringNotContainsString('<form class="destroy-' . $user->id, $html);
-            $this->assertStringNotContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
+            self::assertStringNotContainsString('<form class="destroy-' . $user->id, $html);
+            self::assertStringNotContainsString('action="http://localhost/users/destroy?' . $user->id . '"', $html);
         }
     }
 
-    public function testSetShowRouteHtml()
+    public function testSetShowRouteHtml(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'show']);
@@ -223,12 +223,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
-            $this->assertStringContainsString('show-' . $user->id, $html);
-            $this->assertStringContainsString('href="http://localhost/users/show?' . $user->id . '"', $html);
+            self::assertStringContainsString('show-' . $user->id, $html);
+            self::assertStringContainsString('href="http://localhost/users/show?' . $user->id . '"', $html);
         }
     }
 
-    public function testSetNoShowRouteHtml()
+    public function testSetNoShowRouteHtml(): void
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'show']);
@@ -237,12 +237,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         foreach ($users as $user) {
-            $this->assertStringNotContainsString('<form class="show-' . $user->id, $html);
-            $this->assertStringNotContainsString('href="http://localhost/users/show?' . $user->id . '"', $html);
+            self::assertStringNotContainsString('<form class="show-' . $user->id, $html);
+            self::assertStringNotContainsString('href="http://localhost/users/show?' . $user->id . '"', $html);
         }
     }
 
-    public function testSetRouteDefinitionWithProvidedId()
+    public function testSetRouteDefinitionWithProvidedId(): void
     {
         $user = $this->createUniqueUser();
         app('router')->get('/users', ['as' => 'users.index', fn() => null]);
@@ -258,12 +258,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('href="http://localhost/user/show/' . $user->id . '"', $html);
-        $this->assertStringContainsString('href="http://localhost/user/edit/' . $user->id . '"', $html);
-        $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
+        self::assertStringContainsString('href="http://localhost/user/show/' . $user->id . '"', $html);
+        self::assertStringContainsString('href="http://localhost/user/edit/' . $user->id . '"', $html);
+        self::assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
     }
 
-    public function testSetImplicitBindingRoutes()
+    public function testSetImplicitBindingRoutes(): void
     {
         $user = $this->createUniqueUser();
         app('router')->get('/users', ['as' => 'users.index', fn() => null]);
@@ -279,12 +279,12 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('href="http://localhost/user/show/' . $user->id . '"', $html);
-        $this->assertStringContainsString('href="http://localhost/user/edit/' . $user->id . '"', $html);
-        $this->assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
+        self::assertStringContainsString('href="http://localhost/user/show/' . $user->id . '"', $html);
+        self::assertStringContainsString('href="http://localhost/user/edit/' . $user->id . '"', $html);
+        self::assertStringContainsString('action="http://localhost/user/destroy/' . $user->id . '"', $html);
     }
 
-    public function testSetRouteDefinitionWithProvidedIdAndOtherRouteParams()
+    public function testSetRouteDefinitionWithProvidedIdAndOtherRouteParams(): void
     {
         $user = $this->createUniqueUser();
         app('router')->get('/users', ['as' => 'users.index', fn() => null]);
@@ -302,21 +302,21 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'href="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html
         );
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'action="http://localhost/parent/11/user/destroy/' . $user->id . '/child/33',
             $html
         );
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'href="http://localhost/parent/11/user/show/' . $user->id . '/child/33',
             $html
         );
     }
 
-    public function testSetImplicitBindingRoutesWithOtherRouteParams()
+    public function testSetImplicitBindingRoutesWithOtherRouteParams(): void
     {
         $user = $this->createUniqueUser();
         app('router')->get('/users', ['as' => 'users.index', fn() => null]);
@@ -334,15 +334,15 @@ class RoutesTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'href="http://localhost/parent/11/user/edit/' . $user->id . '/child/33"',
             $html
         );
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'action="http://localhost/parent/11/user/destroy/' . $user->id . '/child/33',
             $html
         );
-        $this->assertStringContainsString(
+        self::assertStringContainsString(
             'href="http://localhost/parent/11/user/show/' . $user->id . '/child/33',
             $html
         );

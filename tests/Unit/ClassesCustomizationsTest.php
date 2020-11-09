@@ -8,72 +8,72 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ClassesCustomizationsTest extends LaravelTableTestCase
 {
-    public function testContainerClassesAttribute()
+    public function testContainerClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class)->containerClasses($classes);
         $table->column();
-        $this->assertEquals($classes, $table->getContainerClasses());
+        self::assertEquals($classes, $table->getContainerClasses());
     }
 
-    public function testTableClassesAttribute()
+    public function testTableClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class)->tableClasses($classes);
         $table->column();
-        $this->assertEquals($classes, $table->getTableClasses());
+        self::assertEquals($classes, $table->getTableClasses());
     }
 
-    public function testTrClassesAttribute()
+    public function testTrClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class)->trClasses($classes);
         $table->column();
-        $this->assertEquals($classes, $table->getTrClasses());
+        self::assertEquals($classes, $table->getTrClasses());
     }
 
-    public function testThClassesAttribute()
+    public function testThClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class)->thClasses($classes);
         $table->column();
-        $this->assertEquals($classes, $table->getThClasses());
+        self::assertEquals($classes, $table->getThClasses());
     }
 
-    public function testTdClassesAttribute()
+    public function testTdClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class)->tdClasses($classes);
         $table->column();
-        $this->assertEquals($classes, $table->getTdClasses());
+        self::assertEquals($classes, $table->getTdClasses());
     }
 
-    public function testColumnClassesAttribute()
+    public function testColumnClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class);
         $table->column()->classes($classes);
-        $this->assertEquals($classes, $table->getColumns()->first()->getClasses());
+        self::assertEquals($classes, $table->getColumns()->first()->getClasses());
     }
 
-    public function testResultClassesAttribute()
+    public function testResultClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
         $table = (new Table())->model(User::class);
         $table->result()->classes($classes);
-        $this->assertEquals($classes, $table->getResults()->first()->getClasses());
+        self::assertEquals($classes, $table->getResults()->first()->getClasses());
     }
 
-    public function testRowConditionalClassesAttribute()
+    public function testRowConditionalClassesAttribute(): void
     {
         $closure = fn($model) => $model->id === 1;
         $classes = ['test-custom-class'];
         $table = (new Table())->rowsConditionalClasses($closure, $classes);
-        $this->assertEquals($closure, $table->getRowsConditionalClasses()->first()['closure']);
-        $this->assertEquals($classes, $table->getRowsConditionalClasses()->first()['classes']);
+        self::assertEquals($closure, $table->getRowsConditionalClasses()->first()['closure']);
+        self::assertEquals($classes, $table->getRowsConditionalClasses()->first()['classes']);
     }
 
-    public function testContainerClassesHtml()
+    public function testContainerClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -84,10 +84,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('<div class="table-container ' . implode(' ', $classes) . '">', $html);
+        self::assertStringContainsString('<div class="table-container ' . implode(' ', $classes) . '">', $html);
     }
 
-    public function testTableClassesHtml()
+    public function testTableClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -99,10 +99,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
 
-        $this->assertStringContainsString('<table class="table ' . implode(' ', $classes) . '">', $html);
+        self::assertStringContainsString('<table class="table ' . implode(' ', $classes) . '">', $html);
     }
 
-    public function testTrClassesHtml()
+    public function testTrClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -113,10 +113,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(substr_count($html, '<tr '), substr_count($html, implode(' ', $classes)));
+        self::assertEquals(substr_count($html, '<tr '), substr_count($html, implode(' ', $classes)));
     }
 
-    public function testThClassesHtml()
+    public function testThClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -127,10 +127,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(substr_count($html, '<th '), substr_count($html, implode(' ', $classes)));
+        self::assertEquals(substr_count($html, '<th '), substr_count($html, implode(' ', $classes)));
     }
 
-    public function testTdClassesHtml()
+    public function testTdClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -141,10 +141,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(substr_count($html, '<td '), substr_count($html, implode(' ', $classes)));
+        self::assertEquals(substr_count($html, '<td '), substr_count($html, implode(' ', $classes)));
     }
 
-    public function testColumnClassesHtml()
+    public function testColumnClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -153,10 +153,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->column('name')->classes($classes);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
+        self::assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
 
-    public function testResultClassesHtml()
+    public function testResultClassesHtml(): void
     {
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
@@ -167,10 +167,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->result()->classes($classes);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        $this->assertEquals(1, substr_count($html, implode(' ', $classes)));
+        self::assertEquals(1, substr_count($html, implode(' ', $classes)));
     }
 
-    public function testRowConditionalClassesHtml()
+    public function testRowConditionalClassesHtml(): void
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
@@ -187,11 +187,11 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
             $closure($user)
-                ? $this->assertEquals($user->conditionnal_classes, $classes)
-                : $this->assertEmpty($user->conditionnal_classes);
+                ? self::assertEquals($user->conditionnal_classes, $classes)
+                : self::assertEmpty($user->conditionnal_classes);
         }
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString(implode(' ', $classes), $html);
-        $this->assertEquals(2, substr_count($html, implode(' ', $classes)));
+        self::assertStringContainsString(implode(' ', $classes), $html);
+        self::assertEquals(2, substr_count($html, implode(' ', $classes)));
     }
 }

@@ -36,13 +36,6 @@ abstract class LaravelTableTestCase extends TestCase
         ]);
     }
 
-    /**
-     * Get package providers.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
-     */
     protected function getPackageProviders($app): array
     {
         return [LaravelTableServiceProvider::class];

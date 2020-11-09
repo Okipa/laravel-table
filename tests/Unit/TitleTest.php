@@ -8,14 +8,14 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class TitleTest extends LaravelTableTestCase
 {
-    public function testTitleAttribute()
+    public function testTitleAttribute(): void
     {
         $table = (new Table())->model(User::class);
         $table->column('name')->title('Name');
-        $this->assertEquals('Name', $table->getColumns()->first()->getTitle());
+        self::assertEquals('Name', $table->getColumns()->first()->getTitle());
     }
 
-    public function testTitleHtml()
+    public function testTitleHtml(): void
     {
         $this->routes(['users'], ['index']);
         $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
@@ -23,7 +23,7 @@ class TitleTest extends LaravelTableTestCase
         $table->column('email')->title('Email');
         $table->configure();
         $html = view('laravel-table::' . $table->getTheadTemplatePath(), compact('table'))->toHtml();
-        $this->assertStringContainsString('Name', $html);
-        $this->assertStringContainsString('Email', $html);
+        self::assertStringContainsString('Name', $html);
+        self::assertStringContainsString('Email', $html);
     }
 }
