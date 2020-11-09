@@ -8,7 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build status](https://github.com/Okipa/laravel-table/workflows/CI/badge.svg)](https://github.com/Okipa/laravel-table/actions)
 [![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-table?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-table.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-table/?branch=master)
 
 Easily render tables from Eloquent models in your views.
   
