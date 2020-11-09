@@ -16,7 +16,7 @@ class DummyClass extends AbstractTable
      */
     protected function table(): Table
     {
-        return (new Table)->model(DummyModelClass::class)
+        return (new Table())->model(DummyModelClass::class)
             ->routes([
                 'index'   => ['name' => 'dummyRoutes.index'],
                 'create'  => ['name' => 'dummyRoute.create'],

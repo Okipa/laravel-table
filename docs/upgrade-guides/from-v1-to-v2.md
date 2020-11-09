@@ -26,7 +26,7 @@ To follow the package upgrade, you should execute the following steps for each t
 
 * Create the table configuration boilerplate. Eg: `php artisan make:table UsersTable --model=App/User`.
 * Move your table configuration in the created table class.
-* Call your table configuration like following (in your controller for example): `$table = (new UsersTable)->setup();` and pass it to the view.
+* Call your table configuration like following (in your controller for example): `$table = (new UsersTable())->setup();` and pass it to the view.
 * Display your table in your view as usual: `{{ $table }}`.
 
 ## API changes
@@ -45,14 +45,14 @@ There are small changes in the API you will have to report in your code:
 If for any reason you need to work with the table rows, you now will have to do it this way:
 
 ```php
-$table = (new UsersTable)->setup();
+$table = (new UsersTable())->setup();
 $rows = $table->getPaginator()->getCollection();
 ```
 
 Instead of this way in previous versions:
 
 ```php
-$table = (new Table);
+$table = (new Table());
 // ... Any table configuration
 $table->render();
 $table->list->getCollection();

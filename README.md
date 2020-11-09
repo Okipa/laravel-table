@@ -49,7 +49,7 @@ class UsersTable extends AbstractTable
 {
     protected function table(): Table
     {
-        return (new Table)->model(User::class)
+        return (new Table())->model(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'user.create'],
@@ -84,7 +84,7 @@ class UsersController
 {
     public function index(): View
     {
-        $table = (new UsersTable)->setup();
+        $table = (new UsersTable())->setup();
     
         return view('templates.users.index', compact('table'));
     }
@@ -167,7 +167,7 @@ Finally, display it in the view:
 * Install the package with composer:
 
 ```bash
-composer require "okipa/laravel-table:^3.0"
+composer require okipa/laravel-table
 ```
 
 ## Configuration
@@ -230,7 +230,7 @@ class NewsTable extends AbstractTable
 
     protected function table(): Table
     {
-        return (new Table)->model(News::class)
+        return (new Table())->model(News::class)
             ->identifier('news-table')
             ->request($this->request)
             ->routes([
@@ -328,7 +328,7 @@ class NewsTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->model(User::class);
+(new Table())->model(User::class);
 ```
 
 <h3 id="table-identifier">identifier</h3>
@@ -343,7 +343,7 @@ class NewsTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->identifier('users-table');
+(new Table())->identifier('users-table');
 ```
 
 <h3 id="table-request">request</h3>
@@ -391,7 +391,7 @@ class UsersTable extends AbstractTable
 
     protected function table(): Table
     {
-        return (new Table)->model(User::class)->request($this->request);
+        return (new Table())->model(User::class)->request($this->request);
     }
 
     // ...
@@ -437,7 +437,7 @@ class UsersTable extends AbstractTable
     // Assuming your declared your route with implicit binding:
     Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
     // You will have to declare your params with keys as following:
-    (new Table)->model(User::class)->routes([
+    (new Table())->model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
@@ -450,7 +450,7 @@ class UsersTable extends AbstractTable
     // Now imagine your route is declared with the table related model as first param like this:
     Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
     // In this case only, you will be able to declare your routes without keys:
-    (new Table)->model(User::class)->routes([
+    (new Table())->model(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherParam']],
         // ...
@@ -462,7 +462,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->routes([
+(new Table())->routes([
     'index' => ['name' => 'news.index'],
     'create' => ['name' => 'news.create', 'params' => ['param1' => 'value1']],
     'edit' => ['name' => 'news.edit', 'params' => ['param2' => 'value2']],
@@ -485,9 +485,9 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->rowsNumber(50);
+(new Table())->rowsNumber(50);
 // Or
-(new Table)->rowsNumber(null);
+(new Table())->rowsNumber(null);
 ```
 
 <h3 id="table-activateRowsNumberDefinition">activateRowsNumberDefinition</h3>
@@ -504,7 +504,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->activateRowsNumberDefinition(false);
+(new Table())->activateRowsNumberDefinition(false);
 ```
 
 <h3 id="table-query">query</h3>
@@ -521,7 +521,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->query(function(Builder $query){
+(new Table())->query(function(Builder $query){
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('users', 'users.id', '=', 'companies.owner_id');
@@ -545,7 +545,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->appendData(request()->only('status'));
+(new Table())->appendData(request()->only('status'));
 ```
 
 <h3 id="table-containerClasses">containerClasses</h3>
@@ -561,7 +561,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->containerClasses(['set', 'your', 'classes']);
+(new Table())->containerClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tableClasses">tableClasses</h3>
@@ -577,7 +577,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->tableClasses(['set', 'your', 'classes']);
+(new Table())->tableClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-trClasses">trClasses</h3>
@@ -593,7 +593,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->trClasses(['set', 'your', 'classes']);
+(new Table())->trClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-thClasses">thClasses</h3>
@@ -609,7 +609,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->thClasses(['set', 'your', 'classes']);
+(new Table())->thClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-tdClasses">tdClasses</h3>
@@ -625,7 +625,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->tdClasses(['set', 'your', 'classes']);
+(new Table())->tdClasses(['set', 'your', 'classes']);
 ```
 
 <h3 id="table-rowsConditionalClasses">rowsConditionalClasses</h3>
@@ -641,7 +641,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->rowsConditionalClasses(function(User $user){
+(new Table())->rowsConditionalClasses(function(User $user){
     return $model->hasParticularAttribute;
 }, ['set', 'your', 'classes']);
 ```
@@ -660,7 +660,7 @@ class UsersTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table)->destroyHtmlAttributes(fn(User $user) => ['data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])]);
+(new Table())->destroyHtmlAttributes(fn(User $user) => ['data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])]);
 ```
 
 **Javascript snippet example:**
@@ -697,7 +697,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->disableRows(fn(User $user) => $user->id = auth()->id(), ['bg-danger', 'text-primary']);
+(new Table())->disableRows(fn(User $user) => $user->id = auth()->id(), ['bg-danger', 'text-primary']);
 ```
 
 <h3 id="table-tableTemplate">tableTemplate</h3>
@@ -713,7 +713,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->tableTemplate('tailwindCss.table');
+(new Table())->tableTemplate('tailwindCss.table');
 ```
 
 <h3 id="table-theadTemplate">theadTemplate</h3>
@@ -729,7 +729,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->theadTemplate('tailwindCss.thead');
+(new Table())->theadTemplate('tailwindCss.thead');
 ```
 
 <h3 id="table-rowsSearchingTemplate">rowsSearchingTemplate</h3>
@@ -745,7 +745,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->rowsSearchingTemplate('tailwindCss.rows-searching');
+(new Table())->rowsSearchingTemplate('tailwindCss.rows-searching');
 ```
 
 <h3 id="table-rowsNumberDefinitionTemplate">rowsNumberDefinitionTemplate</h3>
@@ -761,7 +761,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->rowsSearchingTemplate('tailwindCss.rows-number-definition');
+(new Table())->rowsSearchingTemplate('tailwindCss.rows-number-definition');
 ```
 
 <h3 id="table-createActionTemplate">createActionTemplate</h3>
@@ -777,7 +777,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->createActionTemplate('tailwindCss.create-action');
+(new Table())->createActionTemplate('tailwindCss.create-action');
 ```
 
 <h3 id="table-columnTitlesTemplate">columnTitlesTemplate</h3>
@@ -793,7 +793,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->columnTitlesTemplate('tailwindCss.column-titles');
+(new Table())->columnTitlesTemplate('tailwindCss.column-titles');
 ```
 
 <h3 id="table-tbodyTemplate">tbodyTemplate</h3>
@@ -809,7 +809,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->tbodyTemplate('tailwindCss.tbody');
+(new Table())->tbodyTemplate('tailwindCss.tbody');
 ```
 
 <h3 id="table-showActionTemplate">showActionTemplate</h3>
@@ -825,7 +825,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->showActionTemplate('tailwindCss.show-action');
+(new Table())->showActionTemplate('tailwindCss.show-action');
 ```
 
 <h3 id="table-editActionTemplate">editActionTemplat</h3>
@@ -841,7 +841,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->editActionTemplate('tailwindCss.edit-action');
+(new Table())->editActionTemplate('tailwindCss.edit-action');
 ```
 
 <h3 id="table-destroyActionTemplate">destroyActionTemplate</h3>
@@ -857,7 +857,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->destroyActionTemplate('tailwindCss.destroy-action');
+(new Table())->destroyActionTemplate('tailwindCss.destroy-action');
 ```
 
 <h3 id="table-resultsTemplate">resultsTemplate</h3>
@@ -873,7 +873,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->resultsTemplate('tailwindCss.results');
+(new Table())->resultsTemplate('tailwindCss.results');
 ```
 
 <h3 id="table-tfootTemplate">tfootTemplate</h3>
@@ -889,7 +889,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->tfootTemplate('tailwindCss.tfoot');
+(new Table())->tfootTemplate('tailwindCss.tfoot');
 ```
 
 <h3 id="table-navigationStatusTemplate">navigationStatusTemplate</h3>
@@ -905,7 +905,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->navigationStatusTemplate('tailwindCss.navigation-status');
+(new Table())->navigationStatusTemplate('tailwindCss.navigation-status');
 ```
 
 <h3 id="table-paginationTemplate">paginationTemplate</h3>
@@ -921,7 +921,7 @@ destroyButtons.click((event) => {
 **Use case example:**
 
 ```php
-(new Table)->paginationTemplate('tailwindCss.pagination');
+(new Table())->paginationTemplate('tailwindCss.pagination');
 ```
 
 <h3 id="table-column">column</h3>
@@ -1029,7 +1029,7 @@ $table->column('email')->sortable(true, 'desc');
 $table->column('email')->searchable();
 
 // Example 2
-$table = (new Table)->model(User::class)->query(function(Builder $query) {
+$table = (new Table())->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('companies', 'companies.owner_id', '=', 'users.id');
@@ -1037,7 +1037,7 @@ $table = (new Table)->model(User::class)->query(function(Builder $query) {
 $table->column('company')->searchable('companies', ['name']);
 
 // Example 3
-$table = (new Table)->model(User::class)->query(function(Builder $query) {
+$table = (new Table())->model(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
     $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');
