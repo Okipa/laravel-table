@@ -38,13 +38,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: common, curl, json, mbstring, zip, sqlite, pdo_sqlite
-          coverage: xdebug
+          extensions: curl, json, mbstring, zip, sqlite, pdo_sqlite
+          coverage: pcov
 
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-suggest
+          composer update --prefer-dist --no-interaction
 
       # lower php and laravel versions
 
