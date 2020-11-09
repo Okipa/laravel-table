@@ -1,8 +1,9 @@
 # Changelog
 
-## [3.2.0](https://github.com/Okipa/laravel-table/compare/3.1.3...3.2.0)
+## [4.0.0](https://github.com/Okipa/laravel-table/compare/3.1.3...4.0.0)
 
 * Added PHP 8 support
+* Upgraded https://github.com/Okipa/laravel-html-helper to v4: you should follow the upgrade guide if you published the package views
 * Removed Scrutinizer analysis
 
 ## [3.1.3](https://github.com/Okipa/laravel-table/compare/3.1.2...3.1.3)
