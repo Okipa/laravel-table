@@ -11,7 +11,7 @@ class EmptyStatusTest extends LaravelTableTestCase
     public function testEmptyListHtml()
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -23,7 +23,7 @@ class EmptyStatusTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
         $table->configure();

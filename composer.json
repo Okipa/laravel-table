@@ -28,7 +28,7 @@
     ],
     "require": {
         "ext-pdo": "*",
-        "php": "^7.4",
+        "php": "^7.4||^8.0",
         "illuminate/support": "^7.0||^8.0",
         "okipa/laravel-html-helper": "^1.4"
     },
@@ -53,8 +53,8 @@
             "vendor/bin/phpcbf",
             "vendor/bin/phpcs",
             "vendor/bin/phpmd config,src text phpmd.xml",
-            "vendor/bin/phpstan analyse --error-format=table --memory-limit=2048M",
-            "vendor/bin/phpunit"
+            "vendor/bin/phpstan analyse --error-format=table --memory-limit=-1",
+            "vendor/bin/phpunit -d memory_limit=-1 --testdox --coverage-text"
         ]
     },
     "extra": {

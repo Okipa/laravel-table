@@ -22,7 +22,7 @@ class Company extends Model
         'owner_id',
         'turnover'
     ];
-    
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');

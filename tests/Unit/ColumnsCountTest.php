@@ -10,7 +10,7 @@ class ColumnsCountTest extends LaravelTableTestCase
 {
     public function testGetColumnsCount()
     {
-        $table = (new Table)->model(User::class);
+        $table = (new Table())->model(User::class);
         $table->column('id');
         $table->column('name');
         $table->column('email');
@@ -20,7 +20,7 @@ class ColumnsCountTest extends LaravelTableTestCase
     public function testGetColumnsCountWithEditRouteDefined()
     {
         $this->routes(['users'], ['index', 'edit']);
-        $table = (new Table)->model(User::class)->routes([
+        $table = (new Table())->model(User::class)->routes([
             'index' => ['name' => 'users.index'],
             'edit'  => ['name' => 'users.edit'],
         ]);

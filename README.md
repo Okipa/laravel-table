@@ -12,7 +12,7 @@
 
 Easily render tables from Eloquent models in your views.
   
-This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAwesome 5` but can quickly be reconfigured to work with any UI framework.
+This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAwesome 5` but can be fully reconfigured to work with any UI framework.
 
 ## Compatibility
 

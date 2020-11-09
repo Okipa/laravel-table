@@ -11,12 +11,12 @@ use Orchestra\Testbench\TestCase;
 
 abstract class LaravelTableTestCase extends TestCase
 {
-    /** @var \Faker\Factory $faker */
-    protected $faker;
-
     use RoutesFaker;
     use UsersFaker;
     use CompaniesFaker;
+
+    /** @var \Faker\Factory $faker */
+    protected $faker;
 
     /**
      * Define environment setup.
@@ -48,9 +48,7 @@ abstract class LaravelTableTestCase extends TestCase
         return [LaravelTableServiceProvider::class];
     }
 
-    /**
-     * Setup the test environment.
-     */
+    /** Setup the test environment. */
     protected function setUp(): void
     {
         parent::setUp();

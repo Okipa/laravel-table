@@ -16,7 +16,7 @@ trait HasResults
 
     public function result(): Result
     {
-        $result = new Result;
+        $result = new Result();
         $this->getResults()->push($result);
 
         return $result;

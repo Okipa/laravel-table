@@ -15,7 +15,7 @@ class RoutesTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » method to '
             . 'declare it.');
-        $table = (new Table)->model(User::class);
+        $table = (new Table())->model(User::class);
         $table->configure();
     }
 
@@ -28,7 +28,7 @@ class RoutesTest extends LaravelTableTestCase
             'destroy' => ['name' => 'users.destroy'],
             'show' => ['name' => 'users.show'],
         ];
-        $table = (new Table)->routes($routes);
+        $table = (new Table())->routes($routes);
         $this->assertEquals($routes, $table->getRoutes());
     }
 
@@ -37,7 +37,7 @@ class RoutesTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The required « index » route key is missing. Use the « routes() » '
             . 'method to declare it.');
-        (new Table)->routes([
+        (new Table())->routes([
             'create' => ['name' => 'users.create'],
             'edit' => ['name' => 'users.edit'],
             'destroy' => ['name' => 'users.destroy'],
@@ -51,7 +51,7 @@ class RoutesTest extends LaravelTableTestCase
             . 'definition should follow this structure: '
             . '["index" => ["name" => "news.index"]. Fix your routes declaration in the '
             . '« routes() » method.');
-        (new Table)->routes([
+        (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'create' => ['test' => 'test'],
         ]);
@@ -63,7 +63,7 @@ class RoutesTest extends LaravelTableTestCase
         $this->expectExceptionMessage('The « activate » key is not an authorized route key '
             . '(index, create, edit, destroy, show). Fix your routes declaration in the '
             . '« routes() » method.');
-        (new Table)->routes([
+        (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'activate' => ['name' => 'users.activate'],
         ]);
@@ -72,7 +72,7 @@ class RoutesTest extends LaravelTableTestCase
     public function testGetRouteSuccess()
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'create' => ['name' => 'users.create'],
             'edit' => ['name' => 'users.edit'],
@@ -88,7 +88,7 @@ class RoutesTest extends LaravelTableTestCase
         $this->expectExceptionMessage('Invalid « $routeKey » argument for the « route() » method. The route key '
             . '« create » has not been found in the routes stack.');
         $routes = ['index' => ['name' => 'users.index']];
-        $table = (new Table)->routes($routes);
+        $table = (new Table())->routes($routes);
         $table->getRoute('create');
     }
 
@@ -97,12 +97,12 @@ class RoutesTest extends LaravelTableTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid « $routeKey » argument for the « route() » method. The route key '
             . '« update » has not been found in the routes stack.');
-        (new Table)->getRoute('update');
+        (new Table())->getRoute('update');
     }
 
     public function testIsRouteDefined()
     {
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']]);
         $this->assertTrue($table->isRouteDefined('index'));
         $this->assertFalse($table->isRouteDefined('update'));
     }
@@ -110,7 +110,7 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetCreateRouteHtml()
     {
         $this->routes(['users'], ['index', 'create']);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'create' => ['name' => 'users.create'],
         ])->model(User::class);
@@ -125,7 +125,7 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetCreateRouteWillShowCreateActionEventIfSearchingAndRowsNumberDefinitionAreDisabledHtml()
     {
         $this->routes(['users'], ['index', 'create']);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'create' => ['name' => 'users.create'],
         ])->model(User::class)->activateRowsNumberDefinition(false);
@@ -140,7 +140,7 @@ class RoutesTest extends LaravelTableTestCase
     public function testSetNoCreateRouteHtml()
     {
         $this->routes(['users'], ['index', 'create']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();
@@ -153,7 +153,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'edit']);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'users.edit'],
         ])->model(User::class);
@@ -170,7 +170,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'edit']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -184,7 +184,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'destroy']);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'destroy' => ['name' => 'users.destroy'],
         ])->model(User::class);
@@ -201,7 +201,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'destroy']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -215,7 +215,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'show']);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'show' => ['name' => 'users.show'],
         ])->model(User::class);
@@ -232,7 +232,7 @@ class RoutesTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index', 'show']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -249,7 +249,7 @@ class RoutesTest extends LaravelTableTestCase
         app('router')->get('/user/edit/{id}', ['as' => 'user.edit', fn() => null]);
         app('router')->post('/user/destroy/{id}', ['as' => 'user.destroy', fn() => null]);
         app('router')->get('/user/show/{id}', ['as' => 'user.show', fn() => null]);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit'],
             'destroy' => ['name' => 'user.destroy'],
@@ -270,7 +270,7 @@ class RoutesTest extends LaravelTableTestCase
         app('router')->get('/user/edit/{user}', ['as' => 'user.edit', fn() => null]);
         app('router')->post('/user/destroy/{user}', ['as' => 'user.destroy', fn() => null]);
         app('router')->get('/user/show/{user}', ['as' => 'user.show', fn() => null]);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit'],
             'destroy' => ['name' => 'user.destroy'],
@@ -293,7 +293,7 @@ class RoutesTest extends LaravelTableTestCase
             'as' => 'user.destroy', fn() => null
         ]);
         app('router')->get('/parent/{parentId}/user/show/{id}/child/{childId}', ['as' => 'user.show', fn() => null]);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit', 'params' => ['parentId' => 11, 'childId' => 33]],
             'destroy' => ['name' => 'user.destroy', 'params' => ['parentId' => 11, 'childId' => 33]],
@@ -325,7 +325,7 @@ class RoutesTest extends LaravelTableTestCase
             'as' => 'user.destroy', fn () => null
         ]);
         app('router')->get('/parent/{parent}/user/show/{user}/child/{child}', ['as' => 'user.show', fn() => null]);
-        $table = (new Table)->routes([
+        $table = (new Table())->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'user.edit', 'params' => ['parent' => 11, 'child' => 33]],
             'destroy' => ['name' => 'user.destroy', 'params' => ['parent' => 11, 'child' => 33]],

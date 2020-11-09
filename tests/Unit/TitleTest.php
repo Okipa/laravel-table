@@ -10,7 +10,7 @@ class TitleTest extends LaravelTableTestCase
 {
     public function testTitleAttribute()
     {
-        $table = (new Table)->model(User::class);
+        $table = (new Table())->model(User::class);
         $table->column('name')->title('Name');
         $this->assertEquals('Name', $table->getColumns()->first()->getTitle());
     }
@@ -18,7 +18,7 @@ class TitleTest extends LaravelTableTestCase
     public function testTitleHtml()
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table)->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
         $table->configure();

@@ -10,7 +10,7 @@ class CustomValueTest extends LaravelTableTestCase
 {
     public function testSetIsCustomValueAttribute()
     {
-        $table = (new Table)->model(User::class);
+        $table = (new Table())->model(User::class);
         $closure = fn(User $user) => null;
         $table->column('name')->value($closure);
         $this->assertEquals($closure, $table->getColumns()->first()->getCustomValueClosure());
@@ -20,7 +20,7 @@ class CustomValueTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('updated_at')->value(fn($model) => 'user name = ' . $model->name);
         $table->configure();

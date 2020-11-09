@@ -10,7 +10,7 @@ class AppendTest extends LaravelTableTestCase
 {
     public function testSetAppendAttribute()
     {
-        $table = (new Table)->model(User::class);
+        $table = (new Table())->model(User::class);
         $table->column('name')->appendsHtml('html');
         $this->assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
         $this->assertEquals(false, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
@@ -18,7 +18,7 @@ class AppendTest extends LaravelTableTestCase
 
     public function testSetAppendAttributeAndSetShowWithNoValue()
     {
-        $table = (new Table)->model(User::class);
+        $table = (new Table())->model(User::class);
         $table->column('name')->appendsHtml('html', true);
         $this->assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
         $this->assertEquals(true, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
@@ -28,7 +28,7 @@ class AppendTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->appendsHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -39,7 +39,7 @@ class AppendTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(1);
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->appendsHtml('html')->value(fn() =>'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -51,7 +51,7 @@ class AppendTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->appendsHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -63,7 +63,7 @@ class AppendTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->appendsHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();

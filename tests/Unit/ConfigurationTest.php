@@ -13,7 +13,7 @@ class ConfigurationTest extends LaravelTableTestCase
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $this->assertFalse($table->hasBeenConfigured());
         $table->toHtml();
@@ -24,7 +24,7 @@ class ConfigurationTest extends LaravelTableTestCase
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $this->assertFalse($table->hasBeenConfigured());
         $table->configure();
@@ -35,7 +35,7 @@ class ConfigurationTest extends LaravelTableTestCase
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table)->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->configure();
         $table->column('email');
