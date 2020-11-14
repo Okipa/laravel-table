@@ -4,7 +4,7 @@
 
 2020-09-14
 
-* Fixed wrong okipa/laravel-html-helper version in composer.json
+* Fixed wrong `okipa/laravel-html-helper` version in composer.json
 
 ## [4.0.0](https://github.com/Okipa/laravel-table/compare/3.1.3...4.0.0)
 
