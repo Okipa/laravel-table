@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.0.1](https://github.com/Okipa/laravel-table/compare/4.0.0...4.0.1)
+
+2020-09-14
+
+* Fixed wrong okipa/laravel-html-helper version in composer.json
+
 ## [4.0.0](https://github.com/Okipa/laravel-table/compare/3.1.3...4.0.0)
 
 2020-09-14
