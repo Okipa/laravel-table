@@ -28,6 +28,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 | Laravel version | PHP version | Package version |
 |---|---|---|
 | ^7.0 | ^7.4 | ^4.0 |
+| ^7.0 | ^7.4 | ^3.0 |
 | ^6.0 | ^7.4 | ^2.0 |
 | ^5.8 | ^7.2 | ^1.3 |
 | ^5.5 | ^7.1 | ^1.0 |
