@@ -1,13 +1,23 @@
-# Generate tables from Eloquent models
+![Laravel Table](/docs/laravel-table.png)
+<p align="center">
+    <a href="https://github.com/Okipa/laravel-table/releases" title="Latest Stable Version">
+        <img src="https://img.shields.io/github/release/Okipa/laravel-table.svg?style=flat-square" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/Okipa/laravel-table" title="Total Downloads">
+        <img src="https://img.shields.io/packagist/dt/okipa/laravel-table.svg?style=flat-square" alt="Total Downloads">
+    </a>
+    <a href="https://github.com/Okipa/laravel-table/actions" title="Build Status">
+        <img src="https://github.com/Okipa/laravel-table/workflows/CI/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://coveralls.io/github/Okipa/laravel-table?branch=master" title="Coverage Status">
+        <img src="https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master" alt="Coverage Status">
+    </a>
+    <a href="https://img.shields.io/badge/License-MIT-blue.svg" title="License: MIT">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+    </a>
+</p>
 
-![Laravel table](docs/laravel-table-preview.png)
-
-[![Source Code](https://img.shields.io/badge/source-okipa/laravel--table-blue.svg)](https://github.com/Okipa/laravel-table)
-[![Latest Version](https://img.shields.io/github/release/okipa/laravel-table.svg?style=flat-square)](https://github.com/Okipa/laravel-table/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/okipa/laravel-table.svg?style=flat-square)](https://packagist.org/packages/okipa/laravel-table)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build status](https://github.com/Okipa/laravel-table/workflows/CI/badge.svg)](https://github.com/Okipa/laravel-table/actions)
-[![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-table?branch=master)
+![Generate tables from Eloquent models](docs/laravel-table-preview.png)
 
 Easily render tables from Eloquent models in your views.
   
@@ -25,6 +35,7 @@ This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAw
 
 ## Upgrade guide
 
+* [From V3 to V4](/docs/upgrade-guides/from-v3-to-v4.md)
 * [From V2 to V3](/docs/upgrade-guides/from-v2-to-v3.md)
 * [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
 
