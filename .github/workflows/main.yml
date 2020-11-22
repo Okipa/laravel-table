@@ -46,13 +46,13 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction
 
-      # Lower php and laravel versions.
+      # Lower PHP and laravel versions.
 
       - name: PHPUnit
         if: matrix.php != '8.0' || matrix.laravel != '8.*'
         run: vendor/bin/phpunit
 
-      # Last php and laravel versions.
+      # Last PHP and laravel versions.
 
       - name: Code analysis
         if: matrix.php == '8.0' && matrix.laravel == '8.*'
