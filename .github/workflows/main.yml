@@ -49,26 +49,26 @@ jobs:
       # Lower PHP and Laravel versions
 
       - name: PHPUnit
-        if: matrix.php != '7.4' || matrix.laravel != '8.*'
+        if: matrix.php != '8.0' || matrix.laravel != '8.*'
         run: vendor/bin/phpunit
 
       # Last PHP and Laravel versions
 
       - name: Code analysis
-        if: matrix.php == '7.4' && matrix.laravel == '8.*'
+        if: matrix.php == '8.0' && matrix.laravel == '8.*'
         run: |
           vendor/bin/phpcs
           vendor/bin/phpmd src text phpmd.xml
           vendor/bin/phpstan analyse
 
       - name: PHPUnit + Code coverage
-        if: matrix.php == '7.4' && matrix.laravel == '8.*'
+        if: matrix.php == '8.0' && matrix.laravel == '8.*'
         run: |
           mkdir -p build/logs
           vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
       - name: Code coverage upload to Coveralls
-        if: matrix.php == '7.4' && matrix.laravel == '8.*'
+        if: matrix.php == '8.0' && matrix.laravel == '8.*'
         env:
           COVERALLS_RUN_LOCALLY: 1
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
