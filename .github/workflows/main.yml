@@ -17,10 +17,10 @@ jobs:
         php: ['7.4', '8.0']
         laravel: ['7.*', '8.*']
         include:
-          - laravel: '8.*'
-            testbench: '6.*'
           - laravel: '7.*'
             testbench: '5.*'
+          - laravel: '8.*'
+            testbench: '6.*'
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
@@ -46,13 +46,13 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction
 
-      # Lower PHP and Laravel versions
+      # Lower php and laravel versions.
 
       - name: PHPUnit
         if: matrix.php != '8.0' || matrix.laravel != '8.*'
         run: vendor/bin/phpunit
 
-      # Last PHP and Laravel versions
+      # Last php and laravel versions.
 
       - name: Code analysis
         if: matrix.php == '8.0' && matrix.laravel == '8.*'
