@@ -49,7 +49,7 @@ Found this package helpful? Please consider supporting my work!
 Create your table class with the following command:
 
 ```bash
-php artisan make:table UsersTable --model=App/User
+php artisan make:table UsersTable --model=App/Models/User
 ```
 
 Set your table configuration in the generated file, which can be found in the `app\Tables` directory:
