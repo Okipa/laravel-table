@@ -11,7 +11,7 @@ class MakeTableTest extends LaravelTableTestCase
     public function testMakeTable(): void
     {
         $this->artisan(MakeTable::class, ['name' => 'UsersTable']);
-        $this->assertFileExists(base_path('app/Tables/UsersTable.php'));
+        self::assertFileExists(base_path('app/Tables/UsersTable.php'));
         $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
         self::assertStringContainsString('namespace App\Tables;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
@@ -23,12 +23,12 @@ class MakeTableTest extends LaravelTableTestCase
 
     public function testMakeModelTable(): void
     {
-        $this->artisan(MakeTable::class, ['name' => 'UsersTable', '--model' => 'App\User']);
-        $this->assertFileExists(base_path('app/Tables/UsersTable.php'));
+        $this->artisan(MakeTable::class, ['name' => 'UsersTable', '--model' => 'App\Models\User']);
+        self::assertFileExists(base_path('app/Tables/UsersTable.php'));
         $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
         self::assertStringContainsString('namespace App\Tables;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
-        self::assertStringContainsString('use App\User;', $fileContent);
+        self::assertStringContainsString('use App\Models\User;', $fileContent);
         self::assertStringContainsString('class UsersTable', $fileContent);
         self::assertStringContainsString('protected function table(): Table', $fileContent);
         self::assertStringContainsString('(new Table())->model(User::class)', $fileContent);

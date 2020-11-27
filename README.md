@@ -59,7 +59,7 @@ namespace App\Tables;
 
 use Okipa\LaravelTable\Abstracts\AbstractTable;
 use Okipa\LaravelTable\Table;
-use App\User;
+use App\Models\User;
 
 class UsersTable extends AbstractTable
 {
@@ -391,7 +391,7 @@ Then, use the custom request in your table:
 ```php
 namespace App\Tables;
 
-use App\Users;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Okipa\LaravelTable\Abstracts\AbstractTable;
 use Okipa\LaravelTable\Table;
