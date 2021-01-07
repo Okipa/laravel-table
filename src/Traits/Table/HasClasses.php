@@ -108,11 +108,11 @@ trait HasClasses
     {
         $this->getRowsConditionalClasses()->each(
             fn($row) => ($row['closure'])($model) ?
-                ($model->conditionnal_classes = array_merge($model->conditionnal_classes ? 
+                ($model->conditionnal_classes = array_merge($model->conditionnal_classes ?
                     $model->conditionnal_classes : array(), $row['classes'])) && true : true
         );
     }
-    
+
     public function getRowsConditionalClasses(): Collection
     {
         return $this->rowsConditionalClasses;
