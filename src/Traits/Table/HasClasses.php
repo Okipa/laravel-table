@@ -106,10 +106,9 @@ trait HasClasses
 
     protected function addClassesToRow(Model $model): void
     {
+        $model->conditionnal_classes = [];
         $this->getRowsConditionalClasses()->each(
-            fn($row) => $model->conditionnal_classes = (($row['closure'])($model)
-                ? $row['classes']
-                : null)
+            fn($row) => ($row['closure'])($model) ? $model->conditionnal_classes = array_merge($model->conditionnal_classes,$row['classes']) : null
         );
     }
 
