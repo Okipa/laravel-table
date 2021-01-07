@@ -108,7 +108,8 @@ trait HasClasses
     {
         $model->conditionnal_classes = [];
         $this->getRowsConditionalClasses()->each(
-            fn($row) => ($row['closure'])($model) ? $model->conditionnal_classes = array_merge($model->conditionnal_classes,$row['classes']) : null
+            fn($row) => ($row['closure'])($model) ? 
+                $model->conditionnal_classes = array_merge($model->conditionnal_classes, $row['classes']) : null
         );
     }
 
