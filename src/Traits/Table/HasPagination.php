@@ -31,7 +31,7 @@ trait HasPagination
         $generatedHiddenFields = [];
         foreach ($httpArguments as $httpArgument) {
             $argument = explode('=', $httpArgument);
-            $generatedHiddenFields[urldecode(head($argument))] = last($argument);
+            $generatedHiddenFields[urldecode(head($argument))] = urldecode(last($argument));
         }
 
         return $generatedHiddenFields;
