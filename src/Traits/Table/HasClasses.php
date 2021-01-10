@@ -86,9 +86,15 @@ trait HasClasses
         return $this->tdClasses;
     }
 
-    public function rowsConditionalClasses(Closure $rowClassesClosure, array $rowClasses): Table
+    /**
+     * @param \Closure $conditions
+     * @param array/\Closure $classes
+     *
+     * @return \Okipa\LaravelTable\Table
+     */
+    public function rowsConditionalClasses(Closure $conditions, $classes): Table
     {
-        $this->rowsConditionalClasses->push(['closure' => $rowClassesClosure, 'classes' => $rowClasses]);
+        $this->rowsConditionalClasses->push(['conditions' => $conditions, 'classes' => $classes]);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
@@ -106,11 +112,15 @@ trait HasClasses
 
     protected function addClassesToRow(Model $model): void
     {
-        $this->getRowsConditionalClasses()->each(
-            fn($row) => $model->conditionnal_classes = (($row['closure'])($model)
-                ? $row['classes']
-                : null)
-        );
+        $model->conditionnal_classes = [];
+        $this->getRowsConditionalClasses()->each(function (array $row) use ($model) {
+            if ($row['conditions']($model)) {
+                $model->conditionnal_classes = array_merge(
+                    $model->conditionnal_classes,
+                    is_callable($row['classes']) ? $row['classes']($model) : $row['classes']
+                );
+            }
+        });
     }
 
     public function getRowsConditionalClasses(): Collection

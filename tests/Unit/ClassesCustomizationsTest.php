@@ -66,11 +66,13 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
 
     public function testRowConditionalClassesAttribute(): void
     {
-        $closure = fn($model) => $model->id === 1;
-        $classes = ['test-custom-class'];
-        $table = (new Table())->rowsConditionalClasses($closure, $classes);
-        self::assertEquals($closure, $table->getRowsConditionalClasses()->first()['closure']);
-        self::assertEquals($classes, $table->getRowsConditionalClasses()->first()['classes']);
+        $table = (new Table())
+            ->rowsConditionalClasses(fn(User $user) => $user->id === 1,
+                fn(User $user) => ['custom', 'class', $user->id])
+            ->rowsConditionalClasses(fn(User $user) => $user->id === 2, ['custom', 'class', '2']);
+        self::assertEquals(fn(User $user) => ['custom', 'class', $user->id],
+            $table->getRowsConditionalClasses()->first()['conditions']);
+        self::assertEquals(['custom', 'class', '2'], $table->getRowsConditionalClasses()->last()['classes']);
     }
 
     public function testContainerClassesHtml(): void
@@ -174,24 +176,37 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
-        $closure = fn($model) => $model->id === 1 || $model->id === 2;
-        $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
-        $table = (new Table())->model(User::class)->routes([
-            'index' => ['name' => 'users.index'],
-            'create' => ['name' => 'users.create'],
-            'edit' => ['name' => 'users.edit'],
-            'destroy' => ['name' => 'users.destroy'],
-        ])->rowsConditionalClasses($closure, $classes);
+        //        $closure = fn($model) => $model->id === 1 || $model->id === 2;
+        //        $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
+        $table = (new Table())->model(User::class)
+            ->routes([
+                'index' => ['name' => 'users.index'],
+                'create' => ['name' => 'users.create'],
+                'edit' => ['name' => 'users.edit'],
+                'destroy' => ['name' => 'users.destroy'],
+            ])
+            ->rowsConditionalClasses(fn($model) => $model->id === 1, fn(User $model) => ['custom', 'first-class', $model->id])
+            ->rowsConditionalClasses(fn($model) => $model->id === 1, ['custom', 'second-class', '1'])
+            ->rowsConditionalClasses(fn($model) => $model->id === 2, ['custom', 'class', '2']);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email');
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
-            $closure($user)
-                ? self::assertEquals($user->conditionnal_classes, $classes)
-                : self::assertEmpty($user->conditionnal_classes);
+            if (! in_array($user->id, [1, 2], true)) {
+                self::assertEmpty($user->conditionnal_classes);
+                continue;
+            }
+            if ($user->id === 1) {
+                self::assertEquals(
+                    ['custom', 'first-class', 1, 'custom', 'second-class', '1'],
+                    $user->conditionnal_classes
+                );
+                continue;
+            }
+            self::assertEquals(['custom', 'class', '2'], $user->conditionnal_classes);
         }
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        self::assertStringContainsString(implode(' ', $classes), $html);
-        self::assertEquals(2, substr_count($html, implode(' ', $classes)));
+        self::assertStringContainsString('custom first-class 1 custom second-class 1', $html);
+        self::assertStringContainsString('custom class 2', $html);
     }
 }
