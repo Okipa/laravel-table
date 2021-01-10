@@ -25,15 +25,15 @@
                         $showButton = $column->getButtonClasses() && ($value || $customValue || $showPrepend || $showAppend);
                     @endphp
                     <td{{ html_classes($table->getTdClasses(), $column->getClasses()) }}{{ html_attributes($columnKey === 0 ? ['scope' => 'row'] : null) }}>
-                        {{-- custom html element --}}
+                        {{-- Custom html element --}}
                         @if($html)
                             {!! $html !!}
                         @else
-                            {{-- link --}}
+                            {{-- Link --}}
                             @if($showLink)
                                 <a href="{{ $url }}" title="{{ $customValue ? $customValue : $value }}">
                             @endif
-                            {{-- button start--}}
+                            {{-- Button start--}}
                             @if($showButton)
                                 <button{{ html_classes(
                                     $column->getButtonClasses(),
@@ -41,41 +41,41 @@
                                     $customValue ? Str::slug(strip_tags($customValue), '-') : null
                                 ) }}>
                             @endif
-                                {{-- prepend --}}
+                                {{-- Prepend --}}
                                 @if($showPrepend)
                                     {!! $column->getPrependedHtml() !!}
                                 @endif
-                                {{-- custom value --}}
+                                {{-- Custom value --}}
                                 @if($customValue)
                                     {{ $customValue }}
-                                {{-- string limit --}}
+                                {{-- String limit --}}
                                 @elseif($column->getStringLimit())
                                     {{ Str::limit(strip_tags($value), $column->getStringLimit()) }}
-                                {{-- datetime format --}}
+                                {{-- Datetime format --}}
                                 @elseif($column->getDateTimeFormat())
                                     {{ $value
                                         ? \Carbon\Carbon::parse($value)->format($column->getDateTimeFormat())
                                         : null }}
-                                {{-- basic value --}}
+                                {{-- Basic value --}}
                                 @else
                                     {{ $value }}
                                 @endif
-                                {{-- append --}}
+                                {{-- Append --}}
                                 @if($showAppend)
                                     {!! $column->getAppendedHtml() !!}
                                 @endif
-                            {{-- button end --}}
+                            {{-- Button end --}}
                             @if($showButton)
                                 </button>
                             @endif
-                            {{-- link end --}}
+                            {{-- Link end --}}
                             @if($showLink)
                                 </a>
                             @endif
                         @endif
                     </td>
                 @endforeach
-                {{-- actions --}}
+                {{-- Actions --}}
                 @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') || $table->isRouteDefined('show')))
                     <td{{ html_classes($table->getTdClasses(), 'text-right') }}>
                         @if(! $model->disabled_classes)

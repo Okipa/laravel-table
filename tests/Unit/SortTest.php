@@ -57,7 +57,7 @@ class SortTest extends LaravelTableTestCase
         $table->configure();
         self::assertEquals(
             $users->sortBy('email')->values()->toArray(),
-            $table->getPaginator()->toArray()['data']
+            $table->getPaginator()->getCollection()->toArray()
         );
     }
 

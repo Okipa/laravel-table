@@ -18,23 +18,14 @@ trait HasPagination
 
     public function appendData(array $appendedToPaginator): Table
     {
+        $appendedToPaginator = array_filter($appendedToPaginator);
         $this->appendedToPaginator = $appendedToPaginator;
-        $this->generatedHiddenFields = $this->extractHiddenFieldsToGenerate($appendedToPaginator);
+        // Todo: remove `generatedHiddenFields` management in a future major version,
+        // which is a duplicate of `appendedToPaginator`.
+        $this->generatedHiddenFields = $appendedToPaginator;
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
-    }
-
-    protected function extractHiddenFieldsToGenerate(array $appendedToPaginator): array
-    {
-        $httpArguments = explode('&', http_build_query($appendedToPaginator));
-        $generatedHiddenFields = [];
-        foreach ($httpArguments as $httpArgument) {
-            $argument = explode('=', $httpArgument);
-            $generatedHiddenFields[urldecode(head($argument))] = last($argument);
-        }
-
-        return $generatedHiddenFields;
     }
 
     public function getGeneratedHiddenFields(): array
