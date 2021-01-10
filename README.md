@@ -227,6 +227,7 @@ Here is the list of the words and sentences available for translation:
 namespace App\Tables;
 
 use App\News;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Okipa\LaravelTable\Table;
@@ -274,13 +275,11 @@ class NewsTable extends AbstractTable
                 $query->addSelect('users.name as author');
                 $query->join('users', 'users.id', '=', 'news.author_id');
             })
-            ->disableRows(
-                fn(News $news) => in_array($news->id, [1, 2]),
-                ['disabled', 'bg-secondary', 'text-white']
-            )
+            ->disableRows(fn(News $news) => in_array($news->id, [1, 2]), ['disabled', 'bg-secondary', 'text-white'])
+            ->rowsConditionalClasses(fn(News $news) => $news->id === 3, ['highlighted', 'bg-success'])
             ->rowsConditionalClasses(
-                fn(News $news) => $news->id === 3,
-                ['highlighted', 'bg-success']
+                fn(News $news) => $news->category,
+                fn(News $news) => 'category-' . Str::snake($news->category)
             )
             // Append all request params to the paginator
             ->appendData($this->request->all());
@@ -647,19 +646,24 @@ class UsersTable extends AbstractTable
 <h3 id="table-rowsConditionalClasses">rowsConditionalClasses</h3>
 
 > Set rows classes when the given conditions are respected.  
-> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
-> `
-> **Note:**
+> The closures let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
 
-* Signature: `rowsConditionalClasses(Closure $rowClassesClosure, array $rowClasses): \Okipa\LaravelTable\Table`
+**Note:**
+
+* Signature: `rowsConditionalClasses(Closure $rowClassesClosure, array|Closure $rowClasses): \Okipa\LaravelTable\Table`
 * Optional
 
 **Use case example:**
 
 ```php
-(new Table())->rowsConditionalClasses(function(User $user){
-    return $model->hasParticularAttribute;
-}, ['set', 'your', 'classes']);
+(new Table())->rowsConditionalClasses(fn(User $user) => $model->hasParticularAttribute, ['set', 'your', 'classes']);
+
+// Or
+
+(new Table())->rowsConditionalClasses(
+    fn(User $user) => $model->hasParticularAttribute,
+    fn(User $user) => 'dynamic-class-name-' . $model->particularAttribute
+);
 ```
 
 <h3 id="table-destroyConfirmationHtmlAttributes">destroyConfirmationHtmlAttributes</h3>
