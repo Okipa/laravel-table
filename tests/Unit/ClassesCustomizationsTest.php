@@ -66,12 +66,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
 
     public function testRowConditionalClassesAttribute(): void
     {
-        $table = (new Table())
-            ->rowsConditionalClasses(
-                fn(User $user) => $user->id === 1,
-                fn(User $user) => ['custom', 'class', $user->id]
-            )
-            ->rowsConditionalClasses(fn(User $user) => $user->id === 2, ['custom', 'class', '2']);
+        $table = (new Table())->rowsConditionalClasses(
+            fn(User $user) => $user->id === 1,
+            fn(User $user) => ['custom', 'class', $user->id]
+        )->rowsConditionalClasses(fn(User $user) => $user->id === 2, ['custom', 'class', '2']);
         self::assertEquals(
             fn(User $user) => ['custom', 'class', $user->id],
             $table->getRowsConditionalClasses()->first()['conditions']
