@@ -88,7 +88,7 @@ trait HasClasses
 
     /**
      * @param \Closure $conditions
-     * @param array/\Closure $classes
+     * @param array|\Closure $classes
      *
      * @return \Okipa\LaravelTable\Table
      */
@@ -112,11 +112,10 @@ trait HasClasses
 
     protected function addClassesToRow(Model $model): void
     {
-        $model->conditionnal_classes = [];
         $this->getRowsConditionalClasses()->each(function (array $row) use ($model) {
             if ($row['conditions']($model)) {
                 $model->conditionnal_classes = array_merge(
-                    $model->conditionnal_classes,
+                    $model->conditionnal_classes ?? [],
                     is_callable($row['classes']) ? $row['classes']($model) : $row['classes']
                 );
             }

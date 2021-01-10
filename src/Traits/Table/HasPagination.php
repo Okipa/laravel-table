@@ -20,7 +20,8 @@ trait HasPagination
     {
         $appendedToPaginator = array_filter($appendedToPaginator);
         $this->appendedToPaginator = $appendedToPaginator;
-        // Todo: remove `generatedHiddenFields` management in a future major version, which is a duplicate of `appendedToPaginator`.
+        // Todo: remove `generatedHiddenFields` management in a future major version,
+        // which is a duplicate of `appendedToPaginator`.
         $this->generatedHiddenFields = $appendedToPaginator;
 
         /** @var \Okipa\LaravelTable\Table $this */

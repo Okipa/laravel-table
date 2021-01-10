@@ -67,11 +67,15 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
     public function testRowConditionalClassesAttribute(): void
     {
         $table = (new Table())
-            ->rowsConditionalClasses(fn(User $user) => $user->id === 1,
-                fn(User $user) => ['custom', 'class', $user->id])
+            ->rowsConditionalClasses(
+                fn(User $user) => $user->id === 1,
+                fn(User $user) => ['custom', 'class', $user->id]
+            )
             ->rowsConditionalClasses(fn(User $user) => $user->id === 2, ['custom', 'class', '2']);
-        self::assertEquals(fn(User $user) => ['custom', 'class', $user->id],
-            $table->getRowsConditionalClasses()->first()['conditions']);
+        self::assertEquals(
+            fn(User $user) => ['custom', 'class', $user->id],
+            $table->getRowsConditionalClasses()->first()['conditions']
+        );
         self::assertEquals(['custom', 'class', '2'], $table->getRowsConditionalClasses()->last()['classes']);
     }
 
@@ -176,8 +180,6 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
-        //        $closure = fn($model) => $model->id === 1 || $model->id === 2;
-        //        $classes = ['test-row-custom-class-1', 'test-row-custom-class-2'];
         $table = (new Table())->model(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
@@ -185,7 +187,10 @@ class ClassesCustomizationsTest extends LaravelTableTestCase
                 'edit' => ['name' => 'users.edit'],
                 'destroy' => ['name' => 'users.destroy'],
             ])
-            ->rowsConditionalClasses(fn($model) => $model->id === 1, fn(User $model) => ['custom', 'first-class', $model->id])
+            ->rowsConditionalClasses(
+                fn($model) => $model->id === 1,
+                fn(User $model) => ['custom', 'first-class', $model->id]
+            )
             ->rowsConditionalClasses(fn($model) => $model->id === 1, ['custom', 'second-class', '1'])
             ->rowsConditionalClasses(fn($model) => $model->id === 2, ['custom', 'class', '2']);
         $table->column('name')->title('Name');
