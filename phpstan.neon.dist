@@ -13,7 +13,7 @@ parameters:
     ignoreErrors:
         - '#Access to an undefined property#'
 
-    excludes_analyse:
+    excludePaths:
         - ./*/*/FileToBeExcluded.php
 
     checkMissingIterableValueType: true
