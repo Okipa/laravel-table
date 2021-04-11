@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Validator;
 use Okipa\LaravelTable\Traits\Table\HasAdditionalQueries;
 use Okipa\LaravelTable\Traits\Table\HasClasses;
+use Okipa\LaravelTable\Traits\Table\HasCollection;
 use Okipa\LaravelTable\Traits\Table\HasColumns;
 use Okipa\LaravelTable\Traits\Table\HasDestroyConfirmation;
 use Okipa\LaravelTable\Traits\Table\HasDisabledRows;
@@ -24,6 +25,7 @@ class Table implements Htmlable
 {
     use HasTemplates;
     use HasModel;
+    use HasCollection;
     use HasIdentifier;
     use HasRoutes;
     use HasClasses;
@@ -37,6 +39,12 @@ class Table implements Htmlable
     use HasSearching;
     use HasPagination;
     use HasDestroyConfirmation;
+
+    protected const MODEL_MODE = 'model_mode';
+
+    protected const COLLECTION_MODE = 'collection_mode';
+
+    protected ?string $mode = null;
 
     protected bool $configured = false;
 
