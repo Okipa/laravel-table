@@ -6,7 +6,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\User;
 
-class ClassesCustomizationsTest extends LaravelTableTestCase
+class ClassesCustomizationTest extends LaravelTableTestCase
 {
     public function testContainerClassesAttribute(): void
     {

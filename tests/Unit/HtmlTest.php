@@ -6,7 +6,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\User;
 
-class CustomHtmlElementTest extends LaravelTableTestCase
+class HtmlTest extends LaravelTableTestCase
 {
     public function testHtmlAttribute(): void
     {

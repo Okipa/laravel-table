@@ -1,11 +1,17 @@
 # Changelog
 
+## [4.0.3](https://github.com/Okipa/laravel-table/compare/4.0.2...4.0.3)
+
+2021-04-11
+
+* Updated table generation stub when called with `--model` option
+
 ## [4.0.2](https://github.com/Okipa/laravel-table/compare/4.0.1...4.0.2)
 
 2021-01-10
 
 * Fixed #66 : Bugfix to allow the `->rowsConditionalClasses()` method to be called several times on a table. In addition, the second `$rowClasses` argument of this method now accepts array or closure (which let you manipulate a `\Illuminate\Database\Eloquent\Model $model` attribute)
-* Fixed #68 : Removed useless treatment when data is appended to paginator with `->appendData()` method, which led to `+` character addition when values were containing spaces.
+* Fixed #68 : Removed useless treatment when data is appended to paginator with `->appendData()` method, which led to `+` character addition when values were containing spaces
 
 ## [4.0.1](https://github.com/Okipa/laravel-table/compare/4.0.0...4.0.1)
 
