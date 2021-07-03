@@ -494,4 +494,20 @@ class SearchTest extends LaravelTableTestCase
         $table->configure();
         self::assertTrue($user->is($table->getPaginator()->getCollection()->first()));
     }
+
+    public function testItCanSearchFromIntegerField(): void
+    {
+        $users = $this->createMultipleUsers(3);
+        $customRequest = (new Request())->merge([
+            (new Table())->getRowsNumberField() => 20,
+            'search' => $users->first()->age,
+        ]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->request($customRequest);
+        $table->column('age')->searchable();
+        $table->configure();
+        self::assertTrue($users->first()->is($table->getPaginator()->getCollection()->first()));
+    }
 }

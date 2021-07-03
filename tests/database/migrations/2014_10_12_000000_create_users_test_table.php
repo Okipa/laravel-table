@@ -18,6 +18,7 @@ class CreateUsersTestTable extends Migration
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->unsignedSmallInteger('age')->nullable();
             $table->timestamps();
         });
     }

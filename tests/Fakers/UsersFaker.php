@@ -34,6 +34,7 @@ trait UsersFaker
             'name' => str_replace(['\''], '', $this->faker->unique()->name()),
             'email' => $this->faker->unique()->email(),
             'password' => Hash::make($this->clearPassword),
+            'age' => $this->faker->numberBetween(10, 100),
         ];
     }
 }

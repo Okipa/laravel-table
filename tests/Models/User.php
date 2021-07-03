@@ -10,7 +10,7 @@ class User extends Model
     protected $table = 'users_test';
 
     /** @var array */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'age'];
 
     /** @var array */
     protected $hidden = ['password'];
