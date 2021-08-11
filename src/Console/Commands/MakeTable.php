@@ -10,6 +10,13 @@ use Symfony\Component\Console\Input\InputOption;
 class MakeTable extends GeneratorCommand
 {
     /**
+     * The type of class being generated.
+     *
+     * @var string
+     */
+    protected $type = 'Table';
+    
+    /**
      * The console command name.
      *
      * @var string
