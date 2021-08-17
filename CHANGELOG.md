@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.4](https://github.com/Okipa/laravel-table/compare/4.0.3...4.0.4)
+
+2021-08-17
+
+* Added `$type` property to `src/Console/Commands/MakeTable` in order to display correct messages:
+  * `Table already exists!`
+  * `Table created successfully.`
+
 ## [4.0.3](https://github.com/Okipa/laravel-table/compare/4.0.2...4.0.3)
 
 2021-04-11
