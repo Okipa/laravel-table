@@ -15,7 +15,7 @@ class MakeTable extends GeneratorCommand
      * @var string
      */
     protected $type = 'Table';
-    
+
     /**
      * The console command name.
      *
