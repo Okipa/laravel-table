@@ -18,7 +18,6 @@ trait HasDisabledRows
             'classes' => ! empty($classes) ? $classes : config('laravel-table.classes.disabled'),
         ]);
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 

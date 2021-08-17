@@ -27,10 +27,9 @@
         }
     ],
     "require": {
-        "php": "^7.4||^8.0",
+        "php": "^8.0",
         "ext-pdo": "*",
-        "illuminate/support": "^7.0||^8.0",
-        "okipa/laravel-html-helper": "^2.0"
+        "illuminate/support": "^8.0"
     },
     "require-dev": {
         "nunomaduro/larastan": "^0.6",

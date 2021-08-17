@@ -4,7 +4,7 @@ namespace Okipa\LaravelTable\Exceptions;
 
 use Exception;
 
-class TableModeAlreadyDefined extends Exception
+class TableBuildModeAlreadyDefined extends Exception
 {
     //
 }

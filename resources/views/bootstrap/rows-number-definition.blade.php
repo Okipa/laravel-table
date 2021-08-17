@@ -4,7 +4,7 @@
             <input type="hidden" name="{{ $table->getSearchField() }}" value="{{ $table->getRequest()->get($table->getSearchField()) }}">
             <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
             <input type="hidden" name="{{ $table->getSortDirField() }}" value="{{ $table->getRequest()->get($table->getSortDirField()) }}">
-            @foreach($table->getGeneratedHiddenFields() as $appendedKey => $appendedValue)
+            @foreach($table->getAppendedToPaginator() as $appendedKey => $appendedValue)
                 <input type="hidden" name="{{ $appendedKey }}" value="{{ $appendedValue }}">
             @endforeach
             <div class="input-group">

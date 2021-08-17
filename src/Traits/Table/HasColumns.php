@@ -22,15 +22,14 @@ trait HasColumns
      * @param string|null $dbField
      *
      * @return \Okipa\LaravelTable\Column
-     * @throws \ErrorException
+     * @throws \Okipa\LaravelTable\Exceptions\TableModelNotFound
+     * @throws \Okipa\LaravelTable\Exceptions\TableCollectionNotFound
      */
-    public function column(?string $dbField = null): Column
+    public function column(string|null $dbField = null): Column
     {
-        /** @var \Okipa\LaravelTable\Table $this */
         $this->checkModelIsDefined();
-        /** @var \Okipa\LaravelTable\Table $this */
+        $this->checkCollectionIsDefined();
         $column = new Column($this, $dbField);
-        /** @var $this $this */
         $this->columns->push($column);
 
         return $column;
@@ -45,12 +44,12 @@ trait HasColumns
         return $this->getColumns()->count() + $extraColumnsCount;
     }
 
-    abstract public function isRouteDefined(string $routeKey): bool;
-
     public function getColumns(): Collection
     {
         return $this->columns;
     }
+
+    abstract public function isRouteDefined(string $routeKey): bool;
 
     public function addToSearchableColumns(Column $column): void
     {
@@ -84,18 +83,14 @@ trait HasColumns
         $this->searchableColumns = new Collection();
     }
 
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @throws \ErrorException
-     */
     protected function checkColumnsValidity(Builder $query): void
     {
         $this->getColumns()->map(function (Column $column) use ($query) {
             $this->checkSortableColumnHasAttribute($column);
             $isSearchable = in_array(
                 $column->getDbField(),
-                $this->getSearchableColumns()->map(fn(Column $column) => $column->getDbField())->toArray()
+                $this->getSearchableColumns()->map(fn(Column $column) => $column->getDbField())->toArray(),
+                true
             );
             if ($isSearchable) {
                 $this->checkSearchableColumnHasAttribute($column);
@@ -145,7 +140,7 @@ trait HasColumns
         $searchedDatabaseColumns = $column->getDbSearchedFields() ?: [$column->getDbField()];
         $tableDbData = $this->getColumnDbInfo($column, $query);
         foreach ($searchedDatabaseColumns as $searchedDatabaseColumn) {
-            if (! in_array($searchedDatabaseColumn, $tableDbData['columns'])) {
+            if (! in_array($searchedDatabaseColumn, $tableDbData['columns'], true)) {
                 $tableAlias = Arr::get($tableDbData, 'alias');
                 $dynamicMessagePart = $tableAlias
                     ? '« ' . $tableDbData['table'] . ' » (aliased as « ' . $tableAlias . ' ») table'
@@ -165,7 +160,7 @@ trait HasColumns
         if ($column->getDbSearchedTable()) {
             $fromSqlStatement = last(explode(' from ', (string) $query->toSql()));
             $dbAliases = [];
-            preg_match_all('/["`]([a-zA-Z0-9_]*)["`] as ["`]([a-zA-Z0-9_]*)["`]/', $fromSqlStatement, $dbAliases);
+            preg_match_all('/["`](\w*)["`] as ["`](\w*)["`]/', $fromSqlStatement, $dbAliases);
             if (! empty(array_filter($dbAliases))) {
                 $position = array_keys(Arr::where(
                     array_shift($dbAliases),
@@ -181,15 +176,5 @@ trait HasColumns
         $dbColumns = Schema::getColumnListing($dbTable);
 
         return ['table' => $dbTable, 'alias' => $dbAlias, 'columns' => $dbColumns];
-    }
-
-    /** @throws \ErrorException */
-    protected function checkIfAtLeastOneColumnIsDeclared(): void
-    {
-        if ($this->getColumns()->isEmpty()) {
-            $errorMessage = 'No column has been added to the table. Please add at least one column by using the '
-                . '« column() » method on the table object.';
-            throw new ErrorException($errorMessage);
-        }
     }
 }

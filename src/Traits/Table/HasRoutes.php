@@ -22,7 +22,6 @@ trait HasRoutes
         $this->checkRoutesValidity($routes);
         $this->routes = $routes;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -51,7 +50,7 @@ trait HasRoutes
     {
         $routeKeys = array_keys($routes);
         foreach ($requiredRouteKeys as $requiredRouteKey) {
-            if (! in_array($requiredRouteKey, $routeKeys)) {
+            if (! in_array($requiredRouteKey, $routeKeys, true)) {
                 throw new ErrorException(
                     'The required « ' . $requiredRouteKey
                     . ' » route key is missing. Use the « routes() » method to declare it.'
@@ -69,7 +68,7 @@ trait HasRoutes
     protected function checkAllowedRoutesValidity(array $routes, array $allowedRouteKeys): void
     {
         foreach (array_keys($routes) as $routeKey) {
-            if (! in_array($routeKey, $allowedRouteKeys)) {
+            if (! in_array($routeKey, $allowedRouteKeys, true)) {
                 throw new ErrorException(
                     'The « ' . $routeKey . ' » key is not an authorized route key (' . implode(', ', $allowedRouteKeys)
                     . '). Fix your routes declaration in the « routes() » method.'
@@ -88,10 +87,10 @@ trait HasRoutes
         $requiredRouteParams = ['name'];
         foreach ($routes as $routeKey => $route) {
             foreach ($requiredRouteParams as $requiredRouteParam) {
-                if (! in_array($requiredRouteParam, array_keys($route))) {
+                if (! in_array($requiredRouteParam, array_keys($route), true)) {
                     throw new ErrorException(
                         'The « ' . $requiredRouteParam . ' » key is missing from the « ' . $routeKey
-                        . ' » route definition. Each route definition should follow this structure: '
+                        . ' » route definition. Each route definition should follow this structure example: '
                         . '["index" => ["name" => "news.index"]. '
                         . 'Fix your routes declaration in the « routes() » method.'
                     );
@@ -115,7 +114,7 @@ trait HasRoutes
         );
     }
 
-    protected function checkRouteIsDefined(string $routeKey)
+    protected function checkRouteIsDefined(string $routeKey): void
     {
         if (! $this->isRouteDefined($routeKey)) {
             throw new InvalidArgumentException(

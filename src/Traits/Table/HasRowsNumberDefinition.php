@@ -12,11 +12,10 @@ trait HasRowsNumberDefinition
 
     protected bool $rowsNumberDefinitionActivated;
 
-    public function rowsNumber(?int $rowsNumber): Table
+    public function rowsNumber(int|null $rowsNumber): Table
     {
         $this->rowsNumberValue = $rowsNumber;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -30,7 +29,7 @@ trait HasRowsNumberDefinition
         return $this->rowsNumberField;
     }
 
-    public function getRowsNumberValue(): ?int
+    public function getRowsNumberValue(): int|null
     {
         return $this->rowsNumberValue;
     }
@@ -39,7 +38,6 @@ trait HasRowsNumberDefinition
     {
         $this->rowsNumberDefinitionActivated = $activate;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -48,7 +46,7 @@ trait HasRowsNumberDefinition
         return $this->rowsNumberDefinitionActivated;
     }
 
-    protected function initializeRowsNumberDefinition()
+    protected function initializeRowsNumberDefinition(): void
     {
         $this->rowsNumberValue = config('laravel-table.behavior.rows_number');
         $this->rowsNumberDefinitionActivated = (bool) config('laravel-table.behavior.activate_rows_number_definition');

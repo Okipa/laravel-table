@@ -14,7 +14,6 @@ trait HasDestroyConfirmation
     {
         $this->destroyConfirmationClosure = $destroyConfirmationClosure;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -25,7 +24,7 @@ trait HasDestroyConfirmation
         }
     }
 
-    public function getDestroyConfirmationClosure(): ?Closure
+    public function getDestroyConfirmationClosure(): Closure|null
     {
         return $this->destroyConfirmationClosure;
     }

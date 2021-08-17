@@ -18,7 +18,6 @@ trait HasRequest
     {
         $this->request = $request;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 

@@ -14,7 +14,6 @@ trait HasIdentifier
         $this->identifier = Str::slug($identifier);
         $this->redefineInteractionFieldsFromIdentifier();
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 

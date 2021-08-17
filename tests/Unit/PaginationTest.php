@@ -13,7 +13,6 @@ class PaginationTest extends LaravelTableTestCase
         $appended = ['foo' => 'bar', 'baz' => 'qux', 'quux_corge' => 'grault garply', 'waldo'];
         $table = (new Table())->appendData($appended);
         self::assertEquals($table->getAppendedToPaginator(), $appended);
-        self::assertEquals($table->getGeneratedHiddenFields(), $appended);
     }
 
     public function testAppendDataHtml(): void
@@ -26,7 +25,7 @@ class PaginationTest extends LaravelTableTestCase
         $table->column('name')->title('Name')->searchable();
         $table->configure();
         $rowsNumberDefinitionHtml = view(
-            'laravel-table::' . $table->getrowsNumberDefinitionTemplatePath(),
+            'laravel-table::' . $table->getRowsNumberDefinitionTemplatePath(),
             compact('table')
         )->toHtml();
         self::assertStringContainsString('<input type="hidden" name="foo" value="bar">', $rowsNumberDefinitionHtml);

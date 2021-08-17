@@ -25,7 +25,6 @@ trait HasClasses
     {
         $this->containerClasses = $containerClasses;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -38,7 +37,6 @@ trait HasClasses
     {
         $this->tableClasses = $tableClasses;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -51,7 +49,6 @@ trait HasClasses
     {
         $this->trClasses = $trClasses;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -64,7 +61,6 @@ trait HasClasses
     {
         $this->thClasses = $thClasses;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -77,7 +73,6 @@ trait HasClasses
     {
         $this->tdClasses = $tdClasses;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -86,17 +81,10 @@ trait HasClasses
         return $this->tdClasses;
     }
 
-    /**
-     * @param \Closure $conditions
-     * @param array|\Closure $classes
-     *
-     * @return \Okipa\LaravelTable\Table
-     */
     public function rowsConditionalClasses(Closure $conditions, $classes): Table
     {
         $this->rowsConditionalClasses->push(['conditions' => $conditions, 'classes' => $classes]);
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 

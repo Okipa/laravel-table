@@ -14,23 +14,12 @@ trait HasPagination
 
     protected array $appendedToPaginator = [];
 
-    protected array $generatedHiddenFields = [];
-
     public function appendData(array $appendedToPaginator): Table
     {
         $appendedToPaginator = array_filter($appendedToPaginator);
         $this->appendedToPaginator = $appendedToPaginator;
-        // Todo: remove `generatedHiddenFields` management in a future major version,
-        // which is a duplicate of `appendedToPaginator`.
-        $this->generatedHiddenFields = $appendedToPaginator;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
-    }
-
-    public function getGeneratedHiddenFields(): array
-    {
-        return $this->generatedHiddenFields;
     }
 
     public function getNavigationStatus(): string
@@ -48,11 +37,10 @@ trait HasPagination
         return $this->paginator;
     }
 
-    abstract public function getDestroyConfirmationClosure(): ?Closure;
+    abstract public function getDestroyConfirmationClosure(): Closure|null;
 
     protected function paginateFromQuery(Builder $query): void
     {
-        /** @var int|null $perPage */
         $perPage = $this->getRowsNumberValue() ?: $query->count();
         $this->paginator = $query->paginate($perPage);
         $this->getPaginator()->appends(array_merge([
@@ -63,7 +51,7 @@ trait HasPagination
         ], $this->getAppendedToPaginator()));
     }
 
-    abstract public function getRowsNumberValue(): ?int;
+    abstract public function getRowsNumberValue(): int|null;
 
     abstract public function getRowsNumberField(): string;
 
@@ -71,11 +59,11 @@ trait HasPagination
 
     abstract public function getSortByField(): string;
 
-    abstract public function getSortByValue(): ?string;
+    abstract public function getSortByValue(): string|null;
 
     abstract public function getSortDirField(): string;
 
-    abstract public function getSortDirValue(): ?string;
+    abstract public function getSortDirValue(): string|null;
 
     public function getAppendedToPaginator(): array
     {

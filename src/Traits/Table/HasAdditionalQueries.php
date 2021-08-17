@@ -8,13 +8,12 @@ use Okipa\LaravelTable\Table;
 
 trait HasAdditionalQueries
 {
-    protected ?Closure $additionalQueriesClosure = null;
+    protected Closure|null $additionalQueriesClosure = null;
 
     public function query(Closure $additionalQueriesClosure): Table
     {
         $this->additionalQueriesClosure = $additionalQueriesClosure;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 

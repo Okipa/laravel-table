@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Validator;
 use Okipa\LaravelTable\Traits\Table\HasAdditionalQueries;
+use Okipa\LaravelTable\Traits\Table\HasBuildMode;
 use Okipa\LaravelTable\Traits\Table\HasClasses;
 use Okipa\LaravelTable\Traits\Table\HasCollection;
 use Okipa\LaravelTable\Traits\Table\HasColumns;
@@ -23,6 +24,7 @@ use Okipa\LaravelTable\Traits\Table\HasTemplates;
 
 class Table implements Htmlable
 {
+    use HasBuildMode;
     use HasTemplates;
     use HasModel;
     use HasCollection;
@@ -39,12 +41,6 @@ class Table implements Htmlable
     use HasSearching;
     use HasPagination;
     use HasDestroyConfirmation;
-
-    protected const MODEL_MODE = 'model_mode';
-
-    protected const COLLECTION_MODE = 'collection_mode';
-
-    protected ?string $mode = null;
 
     protected bool $configured = false;
 
@@ -64,12 +60,7 @@ class Table implements Htmlable
         return $this->configured;
     }
 
-    /**
-     * Get content as a string of HTML.
-     *
-     * @return string
-     * @throws \ErrorException
-     */
+    /** @throws \ErrorException */
     public function toHtml(): string
     {
         if (! $this->configured) {
@@ -79,13 +70,10 @@ class Table implements Htmlable
         return view('laravel-table::' . $this->getTableTemplatePath(), ['table' => $this])->toHtml();
     }
 
-    /**
-     * @throws \ErrorException
-     */
+    /** @throws \ErrorException */
     public function configure(): void
     {
         $this->checkRoutesValidity($this->routes);
-        $this->checkIfAtLeastOneColumnIsDeclared();
         $this->defineInteractionsFromRequest();
         $query = $this->getModel()->query();
         $this->executeAdditionalQueries($query);

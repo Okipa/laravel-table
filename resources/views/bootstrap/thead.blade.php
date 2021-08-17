@@ -9,7 +9,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     @if($table->getRowsNumberDefinitionActivation())
-                        @include('laravel-table::' . $table->getrowsNumberDefinitionTemplatePath())
+                        @include('laravel-table::' . $table->getRowsNumberDefinitionTemplatePath())
                     @endif
                     @include('laravel-table::' . $table->getCreateActionTemplatePath())
                 </div>

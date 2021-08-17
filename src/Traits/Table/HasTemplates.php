@@ -38,7 +38,6 @@ trait HasTemplates
     {
         $this->tableTemplatePath = $tableTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -51,7 +50,6 @@ trait HasTemplates
     {
         $this->theadTemplatePath = $theadTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -64,7 +62,6 @@ trait HasTemplates
     {
         $this->rowsSearchingTemplatePath = $rowsSearchingTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -77,11 +74,10 @@ trait HasTemplates
     {
         $this->rowsNumberDefinitionTemplatePath = $rowsNumberDefinitionTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    public function getrowsNumberDefinitionTemplatePath(): string
+    public function getRowsNumberDefinitionTemplatePath(): string
     {
         return $this->rowsNumberDefinitionTemplatePath;
     }
@@ -90,7 +86,6 @@ trait HasTemplates
     {
         $this->createActionTemplatePath = $createActionTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -103,7 +98,6 @@ trait HasTemplates
     {
         $this->columnTitlesTemplatePath = $columnTitlesTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -116,7 +110,6 @@ trait HasTemplates
     {
         $this->tbodyTemplatePath = $tbodyTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -129,7 +122,6 @@ trait HasTemplates
     {
         $this->showActionTemplatePath = $showActionTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -142,7 +134,6 @@ trait HasTemplates
     {
         $this->editActionTemplatePath = $editActionTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -155,7 +146,6 @@ trait HasTemplates
     {
         $this->destroyActionTemplatePath = $destroyActionTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -168,7 +158,6 @@ trait HasTemplates
     {
         $this->resultsTemplatePath = $resultsTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -181,7 +170,6 @@ trait HasTemplates
     {
         $this->tfootTemplatePath = $tfootTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -194,7 +182,6 @@ trait HasTemplates
     {
         $this->navigationStatusTemplatePath = $navigationStatusTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
@@ -207,7 +194,6 @@ trait HasTemplates
     {
         $this->paginationTemplatePath = $paginationTemplatePath;
 
-        /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 

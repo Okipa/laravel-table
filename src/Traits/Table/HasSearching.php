@@ -54,7 +54,7 @@ trait HasSearching
         foreach ($dbSearchedFields as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
             $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
             $query->{$whereOperator}(
-                // Allow to keep the case insensitive search with MySQL in case of JSON database field
+                // Allow to keep the case-insensitive search with MySQL in case of JSON database field
                 DB::raw('LOWER(' . $dbSearchedTable . '.' . $searchedDatabaseColumn . ')'),
                 $this->getCaseInsensitiveSearchingLikeOperator(),
                 '%' . mb_strtolower($searchedValue) . '%'
@@ -67,6 +67,6 @@ trait HasSearching
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
 
-        return in_array($driver, ['pgsql']) ? 'ILIKE' : 'LIKE';
+        return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 }

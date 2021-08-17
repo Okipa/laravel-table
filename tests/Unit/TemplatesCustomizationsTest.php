@@ -33,7 +33,7 @@ class TemplatesCustomizationsTest extends LaravelTableTestCase
     {
         $templatePath = 'rows-number-definition-test';
         $table = (new Table())->model(User::class)->rowsNumberDefinitionTemplate($templatePath);
-        self::assertEquals($templatePath, $table->getrowsNumberDefinitionTemplatePath());
+        self::assertEquals($templatePath, $table->getRowsNumberDefinitionTemplatePath());
     }
 
     public function testSetCreateTemplateAttribute(): void
@@ -158,7 +158,7 @@ class TemplatesCustomizationsTest extends LaravelTableTestCase
             ->rowsNumberDefinitionTemplate('rows-number-definition-test');
         $table->column('name');
         $table->configure();
-        $html = view('laravel-table::' . $table->getrowsNumberDefinitionTemplatePath(), compact('table'))->toHtml();
+        $html = view('laravel-table::' . $table->getRowsNumberDefinitionTemplatePath(), compact('table'))->toHtml();
         self::assertStringContainsString('<form id="rows-number-definition-test"></form>', $html);
     }
 
