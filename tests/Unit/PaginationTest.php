@@ -20,7 +20,7 @@ class PaginationTest extends LaravelTableTestCase
         $this->routes(['users'], ['index']);
         $appended = ['foo' => 'bar', 'baz' => 'qux', 'quux_corge' => 'grault garply', 'waldo'];
         $table = (new Table())->routes(['index' => ['name' => 'users.index']])
-            ->model(User::class)
+            ->fromModel(User::class)
             ->appendData($appended);
         $table->column('name')->title('Name')->searchable();
         $table->configure();

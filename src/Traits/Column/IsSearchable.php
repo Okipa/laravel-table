@@ -6,7 +6,7 @@ use Okipa\LaravelTable\Column;
 
 trait IsSearchable
 {
-    protected ?string $dbSearchedTable;
+    protected string|null $dbSearchedTable;
 
     protected array $dbSearchedFields;
 
@@ -14,14 +14,12 @@ trait IsSearchable
     {
         $this->dbSearchedTable = $dbSearchedTable;
         $this->dbSearchedFields = $dbSearchedFields;
-        /** @var \Okipa\LaravelTable\Column $this */
         $this->getTable()->addToSearchableColumns($this);
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 
-    public function getDbSearchedTable(): ?string
+    public function getDbSearchedTable(): string|null
     {
         return $this->dbSearchedTable;
     }

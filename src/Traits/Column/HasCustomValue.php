@@ -7,17 +7,16 @@ use Okipa\LaravelTable\Column;
 
 trait HasCustomValue
 {
-    protected ?Closure $customValueClosure = null;
+    public Closure|null $customValueClosure = null;
 
     public function value(Closure $customValueClosure): Column
     {
         $this->customValueClosure = $customValueClosure;
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 
-    public function getCustomValueClosure(): ?Closure
+    public function getCustomValueClosure(): Closure|null
     {
         return $this->customValueClosure;
     }

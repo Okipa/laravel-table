@@ -12,11 +12,18 @@ trait HasSearching
 {
     protected string $searchField = 'search';
 
-    protected ?string $searchValue = null;
+    protected string|null $searchValue = null;
 
     abstract public function getRequest(): Request;
 
     abstract public function getSearchableColumns(): Collection;
+
+    protected function applySearching(Builder|null $query = null): void
+    {
+        if($this->hasDataSource('model')) {
+            $this->applySearchingOnQuery($query);
+        }
+    }
 
     protected function applySearchingOnQuery(Builder $query): void
     {
@@ -50,7 +57,7 @@ trait HasSearching
     {
         $dbSearchedTable = $column->getDbSearchedTable() ?: $column->getDbTable();
         $whereOperator = $columnKey > 0 ? 'orWhere' : 'where';
-        $dbSearchedFields = $column->getDbSearchedFields() ?: [$column->getDbField()];
+        $dbSearchedFields = $column->getDbSearchedFields() ?: [$column->getDataSourceField()];
         foreach ($dbSearchedFields as $searchedDatabaseColumnKey => $searchedDatabaseColumn) {
             $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
             $query->{$whereOperator}(

@@ -7,9 +7,9 @@ use Okipa\LaravelTable\Column;
 
 trait IsLink
 {
-    protected ?string $url = null;
+    protected string|null $url = null;
 
-    protected ?Closure $urlClosure = null;
+    protected Closure|null $urlClosure = null;
 
     /**
      * @param string|Closure|null $url
@@ -26,16 +26,15 @@ trait IsLink
             $this->url = '__VALUE__';
         }
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 
-    public function getUrl(): ?string
+    public function getUrl(): string|null
     {
         return $this->url;
     }
 
-    public function getUrlClosure(): ?Closure
+    public function getUrlClosure(): Closure|null
     {
         return $this->urlClosure;
     }

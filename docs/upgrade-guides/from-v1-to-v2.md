@@ -38,7 +38,7 @@ There are small changes in the API you will have to report in your code:
 * Rename each `Table` use of `->appends(` by `->appendData(`.
 * Rename each `Table` use of `->rowsNumberSelectionActivation(` by `->activateRowsNumberDefinition(`.
 * Rename each `Column` use of `->prepend(` by `->prependHtml(`.
-* Rename each `Column` use of `->append(` by `->appendsHtml(`.
+* Rename each `Column` use of `->append(` by `->appendHtml(`.
 
 ## Accessing table rows
 

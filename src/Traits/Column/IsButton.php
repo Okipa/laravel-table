@@ -12,7 +12,6 @@ trait IsButton
     {
         $this->buttonClasses = $buttonClasses;
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 

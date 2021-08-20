@@ -10,7 +10,7 @@ class HtmlTest extends LaravelTableTestCase
 {
     public function testHtmlAttribute(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $closure = fn(User $user) => null;
         $table->column('name')->html($closure);
         self::assertEquals($closure, $table->getColumns()->first()->getCustomHtmlClosure());

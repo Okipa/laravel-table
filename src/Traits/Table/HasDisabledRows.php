@@ -3,7 +3,6 @@
 namespace Okipa\LaravelTable\Traits\Table;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Table;
 
@@ -26,13 +25,11 @@ trait HasDisabledRows
         $this->disabledRows = new Collection();
     }
 
-    protected function disableRow(Model $model): void
+    protected function disableRow(array &$row): void
     {
-        $this->getDisabledRows()->each(
-            fn($row) => $model->disabled_classes = (($row['closure'])($model)
-                ? $row['classes']
-                : null)
-        );
+        foreach ($this->getDisabledRows() as $disabledRow) {
+            $row['disabled_classes'] = (($disabledRow['closure'])($row) ? $disabledRow['classes'] : null);
+        }
     }
 
     public function getDisabledRows(): Collection

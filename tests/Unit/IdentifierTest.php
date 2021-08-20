@@ -12,35 +12,35 @@ class IdentifierTest extends LaravelTableTestCase
     public function testSetIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)->identifier($identifier);
+        $table = (new Table())->fromModel(User::class)->identifier($identifier);
         self::assertEquals('identifier-test', $table->getIdentifier());
     }
 
     public function testRowsFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)->identifier($identifier);
+        $table = (new Table())->fromModel(User::class)->identifier($identifier);
         self::assertEquals('identifier_test_rows', $table->getRowsNumberField());
     }
 
     public function testSearchFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)->identifier($identifier);
+        $table = (new Table())->fromModel(User::class)->identifier($identifier);
         self::assertEquals('identifier_test_search', $table->getSearchField());
     }
 
     public function testSortByFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)->identifier($identifier);
+        $table = (new Table())->fromModel(User::class)->identifier($identifier);
         self::assertEquals('identifier_test_sort_by', $table->getSortByField());
     }
 
     public function testSortDirFieldWithIdentifierAttribute(): void
     {
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)->identifier($identifier);
+        $table = (new Table())->fromModel(User::class)->identifier($identifier);
         self::assertEquals('identifier_test_sort_dir', $table->getSortDirField());
     }
 
@@ -49,7 +49,7 @@ class IdentifierTest extends LaravelTableTestCase
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->identifier($identifier)
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
@@ -63,7 +63,7 @@ class IdentifierTest extends LaravelTableTestCase
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->identifier($identifier)
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
@@ -77,7 +77,7 @@ class IdentifierTest extends LaravelTableTestCase
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->identifier($identifier)
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
@@ -91,7 +91,7 @@ class IdentifierTest extends LaravelTableTestCase
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->identifier($identifier)
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();
@@ -105,7 +105,7 @@ class IdentifierTest extends LaravelTableTestCase
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
         $identifier = 'identifier test';
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->identifier($identifier)
             ->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->sortable()->searchable();

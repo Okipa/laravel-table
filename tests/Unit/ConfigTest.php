@@ -60,7 +60,7 @@ class ConfigTest extends LaravelTableTestCase
         config()->set('laravel-table.behavior.rows_number', 9999);
         $this->createMultipleUsers(3);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy', 'show']);
-        $table = (new Table())->model(User::class)->routes([
+        $table = (new Table())->fromModel(User::class)->routes([
             'index' => ['name' => 'users.index'],
             'create' => ['name' => 'users.create'],
             'edit' => ['name' => 'users.edit'],

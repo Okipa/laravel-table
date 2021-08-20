@@ -8,23 +8,18 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ValueTest extends LaravelTableTestCase
 {
-    public function testSetIsCustomValueAttribute(): void
-    {
-        $table = (new Table())->model(User::class);
-        $closure = fn(User $user) => null;
-        $table->column('name')->value($closure);
-        self::assertEquals($closure, $table->getColumns()->first()->getCustomValueClosure());
-    }
-
-    public function testIsCustomValueHtml(): void
+    /** @test */
+    public function it_can_set_custom_value(): void
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $closure = fn(array $row) => 'user name = ' . $row['name'];
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->column('updated_at')->value(fn($model) => 'user name = ' . $model->name);
+        $table->column('updated_at')->value($closure);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertEquals($closure, $table->getColumns()->last()->getCustomValueClosure());
         self::assertStringContainsString('user name = ' . $user->name, $html);
     }
 }

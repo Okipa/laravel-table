@@ -16,7 +16,7 @@ class SortTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(2);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
         $table->configure();
@@ -27,17 +27,17 @@ class SortTest extends LaravelTableTestCase
 
     public function testSetSortableAttribute(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->sortable();
         self::assertTrue($table->getColumns()->first()->getIsSortable());
         self::assertEquals(1, $table->getSortableColumns()->count());
-        self::assertEquals('name', $table->getSortableColumns()->first()->getDbField());
+        self::assertEquals('name', $table->getSortableColumns()->first()->getDataSourceField());
     }
 
     public function testSetSortByDefaultAttribute(): void
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email')->sortable(true, 'desc');
         self::assertEquals('email', $table->getSortByValue());
@@ -51,7 +51,7 @@ class SortTest extends LaravelTableTestCase
     {
         $users = $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('name')->title('Name');
         $table->column('email')->title('Email')->sortable(true);
         $table->configure();
@@ -64,9 +64,9 @@ class SortTest extends LaravelTableTestCase
     public function testSortByDefaultCalledMultiple(): void
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table is already sorted by the « name » database column. You only can sort '
+        $this->expectExceptionMessage('The table is already sorted by the "name" database column. You only can sort '
             . 'a table column by default once');
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->sortable(true);
         $table->column('email')->sortable(true);
     }
@@ -75,7 +75,7 @@ class SortTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('name');
         $table->column('email');
         $table->configure();
@@ -87,11 +87,11 @@ class SortTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('name')->sortable();
         $table->column('email')->sortable();
         $table->configure();
-        self::assertEquals($table->getSortByValue(), $table->getColumns()->first()->getDbField());
+        self::assertEquals($table->getSortByValue(), $table->getColumns()->first()->getDataSourceField());
         self::assertEquals($table->getSortDirValue(), 'asc');
     }
 
@@ -100,10 +100,10 @@ class SortTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the sortable table columns has no defined database column. '
             . 'You have to define a database column for each sortable table columns by '
-            . 'setting a string parameter in the « column » method.');
+            . 'setting a string parameter in the "column" method.');
         $this->createMultipleUsers(5);
         $this->routes(['companies'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'companies.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'companies.index']])->fromModel(User::class);
         $table->column()->sortable();
         $table->configure();
     }
@@ -117,7 +117,7 @@ class SortTest extends LaravelTableTestCase
             (new Table())->getSortDirField() => 'desc',
         ]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->title('Name')->sortable();
@@ -141,7 +141,7 @@ class SortTest extends LaravelTableTestCase
             (new Table())->getSortByField() => 'owner',
             (new Table())->getSortDirField() => 'desc',
         ]);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -166,7 +166,7 @@ class SortTest extends LaravelTableTestCase
             (new Table())->getSortByField() => 'owner',
             (new Table())->getSortDirField() => 'desc',
         ]);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -189,7 +189,7 @@ class SortTest extends LaravelTableTestCase
     public function testSortableColumnHtml(): void
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->sortable();
         $table->column('email')->title('Email');
         $table->configure();

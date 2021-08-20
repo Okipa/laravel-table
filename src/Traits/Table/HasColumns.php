@@ -19,17 +19,15 @@ trait HasColumns
     protected Collection $searchableColumns;
 
     /**
-     * @param string|null $dbField
+     * @param string|null $dataSourceField
      *
      * @return \Okipa\LaravelTable\Column
-     * @throws \Okipa\LaravelTable\Exceptions\TableModelNotFound
-     * @throws \Okipa\LaravelTable\Exceptions\TableCollectionNotFound
+     * @throws \Okipa\LaravelTable\Exceptions\TableDataSourceNotDefined
      */
-    public function column(string|null $dbField = null): Column
+    public function column(string|null $dataSourceField = null): Column
     {
-        $this->checkModelIsDefined();
-        $this->checkCollectionIsDefined();
-        $column = new Column($this, $dbField);
+        $this->checkDataSourceIsDefined();
+        $column = new Column($this, $dataSourceField);
         $this->columns->push($column);
 
         return $column;
@@ -88,8 +86,8 @@ trait HasColumns
         $this->getColumns()->map(function (Column $column) use ($query) {
             $this->checkSortableColumnHasAttribute($column);
             $isSearchable = in_array(
-                $column->getDbField(),
-                $this->getSearchableColumns()->map(fn(Column $column) => $column->getDbField())->toArray(),
+                $column->getDataSourceField(),
+                $this->getSearchableColumns()->map(fn(Column $column) => $column->getDataSourceField())->toArray(),
                 true
             );
             if ($isSearchable) {
@@ -106,10 +104,10 @@ trait HasColumns
      */
     protected function checkSortableColumnHasAttribute(Column $column): void
     {
-        if (! $column->getDbField() && $column->getIsSortable()) {
+        if (! $column->getDataSourceField() && $column->getIsSortable()) {
             $errorMessage = 'One of the sortable table columns has no defined database column. You have to define a '
                 . 'database column for each sortable table columns by setting a string parameter in the '
-                . '« column » method.';
+                . '"column()" method.';
             throw new ErrorException($errorMessage);
         }
     }
@@ -121,10 +119,10 @@ trait HasColumns
      */
     protected function checkSearchableColumnHasAttribute(Column $column): void
     {
-        if (! $column->getDbField()) {
+        if (! $column->getDataSourceField()) {
             $errorMessage = 'One of the searchable table columns has no defined database column. You have to define '
                 . 'a database column for each searchable table columns by setting a string parameter in '
-                . 'the « column » method.';
+                . 'the "column()" method.';
             throw new ErrorException($errorMessage);
         }
     }
@@ -137,17 +135,17 @@ trait HasColumns
      */
     protected function checkSearchedAttributeDoesExistInRelatedTable(Column $column, Builder $query): void
     {
-        $searchedDatabaseColumns = $column->getDbSearchedFields() ?: [$column->getDbField()];
+        $searchedDatabaseColumns = $column->getDbSearchedFields() ?: [$column->getDataSourceField()];
         $tableDbData = $this->getColumnDbInfo($column, $query);
         foreach ($searchedDatabaseColumns as $searchedDatabaseColumn) {
             if (! in_array($searchedDatabaseColumn, $tableDbData['columns'], true)) {
                 $tableAlias = Arr::get($tableDbData, 'alias');
                 $dynamicMessagePart = $tableAlias
-                    ? '« ' . $tableDbData['table'] . ' » (aliased as « ' . $tableAlias . ' ») table'
-                    : '« ' . $tableDbData['table'] . ' » table';
-                $errorMessage = 'The table column with related « ' . $searchedDatabaseColumn . ' » database column is '
+                    ? '"' . $tableDbData['table'] . '" (aliased as "' . $tableAlias . '") table'
+                    : '"' . $tableDbData['table'] . '" table';
+                $errorMessage = 'The table column with related "' . $searchedDatabaseColumn . '" database column is '
                     . 'searchable and does not exist in the ' . $dynamicMessagePart
-                    . '. Set the database searched table and (optionally) columns with the « sortable » '
+                    . '. Set the database searched table and (optionally) columns with the "sortable" '
                     . 'method arguments.';
                 throw new ErrorException($errorMessage);
             }

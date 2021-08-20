@@ -9,31 +9,40 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ButtonTest extends LaravelTableTestCase
 {
-    public function testSetButtonAttribute(): void
+    /** @test */
+    public function it_can_set_button_with_model_value(): void
     {
-        $table = (new Table())->model(User::class);
-        $table->column('name')->button(['buttonClass']);
-        self::assertEquals(['buttonClass'], $table->getColumns()->first()->getButtonClasses());
-    }
-
-    public function testIsButtonHtml(): void
-    {
-        $this->createUniqueUser();
+        $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        self::assertStringContainsString('<button class="btn btn-primary', $html);
+        self::assertEquals(['btn', 'btn-primary'], $table->getColumns()->first()->getButtonClasses());
+        self::assertStringContainsString('<button class="btn btn-primary ' . Str::slug(strip_tags($user->name)), $html);
         self::assertStringContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueHtml(): void
+    /** @test */
+    public function it_can_set_button_with_collection_value(): void
+    {
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromCollection(collect([['name' => 'Name test']]))->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->button(['btn', 'btn-primary']);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertEquals(['btn', 'btn-primary'], $table->getColumns()->first()->getButtonClasses());
+        self::assertStringContainsString('<button class="btn btn-primary name-test', $html);
+        self::assertStringContainsString('</button>', $html);
+    }
+
+    /** @test */
+    public function it_cant_set_button_with_no_model_value(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary']);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -41,12 +50,25 @@ class ButtonTest extends LaravelTableTestCase
         self::assertStringNotContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueWithPrependedHtml(): void
+    /** @test */
+    public function it_cant_set_button_with_no_collection_value(): void
+    {
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromCollection(collect([['name' => null]]))->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->button(['btn', 'btn-primary']);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertStringNotContainsString('<button class="btn btn-primary', $html);
+        self::assertStringNotContainsString('</button>', $html);
+    }
+
+    /** @test */
+    public function it_can_set_button_with_no_model_value_but_prepended_html(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->button(['btn', 'btn-primary'])->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -54,30 +76,56 @@ class ButtonTest extends LaravelTableTestCase
         self::assertStringContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithNoValueWithAppendedHtml(): void
+    /** @test */
+    public function it_can_set_button_with_no_collection_value_but_prepended_html(): void
     {
-        $user = $this->createUniqueUser();
-        $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->button(['btn', 'btn-primary'])->appendsHtml('icon', true);
+        $table = (new Table())->fromCollection(collect([['name' => null]]))->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->button(['btn', 'btn-primary'])->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         self::assertStringContainsString('<button class="btn btn-primary', $html);
         self::assertStringContainsString('</button>', $html);
     }
 
-    public function testIsButtonWithCustomValueHtml(): void
+    /** @test */
+    public function it_can_set_button_with_no_model_value_but_appended_html(): void
+    {
+        $user = $this->createUniqueUser();
+        $user->update(['name' => null]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->button(['btn', 'btn-primary'])->appendHtml('icon', true);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertStringContainsString('<button class="btn btn-primary', $html);
+        self::assertStringContainsString('</button>', $html);
+    }
+
+    /** @test */
+    public function it_can_set_button_with_no_collection_value_but_appended_html(): void
+    {
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromCollection(collect([['name' => null]]))->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->button(['btn', 'btn-primary'])->appendHtml('icon', true);
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertStringContainsString('<button class="btn btn-primary', $html);
+        self::assertStringContainsString('</button>', $html);
+    }
+
+    /** @test */
+    public function it_can_set_button_with_custom_value(): void
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
-        $table->column()->button(['buttonClass'])->value(fn(User $user) => 'user name = ' . $user->name);
+        $table->column()->button(['button-class'])->value(fn(array $row) => 'user name = ' . $row['name']);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         self::assertStringContainsString(
-            '<button class="buttonClass user-name-' . Str::slug(strip_tags($user->name)) . '">',
+            '<button class="button-class user-name-' . Str::slug(strip_tags($user->name)) . '">',
             $html
         );
         self::assertStringContainsString('</button>', $html);

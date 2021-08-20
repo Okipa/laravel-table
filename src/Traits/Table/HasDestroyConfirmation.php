@@ -8,7 +8,7 @@ use Okipa\LaravelTable\Table;
 
 trait HasDestroyConfirmation
 {
-    protected ?Closure $destroyConfirmationClosure = null;
+    protected Closure|null $destroyConfirmationClosure = null;
 
     public function destroyConfirmationHtmlAttributes(Closure $destroyConfirmationClosure): Table
     {
@@ -17,10 +17,10 @@ trait HasDestroyConfirmation
         return $this;
     }
 
-    public function defineRowConfirmationHtmlAttributes(Model $model): void
+    public function defineRowConfirmationHtmlAttributes(array &$row): void
     {
         if ($this->getDestroyConfirmationClosure()) {
-            $model->destroy_confirmation_attributes = ($this->getDestroyConfirmationClosure())($model);
+            $row['destroy_confirmation_attributes'] = ($this->getDestroyConfirmationClosure())($row);
         }
     }
 

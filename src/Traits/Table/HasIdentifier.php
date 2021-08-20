@@ -7,7 +7,7 @@ use Okipa\LaravelTable\Table;
 
 trait HasIdentifier
 {
-    protected ?string $identifier = null;
+    protected string|null $identifier = null;
 
     public function identifier(string $identifier): Table
     {
@@ -26,7 +26,7 @@ trait HasIdentifier
         $this->reDefineSortDirField($underscoredIdentifier . $this->getSortDirField());
     }
 
-    public function getIdentifier(): ?string
+    public function getIdentifier(): string|null
     {
         return $this->identifier;
     }

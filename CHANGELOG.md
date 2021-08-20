@@ -162,7 +162,7 @@
 * The model is now directly passed to the route during the table `show`, `edit` and `destroy` routes generation instead of its id
 ```php
 // Assuming your declared your edit route like this:
-(new Table())->model(User::class)->routes([
+(new Table())->fromModel(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...
@@ -182,7 +182,7 @@ route('user.edit', [$user->id, 'foo' => 'bar']);
 // With a route declared like this:
 Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
 // And a table routes declaration like this:
-(new Table())->model(User::class)->routes([
+(new Table())->fromModel(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['bar']],
     //...
@@ -197,7 +197,7 @@ Route::get('user/edit/{user}/{foo}', 'UsersController@edit')->name('user.edit');
 * Fixed the `show`, `edit` and `destroy` route generation, since Laravel 6 does handle differently the key given in the `route()` helper:
 ```php
 // Assuming your declared your edit route like this:
-(new Table())->model(User::class)->routes([
+(new Table())->fromModel(User::class)->routes([
     // ...
     'edit'    => ['name'=> 'user.edit', 'params' => ['foo' => 'bar']],
     //...

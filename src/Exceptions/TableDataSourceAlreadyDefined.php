@@ -4,7 +4,7 @@ namespace Okipa\LaravelTable\Exceptions;
 
 use Exception;
 
-class TableCollectionNotFound extends Exception
+class TableDataSourceAlreadyDefined extends Exception
 {
     //
 }

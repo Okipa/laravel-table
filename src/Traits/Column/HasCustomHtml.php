@@ -7,17 +7,16 @@ use Okipa\LaravelTable\Column;
 
 trait HasCustomHtml
 {
-    protected ?Closure $customHtmlClosure = null;
+    protected Closure|null $customHtmlClosure = null;
 
     public function html(Closure $customHtmlClosure): Column
     {
         $this->customHtmlClosure = $customHtmlClosure;
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 
-    public function getCustomHtmlClosure(): ?Closure
+    public function getCustomHtmlClosure(): Closure|null
     {
         return $this->customHtmlClosure;
     }

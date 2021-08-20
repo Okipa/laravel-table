@@ -6,14 +6,14 @@
                href="{{ $table->getRoute('index', array_merge([
                     $table->getRowsNumberField() => $table->getRequest()->get($table->getRowsNumberField()),
                     $table->getSearchField() => $table->getRequest()->get($table->getSearchField()),
-                    $table->getSortByField() => $column->getDbField(),
+                    $table->getSortByField() => $column->getDataSourceField(),
                     $table->getSortDirField() => $table->getRequest()->get($table->getSortDirField()) === 'desc' ? 'asc' : 'desc',
                 ], $table->getAppendedToPaginator())) }}"
                title="{{ $column->getTitle() }}">
-                @if($table->getRequest()->get($table->getSortByField()) === $column->getDbField()
+                @if($table->getRequest()->get($table->getSortByField()) === $column->getDataSourceField()
                     && $table->getRequest()->get($table->getSortDirField()) === 'asc')
                     <span class="sort asc">{!! config('laravel-table.icon.sort_asc') !!}</span>
-                @elseif($table->getRequest()->get($table->getSortByField()) === $column->getDbField()
+                @elseif($table->getRequest()->get($table->getSortByField()) === $column->getDataSourceField()
                     && $table->getRequest()->get($table->getSortDirField()) === 'desc')
                     <span class="sort desc">{!! config('laravel-table.icon.sort_desc') !!}</span>
                 @else

@@ -3,7 +3,6 @@
 namespace Okipa\LaravelTable\Traits\Table;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Okipa\LaravelTable\Table;
 
@@ -81,7 +80,7 @@ trait HasClasses
         return $this->tdClasses;
     }
 
-    public function rowsConditionalClasses(Closure $conditions, $classes): Table
+    public function rowsConditionalClasses(Closure $conditions, array|Closure $classes): Table
     {
         $this->rowsConditionalClasses->push(['conditions' => $conditions, 'classes' => $classes]);
 
@@ -98,16 +97,18 @@ trait HasClasses
         $this->rowsConditionalClasses = new Collection();
     }
 
-    protected function addClassesToRow(Model $model): void
+    protected function addClassesToRow(array &$row): void
     {
-        $this->getRowsConditionalClasses()->each(function (array $row) use ($model) {
-            if ($row['conditions']($model)) {
-                $model->conditionnal_classes = array_merge(
-                    $model->conditionnal_classes ?? [],
-                    is_callable($row['classes']) ? $row['classes']($model) : $row['classes']
+        foreach ($this->getRowsConditionalClasses() as $conditionalClass) {
+            if ($conditionalClass['conditions']($row)) {
+                $row['conditional_classes'] = array_merge(
+                    $row['conditional_classes'] ?? [],
+                    is_callable($conditionalClass['classes'])
+                        ? $conditionalClass['classes']($row)
+                        : $conditionalClass['classes']
                 );
             }
-        });
+        }
     }
 
     public function getRowsConditionalClasses(): Collection

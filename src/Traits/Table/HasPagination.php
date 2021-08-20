@@ -2,10 +2,9 @@
 
 namespace Okipa\LaravelTable\Traits\Table;
 
-use Closure;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Okipa\LaravelTable\Table;
 
 trait HasPagination
@@ -37,12 +36,33 @@ trait HasPagination
         return $this->paginator;
     }
 
-    abstract public function getDestroyConfirmationClosure(): Closure|null;
+    protected function transformPaginatedRows(): void
+    {
+        $this->getPaginator()->getCollection()->transform(function (Model|array $row) {
+            $row = $row instanceof Model ? $row->toArray() : $row;
+            $this->addClassesToRow($row);
+            $this->disableRow($row);
+            $this->defineRowConfirmationHtmlAttributes($row);
 
-    protected function paginateFromQuery(Builder $query): void
+            return $row;
+        });
+    }
+
+    protected function generatePaginatorFromEloquent(Builder $query): void
     {
         $perPage = $this->getRowsNumberValue() ?: $query->count();
         $this->paginator = $query->paginate($perPage);
+    }
+
+    protected function generatePaginatorFromCollection(): void
+    {
+        $total = $this->getCollection()->count();
+        $perPage = $this->getRowsNumberValue() ?: $total;
+        $this->paginator = new LengthAwarePaginator($this->getCollection(), $total, $perPage);
+    }
+
+    protected function appendDataToPaginator(): void
+    {
         $this->getPaginator()->appends(array_merge([
             $this->getRowsNumberField() => $this->getRowsNumberValue(),
             $this->getSearchField() => $this->searchValue,
@@ -51,37 +71,8 @@ trait HasPagination
         ], $this->getAppendedToPaginator()));
     }
 
-    abstract public function getRowsNumberValue(): int|null;
-
-    abstract public function getRowsNumberField(): string;
-
-    abstract public function getSearchField(): string;
-
-    abstract public function getSortByField(): string;
-
-    abstract public function getSortByValue(): string|null;
-
-    abstract public function getSortDirField(): string;
-
-    abstract public function getSortDirValue(): string|null;
-
     public function getAppendedToPaginator(): array
     {
         return $this->appendedToPaginator;
     }
-
-    protected function transformPaginatedRows(): void
-    {
-        $this->getPaginator()->getCollection()->transform(function (Model $model) {
-            $this->addClassesToRow($model);
-            $this->disableRow($model);
-            $this->defineRowConfirmationHtmlAttributes($model);
-
-            return $model;
-        });
-    }
-
-    abstract protected function addClassesToRow(Model $model): void;
-
-    abstract protected function disableRow(Model $model): void;
 }

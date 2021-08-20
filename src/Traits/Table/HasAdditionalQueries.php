@@ -25,7 +25,7 @@ trait HasAdditionalQueries
         }
     }
 
-    public function getAdditionalQueriesClosure(): ?Closure
+    public function getAdditionalQueriesClosure(): Closure|null
     {
         return $this->additionalQueriesClosure;
     }

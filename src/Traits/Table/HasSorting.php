@@ -10,11 +10,11 @@ trait HasSorting
 {
     protected string $sortByField = 'sort_by';
 
-    protected ?string $sortByValue = null;
+    protected string|null $sortByValue = null;
 
     protected string $sortDirField = 'sort_dir';
 
-    protected ?string $sortDirValue = null;
+    protected string|null $sortDirValue = null;
 
     abstract public function getRequest(): Request;
 
@@ -39,7 +39,7 @@ trait HasSorting
         }
     }
 
-    protected function getProcessedSortByValue(): ?string
+    protected function getProcessedSortByValue(): string|null
     {
         $requestSortByField = $this->getRequest()->get($this->getSortByField());
         if ($requestSortByField) {
@@ -50,7 +50,7 @@ trait HasSorting
         }
 
         return $this->getSortableColumns()->isNotEmpty()
-            ? $this->getSortableColumns()->first()->getDbField()
+            ? $this->getSortableColumns()->first()->getDataSourceField()
             : null;
     }
 
@@ -77,7 +77,7 @@ trait HasSorting
         return $this->sortByField;
     }
 
-    public function getSortByValue(): ?string
+    public function getSortByValue(): string|null
     {
         return $this->sortByValue;
     }
@@ -92,7 +92,7 @@ trait HasSorting
         return $this->sortDirField;
     }
 
-    public function getSortDirValue(): ?string
+    public function getSortDirValue(): string|null
     {
         return $this->sortDirValue;
     }

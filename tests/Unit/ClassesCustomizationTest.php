@@ -11,7 +11,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testContainerClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class)->containerClasses($classes);
+        $table = (new Table())->fromModel(User::class)->containerClasses($classes);
         $table->column();
         self::assertEquals($classes, $table->getContainerClasses());
     }
@@ -19,7 +19,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testTableClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class)->tableClasses($classes);
+        $table = (new Table())->fromModel(User::class)->tableClasses($classes);
         $table->column();
         self::assertEquals($classes, $table->getTableClasses());
     }
@@ -27,7 +27,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testTrClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class)->trClasses($classes);
+        $table = (new Table())->fromModel(User::class)->trClasses($classes);
         $table->column();
         self::assertEquals($classes, $table->getTrClasses());
     }
@@ -35,7 +35,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testThClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class)->thClasses($classes);
+        $table = (new Table())->fromModel(User::class)->thClasses($classes);
         $table->column();
         self::assertEquals($classes, $table->getThClasses());
     }
@@ -43,7 +43,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testTdClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class)->tdClasses($classes);
+        $table = (new Table())->fromModel(User::class)->tdClasses($classes);
         $table->column();
         self::assertEquals($classes, $table->getTdClasses());
     }
@@ -51,7 +51,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testColumnClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column()->classes($classes);
         self::assertEquals($classes, $table->getColumns()->first()->getClasses());
     }
@@ -59,7 +59,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     public function testResultClassesAttribute(): void
     {
         $classes = ['test-custom-class'];
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->result()->classes($classes);
         self::assertEquals($classes, $table->getResults()->first()->getClasses());
     }
@@ -82,7 +82,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->containerClasses($classes);
         $table->column('name');
@@ -96,7 +96,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->tableClasses($classes);
         $table->column('name');
@@ -111,7 +111,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->trClasses($classes);
         $table->column('name');
@@ -125,7 +125,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->thClasses($classes);
         $table->column('name');
@@ -139,7 +139,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->tdClasses($classes);
         $table->column('name');
@@ -153,7 +153,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->classes($classes);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -165,7 +165,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $this->createMultipleUsers(2);
         $classes = ['test-custom-class'];
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
         $table->result()->classes($classes);
@@ -178,7 +178,7 @@ class ClassesCustomizationTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'users.create'],
@@ -196,17 +196,17 @@ class ClassesCustomizationTest extends LaravelTableTestCase
         $table->configure();
         foreach ($table->getPaginator()->getCollection() as $user) {
             if (! in_array($user->id, [1, 2], true)) {
-                self::assertEmpty($user->conditionnal_classes);
+                self::assertEmpty($user->conditional_classes);
                 continue;
             }
             if ($user->id === 1) {
                 self::assertEquals(
                     ['custom', 'first-class', 1, 'custom', 'second-class', '1'],
-                    $user->conditionnal_classes
+                    $user->conditional_classes
                 );
                 continue;
             }
-            self::assertEquals(['custom', 'class', '2'], $user->conditionnal_classes);
+            self::assertEquals(['custom', 'class', '2'], $user->conditional_classes);
         }
         $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
         self::assertStringContainsString('custom first-class 1 custom second-class 1', $html);

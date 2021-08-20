@@ -8,65 +8,72 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class AppendTest extends LaravelTableTestCase
 {
-    public function testSetAppendAttribute(): void
+    /** @test */
+    public function it_can_append_html_with_model_value(): void
     {
-        $table = (new Table())->model(User::class);
-        $table->column('name')->appendsHtml('html');
-        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
-        self::assertEquals(false, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
-    }
-
-    public function testSetAppendAttributeAndSetShowWithNoValue(): void
-    {
-        $table = (new Table())->model(User::class);
-        $table->column('name')->appendsHtml('html', true);
-        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
-        self::assertEquals(true, $table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
-    }
-
-    public function testSetAppendHtml(): void
-    {
-        $this->createMultipleUsers(1);
+        $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->appendsHtml('html');
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->appendHtml('html');
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        self::assertFalse($table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
+        self::assertStringContainsString('html', $html);
+    }
+
+    /** @test */
+    public function it_can_append_html_with_collection_value(): void
+    {
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromCollection(collect([['name' => 'Name test']]))->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->appendHtml('html');
+        $table->configure();
+        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        self::assertFalse($table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
+        self::assertStringContainsString('html', $html);
+    }
+
+    /** @test */
+    public function it_can_append_html_with_custom_value(): void
+    {
+        $this->createUniqueUser();
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->appendHtml('html')->value(fn() =>'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         self::assertStringContainsString('html', $html);
     }
 
-    public function testSetAppendWithCustomValueHtml(): void
-    {
-        $this->createMultipleUsers(1);
-        $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->appendsHtml('html')->value(fn() =>'test');
-        $table->configure();
-        $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
-        self::assertStringContainsString('html', $html);
-    }
-
-    public function testSetAppendWithNoValueHtml(): void
+    /** @test */
+    public function it_cant_append_html_when_model_has_no_value(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->appendsHtml('html');
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->appendHtml('html');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        self::assertFalse($table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
         self::assertStringNotContainsString('html', $html);
     }
 
-    public function testSetAppendWithNoValueButShowAnywayValueHtml(): void
+    /** @test */
+    public function it_can_append_html_when_model_has_no_value_with_forced_displaying(): void
     {
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->appendsHtml('html', true);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->appendHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
+        self::assertEquals('html', $table->getColumns()->first()->getAppendedHtml());
+        self::assertTrue($table->getColumns()->first()->shouldForceAppendedHtmlDisplay());
         self::assertStringContainsString('html', $html);
     }
 }

@@ -18,14 +18,14 @@ class SearchTest extends LaravelTableTestCase
 {
     public function testSetIsSearchableAttribute(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->searchable();
-        self::assertEquals('name', $table->getSearchableColumns()->first()->getDbField());
+        self::assertEquals('name', $table->getSearchableColumns()->first()->getDataSourceField());
     }
 
     public function testSetSearchedDatabaseTableAttributeOnly(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->searchable('dbSearchedTable');
         self::assertEquals('dbSearchedTable', $table->getColumns()->first()->getDbSearchedTable());
         self::assertEquals([], $table->getColumns()->first()->getDbSearchedFields());
@@ -33,7 +33,7 @@ class SearchTest extends LaravelTableTestCase
 
     public function testSetSearchedDatabaseTableAndSearchedDatabaseColumns(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->searchable('dbSearchedTable', ['searchedField']);
         self::assertEquals('dbSearchedTable', $table->getColumns()->first()->getDbSearchedTable());
         self::assertEquals(['searchedField'], $table->getColumns()->first()->getDbSearchedFields());
@@ -42,12 +42,12 @@ class SearchTest extends LaravelTableTestCase
     public function testNotExistingSearchableColumn(): void
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table column with related « not_existing_column » database column is '
-            . 'searchable and does not exist in the « users_test » table. Set the database '
-            . 'searched table and (optionally) columns with the « sortable » '
+        $this->expectExceptionMessage('The table column with related "not_existing_column" database column is '
+            . 'searchable and does not exist in the "users_test" table. Set the database '
+            . 'searched table and (optionally) columns with the "sortable" '
             . 'method arguments.');
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('not_existing_column')->searchable();
         $table->configure();
     }
@@ -61,7 +61,7 @@ class SearchTest extends LaravelTableTestCase
             'search' => $searchedValue,
         ]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->searchable();
@@ -82,7 +82,7 @@ class SearchTest extends LaravelTableTestCase
             'search' => $searchedValue,
         ]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->sortable(true);
@@ -102,7 +102,7 @@ class SearchTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $this->createMultipleUsers(10);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->searchable();
         $table->column('email');
         $table->configure();
@@ -113,7 +113,7 @@ class SearchTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $this->createMultipleUsers(10);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->title('Name')->searchable();
         $table->column('email')->title('Email')->searchable();
         $table->configure();
@@ -123,13 +123,13 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchFieldFromOnOtherTableWithoutDeclaringSearchedDatabaseTable(): void
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table column with related « owner » database column is searchable and does '
-            . 'not exist in the « companies_test » table. Set the database searched table '
-            . 'and (optionally) columns with the « sortable » method arguments.');
+        $this->expectExceptionMessage('The table column with related "owner" database column is searchable and does '
+            . 'not exist in the "companies_test" table. Set the database searched table '
+            . 'and (optionally) columns with the "sortable" method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -145,11 +145,11 @@ class SearchTest extends LaravelTableTestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('One of the searchable table columns has no defined database column. You have '
             . 'to define a database column for each searchable table columns by setting a '
-            . 'string parameter in the « column » method.');
+            . 'string parameter in the "column" method.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
-        $table = (new Table())->model(Company::class)->routes(['index' => ['name' => 'companies.index']]);
+        $table = (new Table())->fromModel(Company::class)->routes(['index' => ['name' => 'companies.index']]);
         $table->column()->searchable('users_test', ['name']);
         $table->configure();
     }
@@ -157,13 +157,13 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchOnOtherTableFieldWithCustomTableDeclarationWithoutAlias(): void
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table column with related « owner » database column is searchable and does '
-            . 'not exist in the « users_test » table. Set the database searched table and '
-            . '(optionally) columns with the « sortable » method arguments.');
+        $this->expectExceptionMessage('The table column with related "owner" database column is searchable and does '
+            . 'not exist in the "users_test" table. Set the database searched table and '
+            . '(optionally) columns with the "sortable()" method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -177,14 +177,14 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchNonExistentFieldOnAliasedTable(): void
     {
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table column with related « nonExistent » database column is searchable '
-            . 'and does not exist in the « aliasesUserTable » (aliased as « users_test ») '
+        $this->expectExceptionMessage('The table column with related "nonExistent" database column is searchable '
+            . 'and does not exist in the "aliasesUserTable" (aliased as "users_test") '
             . 'table. Set the database searched table and (optionally) columns with the '
-            . '« sortable » method arguments.');
+            . '"sortable()" method arguments.');
         $this->createMultipleUsers(5);
         $this->createMultipleCompanies(2);
         $this->routes(['companies'], ['index']);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -204,7 +204,7 @@ class SearchTest extends LaravelTableTestCase
             (new Table())->getRowsNumberField() => 20,
             'search' => $searchedValue,
         ]);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -235,7 +235,7 @@ class SearchTest extends LaravelTableTestCase
             'search' => $searchedValue,
             'page' => 2,
         ]);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -261,7 +261,7 @@ class SearchTest extends LaravelTableTestCase
             new Table())->getRowsNumberField() => 20,
             'search' => $searchedValue,
         ]);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
             ->query(function (Builder $query) {
@@ -288,7 +288,7 @@ class SearchTest extends LaravelTableTestCase
             (new Table())->getRowsNumberField() => 20,
             'search' => $searchedValue,
         ]);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->request($customRequest)
             ->query(function (Builder $query) {
@@ -316,7 +316,7 @@ class SearchTest extends LaravelTableTestCase
         $this->createMultipleUsers(5);
         $companies = $this->createMultipleCompanies(10);
         $this->routes(['companies'], ['index']);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'companies.index']])
             ->query(function (Builder $query) {
                 $query->select('companies_test.*');
@@ -339,7 +339,7 @@ class SearchTest extends LaravelTableTestCase
     public function testSearchableHtml(): void
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('name');
         $table->column('email')->searchable();
         $table->configure();
@@ -353,7 +353,7 @@ class SearchTest extends LaravelTableTestCase
     public function testNoSearchableHtml(): void
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
         $table->configure();
@@ -389,7 +389,7 @@ class SearchTest extends LaravelTableTestCase
             'email' => 'charlie@test.fr',
             'password' => Hash::make('secret'),
         ]);
-        $companyAlpha = (new Company())->create([
+        (new Company())->create([
             'owner_id' => $userAlpha->id,
             'name' => 'Company Alpha',
             'turnover' => rand(1000, 99999),
@@ -399,7 +399,7 @@ class SearchTest extends LaravelTableTestCase
             'name' => 'Company Beta',
             'turnover' => rand(1000, 99999),
         ]);
-        $companyCharlie = (new Company())->create([
+        (new Company())->create([
             'owner_id' => $userCharlie->id,
             'name' => 'Company Charlie',
             'turnover' => rand(1000, 99999),
@@ -411,7 +411,7 @@ class SearchTest extends LaravelTableTestCase
             (new Table())->getRowsNumberField() => 20,
             'search' => $searchedValue,
         ]);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest)
             ->query(function (Builder $query) use ($companyBeta) {
@@ -443,7 +443,7 @@ class SearchTest extends LaravelTableTestCase
             'search' => $searchedValue,
         ]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->searchable();
@@ -470,7 +470,7 @@ class SearchTest extends LaravelTableTestCase
             'search' => $searchedValue,
         ]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->searchable();
@@ -487,7 +487,7 @@ class SearchTest extends LaravelTableTestCase
             'search' => $searchedValue,
         ]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(UserJsonFields::class)
+        $table = (new Table())->fromModel(UserJsonFields::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->searchable();

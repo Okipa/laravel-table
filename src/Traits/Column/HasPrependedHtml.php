@@ -4,22 +4,21 @@ namespace Okipa\LaravelTable\Traits\Column;
 
 use Okipa\LaravelTable\Column;
 
-trait PrependsHtml
+trait HasPrependedHtml
 {
-    protected ?string $prependedHtml = null;
+    protected string|null $prependedHtml = null;
 
     protected bool $forcePrependedHtmlDisplay;
 
-    public function prependHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): Column
+    public function prependHtml(string $html, bool $forcePrependedHtmlDisplay = false): Column
     {
-        $this->prependedHtml = $prependedHtml;
+        $this->prependedHtml = $html;
         $this->forcePrependedHtmlDisplay = $forcePrependedHtmlDisplay;
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 
-    public function getPrependedHtml(): ?string
+    public function getPrependedHtml(): string|null
     {
         return $this->prependedHtml;
     }

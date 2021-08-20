@@ -5,20 +5,20 @@
                 <span class="text-info">
                     {!! config('laravel-table.icon.info') !!}
                 </span>
-                @lang('No results were found.')
+                {{ __('No results were found.') }}
             </td>
         </tr>
     @else
-        @foreach($table->getPaginator() as $model)
-            <tr{{ html_classes($table->getTrClasses(), $model->conditionnal_classes, $model->disabled_classes) }}>
+        @foreach($table->getPaginator() as $row)
+            <tr{{ html_classes($table->getTrClasses(), data_get($row, 'conditional_classes'), data_get($row, 'disabled_classes')) }}>
                 @foreach($table->getColumns() as $columnKey => $column)
                     @php
-                        $value = $model->{$column->getDbField()};
-                        $customValue = $column->getCustomValueClosure() ? ($column->getCustomValueClosure())($model) : null;
-                        $html = $column->getCustomHtmlClosure() ? ($column->getCustomHtmlClosure())($model) : null;
+                        $value = $column->getDataSourceField() ? $row[$column->getDataSourceField()] : null;
+                        $customValue = $column->getCustomValueClosure() ? ($column->getCustomValueClosure())($row) : null;
+                        $html = $column->getCustomHtmlClosure() ? ($column->getCustomHtmlClosure())($row) : null;
                         $url = $column->getUrlClosure()
-                            ? ($column->getUrlClosure())($model)
-                            : ($column->getUrl() === '__VALUE__' ? ($customValue ? $customValue : $value) : $column->getUrl());
+                            ? ($column->getUrlClosure())($row)
+                            : ($column->getUrl() === '__VALUE__' ? ($customValue ?: $value) : $column->getUrl());
                         $showPrepend = $column->getPrependedHtml() && (($customValue || $value) || $column->shouldForcePrependedHtmlDisplay());
                         $showAppend = $column->getAppendedHtml() && (($customValue || $value) || $column->shouldForceAppendedHtmlDisplay());
                         $showLink = $url && ($customValue || $value || $showPrepend || $showAppend);
@@ -31,7 +31,7 @@
                         @else
                             {{-- Link --}}
                             @if($showLink)
-                                <a href="{{ $url }}" title="{{ $customValue ? $customValue : $value }}">
+                                <a href="{{ $url }}" title="{{ $customValue ?: $value }}">
                             @endif
                             {{-- Button start--}}
                             @if($showButton)
@@ -78,7 +78,7 @@
                 {{-- Actions --}}
                 @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') || $table->isRouteDefined('show')))
                     <td{{ html_classes($table->getTdClasses(), 'text-right') }}>
-                        @if(! $model->disabled_classes)
+                        @if(! $row->disabled_classes)
                             <div class="d-flex justify-content-end">
                                 @include('laravel-table::' . $table->getShowActionTemplatePath())
                                 @include('laravel-table::' . $table->getEditActionTemplatePath())

@@ -6,25 +6,24 @@ use Okipa\LaravelTable\Column;
 
 trait HasTitle
 {
-    protected ?string $title;
+    protected string|null $title;
 
-    public function title(?string $title): Column
+    public function title(string|null $title): Column
     {
         $this->title = $title;
 
-        /** @var \Okipa\LaravelTable\Column $this */
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string|null
     {
         return $this->title;
     }
 
     protected function initializeTitle(): void
     {
-        $this->title = $this->getDbField() ? (string) __('validation.attributes.' . $this->getDbField()) : null;
+        $this->title = $this->getDataSourceField()
+            ? (string) __('validation.attributes.' . $this->getDataSourceField())
+            : null;
     }
-
-    abstract public function getDbField(): ?string;
 }

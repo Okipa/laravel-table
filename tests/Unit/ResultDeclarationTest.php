@@ -12,7 +12,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
 {
     public function testSetResultsAttribute(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->result()->title('Test');
         self::assertEquals($table->getResults()->count(), 1);
         self::assertEquals($table->getResults()->first()->getTitle(), 'Test');
@@ -22,7 +22,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(10);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(5);
         $table->column('name');
@@ -36,7 +36,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->createMultipleUsers(10);
         $companies = $this->createMultipleCompanies(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
         $table->result()->title('Result !')->html(fn(Collection $paginatedRows) => $paginatedRows->sum('turnover'));
@@ -51,7 +51,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->createMultipleUsers(10);
         $companies = $this->createMultipleCompanies(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(2);
         $table->column('name');
@@ -72,7 +72,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(Company::class)
+        $table = (new Table())->fromModel(Company::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(2);
         $table->column('name');
@@ -87,7 +87,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->result()
             ->title('Selected turnover')
@@ -103,7 +103,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(Company::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(Company::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('turnover');
         $table->result()
@@ -120,7 +120,7 @@ class ResultDeclarationTest extends LaravelTableTestCase
         $this->createMultipleUsers(10);
         $this->createMultipleCompanies(5);
         $this->routes(['users'], ['index', 'edit']);
-        $table = (new Table())->model(Company::class)->routes([
+        $table = (new Table())->fromModel(Company::class)->routes([
             'index' => ['name' => 'users.index'],
             'edit' => ['name' => 'users.edit'],
         ]);

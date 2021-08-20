@@ -3,7 +3,6 @@
 namespace Okipa\LaravelTable\Traits\Table;
 
 use Illuminate\Support\Collection;
-use Okipa\LaravelTable\Exceptions\TableCollectionNotFound;
 use Okipa\LaravelTable\Table;
 
 trait HasCollection
@@ -14,26 +13,18 @@ trait HasCollection
      * @param \Illuminate\Support\Collection $collection
      *
      * @return \Okipa\LaravelTable\Table
-     * @throws \Okipa\LaravelTable\Exceptions\TableBuildModeAlreadyDefined
+     * @throws \Okipa\LaravelTable\Exceptions\TableDataSourceAlreadyDefined
      */
-    public function collection(Collection $collection): Table
+    public function fromCollection(Collection $collection): Table
     {
-        $this->checkNoBuildModeIsAlreadyDefined();
-        $this->setBuildMode('collection');
+        $this->checkDataSourceHasNotAlreadyBeenDefined();
+        $this->setDataSource('collection');
         $this->collection = $collection;
 
         return $this;
     }
 
-    /** @throws \Okipa\LaravelTable\Exceptions\TableCollectionNotFound */
-    protected function checkCollectionIsDefined(): void
-    {
-        if ($this->buildModeId === $this->getBuildModeFromKey('collection')['id'] && ! $this->getCollection()) {
-            throw new TableCollectionNotFound('The table is in "collection" build mode but none has been defined.');
-        }
-    }
-
-    public function getCollection(): ?Collection
+    public function getCollection(): Collection|null
     {
         return $this->collection;
     }

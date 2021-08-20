@@ -6,7 +6,7 @@ use Okipa\LaravelTable\Column;
 
 trait HasDateTimeFormat
 {
-    protected ?string $dateTimeFormat = null;
+    protected string|null $dateTimeFormat = null;
 
     public function dateTimeFormat(string $dateTimeFormat): Column
     {
@@ -16,7 +16,7 @@ trait HasDateTimeFormat
         return $this;
     }
 
-    public function getDateTimeFormat(): ?string
+    public function getDateTimeFormat(): string|null
     {
         return $this->dateTimeFormat;
     }

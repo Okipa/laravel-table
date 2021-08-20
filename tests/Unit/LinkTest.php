@@ -10,21 +10,21 @@ class LinkTest extends LaravelTableTestCase
 {
     public function testSetIsLinkAttributeEmpty(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->link();
         self::assertEquals('__VALUE__', $table->getColumns()->first()->getUrl());
     }
 
     public function testSetIsLinkAttributeString(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->link('link');
         self::assertEquals('link', $table->getColumns()->first()->getUrl());
     }
 
     public function testSetIsLinkAttributeClosure(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $closure = fn() => null;
         $table->column('name')->link($closure);
         self::assertEquals($closure, $table->getColumns()->first()->getUrlClosure());
@@ -34,7 +34,7 @@ class LinkTest extends LaravelTableTestCase
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link();
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -45,7 +45,7 @@ class LinkTest extends LaravelTableTestCase
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link('test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -56,7 +56,7 @@ class LinkTest extends LaravelTableTestCase
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link(fn() => 'url');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -67,7 +67,7 @@ class LinkTest extends LaravelTableTestCase
     {
         $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link();
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -79,7 +79,7 @@ class LinkTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link();
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -91,7 +91,7 @@ class LinkTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link()->prependHtml('html', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -103,8 +103,8 @@ class LinkTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->column('name')->link()->appendsHtml('icon', true);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name')->link()->appendHtml('icon', true);
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
         self::assertStringNotContainsString('<a href="', $html);
@@ -115,7 +115,7 @@ class LinkTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link('url')->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();
@@ -127,7 +127,7 @@ class LinkTest extends LaravelTableTestCase
         $user = $this->createUniqueUser();
         $user->update(['name' => null]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->link()->value(fn() => 'test');
         $table->configure();
         $html = view('laravel-table::' . $table->getTbodyTemplatePath(), compact('table'))->toHtml();

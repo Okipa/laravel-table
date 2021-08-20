@@ -24,7 +24,7 @@ class RowDisableTest extends LaravelTableTestCase
         $closure = fn(User $user) => $user->id === 1 || $user->id === 2;
         $classes = ['test-disabled-default-class'];
         config()->set('laravel-table.classes.disabled', $classes);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'users.create'],
@@ -65,7 +65,7 @@ class RowDisableTest extends LaravelTableTestCase
         $users = $this->createMultipleUsers(5);
         $closure = fn(User $user) => $user->id === 1 || $user->id === 2;
         $classes = ['test-disabled-custom-class'];
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'users.create'],
@@ -103,7 +103,7 @@ class RowDisableTest extends LaravelTableTestCase
         config()->set('laravel-table.behavior.disabled_line.class', $classes);
         $this->routes(['users'], ['index', 'create', 'edit', 'destroy']);
         $this->createMultipleUsers(5);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'users.create'],

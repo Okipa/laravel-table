@@ -33,7 +33,7 @@ class RowsNumberTest extends LaravelTableTestCase
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name')->searchable();
         $table->column('email');
         $table->configure();
@@ -54,7 +54,7 @@ class RowsNumberTest extends LaravelTableTestCase
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', true);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->activateRowsNumberDefinition(false);
         $table->column('name')->searchable();
@@ -77,7 +77,7 @@ class RowsNumberTest extends LaravelTableTestCase
     {
         config()->set('laravel-table.behavior.activate_rows_number_definition', false);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->activateRowsNumberDefinition();
         $table->column('name');
@@ -100,7 +100,7 @@ class RowsNumberTest extends LaravelTableTestCase
     {
         config()->set('laravel-table.behavior.rows_number', 15);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $table->column('email');
         $table->configure();
@@ -111,7 +111,7 @@ class RowsNumberTest extends LaravelTableTestCase
     public function testSetCustomRowsNumberFromMethodHtml(): void
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(15);
         $table->column('name');
@@ -126,7 +126,7 @@ class RowsNumberTest extends LaravelTableTestCase
         $this->createMultipleUsers(20);
         $customRequest = (new Request())->merge([(new Table())->getRowsNumberField() => 10]);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->request($customRequest);
         $table->column('name')->sortable(true, 'asc');
@@ -143,7 +143,7 @@ class RowsNumberTest extends LaravelTableTestCase
         config()->set('laravel-table.behavior.rows_number', 5);
         $users = $this->createMultipleUsers(20);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)
+        $table = (new Table())->fromModel(User::class)
             ->routes(['index' => ['name' => 'users.index']])
             ->rowsNumber(null);
         $table->column('name');

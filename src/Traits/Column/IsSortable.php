@@ -40,18 +40,18 @@ trait IsSortable
         /** @var \Okipa\LaravelTable\Column $this */
         if ($this->getTable()->getSortByValue() || $this->getTable()->getSortDirValue()) {
             /** @var \Okipa\LaravelTable\Column $this */
-            $errorMessage = 'The table is already sorted by the « ' . $this->getTable()->getSortByValue()
-                . ' » database column. You only can sort a table column by default once.';
+            $errorMessage = 'The table is already sorted by the "' . $this->getTable()->getSortByValue()
+                . '" database column. You only can sort a table column by default once.';
             throw new ErrorException($errorMessage);
         }
-        if (! $this->getDbField()) {
+        if (! $this->getDataSourceField()) {
             return;
         }
         /** @var \Okipa\LaravelTable\Column $this */
-        $this->getTable()->defineSortByValue($this->getDbField());
+        $this->getTable()->defineSortByValue($this->getDataSourceField());
         $acceptedDirections = ['asc', 'desc'];
-        $errorMessage = 'Invalid « $sortDirection » second argument for the « sortable » method. Has to be « asc » or '
-            . '« desc ». « ' . $sortDirection . ' » given.';
+        $errorMessage = 'Invalid "$sortDirection" second argument for the "sortable()" method. Has to be "asc" or '
+            . '"desc". "' . $sortDirection . '" given.';
         if (! in_array($sortDirection, $acceptedDirections)) {
             throw new InvalidArgumentException($errorMessage);
         }

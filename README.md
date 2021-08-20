@@ -65,7 +65,7 @@ class UsersTable extends AbstractTable
 {
     protected function table(): Table
     {
-        return (new Table())->model(User::class)
+        return (new Table())->fromModel(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'user.create'],
@@ -164,7 +164,7 @@ Finally, display it in the view:
   * [button](#column-button)
   * [link](#column-link)
   * [prependHtml](#column-prependHtml)
-  * [appendsHtml](#column-appendsHtml)
+  * [appendHtml](#column-appendHtml)
   * [stringLimit](#column-stringLimit)
   * [value](#column-value)
   * [html](#column-html)
@@ -247,7 +247,7 @@ class NewsTable extends AbstractTable
 
     protected function table(): Table
     {
-        return (new Table())->model(News::class)
+        return (new Table())->fromModel(News::class)
             ->identifier('news-table')
             ->request($this->request)
             ->routes([
@@ -297,7 +297,7 @@ class NewsTable extends AbstractTable
         $table->column('category_id')
             ->title(__('Category'))
             ->prependHtml('<i class="fas fa-hand-point-right"></i>')
-            ->appendsHtml('<i class="fas fa-hand-point-left"></i>')
+            ->appendHtml('<i class="fas fa-hand-point-left"></i>')
             ->button(['btn', 'btn-sm', 'btn-outline-primary'])
             ->value(fn(News $news) => config('news.category.' . $news->category_id))
         $table->column()
@@ -323,7 +323,7 @@ class NewsTable extends AbstractTable
   * `button`
   * `link`
   * `prependHtml`
-  * `appendsHtml`
+  * `appendHtml`
   * `stringLimit`
   * `value`
 
@@ -343,7 +343,7 @@ class NewsTable extends AbstractTable
 **Use case example:**
 
 ```php
-(new Table())->model(User::class);
+(new Table())->fromModel(User::class);
 ```
 
 <h3 id="table-identifier">identifier</h3>
@@ -406,7 +406,7 @@ class UsersTable extends AbstractTable
 
     protected function table(): Table
     {
-        return (new Table())->model(User::class)->request($this->request);
+        return (new Table())->fromModel(User::class)->request($this->request);
     }
 
     // ...
@@ -452,7 +452,7 @@ class UsersTable extends AbstractTable
     // Assuming your declared your route with implicit binding:
     Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
     // You will have to declare your params with keys as following:
-    (new Table())->model(User::class)->routes([
+    (new Table())->fromModel(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
         // ...
@@ -465,7 +465,7 @@ class UsersTable extends AbstractTable
     // Now imagine your route is declared with the table related model as first param like this:
     Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
     // In this case only, you will be able to declare your routes without keys:
-    (new Table())->model(User::class)->routes([
+    (new Table())->fromModel(User::class)->routes([
         // ...
         'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherParam']],
         // ...
@@ -705,7 +705,7 @@ destroyButtons.click((event) => {
 
 > Set the disableRows closure that will be executed during the table generation.  
 > The optional second param let you override the classes that will be applied for the disabled rows.  
-> By default, the « config('laravel-table.classes.disabled') » config value is applied.  
+> By default, the `config('laravel-table.classes.disabled')` config value is applied.  
 > For example, you can disable the current logged user to prevent him being edited or deleted from the table.  
 > The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
 
@@ -1049,7 +1049,7 @@ $table->column('email')->sortable(true, 'desc');
 $table->column('email')->searchable();
 
 // Example 2
-$table = (new Table())->model(User::class)->query(function(Builder $query) {
+$table = (new Table())->fromModel(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect('companies.name as company');
     $query->join('companies', 'companies.owner_id', '=', 'users.id');
@@ -1057,7 +1057,7 @@ $table = (new Table())->model(User::class)->query(function(Builder $query) {
 $table->column('company')->searchable('companies', ['name']);
 
 // Example 3
-$table = (new Table())->model(User::class)->query(function(Builder $query) {
+$table = (new Table())->fromModel(User::class)->query(function(Builder $query) {
     $query->select('users.*');
     $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
     $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');
@@ -1138,20 +1138,20 @@ $table->column()->link(function(News $news) {
 $table->column('email')->prependHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
-<h3 id="column-appendsHtml">appendsHtml</h3>
+<h3 id="column-appendHtml">appendHtml</h3>
 
 > Append HTML to the displayed value.  
 > Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
 
 **Note:**
 
-* Signature: `appendsHtml(string $appendedHtml, bool $forceAppendedHtmlDisplay = false): \Okipa\LaravelTable\Column`
+* Signature: `appendHtml(string $appendedHtml, bool $forceAppendedHtmlDisplay = false): \Okipa\LaravelTable\Column`
 * Optional
 
 **Use case example:**
 
 ```php
-$table->column('email')->appendsHtml('<i class="fas fa-envelope"></i>', true);
+$table->column('email')->appendHtml('<i class="fas fa-envelope"></i>', true);
 ```
 
 <h3 id="column-stringLimit">stringLimit</h3>

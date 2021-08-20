@@ -5,10 +5,10 @@ namespace Okipa\LaravelTable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Validator;
 use Okipa\LaravelTable\Traits\Table\HasAdditionalQueries;
-use Okipa\LaravelTable\Traits\Table\HasBuildMode;
 use Okipa\LaravelTable\Traits\Table\HasClasses;
 use Okipa\LaravelTable\Traits\Table\HasCollection;
 use Okipa\LaravelTable\Traits\Table\HasColumns;
+use Okipa\LaravelTable\Traits\Table\HasDataSource;
 use Okipa\LaravelTable\Traits\Table\HasDestroyConfirmation;
 use Okipa\LaravelTable\Traits\Table\HasDisabledRows;
 use Okipa\LaravelTable\Traits\Table\HasIdentifier;
@@ -24,7 +24,7 @@ use Okipa\LaravelTable\Traits\Table\HasTemplates;
 
 class Table implements Htmlable
 {
-    use HasBuildMode;
+    use HasDataSource;
     use HasTemplates;
     use HasModel;
     use HasCollection;
@@ -73,14 +73,11 @@ class Table implements Htmlable
     /** @throws \ErrorException */
     public function configure(): void
     {
-        $this->checkRoutesValidity($this->routes);
+        $this->checkRoutesValidity($this->getRoutes());
         $this->defineInteractionsFromRequest();
-        $query = $this->getModel()->query();
-        $this->executeAdditionalQueries($query);
-        $this->checkColumnsValidity($query);
-        $this->applySearchingOnQuery($query);
-        $this->applySortingOnQuery($query);
-        $this->paginateFromQuery($query);
+        $this->configureFromModel();
+        $this->configureFromCollection();
+        $this->appendDataToPaginator();
         $this->transformPaginatedRows();
         $this->configured = true;
     }
@@ -98,7 +95,7 @@ class Table implements Htmlable
             $this->getSortByField() => [
                 'nullable',
                 'string',
-                'in:' . $this->getColumns()->map(fn(Column $column) => $column->getDbField())->implode(','),
+                'in:' . $this->getColumns()->map(fn(Column $column) => $column->getDataSourceField())->implode(','),
             ],
             $this->getSortDirField() => ['nullable', 'string', 'in:asc,desc'],
         ]);
@@ -112,5 +109,24 @@ class Table implements Htmlable
         }
         $this->rowsNumberValue = $this->getRequest()->get($this->getRowsNumberField());
         $this->searchValue = $this->getRequest()->get($this->getSearchField());
+    }
+
+    protected function configureFromModel(): void
+    {
+        if ($this->hasDataSource('model')) {
+            $query = $this->getModel()->query();
+            $this->executeAdditionalQueries($query);
+            $this->checkColumnsValidity($query);
+            $this->applySearchingOnQuery($query);
+            $this->applySortingOnQuery($query);
+            $this->generatePaginatorFromEloquent($query);
+        }
+    }
+
+    protected function configureFromCollection(): void
+    {
+        if ($this->hasDataSource('collection')) {
+            $this->generatePaginatorFromCollection();
+        }
     }
 }

@@ -16,7 +16,7 @@ trait HasStringLimit
         return $this;
     }
 
-    public function getStringLimit(): ?int
+    public function getStringLimit(): int|null
     {
         return $this->stringLimit;
     }

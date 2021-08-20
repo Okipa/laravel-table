@@ -12,7 +12,7 @@ class NavigationStatusTest extends LaravelTableTestCase
     {
         $this->createMultipleUsers(10);
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         self::assertEquals(
@@ -28,7 +28,7 @@ class NavigationStatusTest extends LaravelTableTestCase
     public function testNavigationStatusHtml(): void
     {
         $this->routes(['users'], ['index']);
-        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->fromModel(User::class);
         $table->column('name')->title('Name');
         $table->configure();
         $html = view('laravel-table::' . $table->getTfootTemplatePath(), compact('table'))->toHtml();

@@ -2,47 +2,62 @@
 
 namespace Okipa\LaravelTable\Tests\Unit;
 
-use ErrorException;
+use Okipa\LaravelTable\Exceptions\TableDataSourceNotDefined;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Test\LaravelTableTestCase;
 use Okipa\LaravelTable\Test\Models\User;
 
 class ColumnDeclarationTest extends LaravelTableTestCase
 {
-    public function testAddColumn(): void
+    /** @test */
+    public function it_can_add_column_to_table_with_model_data_source(): void
     {
-        $columnAttribute = 'name';
-        $table = (new Table())->model(User::class);
-        $table->column($columnAttribute);
+        $table = (new Table())->fromModel(User::class);
+        $table->column('name');
         self::assertEquals(1, $table->getColumns()->count());
         self::assertEquals($table, $table->getColumns()->first()->getTable());
         self::assertEquals(app(User::class)->getTable(), $table->getColumns()->first()->getDbTable());
-        self::assertEquals($columnAttribute, $table->getColumns()->first()->getDbField());
+        self::assertEquals('name', $table->getColumns()->first()->getDataSourceField());
     }
 
-    public function testAddColumnWithAttributeAndNoTitleHtml(): void
+    /** @test */
+    public function it_can_add_column_to_table_with_collection_data_source(): void
     {
+        $table = (new Table())->fromCollection(collect([['name' => 'Name test']]));
+        $table->column('name');
+        self::assertEquals(1, $table->getColumns()->count());
+        self::assertEquals($table, $table->getColumns()->first()->getTable());
+        self::assertNull($table->getColumns()->first()->getDbTable());
+        self::assertEquals('name', $table->getColumns()->first()->getDataSourceField());
+    }
+
+    /** @test */
+    public function it_can_setup_default_title_from_field_with_model_data_source(): void
+    {
+        $user = $this->createUniqueUser();
         $this->routes(['users'], ['index']);
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index']]);
         $table->column('name');
         $html = $table->toHtml();
         self::assertStringContainsString('validation.attributes.name', $html);
     }
 
-    public function testAddColumnWithNoDefinedModel(): void
+    /** @test */
+    public function it_can_setup_default_title_from_field_with_collection_data_source(): void
     {
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The table model has not been defined or is not an instance of '
-                                      . '« Illuminate\Database\Eloquent\Model ».');
-        (new Table())->column('name');
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->fromCollection(collect([['name' => 'Name test']]))->routes(['index' => ['name' => 'users.index']]);
+        $table->column('name');
+        $html = $table->toHtml();
+        self::assertStringContainsString('validation.attributes.name', $html);
     }
 
-    public function testNoDeclaredColumn(): void
+    /** @test */
+    public function it_cant_add_column_when_no_data_source_is_defined(): void
     {
-        $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('No column has been added to the table. Please add at least one column by '
-                                      . 'using the « column() » method on the table object.');
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index']]);
-        $table->configure();
+        $this->expectException(TableDataSourceNotDefined::class);
+        $this->expectExceptionMessage('The table has no defined build source. '
+            . 'Please defined a build source by calling the `model()` or `collection()` method.');
+        (new Table())->column('name');
     }
 }

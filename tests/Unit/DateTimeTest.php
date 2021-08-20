@@ -11,7 +11,7 @@ class DateTimeTest extends LaravelTableTestCase
 {
     public function testDateFormatAttribute(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->dateTimeFormat('d/m/Y H:i:s');
         self::assertEquals('d/m/Y H:i:s', $table->getColumns()->first()->getDateTimeFormat());
     }
@@ -20,7 +20,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('d/m/Y');
         $table->configure();
@@ -30,7 +30,7 @@ class DateTimeTest extends LaravelTableTestCase
 
     public function testDateTimeFormatAttribute(): void
     {
-        $table = (new Table())->model(User::class);
+        $table = (new Table())->fromModel(User::class);
         $table->column('name')->dateTimeFormat('H:i');
         self::assertEquals('H:i', $table->getColumns()->first()->getDateTimeFormat());
     }
@@ -39,7 +39,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('d/m');
         $table->configure();
@@ -51,7 +51,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('H\h i\m\i\n');
         $table->configure();
@@ -63,7 +63,7 @@ class DateTimeTest extends LaravelTableTestCase
     {
         $this->routes(['users'], ['index']);
         $user = $this->createUniqueUser();
-        $table = (new Table())->model(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
+        $table = (new Table())->fromModel(User::class)->routes(['index' => ['name' => 'users.index', 'params' => []]]);
         $table->column('name');
         $table->column('updated_at')->dateTimeFormat('d/m/Y H:i');
         $table->configure();
