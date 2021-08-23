@@ -30,7 +30,7 @@
     @endforeach
     @if($table->isRouteDefined('show') || $table->isRouteDefined('edit') || $table->isRouteDefined('destroy'))
         <th{{ html_classes('text-right', $table->getThClasses()) }} scope="col">
-            @lang('Actions')
+            {{ __('Actions') }}
         </th>
     @endif
 </tr>

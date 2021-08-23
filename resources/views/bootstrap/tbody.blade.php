@@ -54,7 +54,7 @@
                                 {{-- Datetime format --}}
                                 @elseif($column->getDateTimeFormat())
                                     {{ $value
-                                        ? \Carbon\Carbon::parse($value)->format($column->getDateTimeFormat())
+                                        ? Date::parse($value)->format($column->getDateTimeFormat())
                                         : null }}
                                 {{-- Basic value --}}
                                 @else
@@ -78,7 +78,7 @@
                 {{-- Actions --}}
                 @if(($table->isRouteDefined('edit') || $table->isRouteDefined('destroy') || $table->isRouteDefined('show')))
                     <td{{ html_classes($table->getTdClasses(), 'text-right') }}>
-                        @if(! $row->disabled_classes)
+                        @if(! data_get($row, 'disabled_classes'))
                             <div class="d-flex justify-content-end">
                                 @include('laravel-table::' . $table->getShowActionTemplatePath())
                                 @include('laravel-table::' . $table->getEditActionTemplatePath())

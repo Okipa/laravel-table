@@ -17,8 +17,8 @@
                        type="text"
                        name="{{ $table->getSearchField() }}"
                        value="{{ $table->getRequest()->get($table->getSearchField()) }}"
-                       placeholder="@lang('Search by:') {{ $table->getSearchableTitles() }}"
-                       aria-label="@lang('Search by:') {{ $table->getSearchableTitles() }}">
+                       placeholder="{{ __('Search by:') }} {{ $table->getSearchableTitles() }}"
+                       aria-label="{{ __('Search by:') }} {{ $table->getSearchableTitles() }}">
                 @if($table->getRequest()->get($table->getSearchField()))
                     <div class="input-group-append">
                         <a class="input-group-text btn btn-link text-danger reset-research"
@@ -28,14 +28,14 @@
                                 $table->getSortByField() => $table->getRequest()->get($table->getSortByField()),
                                 $table->getSortDirField() => $table->getRequest()->get($table->getSortDirField())
                             ], $table->getAppendedToPaginator())) }}"
-                           title="@lang('Reset research')">
+                           title="{{ __('Reset research') }}">
                             <span>{!! config('laravel-table.icon.reset') !!}</span>
                         </a>
                     </div>
                 @else
                     <div class="input-group-append">
                         <span class="input-group-text py-0">
-                            <button class="btn btn-link p-0 text-primary" type="submit" title="@lang('Search by:') {{ $table->getSearchableTitles() }}">
+                            <button class="btn btn-link p-0 text-primary" type="submit" title="{{ __('Search by:') }} {{ $table->getSearchableTitles() }}">
                                 {!! config('laravel-table.icon.validate') !!}
                             </button>
                         </span>

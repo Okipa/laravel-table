@@ -17,11 +17,11 @@
                    type="number"
                    name="{{ $table->getRowsNumberField() }}"
                    value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}"
-                   placeholder="@lang('Number of rows')"
-                   aria-label="@lang('Number of rows')">
+                   placeholder="{{ __('Number of rows') }}"
+                   aria-label="{{ __('Number of rows') }}">
                 <div class="input-group-append">
                     <div class="input-group-text py-0">
-                        <button class="btn btn-link p-0 text-primary" type="submit" title="@lang('Number of rows')">
+                        <button class="btn btn-link p-0 text-primary" type="submit" title="{{ __('Number of rows') }}">
                             {!! config('laravel-table.icon.validate') !!}
                         </button>
                     </div>
