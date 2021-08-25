@@ -8,7 +8,8 @@ use Okipa\LaravelTable\Test\LaravelTableTestCase;
 
 class ColumnsCountTest extends LaravelTableTestCase
 {
-    public function testGetColumnsCount(): void
+    /** @test */
+    public function it_can_get_columns_count(): void
     {
         $table = (new Table())->fromModel(User::class);
         $table->column('id');
@@ -17,12 +18,15 @@ class ColumnsCountTest extends LaravelTableTestCase
         self::assertEquals(3, $table->getColumnsCount());
     }
 
-    public function testGetColumnsCountWithEditRouteDefined(): void
+    /** @test */
+    public function it_can_get_columns_count_with_interaction_routes_defined(): void
     {
-        $this->routes(['users'], ['index', 'edit']);
+        $this->routes(['users'], ['index', 'edit', 'destroy', 'show']);
         $table = (new Table())->fromModel(User::class)->routes([
             'index' => ['name' => 'users.index'],
             'edit'  => ['name' => 'users.edit'],
+            'destroy'  => ['name' => 'users.destroy'],
+            'show'  => ['name' => 'users.show'],
         ]);
         $table->column('id');
         $table->column('name');

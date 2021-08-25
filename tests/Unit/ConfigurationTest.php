@@ -9,7 +9,8 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ConfigurationTest extends LaravelTableTestCase
 {
-    public function testToHtmlTriggersConfiguration(): void
+    /** @test */
+    public function it_can_set_configured_to_true_when_calling_to_html_method(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -20,7 +21,8 @@ class ConfigurationTest extends LaravelTableTestCase
         self::assertTrue($table->hasBeenConfigured());
     }
 
-    public function testConfigureTriggersConfiguration(): void
+    /** @test */
+    public function it_can_set_configured_to_true_when_calling_configure_method(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);
@@ -31,7 +33,8 @@ class ConfigurationTest extends LaravelTableTestCase
         self::assertTrue($table->hasBeenConfigured());
     }
 
-    public function testConfigurationIsNotExecutedTwice(): void
+    /** @test */
+    public function it_can_set_execute_configuration_twice(): void
     {
         $this->createUniqueUser();
         $this->routes(['users'], ['index']);

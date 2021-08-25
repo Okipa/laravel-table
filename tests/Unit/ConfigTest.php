@@ -8,7 +8,7 @@ use Okipa\LaravelTable\Test\Models\User;
 
 class ConfigTest extends LaravelTableTestCase
 {
-    public function testConfigStructure(): void
+    public function it_can_check_config_structure(): void
     {
         // laravel-table
         self::assertArrayHasKey('classes', config('laravel-table'));
@@ -53,32 +53,5 @@ class ConfigTest extends LaravelTableTestCase
         self::assertArrayHasKey('tfoot', config('laravel-table.template'));
         self::assertArrayHasKey('navigation_status', config('laravel-table.template'));
         self::assertArrayHasKey('pagination', config('laravel-table.template'));
-    }
-
-    public function testCustomDefaultValueRowsNumber(): void
-    {
-        config()->set('laravel-table.behavior.rows_number', 9999);
-        $this->createMultipleUsers(3);
-        $this->routes(['users'], ['index', 'create', 'edit', 'destroy', 'show']);
-        $table = (new Table())->fromModel(User::class)->routes([
-            'index' => ['name' => 'users.index'],
-            'create' => ['name' => 'users.create'],
-            'edit' => ['name' => 'users.edit'],
-            'destroy' => ['name' => 'users.destroy'],
-            'show' => ['name' => 'users.show'],
-        ]);
-        $table->column('name')
-            ->title('Name')
-            ->sortable()
-            ->searchable();
-        $table->column('email')
-            ->title('Email')
-            ->searchable()
-            ->sortable();
-        $table->configure();
-        $html = view('laravel-table::' . $table->getTableTemplatePath(), compact('table'))->toHtml();
-        self::assertEquals(9999, $table->getRowsNumberValue());
-        self::assertStringContainsString('value="9999"', $html);
-        self::assertStringContainsString('rows=9999', $html);
     }
 }
