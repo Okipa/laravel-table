@@ -73,5 +73,5 @@ jobs:
           COVERALLS_RUN_LOCALLY: 1
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
-          composer require php-coveralls/php-coveralls
+          composer require php-coveralls/php-coveralls --with-all-dependencies
           vendor/bin/php-coveralls -v --coverage_clover=build/logs/clover.xml
