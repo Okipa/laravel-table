@@ -1,17 +1,23 @@
 <?php
 
-namespace Okipa\LaravelTable\Test\Models;
+namespace Okipa\LaravelTable\Tests\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Tests\Database\Factories\UserFactory;
 
 class User extends Model
 {
-    /** @var array */
-    protected $table = 'users_test';
+    use HasFactory;
 
-    /** @var array */
+    /** @var string */
+    protected $table = 'users';
+
+    /** @var array<int, string> */
     protected $fillable = ['name', 'email', 'password'];
 
-    /** @var array */
-    protected $hidden = ['password'];
+    protected static function newFactory()
+    {
+        return UserFactory::new();
+    }
 }

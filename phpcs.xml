@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <ruleset name="PSR12">
-    <description>PSR-12 code style validation</description>
+    <description>PSR-12 validation</description>
     <!-- Included directories -->
-    <file>config</file>
-    <file>src</file>
-    <file>tests</file>
+    <file>./config</file>
+    <file>./src</file>
+    <file>./tests</file>
     <!-- Excluded patterns -->
     <exclude-pattern>*/*.js</exclude-pattern>
     <exclude-pattern>*/*.css</exclude-pattern>
@@ -13,7 +13,7 @@
     <!-- Configuration -->
     <arg name="colors"/>
     <arg value="p"/>
-    <!-- Rules configurations -->
+    <!-- Rules -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <exclude-pattern>./tests/*</exclude-pattern>
     </rule>

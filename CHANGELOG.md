@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.0.0](https://github.com/Okipa/laravel-table/compare/4.0.4...5.0.0)
+
+* Removed `okipa/laravel-html-helper` dependency
+* Added `livewire/livewire` dependency
+
 ## [4.0.4](https://github.com/Okipa/laravel-table/compare/4.0.3...4.0.4)
 
 2021-08-17

@@ -3,7 +3,7 @@
 namespace Okipa\LaravelTable;
 
 use Illuminate\Support\ServiceProvider;
-use Okipa\LaravelHtmlHelper\HtmlHelperServiceProvider;
+use Livewire\Livewire;
 use Okipa\LaravelTable\Console\Commands\MakeTable;
 
 class LaravelTableServiceProvider extends ServiceProvider
@@ -17,6 +17,12 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/laravel-table'),
         ], 'laravel-table:views');
+        $this->registerLivewireComponents();
+    }
+
+    protected function registerLivewireComponents(): void
+    {
+        Livewire::component('table', \Okipa\LaravelTable\Livewire\Table::class);
     }
 
     public function register(): void

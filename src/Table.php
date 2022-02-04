@@ -2,119 +2,69 @@
 
 namespace Okipa\LaravelTable;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Facades\Validator;
-use Okipa\LaravelTable\Traits\Table\HasAdditionalQueries;
-use Okipa\LaravelTable\Traits\Table\HasClasses;
-use Okipa\LaravelTable\Traits\Table\HasColumns;
-use Okipa\LaravelTable\Traits\Table\HasDestroyConfirmation;
-use Okipa\LaravelTable\Traits\Table\HasDisabledRows;
-use Okipa\LaravelTable\Traits\Table\HasIdentifier;
-use Okipa\LaravelTable\Traits\Table\HasModel;
-use Okipa\LaravelTable\Traits\Table\HasPagination;
-use Okipa\LaravelTable\Traits\Table\HasRequest;
-use Okipa\LaravelTable\Traits\Table\HasResults;
-use Okipa\LaravelTable\Traits\Table\HasRoutes;
-use Okipa\LaravelTable\Traits\Table\HasRowsNumberDefinition;
-use Okipa\LaravelTable\Traits\Table\HasSearching;
-use Okipa\LaravelTable\Traits\Table\HasSorting;
-use Okipa\LaravelTable\Traits\Table\HasTemplates;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
-class Table implements Htmlable
+class Table
 {
-    use HasTemplates;
-    use HasModel;
-    use HasIdentifier;
-    use HasRoutes;
-    use HasClasses;
-    use HasColumns;
-    use HasResults;
-    use HasRequest;
-    use HasAdditionalQueries;
-    use HasDisabledRows;
-    use HasRowsNumberDefinition;
-    use HasSorting;
-    use HasSearching;
-    use HasPagination;
-    use HasDestroyConfirmation;
+    protected Model $model;
 
-    protected bool $configured = false;
+    protected Collection $columns;
+
+    protected LengthAwarePaginator $rows;
+
+    protected int $numberOfRowsPerPage;
 
     public function __construct()
     {
-        $this->initializeDefaultTemplates();
-        $this->initializeTableDefaultClasses();
-        $this->initializeColumns();
-        $this->initializeResults();
-        $this->initializeRequest();
-        $this->initializeDisabledRows();
-        $this->initializeRowsNumberDefinition();
+        $this->columns = collect();
+        $this->numberOfRowsPerPage = config('laravel-table.number_of_rows_per_page');
     }
 
-    public function hasBeenConfigured(): bool
+    public function model(string $modelClass): self
     {
-        return $this->configured;
+        $this->model = app($modelClass);
+
+        return $this;
     }
 
-    /**
-     * Get content as a string of HTML.
-     *
-     * @return string
-     * @throws \ErrorException
-     */
-    public function toHtml(): string
+    public function numberOfRowsPerPage(int $numberOfRowsPerPage): self
     {
-        if (! $this->configured) {
-            $this->configure();
-        }
+        $this->numberOfRowsPerPage = $numberOfRowsPerPage;
 
-        return view('laravel-table::' . $this->getTableTemplatePath(), ['table' => $this])->toHtml();
+        return $this;
     }
 
-    /**
-     * @throws \ErrorException
-     */
-    public function configure(): void
+    public function column(string $key): Column
     {
-        $this->checkRoutesValidity($this->routes);
-        $this->checkIfAtLeastOneColumnIsDeclared();
-        $this->defineInteractionsFromRequest();
-        $query = $this->getModel()->query();
-        $this->executeAdditionalQueries($query);
-        $this->checkColumnsValidity($query);
-        $this->applySearchingOnQuery($query);
-        $this->applySortingOnQuery($query);
-        $this->paginateFromQuery($query);
-        $this->transformPaginatedRows();
-        $this->configured = true;
+        $column = new Column($key);
+        $this->columns->add($column);
+
+        return $column;
     }
 
-    protected function defineInteractionsFromRequest(): void
+    public function getColumns(): Collection
     {
-        $validator = Validator::make($this->getRequest()->only(
-            $this->getRowsNumberField(),
-            $this->getSearchField(),
-            $this->getSortByField(),
-            $this->getSortDirField()
-        ), [
-            $this->getRowsNumberField() => ['required', 'integer'],
-            $this->getSearchField() => ['nullable', 'string'],
-            $this->getSortByField() => [
-                'nullable',
-                'string',
-                'in:' . $this->getColumns()->map(fn(Column $column) => $column->getDbField())->implode(','),
-            ],
-            $this->getSortDirField() => ['nullable', 'string', 'in:asc,desc'],
+        return $this->columns;
+    }
+
+    public function generateRows(): void
+    {
+        $this->rows = $this->model->paginate($this->numberOfRowsPerPage);
+    }
+
+    public function getRows(): LengthAwarePaginator
+    {
+        return $this->rows;
+    }
+
+    public function getNavigationStatus(): string
+    {
+        return __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
+            'start' => ($this->rows->perPage() * ($this->rows->currentPage() - 1)) + 1,
+            'stop' => $this->rows->count() + (($this->rows->currentPage() - 1) * $this->rows->perPage()),
+            'total' => $this->rows->total(),
         ]);
-        if ($validator->fails()) {
-            $this->getRequest()->merge([
-                $this->getRowsNumberField() => $this->getRowsNumberValue() ?? config('laravel-table.behavior.rows'),
-                $this->getSearchField() => null,
-                $this->getSortByField() => $this->getSortByValue(),
-                $this->getSortDirField() => $this->getSortDirValue(),
-            ]);
-        }
-        $this->rowsNumberValue = $this->getRequest()->get($this->getRowsNumberField());
-        $this->searchValue = $this->getRequest()->get($this->getSearchField());
     }
 }

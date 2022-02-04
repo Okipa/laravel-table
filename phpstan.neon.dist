@@ -6,6 +6,7 @@ parameters:
     paths:
         - config
         - src
+        - tests
 
     # The level 8 is the highest level
     level: 5
