@@ -16,12 +16,12 @@ class Table
 
     protected LengthAwarePaginator $rows;
 
-    protected int $numberOfRowsPerPage;
+    protected array $numberOfRowsPerPageOptions;
 
     public function __construct()
     {
         $this->columns = collect();
-        $this->numberOfRowsPerPage = Config::get('laravel-table.number_of_rows_per_page');
+        $this->numberOfRowsPerPageOptions = Config::get('laravel-table.number_of_rows_per_page_options');
     }
 
     public function model(string $modelClass): self
@@ -31,16 +31,16 @@ class Table
         return $this;
     }
 
-    public function numberOfRowsPerPage(int $numberOfRowsPerPage): self
+    public function numberOfRowsPerPageOptions(array $numberOfRowsPerPageOptions): self
     {
-        $this->numberOfRowsPerPage = $numberOfRowsPerPage;
+        $this->numberOfRowsPerPageOptions = $numberOfRowsPerPageOptions;
 
         return $this;
     }
 
-    public function getNumberOfRowsPerPage(): int
+    public function getNumberOfRowsPerPageOptions(): array
     {
-        return $this->numberOfRowsPerPage;
+        return $this->numberOfRowsPerPageOptions;
     }
 
     public function column(string $key): Column
@@ -61,9 +61,9 @@ class Table
         return $this->columns;
     }
 
-    public function generateRows(): void
+    public function generateRows(int $numberOfRowsPerPage): void
     {
-        $this->rows = $this->model->paginate($this->numberOfRowsPerPage);
+        $this->rows = $this->model->paginate($numberOfRowsPerPage);
     }
 
     public function getRows(): LengthAwarePaginator

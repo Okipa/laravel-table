@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -14,6 +15,8 @@ class Table extends Component
 {
     use WithPagination;
 
+    public bool $initialized = false;
+
     public string $config;
 
     public array $configParams = [];
@@ -22,11 +25,7 @@ class Table extends Component
 
     public string $paginationTheme = 'bootstrap';
 
-    public string|null $number_of_rows_per_page = null;
-
-    public bool $initialized = false;
-
-    protected $listeners = ['table:updated' => '$refresh'];
+    public int $numberOfRowsPerPage;
 
     public function init(): void
     {
@@ -47,29 +46,13 @@ class Table extends Component
      */
     public function render(): View
     {
-        return view('laravel-table::' . Config::get('laravel-table.ui') . '.table', $this->buildTable());
-    }
+        $config = $this->buildConfig();
 
-    /**
-     * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
-     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
-     */
-    protected function buildTable(): array
-    {
-        $config = $this->initConfig();
-        $table = $this->initTable($config);
-        $columns = $table->getColumns();
-
-        return [
-            'columns' => $columns,
-            'columnsCount' => $columns->count(),
-            'rows' => $table->getRows(),
-            'navigationStatus' => $table->getNavigationStatus(),
-        ];
+        return view('laravel-table::' . Config::get('laravel-table.ui') . '.table', $this->buildTable($config));
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration */
-    protected function initConfig(): AbstractTableConfiguration
+    protected function buildConfig(): AbstractTableConfiguration
     {
         if (! app($this->config) instanceof AbstractTableConfiguration) {
             throw new InvalidTableConfiguration('The given ' . $this->config
@@ -79,13 +62,28 @@ class Table extends Component
         return app($this->config, $this->configParams);
     }
 
-    protected function initTable(AbstractTableConfiguration $config): \Okipa\LaravelTable\Table
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    protected function buildTable(AbstractTableConfiguration $config): array
     {
+        /** @var \Okipa\LaravelTable\Table $table */
         $table = app(\Okipa\LaravelTable\Table::class);
         $config->setup($table);
-        $this->number_of_rows_per_page = $this->number_of_rows_per_page ?: $table->getNumberOfRowsPerPage();
-        $table->generateRows();
+        $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
+        $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
+        $table->generateRows($this->numberOfRowsPerPage);
+        $columns = $table->getColumns();
 
-        return $table;
+        return [
+            'columns' => $columns,
+            'columnsCount' => $columns->count(),
+            'rows' => $table->getRows(),
+            'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
+            'navigationStatus' => $table->getNavigationStatus(),
+        ];
+    }
+
+    public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void
+    {
+        $this->numberOfRowsPerPage = $numberOfRowsPerPage;
     }
 }

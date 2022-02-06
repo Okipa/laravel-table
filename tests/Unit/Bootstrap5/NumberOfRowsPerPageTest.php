@@ -12,10 +12,10 @@ use Okipa\LaravelTable\Tests\TestCase;
 class NumberOfRowsPerPageTest extends TestCase
 {
     /** @test */
-    public function it_can_display_number_of_rows_per_page_elements(): void
+    public function it_can_set_global_default_number_of_rows_per_page_options_from_config(): void
     {
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
-        Config::set('laravel-table.icon.validate', 'validate-icon');
+        Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $config = new class extends AbstractTableConfiguration {
             protected function table(Table $table): void
             {
@@ -29,19 +29,52 @@ class NumberOfRowsPerPageTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSeeHtml([
-                '<form wire:submit.prevent="$emitSelf(\'table:updated\')">',
-                '<input wire:model.defer="number_of_rows_per_page"',
+            ->assertSet('numberOfRowsPerPage', 1)
+            ->assertSeeHtmlInOrder([
                 'rows-number-icon',
-                '<button',
-                'validate-icon',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<option value="1" selected>',
+                '<option value="2">',
+                '<option value="3">',
+                '<option value="4">',
+                '<option value="5">',
             ]);
     }
 
     /** @test */
-    public function it_can_set_a_global_default_number_of_rows_per_page_from_config(): void
+    public function it_can_set_specific_number_of_rows_per_page_options_from_table(): void
     {
-        Config::set('laravel-table.number_of_rows_per_page', 1);
+        Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
+        Config::set('laravel-table.number_of_rows_per_page_options', [10, 25, 50, 75, 100]);
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class)->numberOfRowsPerPageOptions([1, 2, 3, 4, 5]);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSet('numberOfRowsPerPage', 1)
+            ->assertSeeHtmlInOrder([
+                'rows-number-icon',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<option value="1" selected>',
+                '<option value="2">',
+                '<option value="3">',
+                '<option value="4">',
+                '<option value="5">',
+            ]);
+    }
+
+    /** @test */
+    public function it_can_set_default_number_of_rows_from_from_first_option(): void
+    {
+        Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
         $config = new class extends AbstractTableConfiguration {
             protected function table(Table $table): void
@@ -56,7 +89,8 @@ class NumberOfRowsPerPageTest extends TestCase
         };
         $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('number_of_rows_per_page', 1);
+            ->assertSet('numberOfRowsPerPage', 1)
+            ->assertSeeHtml('<option value="1" selected>');
         foreach ($users as $user) {
             if ($user->id === $users->first()->id) {
                 $component->assertSeeHtml('<td>' . $user->id . '</td>');
@@ -67,37 +101,9 @@ class NumberOfRowsPerPageTest extends TestCase
     }
 
     /** @test */
-    public function it_can_set_a_specific_default_number_of_rows_per_page_from_table(): void
+    public function it_can_change_number_of_rows_per_page_from_select(): void
     {
-        Config::set('laravel-table.number_of_rows_per_page', 10);
-        $users = User::factory()->count(5)->create();
-        $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
-            {
-                $table->model(User::class)->numberOfRowsPerPage(1);
-            }
-
-            protected function columns(Table $table): void
-            {
-                $table->column('id');
-            }
-        };
-        $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
-            ->call('init')
-            ->assertSet('number_of_rows_per_page', 1);
-        foreach ($users as $user) {
-            if ($user->id === $users->first()->id) {
-                $component->assertSeeHtml('<td>' . $user->id . '</td>');
-            } else {
-                $component->assertDontSeeHtml('<td>' . $user->id . '</td>');
-            }
-        }
-    }
-
-    /** @test */
-    public function it_can_change_number_of_rows_per_page_from_from(): void
-    {
-        Config::set('laravel-table.number_of_rows_per_page', 10);
+        Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
         $config = new class extends AbstractTableConfiguration {
             protected function table(Table $table): void
@@ -112,14 +118,11 @@ class NumberOfRowsPerPageTest extends TestCase
         };
         $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->set('number_of_rows_per_page', 1)
-            ->emit('table:updated');
+            ->call('changeNumberOfRowsPerPage', 5)
+            ->assertSet('numberOfRowsPerPage', 5)
+            ->assertSeeHtml('<option value="5" selected>');
         foreach ($users as $user) {
-            if ($user->id === $users->first()->id) {
-                $component->assertSeeHtml('<td>' . $user->id . '</td>');
-            } else {
-                $component->assertDontSeeHtml('<td>' . $user->id . '</td>');
-            }
+            $component->assertSeeHtml('<td>' . $user->id . '</td>');
         }
     }
 }

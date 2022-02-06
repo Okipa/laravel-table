@@ -27,7 +27,10 @@ return [
         'destroy' => '<i class="fas fa-trash fa-fw"></i>',
     ],
 
-    /** The default number of displayed rows per page. */
-    'number_of_rows_per_page' => 10,
+    /** Whether the select allowing to choose the number of rows per page should be displayed by default. */
+    'enable_number_of_rows_per_page_choice' => true,
+
+    /** The default number-of-rows-per-page-select options. */
+    'number_of_rows_per_page_options' => [10, 25, 50, 75, 100],
 
 ];
