@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
 class Table
 {
@@ -36,6 +37,11 @@ class Table
         return $this;
     }
 
+    public function getNumberOfRowsPerPage(): int
+    {
+        return $this->numberOfRowsPerPage;
+    }
+
     public function column(string $key): Column
     {
         $column = new Column($key);
@@ -44,8 +50,13 @@ class Table
         return $column;
     }
 
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumns(): Collection
     {
+        if ($this->columns->isEmpty()) {
+            throw new NoColumnsDeclared('No columns are declared for ' . $this->model::class . ' table.');
+        }
+
         return $this->columns;
     }
 
@@ -62,7 +73,9 @@ class Table
     public function getNavigationStatus(): string
     {
         return __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
-            'start' => ($this->rows->perPage() * ($this->rows->currentPage() - 1)) + 1,
+            'start' => $this->rows->isNotEmpty()
+                ? ($this->rows->perPage() * ($this->rows->currentPage() - 1)) + 1
+                : 0,
             'stop' => $this->rows->count() + (($this->rows->currentPage() - 1) * $this->rows->perPage()),
             'total' => $this->rows->total(),
         ]);

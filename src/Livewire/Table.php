@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,38 +16,80 @@ class Table extends Component
 
     public string $config;
 
-    protected bool $initialized = false;
+    public array $configParams = [];
+
+    public \Okipa\LaravelTable\Table $table;
 
     public string $paginationTheme = 'bootstrap';
 
+    public string|null $rows_number_per_page = null;
+
+    public bool $initialized = false;
+
     public function init(): void
     {
-        $this->paginationTheme = Str::contains(config('laravel-table.ui'), 'bootstrap')
-            ? 'bootstrap'
-            : 'tailwind';
+        $this->initPaginationTheme();
         $this->initialized = true;
     }
 
-    /** @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration */
+    protected function initPaginationTheme(): void
+    {
+        $this->paginationTheme = Str::contains(Config::get('laravel-table.ui'), 'bootstrap')
+            ? 'bootstrap'
+            : 'tailwind';
+    }
+
+    /**
+     * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
+     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     */
     public function render(): View
     {
-        $table = $this->initialized ? $this->configure() : null;
+        return view('laravel-table::' . Config::get('laravel-table.ui') . '.table', $this->buildTable());
+    }
 
-        return view('laravel-table::' . config('laravel-table.ui') . '.table', compact('table'));
+    /**
+     * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
+     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     */
+    protected function buildTable(): array
+    {
+        $config = $this->initConfig();
+        $table = $this->initTable($config);
+        $columns = $table->getColumns();
+
+        return [
+            'columns' => $columns,
+            'columnsCount' => $columns->count(),
+            'rows' => $table->getRows(),
+            'navigationStatus' => $table->getNavigationStatus(),
+        ];
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration */
-    public function configure(): \Okipa\LaravelTable\Table|null
+    protected function initConfig(): AbstractTableConfiguration
     {
-        $config = app($this->config);
-        if (! $config instanceof AbstractTableConfiguration) {
+        if (! app($this->config) instanceof AbstractTableConfiguration) {
             throw new InvalidTableConfiguration('The given ' . $this->config
                 . ' table config should extend ' . AbstractTableConfiguration::class . '.');
         }
+
+        return app($this->config, $this->configParams);
+    }
+
+    protected function initTable(AbstractTableConfiguration $config): \Okipa\LaravelTable\Table
+    {
         $table = app(\Okipa\LaravelTable\Table::class);
         $config->setup($table);
+        $this->number_of_rows_per_page = $table->getNumberOfRowsPerPage();
         $table->generateRows();
 
         return $table;
+    }
+
+    public function setNumberOfRowsPerPage(): void
+    {
+        $this->table->numberOfRowsPerPage($this->number_of_rows_per_page);
+        $this->resetPage();
     }
 }

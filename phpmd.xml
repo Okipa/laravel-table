@@ -21,6 +21,7 @@
     <!-- Controversial rules -->
     <rule ref="rulesets/controversial.xml">
         <exclude name="CamelCaseMethodName" pattern="tests/*"/>
+        <exclude name="CamelCasePropertyName" pattern="src/Livewire/*"/>
     </rule>
     <!-- Design rules -->
     <rule ref="rulesets/design.xml">

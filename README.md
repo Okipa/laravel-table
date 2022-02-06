@@ -169,7 +169,7 @@ Here is the list of the words and sentences available for translation:
 * `Show`
 * `Edit`
 * `Destroy`
-* `Number of rows`
+* `Number of rows per page`
 * `Search by:`
 * `Reset research`
 * `Actions`
