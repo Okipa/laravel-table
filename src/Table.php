@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
 class Table
@@ -20,7 +21,7 @@ class Table
     public function __construct()
     {
         $this->columns = collect();
-        $this->numberOfRowsPerPage = config('laravel-table.number_of_rows_per_page');
+        $this->numberOfRowsPerPage = Config::get('laravel-table.number_of_rows_per_page');
     }
 
     public function model(string $modelClass): self

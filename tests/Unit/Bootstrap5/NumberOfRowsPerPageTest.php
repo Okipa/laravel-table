@@ -30,7 +30,7 @@ class NumberOfRowsPerPageTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtml([
-                '<form wire:submit.prevent="setNumberOfRowsPerPage">',
+                '<form wire:submit.prevent="$emitSelf(\'table:updated\')">',
                 '<input wire:model.defer="number_of_rows_per_page"',
                 'rows-number-icon',
                 '<button',
@@ -85,6 +85,35 @@ class NumberOfRowsPerPageTest extends TestCase
         $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSet('number_of_rows_per_page', 1);
+        foreach ($users as $user) {
+            if ($user->id === $users->first()->id) {
+                $component->assertSeeHtml('<td>' . $user->id . '</td>');
+            } else {
+                $component->assertDontSeeHtml('<td>' . $user->id . '</td>');
+            }
+        }
+    }
+
+    /** @test */
+    public function it_can_change_number_of_rows_per_page_from_from(): void
+    {
+        Config::set('laravel-table.number_of_rows_per_page', 10);
+        $users = User::factory()->count(5)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+            }
+        };
+        $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->set('number_of_rows_per_page', 1)
+            ->emit('table:updated');
         foreach ($users as $user) {
             if ($user->id === $users->first()->id) {
                 $component->assertSeeHtml('<td>' . $user->id . '</td>');

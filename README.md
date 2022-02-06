@@ -165,6 +165,7 @@ See how to translate them on the Laravel official documentation: https://laravel
 
 Here is the list of the words and sentences available for translation:
 
+* `Loading in progress...`
 * `Create`
 * `Show`
 * `Edit`

@@ -14,7 +14,7 @@
                                 <div class="d-flex justify-content-between">
                                     {{-- Rows number per page --}}
                                     <div class="px-xl-3 py-1">
-                                        <form wire:submit.prevent="setNumberOfRowsPerPage">
+                                        <form wire:submit.prevent="$emitSelf('table:updated')">
                                             <div class="input-group">
                                                 <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
                                                     {!! Config::get('laravel-table.icon.rows_number') !!}

@@ -22,9 +22,11 @@ class Table extends Component
 
     public string $paginationTheme = 'bootstrap';
 
-    public string|null $rows_number_per_page = null;
+    public string|null $number_of_rows_per_page = null;
 
     public bool $initialized = false;
+
+    protected $listeners = ['table:updated' => '$refresh'];
 
     public function init(): void
     {
@@ -81,15 +83,9 @@ class Table extends Component
     {
         $table = app(\Okipa\LaravelTable\Table::class);
         $config->setup($table);
-        $this->number_of_rows_per_page = $table->getNumberOfRowsPerPage();
+        $this->number_of_rows_per_page = $this->number_of_rows_per_page ?: $table->getNumberOfRowsPerPage();
         $table->generateRows();
 
         return $table;
-    }
-
-    public function setNumberOfRowsPerPage(): void
-    {
-        $this->table->numberOfRowsPerPage($this->number_of_rows_per_page);
-        $this->resetPage();
     }
 }
