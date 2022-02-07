@@ -270,13 +270,13 @@ You'll find all your generated table configurations in the `app/Tables` director
 Just call this Livewire component in your view with your configuration class name passed in the `config` parameter.
 
 ```blade
-<x:livewire.table :config="UsersTable::class"/>
+<x:livewire.table :config="App\Tables\UsersTable::class"/>
 ```
 
 In case you have specific attributes to transmit to your table configuration, you should pass them to the `configParams` parameter.
 
 ```blade
-<x:livewire.table :config="UsersTable::class" :configParams="['userCategoryId' => 1]"/>
+<x:livewire.table :config="App\Tables\UsersTable::class" :configParams="['userCategoryId' => 1]"/>
 ```
 
 ### Generate tables from models
