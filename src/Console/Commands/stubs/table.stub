@@ -7,7 +7,7 @@ use Okipa\LaravelTable\Table;
 
 class DummyClass extends AbstractTableConfiguration
 {
-    protected function table(): Table
+    protected function table(Table $table): void
     {
         //
     }

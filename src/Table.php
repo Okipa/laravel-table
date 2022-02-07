@@ -16,11 +16,14 @@ class Table
 
     protected LengthAwarePaginator $rows;
 
+    protected bool $numberOfRowsPerPageChoiceEnabled;
+
     protected array $numberOfRowsPerPageOptions;
 
     public function __construct()
     {
         $this->columns = collect();
+        $this->numberOfRowsPerPageChoiceEnabled = Config::get('laravel-table.enable_number_of_rows_per_page_choice');
         $this->numberOfRowsPerPageOptions = Config::get('laravel-table.number_of_rows_per_page_options');
     }
 
@@ -29,6 +32,16 @@ class Table
         $this->model = app($modelClass);
 
         return $this;
+    }
+
+    public function numberOfRowsPerPageChoiceEnabled(bool $numberOfRowsPerPageChoiceEnabled): bool
+    {
+        return $this->numberOfRowsPerPageChoiceEnabled = $numberOfRowsPerPageChoiceEnabled;
+    }
+
+    public function isNumberOfRowsPerPageChoiceEnabled(): bool
+    {
+        return $this->numberOfRowsPerPageChoiceEnabled;
     }
 
     public function numberOfRowsPerPageOptions(array $numberOfRowsPerPageOptions): self

@@ -13,23 +13,25 @@
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     {{-- Rows number per page --}}
-                                    <div class="px-xl-3 py-1">
-                                        <div class="input-group">
-                                            <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
-                                                {!! Config::get('laravel-table.icon.rows_number') !!}
-                                            </span>
-                                            <select wire:change="changeNumberOfRowsPerPage($event.target.value)"
-                                                    class="form-select"
-                                                    aria-label="{{ __('Number of rows per page') }}"
-                                                    aria-describedby="rows-number-per-page-icon">
-                                                @foreach($numberOfRowsPerPageOptions as $numberOfRowsPerPageOption)
-                                                    <option value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
-                                                        {{ $numberOfRowsPerPageOption }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                    @if($numberOfRowsPerPageChoiceEnabled)
+                                        <div class="px-xl-3 py-1">
+                                            <div class="input-group">
+                                                <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
+                                                    {!! Config::get('laravel-table.icon.rows_number') !!}
+                                                </span>
+                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)"
+                                                        class="form-select"
+                                                        aria-label="{{ __('Number of rows per page') }}"
+                                                        aria-describedby="rows-number-per-page-icon">
+                                                    @foreach($numberOfRowsPerPageOptions as $numberOfRowsPerPageOption)
+                                                        <option value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
+                                                            {{ $numberOfRowsPerPageOption }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                     {{-- Create --}}
                                     <div class="d-flex align-items-center pl-3 py-1">
                                         <a class="btn btn-success"

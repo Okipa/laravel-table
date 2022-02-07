@@ -8,7 +8,7 @@ use DummyFullModelClass;
 
 class DummyClass extends AbstractTableConfiguration
 {
-    protected function table(): Table
+    protected function table(Table $table): void
     {
         return (new Table())->model(DummyModelClass::class)
             ->routes([

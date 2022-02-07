@@ -12,8 +12,89 @@ use Okipa\LaravelTable\Tests\TestCase;
 class NumberOfRowsPerPageTest extends TestCase
 {
     /** @test */
+    public function it_cant_set_number_of_rows_per_page_options_when_feature_is_globally_disabled(): void
+    {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', false);
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertDontSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+    }
+
+    /** @test */
+    public function it_cant_set_number_of_rows_per_page_options_when_feature_is_disabled_from_table(): void
+    {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class)->numberOfRowsPerPageChoiceEnabled(false);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertDontSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+    }
+
+    /** @test */
+    public function it_can_set_number_of_rows_per_page_options_when_feature_is_globally_enabled(): void
+    {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+    }
+
+    /** @test */
+    public function it_can_set_number_of_rows_per_page_options_when_feature_is_enabled_from_table(): void
+    {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', false);
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class)->numberOfRowsPerPageChoiceEnabled(true);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+    }
+
+    /** @test */
     public function it_can_set_global_default_number_of_rows_per_page_options_from_config(): void
     {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $config = new class extends AbstractTableConfiguration {
@@ -44,6 +125,7 @@ class NumberOfRowsPerPageTest extends TestCase
     /** @test */
     public function it_can_set_specific_number_of_rows_per_page_options_from_table(): void
     {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_options', [10, 25, 50, 75, 100]);
         $config = new class extends AbstractTableConfiguration {
@@ -74,6 +156,7 @@ class NumberOfRowsPerPageTest extends TestCase
     /** @test */
     public function it_can_set_default_number_of_rows_from_from_first_option(): void
     {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
         $config = new class extends AbstractTableConfiguration {
@@ -103,6 +186,7 @@ class NumberOfRowsPerPageTest extends TestCase
     /** @test */
     public function it_can_change_number_of_rows_per_page_from_select(): void
     {
+        Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
         $config = new class extends AbstractTableConfiguration {

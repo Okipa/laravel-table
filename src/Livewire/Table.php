@@ -77,6 +77,7 @@ class Table extends Component
             'columns' => $columns,
             'columnsCount' => $columns->count(),
             'rows' => $table->getRows(),
+            'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
             'navigationStatus' => $table->getNavigationStatus(),
         ];

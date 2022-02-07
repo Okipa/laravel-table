@@ -62,15 +62,15 @@ Set your table configuration in the generated file, which can be found in the `a
 ```php
 namespace App\Tables;
 
-use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Table;
 use App\Models\User;
 
-class UsersTable extends AbstractTable
+class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(): Table
+    protected function table(Table $table): void
     {
-        return (new Table())->model(User::class)
+        $table->model(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'user.create'],
@@ -95,28 +95,10 @@ class UsersTable extends AbstractTable
 }
 ```
 
-Send the table to your view:
-
-```php
-use \Illuminate\View\View;
-use \App\Tables\UsersTable;
-
-class UsersController
-{
-    public function index(): View
-    {
-        $table = (new UsersTable())->setup();
-    
-        return view('templates.users.index', compact('table'));
-    }
-}
-
-```
-
-Finally, display it in the view:
+And display it in a view:
 
 ```blade
-{{ $table }}
+<livewire:table :config="App\Tables\UsersTable::class"/>
 ```
 
 ## Table of contents
@@ -127,6 +109,10 @@ Finally, display it in the view:
 * [Translations](#translations)
 * [Advanced configuration example](#advanced-configuration-example)
 * [How to](#how-to)
+  * [Create table configuration files](#create-table-configuration-files)
+  * [Display tables in views](#display-tables-in-views)
+  * [Generate tables from models](#generate-tables-from-models)
+  * [Handle number of rows per page, pagination and navigation status](#handle-number-of-rows-per-page-pagination-and-navigation-status)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -187,23 +173,18 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-class NewsTable extends AbstractTable
+class NewsTable extends AbstractTableConfiguration
 {
-    protected Request $request;
-
-    protected int $categoryId;
-
-    public function __construct(Request $request, int $categoryId)
+    public function __construct(protected Request $request, protected int $categoryId)
     {
-        $this->request = $request;
-        $this->categoryId = $categoryId;
+        //
     }
 
-    protected function table(): Table
+    protected function table(Table $table): void
     {
-        return (new Table())->model(News::class)
+        $table->model(News::class)
             ->identifier('news-table')
             ->request($this->request)
             ->routes([
@@ -213,8 +194,8 @@ class NewsTable extends AbstractTable
                 'destroy' => ['name' => 'news.destroy'],
                 'show' => ['name' => 'news.show'],
             ])
-            ->rowsNumber(50) // Or set `null` to display all the items contained in database
-            ->activateRowsNumberDefinition(false)
+            ->numberOfRowsPerPageChoiceEnabled(false)
+            ->numberOfRowsPerPageOptions([5, 10, 15, 20, 25])
             ->query(function (Builder $query) {
                 // Some examples of what you can do
                 $query->select('news.*');
@@ -276,19 +257,77 @@ class NewsTable extends AbstractTable
 
 ## How to
 
-### Create a table configuration file
+### Create table configuration files
 
-With command line.
+Generate a table configuration by executing this command : `php artisan make:table UsersTable`.
 
-### Define the number of displayed lines
+If you want to generate a configuration with a predefined model, just add this option at the end: `--model=App/Models/User`.
 
-By default displays the number in config.
+You'll find all your generated table configurations in the `app/Tables` directory.
 
-Can be specified on a given table.
+### Display tables in views
 
-### Display a table from its configuration file
+Just call this Livewire component in your view with your configuration class name passed in the `config` parameter.
 
-`<x:livewire.table :config="UsersTable::class"/>`
+```blade
+    <x:livewire.table :config="UsersTable::class"/>
+```
+
+In case you have specific attributes to transmit to your table configuration, you should pass them to the `configParams` parameter.
+
+```blade
+    <x:livewire.table :config="UsersTable::class" :configParams="['userCategoryId' => 1]"/>
+```
+
+### Generate tables from models
+
+To generate a table from an Eloquent model, you'll just have to define it with the `model()` method on your table.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+}
+```
+
+### Handle number of rows per page, pagination and navigation status
+
+You have two ways to allow or disallow users to choose the number of rows that will be displayed per page:
+* Activate or deactivate it globally from the `laravel-table.enable_number_of_rows_per_page_choice` config boolean value
+* Override global activation status by executing the `numberOfRowsPerPageChoiceEnabled()` method on your table
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class)->numberOfRowsPerPageChoiceEnabled(false);
+    }
+}
+```
+
+Following the same logic, you'll be able to define the number of rows per page options that will be available to select:
+* Set options globally from the `laravel-table.number_of_rows_per_page_options` config array value
+* Override global options by executing the `numberOfRowsPerPageOptions()` method on your table
+
+The first of the table defined options will be selected and applied on initialization.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class)->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
+    }
+}
+```
+
+Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as well as a navigation status.
+
+Both of them will be displayed in the table footer.
 
 ## Testing
 

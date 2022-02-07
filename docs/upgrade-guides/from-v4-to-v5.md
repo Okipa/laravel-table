@@ -17,33 +17,11 @@ As so, you will have to install it properly before using this package : https://
 ## Table configuration changes
 
 The following changes must be reported in your table configurations:
-* it now extends `AbstractTableConfiguration` instead of `AbstractTable`.
-* the `table(): Table` function signature has now evolved in `table(Table $table): void`
-
-To resume, here is the old-fashioned way to declare your configurations:
-
-```
-class UsersTable extends AbstractTable
-{
-    protected function table(): Table
-    {
-        return (new Table())->...
-    }
-    
-}
-```
-
-And here is the new way to do it:
-
-```
-class UsersTable extends AbstractTableConfiguration
-{
-    protected function table(Table $table): void
-    {
-        $table->...
-    }
-}
-```
+* replace `extend AbstractTable` by `extend AbstractTableConfiguration`
+* replace `protected function table(): Table` function signatures by `protected function table(Table $table): void`
+* replace `return (new Table())` by `$table->` at the beginning of the `table()` function
+* replace `->activateRowsNumberDefinition(` calls by `->numberOfRowsPerPageChoiceEnabled(`
+* replace `->rowsNumber(` calls by `->numberOfRowsPerPageOptions(` (do not forget to provide an array of integers instead of an integer)
 
 ## Translation changes
 
