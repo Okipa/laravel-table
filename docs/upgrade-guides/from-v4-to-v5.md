@@ -23,6 +23,18 @@ The following changes must be reported in your table configurations:
 * replace `->activateRowsNumberDefinition(` calls by `->numberOfRowsPerPageChoiceEnabled(`
 * replace `->rowsNumber(` calls by `->numberOfRowsPerPageOptions(` (do not forget to provide an array of integers instead of an integer)
 
+## Table displaying changes
+
+You do not have to instantiate your configuration in your controller anymore.
+
+You should search for `$table =` or `->setup()` in your controller and remove all these instantiations.
+
+Then, replace all the `{{ $table }}` calls from your views by the Livewire dedicated component with you table configuration passed in parameter:
+
+```blade
+<x:livewire.table :config="UsersTable::class"/>
+```
+
 ## Translation changes
 
 * `Number of rows` becomes `Number of rows per page`
