@@ -5,7 +5,7 @@
                 {{-- Table header--}}
                 <thead>
                     {{-- Table actions --}}
-                    <tr class="bg-white">
+                    <tr class="bg-white border-bottom">
                         <td class="px-0"{{ $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null }}>
                             <div class="d-flex flex-column flex-xl-row">
                                 {{-- Search --}}
@@ -46,18 +46,22 @@
                         </td>
                     </tr>
                     {{-- Column titles --}}
-                    <tr>
+                    <tr class="bg-light border-bottom">
                         @foreach($columns as $column)
-                            <th scope="col">{{ $column->getTitle() }}</th>
+                            <th class="align-middle" scope="col">{{ $column->getTitle() }}</th>
                         @endforeach
                     </tr>
                 </thead>
                 {{-- Table body--}}
                 <tbody>
                     @foreach($rows as $row)
-                        <tr{{ $loop->first ? ' scope="row"' : null }}>
+                        <tr class="border-bottom">
                             @foreach($columns as $column)
-                                <td>{{ data_get($row, $column->getKey()) }}</td>
+                                @if($loop->first)
+                                    <th class="align-middle" scope="row">{{ data_get($row, $column->getKey()) }}</th>
+                                @else
+                                    <td class="align-middle">{{ data_get($row, $column->getKey()) }}</td>
+                                @endif
                             @endforeach
                         </tr>
                     @endforeach
@@ -65,7 +69,7 @@
                 {{-- Table footer--}}
                 <tfoot>
                     <tr>
-                        <td class="bg-light"{{ $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null }}>
+                        <td class="bg-light align-middle"{{ $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null }}>
                             <div class="d-flex justify-content-between flex-wrap">
                                 <div class="d-flex align-items-center px-3 py-1 navigation-container">
                                     <div>{!! $navigationStatus !!}</div>
