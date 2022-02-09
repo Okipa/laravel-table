@@ -34,7 +34,7 @@ class Table
         return $this;
     }
 
-    public function numberOfRowsPerPageChoiceEnabled(bool $numberOfRowsPerPageChoiceEnabled): bool
+    public function enableNumberOfRowsPerPageChoice(bool $numberOfRowsPerPageChoiceEnabled): bool
     {
         return $this->numberOfRowsPerPageChoiceEnabled = $numberOfRowsPerPageChoiceEnabled;
     }
@@ -62,6 +62,21 @@ class Table
         $this->columns->add($column);
 
         return $column;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function getColumnSortedByDefault(): Column|null
+    {
+        $sortableColumns = $this->getColumns()->filter(fn(Column $column) => $column->isSortable());
+        if ($sortableColumns->isEmpty()) {
+            return null;
+        }
+        $columnSortedByDefault = $sortableColumns->filter(fn(Column $column) => $column->isSortedByDefault())->first();
+        if (! $columnSortedByDefault) {
+            return $sortableColumns->first();
+        }
+
+        return $columnSortedByDefault;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

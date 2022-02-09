@@ -20,7 +20,7 @@ The following changes must be reported in your table configurations:
 * replace `extend AbstractTable` by `extend AbstractTableConfiguration`
 * replace `protected function table(): Table` function signatures by `protected function table(Table $table): void`
 * replace `return (new Table())` by `$table->` at the beginning of the `table()` function
-* replace `->activateRowsNumberDefinition(` calls by `->numberOfRowsPerPageChoiceEnabled(`
+* replace `->activateRowsNumberDefinition(` calls by `->enableNumberOfRowsPerPageChoice(`
 * replace `->rowsNumber(` calls by `->numberOfRowsPerPageOptions(` (do not forget to provide an array of integers instead of an integer)
 
 ## Table displaying changes

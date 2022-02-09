@@ -48,7 +48,30 @@
                     {{-- Column titles --}}
                     <tr class="bg-light border-bottom">
                         @foreach($columns as $column)
-                            <th class="align-middle" scope="col">{{ $column->getTitle() }}</th>
+                            <th class="align-middle" scope="col">
+                                {{-- Sorting --}}
+                                @if($column->isSortable())
+                                    @if($sortedColumnKey === $column->getKey())
+                                        <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
+                                           href=""
+                                           title="{{ $sortedColumnAsc ? __('Sort descending') : __('Sort ascending') }}">
+                                            {!! $sortedColumnAsc
+                                                ? Config::get('laravel-table.icon.sort_desc')
+                                                : Config::get('laravel-table.icon.sort_asc') !!}
+                                            {{ $column->getTitle() }}
+                                        </a>
+                                    @else
+                                        <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
+                                           href=""
+                                           title="{{ __('Sort ascending') }}">
+                                            {!! Config::get('laravel-table.icon.sort') !!}
+                                            {{ $column->getTitle() }}
+                                        </a>
+                                    @endif
+                                @else
+                                    {{ $column->getTitle() }}
+                                @endif
+                            </th>
                         @endforeach
                     </tr>
                 </thead>

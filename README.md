@@ -194,7 +194,7 @@ class NewsTable extends AbstractTableConfiguration
                 'destroy' => ['name' => 'news.destroy'],
                 'show' => ['name' => 'news.show'],
             ])
-            ->numberOfRowsPerPageChoiceEnabled(false)
+            ->enableNumberOfRowsPerPageChoice(false)
             ->numberOfRowsPerPageOptions([5, 10, 15, 20, 25])
             ->query(function (Builder $query) {
                 // Some examples of what you can do
@@ -297,14 +297,14 @@ class UsersTable extends AbstractTableConfiguration
 
 You have two ways to allow or disallow users to choose the number of rows that will be displayed per page:
 * Activate or deactivate it globally from the `laravel-table.enable_number_of_rows_per_page_choice` config boolean value
-* Override global activation status by executing the `numberOfRowsPerPageChoiceEnabled()` method on your table
+* Override global activation status by executing the `enableNumberOfRowsPerPageChoice()` method on your table
 
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(Table $table): void
     {
-        $table->model(User::class)->numberOfRowsPerPageChoiceEnabled(false);
+        $table->model(User::class)->enableNumberOfRowsPerPageChoice(false);
     }
 }
 ```

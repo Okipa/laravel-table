@@ -38,7 +38,7 @@ class NumberOfRowsPerPageTest extends TestCase
         $config = new class extends AbstractTableConfiguration {
             protected function table(Table $table): void
             {
-                $table->model(User::class)->numberOfRowsPerPageChoiceEnabled(false);
+                $table->model(User::class)->enableNumberOfRowsPerPageChoice(false);
             }
 
             protected function columns(Table $table): void
@@ -78,7 +78,7 @@ class NumberOfRowsPerPageTest extends TestCase
         $config = new class extends AbstractTableConfiguration {
             protected function table(Table $table): void
             {
-                $table->model(User::class)->numberOfRowsPerPageChoiceEnabled(true);
+                $table->model(User::class)->enableNumberOfRowsPerPageChoice(true);
             }
 
             protected function columns(Table $table): void

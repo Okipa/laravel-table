@@ -27,6 +27,10 @@ class Table extends Component
 
     public int $numberOfRowsPerPage;
 
+    public string|null $sortedColumnKey;
+
+    public bool $sortedColumnAsc = true;
+
     public function init(): void
     {
         $this->initPaginationTheme();
@@ -72,6 +76,9 @@ class Table extends Component
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
         $table->generateRows($this->numberOfRowsPerPage);
         $columns = $table->getColumns();
+        $columnSortedByDefault = $table->getColumnSortedByDefault();
+        $this->sortedColumnKey = $columnSortedByDefault?->getKey();
+        $this->sortedColumnAsc = (bool) $columnSortedByDefault?->isSortedAscByDefault();
 
         return [
             'columns' => $columns,
@@ -86,5 +93,11 @@ class Table extends Component
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void
     {
         $this->numberOfRowsPerPage = $numberOfRowsPerPage;
+    }
+
+    public function sortBy(string $columnKey): void
+    {
+        $this->sortedColumnAsc = $this->sortedColumnKey !== $columnKey;
+        $this->sortedColumnKey = $columnKey;
     }
 }
