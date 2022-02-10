@@ -6,7 +6,7 @@
                 <thead>
                     {{-- Table actions --}}
                     <tr class="bg-white border-bottom">
-                        <td class="px-0"{{ $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null }}>
+                        <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-column flex-xl-row">
                                 {{-- Search --}}
                                 <div class="flex-fill">
@@ -92,7 +92,7 @@
                 {{-- Table footer--}}
                 <tfoot>
                     <tr>
-                        <td class="bg-light align-middle"{{ $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null }}>
+                        <td class="bg-light align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex justify-content-between flex-wrap">
                                 <div class="d-flex align-items-center px-3 py-1 navigation-container">
                                     <div>{!! $navigationStatus !!}</div>
