@@ -51,11 +51,11 @@
                             <th class="align-middle" scope="col">
                                 {{-- Sorting --}}
                                 @if($column->isSortable())
-                                    @if($sortedColumnKey === $column->getKey())
+                                    @if($sortBy === $column->getKey())
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
                                            href=""
-                                           title="{{ $sortedColumnAsc ? __('Sort descending') : __('Sort ascending') }}">
-                                            {!! $sortedColumnAsc
+                                           title="{{ $sortAsc ? __('Sort descending') : __('Sort ascending') }}">
+                                            {!! $sortAsc
                                                 ? Config::get('laravel-table.icon.sort_desc')
                                                 : Config::get('laravel-table.icon.sort_asc') !!}
                                             {{ $column->getTitle() }}

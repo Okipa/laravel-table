@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -89,9 +90,11 @@ class Table
         return $this->columns;
     }
 
-    public function generateRows(int $numberOfRowsPerPage): void
+    public function generateRows(string|null $sortBy, bool $sortAsc, int $numberOfRowsPerPage): void
     {
-        $this->rows = $this->model->paginate($numberOfRowsPerPage);
+        $this->rows = $this->model
+            ->when($sortBy, fn(Builder $query) => $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
+            ->paginate($numberOfRowsPerPage);
     }
 
     public function getRows(): LengthAwarePaginator

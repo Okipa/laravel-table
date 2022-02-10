@@ -27,9 +27,9 @@ class Table extends Component
 
     public int $numberOfRowsPerPage;
 
-    public string|null $sortedColumnKey;
+    public string|null $sortBy;
 
-    public bool $sortedColumnAsc = true;
+    public bool $sortAsc;
 
     public function init(): void
     {
@@ -72,13 +72,16 @@ class Table extends Component
         /** @var \Okipa\LaravelTable\Table $table */
         $table = app(\Okipa\LaravelTable\Table::class);
         $config->setup($table);
+        $columns = $table->getColumns();
+        // Sorting
+        $columnSortedByDefault = $table->getColumnSortedByDefault();
+        $this->sortBy = $this->sortBy ?? $columnSortedByDefault?->getKey();
+        $this->sortAsc = $this->sortAsc ?? (bool) $columnSortedByDefault?->isSortedAscByDefault();
+        // Pagination
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
-        $table->generateRows($this->numberOfRowsPerPage);
-        $columns = $table->getColumns();
-        $columnSortedByDefault = $table->getColumnSortedByDefault();
-        $this->sortedColumnKey = $columnSortedByDefault?->getKey();
-        $this->sortedColumnAsc = (bool) $columnSortedByDefault?->isSortedAscByDefault();
+        // Rows generation
+        $table->generateRows($this->sortBy, $this->sortAsc, $this->numberOfRowsPerPage);
 
         return [
             'columns' => $columns,
@@ -97,7 +100,7 @@ class Table extends Component
 
     public function sortBy(string $columnKey): void
     {
-        $this->sortedColumnAsc = $this->sortedColumnKey !== $columnKey;
-        $this->sortedColumnKey = $columnKey;
+        $this->sortAsc = $this->sortBy !== $columnKey || ! $this->sortAsc;
+        $this->sortBy = $columnKey;
     }
 }
