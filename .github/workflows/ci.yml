@@ -19,8 +19,10 @@ jobs:
         include:
           - laravel: '9.*'
             testbench: '7.*'
+            larastan: '2.*'
           - laravel: '8.*'
             testbench: '6.*'
+            larastan: '1.*'
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
