@@ -9,7 +9,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Tests\Models\User;
 use Okipa\LaravelTable\Tests\TestCase;
 
-class PaginationTest extends TestCase
+class TablePaginationTest extends TestCase
 {
     /** @test */
     public function it_cant_paginate_table_when_number_of_rows_does_not_exceed_the_limit(): void
@@ -30,7 +30,7 @@ class PaginationTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSet('paginationTheme', 'bootstrap')
-            ->assertDontSeeHtml(['<ul class="pagination">']);
+            ->assertDontSeeHtml('<ul class="pagination">');
     }
 
     /** @test */
@@ -54,7 +54,8 @@ class PaginationTest extends TestCase
             ->assertSet('paginationTheme', 'bootstrap')
             ->assertSeeHtmlInOrder([
                 '<tfoot>',
-                '<ul class="pagination">'
+                '<ul class="pagination">',
+                '</tfoot>',
             ]);
     }
 }

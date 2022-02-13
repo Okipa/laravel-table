@@ -9,7 +9,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Tests\Models\User;
 use Okipa\LaravelTable\Tests\TestCase;
 
-class SortableTest extends TestCase
+class ColumnSortableTest extends TestCase
 {
     /** @test */
     public function it_cant_sort_any_column_when_no_column_is_sortable(): void
@@ -32,14 +32,20 @@ class SortableTest extends TestCase
             ->assertSet('sortBy', null)
             ->assertSet('sortAsc', false)
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
                 '<th class="align-middle" scope="col">',
                 'id',
                 '</th>',
                 '<th class="align-middle" scope="col">',
                 'name',
                 '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
+                '</tbody>',
             ])
             ->assertDontSeeHtml([
                 '<a wire:click.prevent="sortBy(\'id\')"',
@@ -72,6 +78,8 @@ class SortableTest extends TestCase
             ->assertSet('sortBy', 'id')
             ->assertSet('sortAsc', true)
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
                 '<th class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'id\')"',
                 'title="Sort descending"',
@@ -84,8 +92,12 @@ class SortableTest extends TestCase
                 'icon-sort',
                 'name',
                 '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
+                '</tbody>',
             ]);
     }
 
@@ -113,6 +125,8 @@ class SortableTest extends TestCase
             ->assertSet('sortBy', 'name')
             ->assertSet('sortAsc', true)
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
                 '<th class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'id\')"',
                 'title="Sort ascending"',
@@ -125,8 +139,12 @@ class SortableTest extends TestCase
                 'icon-sort-desc',
                 'name',
                 '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
+                '</tbody>',
             ]);
     }
 
@@ -154,6 +172,8 @@ class SortableTest extends TestCase
             ->assertSet('sortBy', 'name')
             ->assertSet('sortAsc', false)
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
                 '<th class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'id\')"',
                 'title="Sort ascending"',
@@ -166,8 +186,12 @@ class SortableTest extends TestCase
                 'icon-sort-asc',
                 'name',
                 '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
+                '</tbody>',
             ]);
     }
 
@@ -199,6 +223,8 @@ class SortableTest extends TestCase
             ->assertSet('sortBy', 'name')
             ->assertSet('sortAsc', true)
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
                 '<th class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'id\')"',
                 'title="Sort ascending"',
@@ -211,6 +237,9 @@ class SortableTest extends TestCase
                 'icon-sort-desc',
                 'name',
                 '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
             ]);
@@ -219,6 +248,8 @@ class SortableTest extends TestCase
             ->assertSet('sortBy', 'name')
             ->assertSet('sortAsc', false)
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
                 '<th class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'id\')"',
                 'title="Sort ascending"',
@@ -231,8 +262,12 @@ class SortableTest extends TestCase
                 'icon-sort-asc',
                 'name',
                 '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
+                '</tbody>',
             ]);
     }
 }

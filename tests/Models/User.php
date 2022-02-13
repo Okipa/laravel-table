@@ -13,10 +13,10 @@ class User extends Model
     /** @var string */
     protected $table = 'users';
 
-    /** @var array<int, string> */
+    /** @var array */
     protected $fillable = ['name', 'email', 'password'];
 
-    protected static function newFactory()
+    protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
     }

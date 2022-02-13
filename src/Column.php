@@ -22,9 +22,11 @@ class Column
         return $this->key;
     }
 
-    public function title(string $title): void
+    public function title(string $title): self
     {
         $this->title = $title;
+
+        return $this;
     }
 
     public function getTitle(): string
@@ -32,11 +34,13 @@ class Column
         return $this->title ?: __('validation.attributes.' . $this->key);
     }
 
-    public function sortable(bool $sortByDefault = false, bool $sortAscByDefault = true): void
+    public function sortable(bool $sortByDefault = false, bool $sortAscByDefault = true): self
     {
         $this->sortable = true;
         $this->sortedByDefault = $sortByDefault;
         $this->sortedAscByDefault = $sortAscByDefault;
+
+        return $this;
     }
 
     public function isSortable(): bool

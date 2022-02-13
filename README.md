@@ -107,12 +107,13 @@ And display it in a view:
 * [Configuration](#configuration)
 * [Templates](#templates)
 * [Translations](#translations)
-* [Advanced configuration example](#advanced-configuration-example)
 * [How to](#how-to)
   * [Create table configuration files](#create-table-configuration-files)
   * [Display tables in views](#display-tables-in-views)
   * [Generate tables from models](#generate-tables-from-models)
-  * [Handle number of rows per page, pagination and navigation status](#handle-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Declare columns on tables](#declare-columns-on-tables)
+  * [Set custom column titles](#set-custom-column-titles)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -126,6 +127,12 @@ And display it in a view:
 ```bash
 composer require okipa/laravel-table
 ```
+
+This uses [Livewire](https://laravel-livewire.com) under the hood and its installation is required.
+
+It will automatically be installed if you don't already have installed it.
+
+However, you'll have to follow the [installation instructions](https://laravel-livewire.com/docs/installation) if it has not already been done.
 
 ## Configuration
 
@@ -162,98 +169,6 @@ Here is the list of the words and sentences available for translation:
 * `Actions`
 * `No results were found.`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
-
-## Advanced configuration example
-
-```php
-namespace App\Tables;
-
-use App\News;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
-use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-
-class NewsTable extends AbstractTableConfiguration
-{
-    public function __construct(protected Request $request, protected int $categoryId)
-    {
-        //
-    }
-
-    protected function table(Table $table): void
-    {
-        $table->model(News::class)
-            ->identifier('news-table')
-            ->request($this->request)
-            ->routes([
-                'index' => ['name' => 'news.index'],
-                'create' => ['name' => 'news.create'],
-                'edit' => ['name' => 'news.edit'],
-                'destroy' => ['name' => 'news.destroy'],
-                'show' => ['name' => 'news.show'],
-            ])
-            ->enableNumberOfRowsPerPageChoice(false)
-            ->numberOfRowsPerPageOptions([5, 10, 15, 20, 25])
-            ->query(function (Builder $query) {
-                // Some examples of what you can do
-                $query->select('news.*');
-                // Add a constraint
-                $query->where('category_id', $this->categoryId);
-                // Get value stored in a json field
-                $query->addSelect('news.json_field->>json_attribute as json_attribute');
-                // Get a formatted value from a pivot table
-                $query->selectRaw('count(comments.id) as comments_count');
-                $query->leftJoin('news_commment', 'news_commment.news_id', '=', 'news.id');
-                $query->leftJoin('comments', 'comments.id', '=', 'news_commment.comment_id');
-                $query->groupBy('comments.id');
-                // Alias a value to make it available from the column model
-                $query->addSelect('users.name as author');
-                $query->join('users', 'users.id', '=', 'news.author_id');
-            })
-            ->disableRows(fn(News $news) => in_array($news->id, [1, 2]), ['disabled', 'bg-secondary', 'text-white'])
-            ->rowsConditionalClasses(fn(News $news) => $news->id === 3, ['highlighted', 'bg-success'])
-            ->rowsConditionalClasses(
-                fn(News $news) => $news->category,
-                fn(News $news) => 'category-' . Str::snake($news->category)
-            )
-            // Append all request params to the paginator
-            ->appendData($this->request->all());
-    }
-    
-    protected function columns(Table $table): void
-    {
-        $table->column('id')->sortable(true);
-        $table->column()->title(__('Illustration'))->html(fn(News $news) => $news->image_src
-            ? '<img src="' . $news->image_src . '" alt="' .  $news->title . '">'
-            : null);
-        $table->column('title')->sortable()->searchable();
-        $table->column('content')->stringLimit(30);
-        $table->column('author')->sortable(true)->searchable('user', ['name']);
-        $table->column('category_id')
-            ->title(__('Category'))
-            ->prependHtml('<i class="fas fa-hand-point-right"></i>')
-            ->appendsHtml('<i class="fas fa-hand-point-left"></i>')
-            ->button(['btn', 'btn-sm', 'btn-outline-primary'])
-            ->value(fn(News $news) => config('news.category.' . $news->category_id))
-        $table->column()
-            ->title(__('Display'))
-            ->link(fn(News $news) => route('news.show', $news))
-            ->button(['btn', 'btn-sm', 'btn-primary']);
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('published_at')->dateTimeFormat('d/m/Y H:i')->sortable(true, 'desc');
-    }
-
-    protected function resultLines(Table $table): void
-    {
-        $table->result()
-            ->title('Total of comments')
-            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('comments_count'));
-    }
-}
-```
 
 ## How to
 
@@ -293,7 +208,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-### Handle number of rows per page, pagination and navigation status
+### Handle tables number of rows per page, pagination and navigation status
 
 You have two ways to allow or disallow users to choose the number of rows that will be displayed per page:
 * Activate or deactivate it globally from the `laravel-table.enable_number_of_rows_per_page_choice` config boolean value
@@ -328,6 +243,50 @@ class UsersTable extends AbstractTableConfiguration
 Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as well as a navigation status.
 
 Both of them will be displayed in the table footer.
+
+### Declare columns on tables
+
+Declare columns on tables with the `columns` method available in your generated table configuration.
+
+You'll have to pass a `string $key` param to the `column` method, that will be used to:
+* Define a default column title to `__('validation.attributes.<key>')`
+* Define a default column and rows value
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('id'); // Column title set to `__('validation.attributes.id')` and colum/rows value set to `$user->id`
+        $table->column('name'); // Column title set to `__('validation.attributes.name')` and column/rows value set to `$table->name`
+    }
+}
+```
+
+### Set custom column titles
+
+You can set a specific column title by using the `title` method.
+
+```php
+class UsersTable extends AbstractTableConfigurations
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('id'); // Column title set to `__('validation.attributes.id')`
+        $table->column('name')->title('Username'); // Column title set to `User`
+    }
+}
+```
 
 ## Testing
 

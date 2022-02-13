@@ -9,7 +9,7 @@ use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Tests\Models\User;
 use Okipa\LaravelTable\Tests\TestCase;
 
-class NavigationStatusTest extends TestCase
+class TableNavigationStatusTest extends TestCase
 {
     /** @test */
     public function it_can_display_navigation_status_with_no_result(): void
@@ -35,6 +35,7 @@ class NavigationStatusTest extends TestCase
                     'stop' => 0,
                     'total' => 0,
                 ]),
+                '</tfoot>',
             ]);
     }
 
@@ -64,6 +65,7 @@ class NavigationStatusTest extends TestCase
                     'stop' => 10,
                     'total' => 15,
                 ]),
+                '</tfoot>',
             ]);
     }
 
@@ -94,6 +96,7 @@ class NavigationStatusTest extends TestCase
                     'stop' => 15,
                     'total' => 15,
                 ]),
+                '</tfoot>',
             ]);
     }
 }

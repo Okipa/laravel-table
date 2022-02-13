@@ -94,10 +94,10 @@
                     <tr>
                         <td class="bg-light align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex justify-content-between flex-wrap">
-                                <div class="d-flex align-items-center px-3 py-1 navigation-container">
+                                <div class="d-flex align-items-center px-3 py-1">
                                     <div>{!! $navigationStatus !!}</div>
                                 </div>
-                                <div class="d-flex align-items-center mb-n3 px-3 py-1 pagination-container">
+                                <div class="d-flex align-items-center mb-n3 px-3 py-1">
                                     {!! $rows->links() !!}
                                 </div>
                             </div>
