@@ -22,7 +22,7 @@ class LaravelTableServiceProvider extends ServiceProvider
 
     protected function registerLivewireComponents(): void
     {
-        Livewire::component('table', \Okipa\LaravelTable\Livewire\Table::class);
+        Livewire::component('laravel-table::table', \Okipa\LaravelTable\Livewire\Table::class);
     }
 
     public function register(): void

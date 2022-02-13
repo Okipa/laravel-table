@@ -42,8 +42,8 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            LaravelTableServiceProvider::class,
             LivewireServiceProvider::class,
+            LaravelTableServiceProvider::class,
         ];
     }
 }

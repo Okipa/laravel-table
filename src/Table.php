@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -20,6 +21,8 @@ class Table
     protected bool $numberOfRowsPerPageChoiceEnabled;
 
     protected array $numberOfRowsPerPageOptions;
+
+    protected Closure $queryClosure;
 
     public function __construct()
     {
@@ -90,10 +93,18 @@ class Table
         return $this->columns;
     }
 
+    public function query(Closure $queryClosure): self
+    {
+        $this->queryClosure = $queryClosure;
+
+        return $this;
+    }
+
     public function generateRows(string|null $sortBy, bool $sortAsc, int $numberOfRowsPerPage): void
     {
-        $this->rows = $this->model
-            ->when($sortBy, fn(Builder $query) => $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
+        $query = $this->model->query();
+        ($this->queryClosure)($query);
+        $this->rows = $query->when($sortBy, fn(Builder $query) => $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
             ->paginate($numberOfRowsPerPage);
     }
 

@@ -111,6 +111,7 @@ And display it in a view:
   * [Create table configuration files](#create-table-configuration-files)
   * [Display tables in views](#display-tables-in-views)
   * [Generate tables from models](#generate-tables-from-models)
+  * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Set custom column titles](#set-custom-column-titles)
@@ -205,6 +206,24 @@ class UsersTable extends AbstractTableConfiguration
     {
         $table->model(User::class);
     }
+}
+```
+
+### Add query instructions on tables
+
+To add specific query instructions on tables, use the available `query` method.
+
+You'll be able to set specific Eloquent instructions by passing a closure parameter to the `query` method on your table.
+
+This closure will allow you to manipulate a `\Illuminate\Database\Eloquent\Builder $query` argument.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class)->query(fn(Builder $query) => $query->where('active', true));
+    }   
 }
 ```
 

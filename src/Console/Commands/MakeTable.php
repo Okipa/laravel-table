@@ -28,7 +28,7 @@ class MakeTable extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new table configuration';
+    protected $description = 'Create a new table configuration.';
 
     /**
      * Get the stub file for the generator.
