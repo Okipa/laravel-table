@@ -1,13 +1,13 @@
 <?php
 
-namespace Okipa\LaravelTable\Tests\Unit\Bootstrap5;
+namespace Tests\Unit\Bootstrap5;
 
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Tests\Models\User;
-use Okipa\LaravelTable\Tests\TestCase;
+use Tests\Models\User;
+use Tests\TestCase;
 
 class TablePaginationTest extends TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Okipa\LaravelTable\Tests\Unit\Bootstrap5;
+namespace Tests\Unit\Bootstrap5;
 
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Tests\Models\User;
-use Okipa\LaravelTable\Tests\TestCase;
+use Tests\Models\User;
+use Tests\TestCase;
 
 class ColumnSortableTest extends TestCase
 {
@@ -43,8 +43,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
+                e($users->first()->name),
+                e($users->last()->name),
                 '</tbody>',
             ])
             ->assertDontSeeHtml([
@@ -95,8 +95,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
+                e($users->first()->name),
+                e($users->last()->name),
                 '</tbody>',
             ]);
     }
@@ -142,8 +142,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
+                e($users->first()->name),
+                e($users->last()->name),
                 '</tbody>',
             ]);
     }
@@ -189,8 +189,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
+                e($users->first()->name),
+                e($users->last()->name),
                 '</tbody>',
             ]);
     }
@@ -240,8 +240,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
+                e($users->first()->name),
+                e($users->last()->name),
             ]);
         $users = $users->sortByDesc('name');
         $component->call('sortBy', 'name')
@@ -265,8 +265,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
+                e($users->first()->name),
+                e($users->last()->name),
                 '</tbody>',
             ]);
     }

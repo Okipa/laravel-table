@@ -1,12 +1,12 @@
 <?php
 
-namespace Okipa\LaravelTable\Tests\Unit\Bootstrap5;
+namespace Tests\Unit\Bootstrap5;
 
 use ErrorException;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Livewire\Table;
-use Okipa\LaravelTable\Tests\TestCase;
+use Tests\TestCase;
 
 class TableConfigurationTest extends TestCase
 {

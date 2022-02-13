@@ -1,10 +1,10 @@
 <?php
 
-namespace Okipa\LaravelTable\Tests\Database\Factories;
+namespace Tests\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Okipa\LaravelTable\Tests\Models\User;
+use Tests\Models\User;
 
 class UserFactory extends Factory
 {
