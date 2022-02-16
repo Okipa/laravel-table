@@ -12,6 +12,8 @@ class Column
 
     protected bool $sortedAscByDefault = false;
 
+    protected bool $searchable = false;
+
     public function __construct(protected string $key)
     {
         //
@@ -56,5 +58,17 @@ class Column
     public function isSortedAscByDefault(): bool
     {
         return $this->sortedAscByDefault;
+    }
+
+    public function searchable(): self
+    {
+        $this->searchable = true;
+
+        return $this;
+    }
+
+    public function isSearchable(): bool
+    {
+        return $this->searchable;
     }
 }

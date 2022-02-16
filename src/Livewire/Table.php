@@ -25,11 +25,19 @@ class Table extends Component
 
     public string $paginationTheme = 'bootstrap';
 
+    public string $search = '';
+
+    public string $searchableLabels;
+
+    public bool $searchInProgress;
+
     public int $numberOfRowsPerPage;
 
     public string|null $sortBy;
 
     public bool $sortAsc;
+
+    protected $listeners = ['search:executed' => '$refresh'];
 
     public function init(): void
     {
@@ -77,11 +85,13 @@ class Table extends Component
         $columnSortedByDefault = $table->getColumnSortedByDefault();
         $this->sortBy = $this->sortBy ?? $columnSortedByDefault?->getKey();
         $this->sortAsc = $this->sortAsc ?? (bool) $columnSortedByDefault?->isSortedAscByDefault();
+        // Searching
+        $this->searchableLabels = $table->getSearchableLabels();
         // Pagination
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
         // Rows generation
-        $table->generateRows($this->sortBy, $this->sortAsc, $this->numberOfRowsPerPage);
+        $table->generateRows($this->search, $this->sortBy, $this->sortAsc, $this->numberOfRowsPerPage);
 
         return [
             'columns' => $columns,
@@ -91,6 +101,11 @@ class Table extends Component
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
             'navigationStatus' => $table->getNavigationStatus(),
         ];
+    }
+
+    public function searchForRows(): void
+    {
+        $this->emitSelf('search:executed');
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void

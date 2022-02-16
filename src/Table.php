@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
 class Table
@@ -22,7 +23,7 @@ class Table
 
     protected array $numberOfRowsPerPageOptions;
 
-    protected Closure $queryClosure;
+    protected Closure|null $queryClosure = null;
 
     public function __construct()
     {
@@ -100,12 +101,52 @@ class Table
         return $this;
     }
 
-    public function generateRows(string|null $sortBy, bool $sortAsc, int $numberOfRowsPerPage): void
-    {
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function generateRows(
+        string|null $search,
+        string|null $sortBy,
+        bool $sortAsc,
+        int $numberOfRowsPerPage
+    ): void {
         $query = $this->model->query();
-        ($this->queryClosure)($query);
-        $this->rows = $query->when($sortBy, fn(Builder $query) => $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
+        if ($this->queryClosure) {
+            ($this->queryClosure)($query);
+        }
+        $this->rows = $query
+            // Search
+            ->when($search, function (Builder $searchQuery) use ($search) {
+                $this->getSearchableColumns()->each(fn(Column $searchableColumn) => $searchQuery->orWhere(
+                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                    $this->getCaseInsensitiveSearchingLikeOperator(),
+                    '%' . mb_strtolower($search) . '%'
+                ));
+            })
+            // Sort
+            ->when($sortBy, fn(Builder $sortQuery) => $sortQuery->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
+            // Paginate
             ->paginate($numberOfRowsPerPage);
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    protected function getSearchableColumns(): Collection
+    {
+        return $this->getColumns()->filter(fn(Column $column) => $column->isSearchable());
+    }
+
+    protected function getCaseInsensitiveSearchingLikeOperator(): string
+    {
+        $connection = config('database.default');
+        $driver = config('database.connections.' . $connection . '.driver');
+
+        return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function getSearchableLabels(): string
+    {
+        return $this->getSearchableColumns()
+            ->map(fn(Column $searchableColumn) => ['title' => $searchableColumn->getTitle()])
+            ->implode('title', ', ');
     }
 
     public function getRows(): LengthAwarePaginator

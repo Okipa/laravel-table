@@ -10,6 +10,33 @@
                             <div class="d-flex flex-column flex-xl-row">
                                 {{-- Search --}}
                                 <div class="flex-fill">
+                                    <div class="flex-fill pr-xl-3 py-1">
+                                        <div class="input-group">
+                                            <span id="search-for-rows" class="input-group-text text-secondary">
+                                                {!! config('laravel-table.icon.search') !!}
+                                            </span>
+                                            <input wire:model.defer="search"
+                                                   class="form-control"
+                                                   placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
+                                                   aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
+                                                   aria-describedby="search-for-rows">
+                                            @if($search)
+                                                <a wire:click.prevent="resetSearch"
+                                                   class="input-group-text btn btn-link text-danger"
+                                                   title="{{ __('Reset research') }}">
+                                                    <span>{!! config('laravel-table.icon.reset') !!}</span>
+                                                </a>
+                                            @else
+                                                <span class="input-group-text py-0">
+                                                    <a wire:click.prevent="searchForRows"
+                                                       class="btn btn-link p-0 text-primary"
+                                                       title="{{ __('Search by:') }} {{ $searchableLabels }}">
+                                                        {!! config('laravel-table.icon.validate') !!}
+                                                    </a>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     {{-- Rows number per page --}}
