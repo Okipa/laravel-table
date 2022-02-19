@@ -32,7 +32,7 @@
                                                     </span>
                                                     @if($search)
                                                         <span class="input-group-text">
-                                                            <a wire:click.prevent="$set('search', null), $refresh"
+                                                            <a wire:click.prevent="$set('search', ''), $refresh"
                                                                class="btn btn-sm btn-link text-danger p-0"
                                                                title="{{ __('Reset research') }}">
                                                                 <span>{!! config('laravel-table.icon.reset') !!}</span>
