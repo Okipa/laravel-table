@@ -85,6 +85,13 @@ class ColumnSearchableTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
+            ->assertSet('search', '')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                e($users->first()->name),
+                e($users->last()->name),
+                '</tbody>',
+            ])
             ->set('search', $users->first()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
@@ -101,5 +108,42 @@ class ColumnSearchableTest extends TestCase
                 '</tbody>',
             ])
             ->assertDontSeeHtml(e($users->first()->name));
+    }
+
+    /** @test */
+    public function it_can_reset_search(): void
+    {
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('id');
+                $table->column('name')->searchable();
+                $table->column('email')->searchable();
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->set('search', $users->first()->name)
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                e($users->first()->name),
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml(e($users->last()->name))
+            ->set('search', '')
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                e($users->first()->name),
+                e($users->last()->name),
+                '</tbody>',
+            ]);
     }
 }
