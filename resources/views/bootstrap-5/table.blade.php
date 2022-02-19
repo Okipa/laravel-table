@@ -14,7 +14,8 @@
                                         <div class="flex-fill pr-xl-3 py-1">
                                             <form wire:submit.prevent="$refresh">
                                                 <div class="input-group">
-                                                    <span id="search-for-rows" class="input-group-text text-secondary">
+                                                    <span id="search-for-rows"
+                                                          class="input-group-text">
                                                         {!! config('laravel-table.icon.search') !!}
                                                     </span>
                                                     <input wire:model.defer="search"
