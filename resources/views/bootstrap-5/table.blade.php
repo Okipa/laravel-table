@@ -22,19 +22,20 @@
                                                            placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-describedby="search-for-rows">
+                                                    <span class="input-group-text">
+                                                        <button class="btn btn-sm btn-link text-primary p-0"
+                                                                type="submit"
+                                                                title="{{ __('Search by:') }} {{ $searchableLabels }}">
+                                                            {!! config('laravel-table.icon.validate') !!}
+                                                        </button>
+                                                    </span>
                                                     @if($search)
-                                                        <a wire:click.prevent="resetSearch"
-                                                           class="input-group-text btn btn-link text-danger"
-                                                           title="{{ __('Reset research') }}">
-                                                            <span>{!! config('laravel-table.icon.reset') !!}</span>
-                                                        </a>
-                                                    @else
-                                                        <span class="input-group-text py-0">
-                                                            <button class="btn btn-link p-0 text-primary"
-                                                                    type="submit"
-                                                                    title="{{ __('Search by:') }} {{ $searchableLabels }}">
-                                                                {!! config('laravel-table.icon.validate') !!}
-                                                            </button>
+                                                        <span class="input-group-text">
+                                                            <a wire:click.prevent="$set('search', null), $refresh"
+                                                               class="btn btn-sm btn-link text-danger p-0"
+                                                               title="{{ __('Reset research') }}">
+                                                                <span>{!! config('laravel-table.icon.reset') !!}</span>
+                                                            </a>
                                                         </span>
                                                     @endif
                                                 </div>
