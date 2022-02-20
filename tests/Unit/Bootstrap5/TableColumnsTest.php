@@ -9,7 +9,7 @@ use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
 
-class ColumnsDeclarationTest extends TestCase
+class TableColumnsTest extends TestCase
 {
     /** @test */
     public function it_cant_generate_table_without_columns(): void
