@@ -2,6 +2,11 @@
 
 namespace Okipa\LaravelTable;
 
+use Closure;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
+use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+
 class Column
 {
     protected string|null $title = null;
@@ -13,6 +18,10 @@ class Column
     protected bool $sortedAscByDefault = false;
 
     protected bool $searchable = false;
+
+    protected Closure|AbstractFormatter|null $formatter = null;
+
+    protected bool $escapeHtml;
 
     public function __construct(protected string $key)
     {
@@ -70,5 +79,28 @@ class Column
     public function isSearchable(): bool
     {
         return $this->searchable;
+    }
+
+    public function format(Closure|AbstractFormatter $formatter, bool $escapeHtml = false): void
+    {
+        $this->formatter = $formatter;
+        $this->escapeHtml = $escapeHtml;
+    }
+
+    public function getValue(Model $row): HtmlString|string
+    {
+        if ($this->formatter instanceof Closure) {
+            return $this->manageHtmlEscaping(($this->formatter)($row));
+        }
+        if ($this->formatter instanceof AbstractFormatter) {
+            return $this->manageHtmlEscaping($this->formatter->format($row));
+        }
+
+        return $this->manageHtmlEscaping(data_get($row, $this->key));
+    }
+
+    protected function manageHtmlEscaping(mixed $value): HtmlString|string
+    {
+        return $this->escapeHtml ? $value : new HtmlString($value);
     }
 }

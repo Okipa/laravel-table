@@ -6,6 +6,7 @@ use Illuminate\View\ViewException;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Table;
+use Tests\Models\Company;
 use Tests\Models\User;
 use Tests\TestCase;
 

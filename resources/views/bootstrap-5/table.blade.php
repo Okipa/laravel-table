@@ -114,9 +114,9 @@
                         <tr class="border-bottom">
                             @foreach($columns as $column)
                                 @if($loop->first)
-                                    <th class="align-middle" scope="row">{{ data_get($row, $column->getKey()) }}</th>
+                                    <th class="align-middle" scope="row">{{ $column->getValue($row) }}</th>
                                 @else
-                                    <td class="align-middle">{{ data_get($row, $column->getKey()) }}</td>
+                                    <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
                         </tr>
