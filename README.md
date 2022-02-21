@@ -115,6 +115,9 @@ And display it in a view:
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Set custom column titles](#set-custom-column-titles)
+  * [Handle columns sorting](#handle-columns-sorting)
+  * [Handle columns searching](#handle-columns-searching)
+  * [Format columns](#format-columns)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -306,6 +309,18 @@ class UsersTable extends AbstractTableConfigurations
     }
 }
 ```
+
+### Handle columns sorting
+
+ToDo
+
+### Handle columns searching
+
+ToDo
+
+### Format columns
+
+ToDo
 
 ## Testing
 

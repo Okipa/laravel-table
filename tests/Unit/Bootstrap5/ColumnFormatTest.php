@@ -12,7 +12,7 @@ use Tests\TestCase;
 class ColumnFormatTest extends TestCase
 {
     /** @test */
-    public function it_can_format_row_from_closure(): void
+    public function it_can_format_column_from_closure(): void
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
@@ -37,7 +37,7 @@ class ColumnFormatTest extends TestCase
     }
 
     /** @test */
-    public function it_can_format_row_from_formatter(): void
+    public function it_can_format_column_from_formatter(): void
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
@@ -68,7 +68,7 @@ class ColumnFormatTest extends TestCase
     }
 
     /** @test */
-    public function it_can_format_row_with_html_escaping(): void
+    public function it_can_format_column_with_html_escaping(): void
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
