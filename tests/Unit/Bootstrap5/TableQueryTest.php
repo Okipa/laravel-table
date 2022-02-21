@@ -16,7 +16,6 @@ class TableQueryTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-
             public function __construct(protected int|null $userIdToExclude = null)
             {
                 //

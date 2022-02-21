@@ -21,7 +21,7 @@ class Column
 
     protected Closure|AbstractFormatter|null $formatter = null;
 
-    protected bool $escapeHtml;
+    protected bool $escapeHtml = false;
 
     public function __construct(protected string $key)
     {
