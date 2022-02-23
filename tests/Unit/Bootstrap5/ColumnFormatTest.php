@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Bootstrap5;
 
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -49,12 +50,12 @@ class ColumnFormatTest extends TestCase
             protected function columns(Table $table): void
             {
                 $formatter = new class extends AbstractFormatter {
-                    public function format(mixed $row): string
+                    public function format(Model $user): string
                     {
-                        return '<b>Test ' . $row->name . '</b>';
+                        return '<b>Test ' . $user->name . '</b>';
                     }
                 };
-                $table->column('name')->format($formatter);
+                $table->column('name')->format(new $formatter);
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])

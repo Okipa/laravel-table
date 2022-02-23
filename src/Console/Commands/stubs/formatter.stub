@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+
+class DummyClass extends AbstractFormatter
+{
+    protected function format(Model $model): mixed
+    {
+        //
+    }
+}

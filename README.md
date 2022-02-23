@@ -115,9 +115,9 @@ And display it in a view:
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Set custom column titles](#set-custom-column-titles)
-  * [Handle columns sorting](#handle-columns-sorting)
-  * [Handle columns searching](#handle-columns-searching)
-  * [Format columns](#format-columns)
+  * [Format column values](#format-column-values)
+  * [Sort columns](#handle-columns-sorting)
+  * [Configure columns searching](#configure-columns-searching)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -310,15 +310,67 @@ class UsersTable extends AbstractTableConfigurations
 }
 ```
 
+### Format column values
+
+You'll sometimes need to format column values. There are a few ways to achieve this.
+
+For specific cases, you should pass a closure parameter to the `format` method on your column.
+
+This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
+
+```php
+class UsersTable extends AbstractTableConfigurations
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('name')->format(fn(User $user) => 'Custom formatted ' . $user->name);
+    }
+}
+```
+
+If you want to apply the same formatting treatment repeatedly, you should create a formatter with the following command: `php artisan make:table:formatter ActiveFormatter`.
+
+You'll find the generated formatter in the `app\Table\Formatters` directory.
+
+```php
+class ActiveFormatter extends AbstractFormatter
+{
+    public function format(Model $user): string
+    {
+        return $user->active
+            ? '<i class="fa-solid fa-check text-success"></i>'
+            : '<i class="fa-solid fa-xmark text-danger"></i>';
+    }
+}
+```
+
+You'll be able to reuse this formatter in your tables.
+
+```php
+class UsersTable extends AbstractTableConfigurations
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('active')->format(new ActiveFormatter());
+    }
+}
+```
+
 ### Handle columns sorting
 
 ToDo
 
-### Handle columns searching
-
-ToDo
-
-### Format columns
+### Configure columns searching
 
 ToDo
 
