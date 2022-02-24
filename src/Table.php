@@ -61,7 +61,7 @@ class Table
         return $this->numberOfRowsPerPageOptions;
     }
 
-    public function column(string $key): Column
+    public function column(string $key = null): Column
     {
         $column = new Column($key);
         $this->columns->add($column);
@@ -85,6 +85,12 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function getColumn(string $key): Column
+    {
+        return $this->getColumns()->filter(fn(Column $column) => $column->getKey() === $key)->first();
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumns(): Collection
     {
         if ($this->columns->isEmpty()) {
@@ -104,27 +110,47 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function generateRows(
         string|null $search,
-        string|null $sortBy,
+        string|Closure|null $sortBy,
         bool $sortAsc,
         int $numberOfRowsPerPage
     ): void {
         $query = $this->model->query();
+        // Query
         if ($this->queryClosure) {
             ($this->queryClosure)($query);
         }
-        $this->rows = $query
-            // Search
-            ->when($search, function (Builder $searchQuery) use ($search) {
-                $this->getSearchableColumns()->each(fn(Column $searchableColumn) => $searchQuery->orWhere(
-                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                    $this->getCaseInsensitiveSearchingLikeOperator(),
-                    '%' . mb_strtolower($search) . '%'
-                ));
-            })
-            // Sort
-            ->when($sortBy, fn(Builder $sortQuery) => $sortQuery->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
-            // Paginate
-            ->paginate($numberOfRowsPerPage);
+        // Search
+        $query->when($search, function (Builder $searchQuery) use ($search) {
+            $this->getSearchableColumns()->each(fn(Column $searchableColumn) => $searchQuery->orWhere(
+                DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                $this->getCaseInsensitiveSearchingLikeOperator(),
+                '%' . mb_strtolower($search) . '%'
+            ));
+        });
+        // Sort
+        if($sortBy) {
+            $sortBy instanceof Closure
+                ? $sortBy($query, $sortAsc)
+                : $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc');
+        }
+//        $query->when($sortBy, fn(Builder $sortQuery) => $sortBy instanceof Closure
+//            ? dd('test') && $sortBy($sortQuery, $sortAsc)
+//            : $sortQuery->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'));
+//        $this->rows = $query
+//            // Searching
+//            ->when($search, function (Builder $searchQuery) use ($search) {
+//                $this->getSearchableColumns()->each(fn(Column $searchableColumn) => $searchQuery->orWhere(
+//                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+//                    $this->getCaseInsensitiveSearchingLikeOperator(),
+//                    '%' . mb_strtolower($search) . '%'
+//                ));
+//            })
+//            // Sorting
+//            ->when($sortBy, fn(Builder $sortQuery) => dd('trzz') && $sortBy instanceof Closure
+//                ? $sortBy($sortQuery, $sortAsc)
+//                : $sortQuery->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
+        // Paginate
+        $this->rows = $query->paginate($numberOfRowsPerPage);
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

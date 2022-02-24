@@ -81,17 +81,23 @@ class Table extends Component
         $table = app(\Okipa\LaravelTable\Table::class);
         $config->setup($table);
         $columns = $table->getColumns();
-        // Sorting
+        // Search
+        $this->searchableLabels = $table->getSearchableLabels();
+        // Sort
         $columnSortedByDefault = $table->getColumnSortedByDefault();
         $this->sortBy = $this->sortBy ?? $columnSortedByDefault?->getKey();
         $this->sortAsc = $this->sortAsc ?? (bool) $columnSortedByDefault?->isSortedAscByDefault();
-        // Searching
-        $this->searchableLabels = $table->getSearchableLabels();
-        // Pagination
+        $sortableClosure = $this->sortBy ? $table->getColumn($this->sortBy)->getSortableClosure() : null;
+        // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
-        // Rows generation
-        $table->generateRows($this->search, $this->sortBy, $this->sortAsc, $this->numberOfRowsPerPage);
+        // Generate
+        $table->generateRows(
+            $this->search,
+            $sortableClosure ?: $this->sortBy,
+            $this->sortAsc,
+            $this->numberOfRowsPerPage
+        );
 
         return [
             'columns' => $columns,

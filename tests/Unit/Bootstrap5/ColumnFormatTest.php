@@ -31,8 +31,8 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<b>' . e('Test ' . $users->first()->name) . '</b>',
-                '<b>' . e('Test ' . $users->last()->name) . '</b>',
+                '<b>Test ' . $users->first()->name . '</b>',
+                '<b>Test ' . $users->last()->name . '</b>',
                 '</tbody>',
             ]);
     }
@@ -62,8 +62,8 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<b>Test ' . e($users->first()->name) . '</b>',
-                '<b>Test ' . e($users->last()->name) . '</b>',
+                '<b>Test ' . $users->first()->name . '</b>',
+                '<b>Test ' . $users->last()->name . '</b>',
                 '</tbody>',
             ]);
     }

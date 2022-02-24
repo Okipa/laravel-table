@@ -13,9 +13,11 @@ class Column
 
     protected bool $sortable = false;
 
+    protected Closure|null $sortableClosure = null;
+
     protected bool $sortedByDefault = false;
 
-    protected bool $sortedAscByDefault = false;
+    protected bool $sortedAscByDefault = true;
 
     protected bool $searchable = false;
 
@@ -23,7 +25,7 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string $key)
+    public function __construct(protected string|null $key = null)
     {
         //
     }
@@ -45,10 +47,17 @@ class Column
         return $this->title ?: __('validation.attributes.' . $this->key);
     }
 
-    public function sortable(bool $sortByDefault = false, bool $sortAscByDefault = true): self
+    public function sortable(Closure $sortableClosure = null): self
     {
         $this->sortable = true;
-        $this->sortedByDefault = $sortByDefault;
+        $this->sortableClosure = $sortableClosure;
+
+        return $this;
+    }
+
+    public function sortByDefault(bool $sortAscByDefault = true): self
+    {
+        $this->sortedByDefault = true;
         $this->sortedAscByDefault = $sortAscByDefault;
 
         return $this;
@@ -57,6 +66,11 @@ class Column
     public function isSortable(): bool
     {
         return $this->sortable;
+    }
+
+    public function getSortableClosure(): Closure|null
+    {
+        return $this->sortableClosure;
     }
 
     public function isSortedByDefault(): bool
@@ -87,7 +101,7 @@ class Column
         $this->escapeHtml = $escapeHtml;
     }
 
-    public function getValue(Model $row): HtmlString|string
+    public function getValue(Model $row): HtmlString|string|null
     {
         if ($this->formatter instanceof Closure) {
             return $this->manageHtmlEscaping(($this->formatter)($row));
@@ -96,7 +110,7 @@ class Column
             return $this->manageHtmlEscaping($this->formatter->format($row));
         }
 
-        return $this->manageHtmlEscaping(data_get($row, $this->key));
+        return $this->key ? $this->manageHtmlEscaping(data_get($row, $this->key)) : null;
     }
 
     protected function manageHtmlEscaping(mixed $value): HtmlString|string

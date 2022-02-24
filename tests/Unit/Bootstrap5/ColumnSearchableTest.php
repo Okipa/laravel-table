@@ -88,26 +88,26 @@ class ColumnSearchableTest extends TestCase
             ->assertSet('search', '')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                e($users->first()->name),
-                e($users->last()->name),
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ])
             ->set('search', $users->first()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                e($users->first()->name),
+                $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml(e($users->last()->name))
+            ->assertDontSeeHtml($users->last()->name)
             ->set('search', $users->last()->email)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                e($users->last()->name),
+                $users->last()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml(e($users->first()->name));
+            ->assertDontSeeHtml($users->first()->name);
     }
 
     /** @test */
@@ -133,16 +133,16 @@ class ColumnSearchableTest extends TestCase
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                e($users->first()->name),
+                $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml(e($users->last()->name))
+            ->assertDontSeeHtml($users->last()->name)
             ->set('search', '')
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                e($users->first()->name),
-                e($users->last()->name),
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
     }
