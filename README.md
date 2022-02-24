@@ -116,8 +116,8 @@ And display it in a view:
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Set custom column titles](#set-custom-column-titles)
   * [Format column values](#format-column-values)
-  * [Sort columns](#handle-columns-sorting)
   * [Configure columns searching](#configure-columns-searching)
+  * [Handle columns sorting](#handle-columns-sorting)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -370,6 +370,10 @@ class UsersTable extends AbstractTableConfigurations
 }
 ```
 
+### Configure columns searching
+
+ToDo
+
 ### Handle columns sorting
 
 Allow sorting on columns by calling the `sortable` method.
@@ -420,10 +424,6 @@ class UsersTable extends AbstractTableConfigurations
     }
 }
 ```
-
-### Configure columns searching
-
-ToDo
 
 ## Testing
 
