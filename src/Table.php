@@ -128,7 +128,7 @@ class Table
             ));
         });
         // Sort
-        if($sortBy) {
+        if ($sortBy) {
             $sortBy instanceof Closure
                 ? $sortBy($query, $sortAsc)
                 : $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc');

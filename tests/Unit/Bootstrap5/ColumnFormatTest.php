@@ -55,7 +55,7 @@ class ColumnFormatTest extends TestCase
                         return '<b>Test ' . $user->name . '</b>';
                     }
                 };
-                $table->column('name')->format(new $formatter);
+                $table->column('name')->format(new $formatter());
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
