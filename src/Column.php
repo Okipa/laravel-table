@@ -5,12 +5,11 @@ namespace Okipa\LaravelTable;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
 class Column
 {
-    protected string|null $title = null;
-
     protected bool $sortable = false;
 
     protected Closure|null $sortableClosure = null;
@@ -25,9 +24,9 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string|null $key = null)
+    public function __construct(protected string $title, protected string $key = '')
     {
-        //
+        $this->key = $key ?: Str::snake($title);
     }
 
     public function getKey(): string
@@ -35,16 +34,9 @@ class Column
         return $this->key;
     }
 
-    public function title(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getTitle(): string
     {
-        return $this->title ?: __('validation.attributes.' . $this->key);
+        return $this->title;
     }
 
     public function sortable(Closure $sortableClosure = null): self
@@ -95,10 +87,12 @@ class Column
         return $this->searchable;
     }
 
-    public function format(Closure|AbstractFormatter $formatter, bool $escapeHtml = false): void
+    public function format(Closure|AbstractFormatter $formatter, bool $escapeHtml = false): self
     {
         $this->formatter = $formatter;
         $this->escapeHtml = $escapeHtml;
+
+        return $this;
     }
 
     public function getValue(Model $row): HtmlString|string|null

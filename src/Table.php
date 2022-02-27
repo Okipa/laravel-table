@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
 class Table
@@ -61,8 +62,9 @@ class Table
         return $this->numberOfRowsPerPageOptions;
     }
 
-    public function column(string $key = null): Column
+    public function column(string $title, string $key = null): Column
     {
+        $key = $key ?: Str::snake($title);
         $column = new Column($key);
         $this->columns->add($column);
 

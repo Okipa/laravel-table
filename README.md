@@ -86,11 +86,11 @@ class UsersTable extends AbstractTableConfiguration
 
     protected function columns(Table $table): void
     {
-        $table->column('id')->sortable(true);
-        $table->column('name')->sortable()->searchable();
-        $table->column('email')->sortable()->searchable();
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('Id')->sortable(true);
+        $table->column('Name')->sortable()->searchable();
+        $table->column('Email')->sortable()->searchable();
+        $table->column('Created at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('Updated at')->dateTimeFormat('d/m/Y H:i')->sortable();
     }
 }
 ```
@@ -114,10 +114,9 @@ And display it in a view:
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Declare columns on tables](#declare-columns-on-tables)
-  * [Set custom column titles](#set-custom-column-titles)
   * [Format column values](#format-column-values)
   * [Configure columns searching](#configure-columns-searching)
-  * [Handle columns sorting](#handle-columns-sorting)
+  * [Configure columns sorting](#configure-columns-sorting)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -270,9 +269,12 @@ Both of them will be displayed in the table footer.
 
 Declare columns on tables with the `columns` method available in your generated table configuration.
 
-You'll have to pass a `string $key` param to the `column` method, that will be used to:
-* Define a default column title to `__('validation.attributes.<key>')`
-* Define a default column/rows value
+You'll have to pass a `string $title` param to the `column` method, that will be used to:
+* Display the column title on the table
+* Define a default column key guessed from a snake_case formatting of the column title 
+* Define a default column/rows value from the column key
+
+Optionally, you can pass a second `string $key` argument to set a specific column key.
 
 ```php
 class UsersTable extends AbstractTableConfiguration
@@ -284,28 +286,8 @@ class UsersTable extends AbstractTableConfiguration
     
     protected function columns(Table $table): void
     {
-        $table->column('id'); // Column title set to `__('validation.attributes.id')` and colum/rows value set to `$user->id`
-        $table->column('name'); // Column title set to `__('validation.attributes.name')` and column/rows value set to `$user->name`
-    }
-}
-```
-
-### Set custom column titles
-
-You can set a specific column title by using the `title` method.
-
-```php
-class UsersTable extends AbstractTableConfigurations
-{
-    protected function table(Table $table): void
-    {
-        $table->model(User::class);
-    }
-    
-    protected function columns(Table $table): void
-    {
-        $table->column('id'); // Column title set to `__('validation.attributes.id')`
-        $table->column('name')->title('Username'); // Column title set to `User`
+        $table->column('Id'); // Column title set to `Id`, column key set to `id` and value set from `$user->id`
+        $table->column('Username', 'name'); // Column title set to `Username`, column key set to `name` and value set from `$user->name`
     }
 }
 ```
@@ -318,8 +300,6 @@ For specific cases, you should pass a closure parameter to the `format` method o
 
 This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
 
-There is no obligation to set keys for formatted columns as their displayed values will be set from their closure. However, you will have to manually set titles to your columns as they are automatically generated from keys.
-
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
@@ -330,8 +310,8 @@ class UsersTable extends AbstractTableConfigurations
     
     protected function columns(Table $table): void
     {
-        $table->column('id'); // Value assumed from `$user->id`
-        $table->column()->title('Name')->format(fn(User $user) => 'Custom formatted ' . $user->name); // Value set from closure
+        $table->column('Id'); // Value set from `$user->id`
+        $table->column('Username')->format(fn(User $user) => 'Custom formatted ' . $user->name); // Value set from closure
     }
 }
 ```
@@ -364,17 +344,63 @@ class UsersTable extends AbstractTableConfigurations
     
     protected function columns(Table $table): void
     {
-        $table->column('id')->format(new ActiveFormatter());
-        $table->column()->title('Active')->format(new ActiveFormatter());
+        $table->column('Id')->format(new ActiveFormatter());
+        $table->column('Active')->format(new ActiveFormatter());
     }
 }
 ```
 
 ### Configure columns searching
 
-ToDo
+Allow searching on columns by calling the `searching` method.
 
-### Handle columns sorting
+When searchable fields are set, a search input will appear in the table head.
+
+Searchable column titles will be used to indicate which field can be searched on the search input placeholder.
+
+By default, searching will be applied to columns defined keys.
+
+```php
+class UsersTable extends AbstractTableConfigurations
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('Id'); // Column will not be searchable
+        $table->column('Name')->searchable(); // Table will be searchable from `$user->name`
+    }
+}
+```
+
+You will be able to set up a custom searching behaviour by passing a closure to the `searchable` method.
+
+This closure will be executed when searching will be triggered on the table and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` argument.
+
+This feature will be useful to configure specific searching behaviour.
+
+```php
+class UsersTable extends AbstractTableConfigurations
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('Id'); // Column will not be searchable
+        $table->column('Owned companies')
+            // ... Custom formatting
+            ->sortable(fn(Builder $query, string $searched) => $query->whereRelation('companies', 'name', 'LIKE', '%' . $searched . '%'); // Column will be searchable using this closure
+    }
+}
+```
+
+### Configure columns sorting
 
 Allow sorting on columns by calling the `sortable` method.
 
@@ -392,17 +418,15 @@ class UsersTable extends AbstractTableConfigurations
     
     protected function columns(Table $table): void
     {
-        $table->column('id'); // Column will not be sortable
-        $table->column('name')->sortable(); // Column will be sortable on `$user->name`
+        $table->column('Id'); // Column will not be sortable
+        $table->column('Name')->sortable(); // Column will be sortable from `$user->name`
     }
 }
 ```
 
-You will be able to set up a custom sorting behaviour for formatted columns by passing a closure to the `sortable` method.
+To sort a column by default, use the `sortByDefault` column method, which will allow you to pass a `bool $sortAsc` argument.
 
-This closure will be executed when sorting will be triggered on the column and allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `bool $sortAsc` argument.
-
-This feature will be useful for formatted columns, for example.
+You can sort by default a column that is not sortable.
 
 ```php
 class UsersTable extends AbstractTableConfigurations
@@ -414,13 +438,34 @@ class UsersTable extends AbstractTableConfigurations
     
     protected function columns(Table $table): void
     {
-        $table->column('id'); // Column will not be sortable
-        $table->column()
-            ->title('Active')
-            ->format(fn(User $user) => $user->active
-                ? '<i class="fa-solid fa-check text-success"></i>'
-                : '<i class="fa-solid fa-xmark text-danger"></i>';)
-            ->sortable(fn(Builder $query, bool $sortAsc) => $query->orderBy('active', $sortAsc ? 'asc' : 'desc'));
+        $table->column('Id'); // Column will not be sortable
+        $table->column('Name')->sortByDefault(false); // Column will be sorted descending by default on `$user->name`
+    }
+}
+```
+
+
+You will be able to set up a custom sorting behaviour by passing a closure to the `sortable` method.
+
+This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `bool $sortAsc` arguments.
+
+This feature will be useful to configure specific sorting behaviour.
+
+```php
+class UsersTable extends AbstractTableConfigurations
+{
+    protected function table(Table $table): void
+    {
+        $table->model(User::class);
+    }
+    
+    protected function columns(Table $table): void
+    {
+        $table->column('Id'); // Column will not be sortable
+        $table->column('Companies count') 
+            // Custom formatting...
+            ->sortable(fn(Builder $query, bool $sortAsc) => $query->withCount('companies')
+                ->orderBy('companies_count', $sortAsc ? 'asc' : 'desc')); // Column will be sortable from this closure
     }
 }
 ```

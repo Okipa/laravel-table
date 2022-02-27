@@ -19,8 +19,8 @@ class CompanyFactory extends Factory
         ];
     }
 
-    public function withOwner(User $user)
+    public function withOwner(User $user): self
     {
-        $this->afterCreating(fn(Company $company) => $company->companies()->save($user));
+        return $this->afterCreating(fn(Company $company) => $company->companies()->save($user));
     }
 }
