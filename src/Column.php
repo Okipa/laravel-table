@@ -5,8 +5,8 @@ namespace Okipa\LaravelTable;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+use Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection;
 
 class Column
 {
@@ -14,9 +14,9 @@ class Column
 
     protected Closure|null $sortableClosure = null;
 
-    protected bool $sortedByDefault = false;
+    protected bool $sortByDefault = false;
 
-    protected bool $sortedAscByDefault = true;
+    protected string $sortDirByDefault = 'asc';
 
     protected bool $searchable = false;
 
@@ -24,9 +24,9 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string $title, protected string $key = '')
+    public function __construct(protected string $title, protected string $key)
     {
-        $this->key = $key ?: Str::snake($title);
+        //
     }
 
     public function getKey(): string
@@ -47,10 +47,14 @@ class Column
         return $this;
     }
 
-    public function sortByDefault(bool $sortAscByDefault = true): self
+    /** @throws \Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection */
+    public function sortByDefault(string $sortDir = 'asc'): self
     {
-        $this->sortedByDefault = true;
-        $this->sortedAscByDefault = $sortAscByDefault;
+        if (! in_array($sortDir, ['asc', 'desc'], true)) {
+            throw new InvalidColumnSortDirection($sortDir);
+        }
+        $this->sortByDefault = true;
+        $this->sortDirByDefault = $sortDir;
 
         return $this;
     }
@@ -67,12 +71,12 @@ class Column
 
     public function isSortedByDefault(): bool
     {
-        return $this->sortedByDefault;
+        return $this->sortByDefault;
     }
 
-    public function isSortedAscByDefault(): bool
+    public function getSortDirByDefault(): string
     {
-        return $this->sortedAscByDefault;
+        return $this->sortDirByDefault;
     }
 
     public function searchable(): self

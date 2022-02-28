@@ -22,7 +22,7 @@ class ColumnSearchableTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('id');
+                $table->column('Id');
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -44,9 +44,9 @@ class ColumnSearchableTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('id');
-                $table->column('name')->searchable();
-                $table->column('email')->searchable();
+                $table->column('Id');
+                $table->column('Name')->searchable();
+                $table->column('Email')->searchable();
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -56,11 +56,11 @@ class ColumnSearchableTest extends TestCase
                 '<form wire:submit.prevent="$refresh">',
                 '<span id="search-for-rows"',
                 'icon-search',
-                'placeholder="Search by: validation.attributes.name, validation.attributes.email"',
-                'aria-label="Search by: validation.attributes.name, validation.attributes.email"',
+                'placeholder="Search by: Name, Email"',
+                'aria-label="Search by: Name, Email"',
                 'aria-describedby="search-for-rows"',
                 '<button',
-                'title="Search by: validation.attributes.name, validation.attributes.email"',
+                'title="Search by: Name, Email"',
                 'icon-validate',
                 '</thead>',
             ]);
@@ -78,9 +78,9 @@ class ColumnSearchableTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('id');
-                $table->column('name')->searchable();
-                $table->column('email')->searchable();
+                $table->column('Id');
+                $table->column('Name')->searchable();
+                $table->column('Email')->searchable();
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -122,9 +122,9 @@ class ColumnSearchableTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('id');
-                $table->column('name')->searchable();
-                $table->column('email')->searchable();
+                $table->column('Id');
+                $table->column('Name')->searchable();
+                $table->column('Email')->searchable();
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])

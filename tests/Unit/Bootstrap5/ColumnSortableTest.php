@@ -31,8 +31,8 @@ class ColumnSortableTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('sortBy', null)
-            ->assertSet('sortAsc', false)
+            ->assertSet('sortedColumnKey', null)
+            ->assertSet('sortedColumnDir', null)
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -77,8 +77,8 @@ class ColumnSortableTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('sortBy', 'id')
-            ->assertSet('sortAsc', true)
+            ->assertSet('sortedColumnKey', 'id')
+            ->assertSet('sortedColumnDir', 'asc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -124,8 +124,8 @@ class ColumnSortableTest extends TestCase
         $users = $users->sortBy('name');
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('sortBy', 'name')
-            ->assertSet('sortAsc', true)
+            ->assertSet('sortedColumnKey', 'name')
+            ->assertSet('sortedColumnDir', 'asc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -165,14 +165,14 @@ class ColumnSortableTest extends TestCase
             protected function columns(Table $table): void
             {
                 $table->column('Id')->sortable();
-                $table->column('Name')->sortable()->sortByDefault(false);
+                $table->column('Name')->sortable()->sortByDefault('desc');
             }
         };
         $users = $users->sortByDesc('name');
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('sortBy', 'name')
-            ->assertSet('sortAsc', false)
+            ->assertSet('sortedColumnKey', 'name')
+            ->assertSet('sortedColumnDir', 'desc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -198,7 +198,7 @@ class ColumnSortableTest extends TestCase
     }
 
     /** @test */
-    public function it_can_sort_specific_column(): void
+    public function it_can_sort_column(): void
     {
         Config::set('laravel-table.icon.sort_asc', 'icon-sort-asc');
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
@@ -219,11 +219,11 @@ class ColumnSortableTest extends TestCase
         $users = $users->sortBy('name');
         $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('sortBy', 'id')
-            ->assertSet('sortAsc', true)
+            ->assertSet('sortedColumnKey', 'id')
+            ->assertSet('sortedColumnDir', 'asc')
             ->call('sortBy', 'name')
-            ->assertSet('sortBy', 'name')
-            ->assertSet('sortAsc', true)
+            ->assertSet('sortedColumnKey', 'name')
+            ->assertSet('sortedColumnDir', 'asc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -248,8 +248,8 @@ class ColumnSortableTest extends TestCase
             ]);
         $users = $users->sortByDesc('name');
         $component->call('sortBy', 'name')
-            ->assertSet('sortBy', 'name')
-            ->assertSet('sortAsc', false)
+            ->assertSet('sortedColumnKey', 'name')
+            ->assertSet('sortedColumnDir', 'desc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -264,6 +264,57 @@ class ColumnSortableTest extends TestCase
                 'title="Sort ascending"',
                 'icon-sort-asc',
                 'Name',
+                '</th>',
+                '</tr>',
+                '</thead>',
+                '<tbody>',
+                $users->first()->name . '</td>',
+                $users->last()->name . '</td>',
+                '</tbody>',
+            ]);
+    }
+
+    /** @test */
+    public function it_can_sort_column_from_custom_key(): void
+    {
+        Config::set('laravel-table.icon.sort_asc', 'icon-sort-asc');
+        Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
+        Config::set('laravel-table.icon.sort', 'icon-sort');
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(Table $table): void
+            {
+                $table->model(User::class);
+            }
+
+            protected function columns(Table $table): void
+            {
+                $table->column('Custom Id', 'id')->sortable();
+                $table->column('Custom Name', 'name')->sortable();
+            }
+        };
+        $users = $users->sortBy('name');
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSet('sortedColumnKey', 'id')
+            ->assertSet('sortedColumnDir', 'asc')
+            ->call('sortBy', 'name')
+            ->assertSet('sortedColumnKey', 'name')
+            ->assertSet('sortedColumnDir', 'asc')
+            ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
+                '<th class="align-middle" scope="col">',
+                '<a wire:click.prevent="sortBy(\'id\')"',
+                'title="Sort ascending"',
+                'icon-sort',
+                'Custom Id',
+                '</th>',
+                '<th class="align-middle" scope="col">',
+                '<a wire:click.prevent="sortBy(\'name\')"',
+                'title="Sort descending"',
+                'icon-sort-desc',
+                'Custom Name',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -293,15 +344,17 @@ class ColumnSortableTest extends TestCase
                 $table->column('Name')->sortable();
                 $table->column('Companies count')
                     ->format(fn(User $user) => $user->companies->count())
-                    ->sortable(fn(Builder $query, bool $sortAsc) => $query->withCount('companies')->orderBy('companies_count'))
+                    ->sortable(fn(Builder $query, string $sortDir) => $query
+                        ->withCount('companies')
+                        ->orderBy('companies_count', $sortDir))
                     ->sortByDefault();
             }
         };
         $users = $users->loadCount('companies')->sortBy('companies_count');
         $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('sortBy', 'companies_count')
-            ->assertSet('sortAsc', true)
+            ->assertSet('sortedColumnKey', 'companies_count')
+            ->assertSet('sortedColumnDir', 'asc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
@@ -326,8 +379,8 @@ class ColumnSortableTest extends TestCase
             ]);
         $users = $users->sortByDesc('companies_count');
         $component->call('sortBy', 'companies_count')
-            ->assertSet('sortBy', 'companies_count')
-            ->assertSet('sortAsc', false)
+            ->assertSet('sortedColumnKey', 'companies_count')
+            ->assertSet('sortedColumnDir', 'desc')
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',

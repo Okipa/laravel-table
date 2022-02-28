@@ -24,7 +24,7 @@ class ColumnFormatTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>');
+                $table->column('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>');
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -55,7 +55,7 @@ class ColumnFormatTest extends TestCase
                         return '<b>Test ' . $user->name . '</b>';
                     }
                 };
-                $table->column('name')->format(new $formatter());
+                $table->column('Name')->format(new $formatter());
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -80,7 +80,7 @@ class ColumnFormatTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>', true);
+                $table->column('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>', true);
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])

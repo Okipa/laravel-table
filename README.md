@@ -86,11 +86,11 @@ class UsersTable extends AbstractTableConfiguration
 
     protected function columns(Table $table): void
     {
-        $table->column('Id')->sortable(true);
+        $table->column('Id')->sortable();
         $table->column('Name')->sortable()->searchable();
         $table->column('Email')->sortable()->searchable();
-        $table->column('Created at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('Updated at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('Created at')->format(new DateTimeFormatter('d/m/Y H:i'))->sortable();
+        $table->column('Updated at')->format(new DateTimeFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
     }
 }
 ```
@@ -424,7 +424,7 @@ class UsersTable extends AbstractTableConfigurations
 }
 ```
 
-To sort a column by default, use the `sortByDefault` column method, which will allow you to pass a `bool $sortAsc` argument.
+To sort a column by default, use the `sortByDefault` column method, which will allow you to pass a `string $direction` argument.
 
 You can sort by default a column that is not sortable.
 
@@ -439,7 +439,7 @@ class UsersTable extends AbstractTableConfigurations
     protected function columns(Table $table): void
     {
         $table->column('Id'); // Column will not be sortable
-        $table->column('Name')->sortByDefault(false); // Column will be sorted descending by default on `$user->name`
+        $table->column('Name')->sortByDefault('desc'); // Column will be sorted descending by default on `$user->name`
     }
 }
 ```
@@ -447,7 +447,7 @@ class UsersTable extends AbstractTableConfigurations
 
 You will be able to set up a custom sorting behaviour by passing a closure to the `sortable` method.
 
-This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `bool $sortAsc` arguments.
+This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `string $direction` arguments.
 
 This feature will be useful to configure specific sorting behaviour.
 
@@ -464,8 +464,8 @@ class UsersTable extends AbstractTableConfigurations
         $table->column('Id'); // Column will not be sortable
         $table->column('Companies count') 
             // Custom formatting...
-            ->sortable(fn(Builder $query, bool $sortAsc) => $query->withCount('companies')
-                ->orderBy('companies_count', $sortAsc ? 'asc' : 'desc')); // Column will be sortable from this closure
+            ->sortable(fn(Builder $query, bool $sortDir) => $query->withCount('companies')
+                ->orderBy('companies_count', $sortDir)); // Column will be sortable from this closure
     }
 }
 ```

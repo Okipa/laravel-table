@@ -65,7 +65,7 @@ class Table
     public function column(string $title, string $key = null): Column
     {
         $key = $key ?: Str::snake($title);
-        $column = new Column($key);
+        $column = new Column($title, $key);
         $this->columns->add($column);
 
         return $column;
@@ -87,19 +87,19 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function getColumn(string $key): Column
-    {
-        return $this->getColumns()->filter(fn(Column $column) => $column->getKey() === $key)->first();
-    }
-
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumns(): Collection
     {
         if ($this->columns->isEmpty()) {
-            throw new NoColumnsDeclared('No columns are declared for ' . $this->model::class . ' table.');
+            throw new NoColumnsDeclared($this->model);
         }
 
         return $this->columns;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function getColumn(string $key): Column
+    {
+        return $this->getColumns()->filter(fn(Column $column) => $column->getKey() === $key)->first();
     }
 
     public function query(Closure $queryClosure): self
@@ -113,7 +113,7 @@ class Table
     public function generateRows(
         string|null $search,
         string|Closure|null $sortBy,
-        bool $sortAsc,
+        string|null $sortDir,
         int $numberOfRowsPerPage
     ): void {
         $query = $this->model->query();
@@ -130,27 +130,11 @@ class Table
             ));
         });
         // Sort
-        if ($sortBy) {
+        if ($sortBy && $sortDir) {
             $sortBy instanceof Closure
-                ? $sortBy($query, $sortAsc)
-                : $query->orderBy($sortBy, $sortAsc ? 'asc' : 'desc');
+                ? $sortBy($query, $sortDir)
+                : $query->orderBy($sortBy, $sortDir);
         }
-//        $query->when($sortBy, fn(Builder $sortQuery) => $sortBy instanceof Closure
-//            ? dd('test') && $sortBy($sortQuery, $sortAsc)
-//            : $sortQuery->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'));
-//        $this->rows = $query
-//            // Searching
-//            ->when($search, function (Builder $searchQuery) use ($search) {
-//                $this->getSearchableColumns()->each(fn(Column $searchableColumn) => $searchQuery->orWhere(
-//                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-//                    $this->getCaseInsensitiveSearchingLikeOperator(),
-//                    '%' . mb_strtolower($search) . '%'
-//                ));
-//            })
-//            // Sorting
-//            ->when($sortBy, fn(Builder $sortQuery) => dd('trzz') && $sortBy instanceof Closure
-//                ? $sortBy($sortQuery, $sortAsc)
-//                : $sortQuery->orderBy($sortBy, $sortAsc ? 'asc' : 'desc'))
         // Paginate
         $this->rows = $query->paginate($numberOfRowsPerPage);
     }

@@ -33,9 +33,9 @@ class Table extends Component
 
     public int $numberOfRowsPerPage;
 
-    public string|null $sortBy;
+    public string|null $sortedColumnKey;
 
-    public bool $sortAsc;
+    public string|null $sortedColumnDir;
 
     protected $listeners = ['search:executed' => '$refresh'];
 
@@ -67,8 +67,7 @@ class Table extends Component
     protected function buildConfig(): AbstractTableConfiguration
     {
         if (! app($this->config) instanceof AbstractTableConfiguration) {
-            throw new InvalidTableConfiguration('The given ' . $this->config
-                . ' table config should extend ' . AbstractTableConfiguration::class . '.');
+            throw new InvalidTableConfiguration($this->config);
         }
 
         return app($this->config, $this->configParams);
@@ -85,17 +84,18 @@ class Table extends Component
         $this->searchableLabels = $table->getSearchableLabels();
         // Sort
         $columnSortedByDefault = $table->getColumnSortedByDefault();
-        $this->sortBy = $this->sortBy ?? $columnSortedByDefault?->getKey();
-        $this->sortAsc = $this->sortAsc ?? (bool) $columnSortedByDefault?->isSortedAscByDefault();
-        $sortableClosure = $this->sortBy ? $table->getColumn($this->sortBy)->getSortableClosure() : null;
+        $this->sortedColumnKey = $this->sortedColumnKey ?? $columnSortedByDefault?->getKey();
+        $this->sortedColumnDir = $this->sortedColumnDir ?? $columnSortedByDefault?->getSortDirByDefault();
+        $sortableClosure =
+            $this->sortedColumnKey ? $table->getColumn($this->sortedColumnKey)->getSortableClosure() : null;
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
         // Generate
         $table->generateRows(
             $this->search,
-            $sortableClosure ?: $this->sortBy,
-            $this->sortAsc,
+            $sortableClosure ?: $this->sortedColumnKey,
+            $this->sortedColumnDir,
             $this->numberOfRowsPerPage
         );
 
@@ -121,7 +121,9 @@ class Table extends Component
 
     public function sortBy(string $columnKey): void
     {
-        $this->sortAsc = $this->sortBy !== $columnKey || ! $this->sortAsc;
-        $this->sortBy = $columnKey;
+        $this->sortedColumnDir = $this->sortedColumnKey !== $columnKey || $this->sortedColumnDir === 'desc'
+            ? 'asc'
+            : 'desc';
+        $this->sortedColumnKey = $columnKey;
     }
 }

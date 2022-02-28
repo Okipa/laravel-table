@@ -41,15 +41,15 @@ class MakeTableTest extends TestCase
         self::assertStringContainsString('\'entry\' => $user->database_attribute', $fileContent);
         self::assertStringContainsString('protected function columns(Table $table): void', $fileContent);
         self::assertStringContainsString(
-            '$table->column(\'id\')->sortable();',
+            '$table->column(\'Id\')->sortable();',
             $fileContent
         );
         self::assertStringContainsString(
-            '$table->column(\'created_at\')->dateTimeFormat(\'d/m/Y H:i\')->sortable();',
+            '$table->column(\'Created at\')->dateTimeFormat(\'d/m/Y H:i\')->sortable();',
             $fileContent
         );
         self::assertStringContainsString(
-            '$table->column(\'updated_at\')->dateTimeFormat(\'d/m/Y H:i\')->sortable(true, \'desc\');',
+            '$table->column(\'Updated at\')->dateTimeFormat(\'d/m/Y H:i\')->sortable()->sortByDefault(\'desc\');',
             $fileContent
         );
         self::assertStringContainsString('protected function resultLines(Table $table): void', $fileContent);

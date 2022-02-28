@@ -24,7 +24,7 @@ class TablePaginationTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('id');
+                $table->column('Id');
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -46,7 +46,7 @@ class TablePaginationTest extends TestCase
 
             protected function columns(Table $table): void
             {
-                $table->column('id');
+                $table->column('Id');
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
