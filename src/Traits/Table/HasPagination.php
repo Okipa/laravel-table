@@ -14,21 +14,42 @@ trait HasPagination
 
     protected array $appendedToPaginator = [];
 
-    protected array $generatedHiddenFields = [];
+    protected string $generatedHiddenFields = '';
 
     public function appendData(array $appendedToPaginator): Table
     {
         $appendedToPaginator = array_filter($appendedToPaginator);
         $this->appendedToPaginator = $appendedToPaginator;
-        // Todo: remove `generatedHiddenFields` management in a future major version,
-        // which is a duplicate of `appendedToPaginator`.
-        $this->generatedHiddenFields = $appendedToPaginator;
+        $this->generatedHiddenFields = $this->generateHiddenInputsFromArray($appendedToPaginator);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    public function getGeneratedHiddenFields(): array
+    protected function generateHiddenInputsFromArray(array $data = [], $namePrefix = ''): string
+    {
+        if (! $data) {
+            return '';
+        }
+        $html = '';
+        $namePrefix = trim($namePrefix);
+        foreach ($data as $key => $value) {
+            $keyEsc = htmlentities($key);
+            if ($namePrefix !== '') {
+                $keyEsc = $namePrefix . "[{$keyEsc}]";
+            }
+            if (is_array($value)) {
+                $html .= $this->generateHiddenInputsFromArray($value, $keyEsc);
+            } else {
+                $valueEsc = htmlentities($value);
+                $html .= "<input type=\"hidden\" name=\"{$keyEsc}\" value=\"{$valueEsc}\">" . PHP_EOL;
+            }
+        }
+
+        return $html;
+    }
+
+    public function getGeneratedHiddenFields(): string
     {
         return $this->generatedHiddenFields;
     }
@@ -50,6 +71,18 @@ trait HasPagination
 
     abstract public function getDestroyConfirmationClosure(): ?Closure;
 
+    abstract public function getRowsNumberField(): string;
+
+    abstract public function getSearchField(): string;
+
+    abstract public function getSortByField(): string;
+
+    abstract public function getSortByValue(): ?string;
+
+    abstract public function getSortDirField(): string;
+
+    abstract public function getSortDirValue(): ?string;
+
     protected function paginateFromQuery(Builder $query): void
     {
         /** @var int|null $perPage */
@@ -64,18 +97,6 @@ trait HasPagination
     }
 
     abstract public function getRowsNumberValue(): ?int;
-
-    abstract public function getRowsNumberField(): string;
-
-    abstract public function getSearchField(): string;
-
-    abstract public function getSortByField(): string;
-
-    abstract public function getSortByValue(): ?string;
-
-    abstract public function getSortDirField(): string;
-
-    abstract public function getSortDirValue(): ?string;
 
     public function getAppendedToPaginator(): array
     {
