@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.0.5](https://github.com/Okipa/laravel-table/compare/4.0.4...4.0.5)
+
+2022-03-01
+
+* Fixed error when appending array to table with the `appendData` method
+
 ## [4.0.4](https://github.com/Okipa/laravel-table/compare/4.0.3...4.0.4)
 
 2021-08-17
