@@ -1,12 +1,9 @@
 @if($table->getRowsNumberDefinitionActivation())
     <div class="px-xl-3 py-1 rows-number-definition">
-        <form role="form" method="GET" action="{{ $table->getRoute('index') }}">
+        <form role="form" method="GET" action="{{ $table->getRoute('index') . '?' . http_build_query($table->getAppendedToPaginator()) }}">
             <input type="hidden" name="{{ $table->getSearchField() }}" value="{{ $table->getRequest()->get($table->getSearchField()) }}">
             <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
             <input type="hidden" name="{{ $table->getSortDirField() }}" value="{{ $table->getRequest()->get($table->getSortDirField()) }}">
-            @foreach($table->getGeneratedHiddenFields() as $appendedKey => $appendedValue)
-                <input type="hidden" name="{{ $appendedKey }}" value="{{ $appendedValue }}">
-            @endforeach
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text text-secondary">
