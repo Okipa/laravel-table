@@ -494,4 +494,29 @@ class SearchTest extends LaravelTableTestCase
         $table->configure();
         self::assertTrue($user->is($table->getPaginator()->getCollection()->first()));
     }
+
+    public function testGenerateHiddenFieldsOnSearchFormHtml(): void
+    {
+        $this->routes(['users'], ['index']);
+        $appended = [
+            'foo' => 'bar',
+            'baz' => [
+                'qux',
+                'quux' => 'corge',
+                'grault',
+            ],
+            7 => 'garply',
+        ];
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])
+            ->model(User::class)
+            ->appendData($appended);
+        $table->column('name')->title('Name')->searchable();
+        $table->configure();
+        $searchHtml = view('laravel-table::' . $table->getRowsSearchingTemplatePath(), compact('table'))->toHtml();
+        self::assertStringContainsString('<input type="hidden" name="foo" value="bar">', $searchHtml);
+        self::assertStringContainsString('<input type="hidden" name="baz[0]" value="qux">', $searchHtml);
+        self::assertStringContainsString('<input type="hidden" name="baz[quux]" value="corge">', $searchHtml);
+        self::assertStringContainsString('<input type="hidden" name="baz[1]" value="grault">', $searchHtml);
+        self::assertStringContainsString('<input type="hidden" name="7" value="garply">', $searchHtml);
+    }
 }
