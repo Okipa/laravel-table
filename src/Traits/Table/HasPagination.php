@@ -14,42 +14,40 @@ trait HasPagination
 
     protected array $appendedToPaginator = [];
 
-    protected string $generatedHiddenFields = '';
+    protected array $generatedHiddenFields = [];
 
     public function appendData(array $appendedToPaginator): Table
     {
         $appendedToPaginator = array_filter($appendedToPaginator);
         $this->appendedToPaginator = $appendedToPaginator;
-        $this->generatedHiddenFields = $this->generateHiddenInputsFromArray($appendedToPaginator);
+        $this->generatedHiddenFields = $this->generateHiddenInputsArray($appendedToPaginator);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
     }
 
-    protected function generateHiddenInputsFromArray(array $data = [], $namePrefix = ''): string
+    protected function generateHiddenInputsArray(array $data = [], string $prefix = null): array
     {
-        if (! $data) {
-            return '';
-        }
-        $html = '';
-        $namePrefix = trim($namePrefix);
+        $inputsArray = [];
+        $prefix = trim($prefix);
         foreach ($data as $key => $value) {
-            $keyEsc = htmlentities($key);
-            if ($namePrefix !== '') {
-                $keyEsc = $namePrefix . "[{$keyEsc}]";
+            if ($prefix) {
+                $key = $prefix . "[{$key}]";
             }
             if (is_array($value)) {
-                $html .= $this->generateHiddenInputsFromArray($value, $keyEsc);
+                $arrayData = $this->generateHiddenInputsArray($value, $key);
+                foreach ($arrayData as $arrayKey => $arrayValue) {
+                    $inputsArray[$arrayKey] = $arrayValue;
+                }
             } else {
-                $valueEsc = htmlentities($value);
-                $html .= "<input type=\"hidden\" name=\"{$keyEsc}\" value=\"{$valueEsc}\">" . PHP_EOL;
+                $inputsArray[$key] = $value;
             }
         }
 
-        return $html;
+        return $inputsArray;
     }
 
-    public function getGeneratedHiddenFields(): string
+    public function getGeneratedHiddenFields(): array
     {
         return $this->generatedHiddenFields;
     }

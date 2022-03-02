@@ -5,8 +5,6 @@
 2022-03-01
 
 * Fixed error when appending array data to table with the `appendData` method
-  * Data is now appended with hidden input to rows-number-definition-form and to search-form from the table `getGeneratedHiddenFields` method which is now returning html and not an array as before
-  * You may have to update your `rows-number-definition.blade.php` and `rows-searching.blade.php` view if you have published them
 
 ## [4.0.4](https://github.com/Okipa/laravel-table/compare/4.0.3...4.0.4)
 
