@@ -209,7 +209,7 @@ class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        Table::make()->model(User::class);
+        return Table::make()->model(User::class);
     }
 }
 ```
@@ -227,7 +227,7 @@ class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        Table::make()->model(User::class)->query(fn(Builder $query) => $query->where('active', true));
+        return Table::make()->model(User::class)->query(fn(Builder $query) => $query->where('active', true));
     }   
 }
 ```
@@ -243,7 +243,7 @@ class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(false);
+        return Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(false);
     }
 }
 ```
@@ -259,7 +259,7 @@ class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        Table::make()->model(User::class)->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
+        return Table::make()->model(User::class)->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
     }
 }
 ```
@@ -328,11 +328,11 @@ If you want to apply the same formatting treatment repeatedly, you should create
 You'll find the generated formatter in the `app\Table\Formatters` directory.
 
 ```php
-class ActiveFormatter extends AbstractFormatter
+class BooleanFormatter extends AbstractFormatter
 {
-    public function format(Model $user): string
+    public function format(Model $model, string $key): string
     {
-        return $user->active
+        return $user->{$key}
             ? '<i class="fa-solid fa-check text-success"></i>'
             : '<i class="fa-solid fa-xmark text-danger"></i>';
     }
@@ -352,8 +352,8 @@ class UsersTable extends AbstractTableConfigurations
     protected function columns(): array
     {
         return [
-            Column::make('Id')->format(new ActiveFormatter());
-            Column::make('Active')->format(new ActiveFormatter());
+            Column::make('Id');
+            Column::make('Active')->format(new BooleanFormatter());
         ];
     }
 }
@@ -407,7 +407,7 @@ class UsersTable extends AbstractTableConfigurations
             Column::make('Id'); // Column will not be searchable
             Column::make('Owned companies')
                 // ... Custom formatting
-                ->sortable(fn(Builder $query, string $searched) => $query->whereRelation('companies', 'name', 'LIKE', '%' . $searched . '%'); // Column will be searchable using this closure
+                ->searchable(fn(Builder $query, string $searched) => $query->whereRelation('companies', 'name', 'LIKE', '%' . $searched . '%'); // Column will be searchable using this closure
         ];
     }
 }
@@ -460,7 +460,6 @@ class UsersTable extends AbstractTableConfigurations
     }
 }
 ```
-
 
 You will be able to set up a custom sorting behaviour by passing a closure to the `sortable` method.
 

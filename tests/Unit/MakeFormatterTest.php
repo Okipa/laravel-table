@@ -11,13 +11,14 @@ class MakeFormatterTest extends TestCase
 {
     public function testMakeTable(): void
     {
-        $this->artisan(MakeFormatter::class, ['name' => 'ActiveFormatter']);
-        self::assertFileExists(base_path('app/Tables/Formatters/ActiveFormatter.php'));
-        $fileContent = File::get(base_path('app/Tables/Formatters/ActiveFormatter.php'));
+        $this->artisan(MakeFormatter::class, ['name' => 'BooleanFormatter']);
+        self::assertFileExists(base_path('app/Tables/Formatters/BooleanFormatter.php'));
+        $fileContent = File::get(base_path('app/Tables/Formatters/BooleanFormatter.php'));
         self::assertStringContainsString('namespace App\Tables\Formatters;', $fileContent);
+        self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractFormatter;', $fileContent);
-        self::assertStringContainsString('class ActiveFormatter', $fileContent);
-        self::assertStringContainsString('protected function format(Model $model): mixed', $fileContent);
+        self::assertStringContainsString('class BooleanFormatter', $fileContent);
+        self::assertStringContainsString('protected function format(Model $model, string $key): mixed', $fileContent);
     }
 
     protected function setUp(): void
