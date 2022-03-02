@@ -6,21 +6,15 @@ use Okipa\LaravelTable\Table;
 
 abstract class AbstractTableConfiguration
 {
-    public function setup(Table $table): Table
+    public function setup(): Table
     {
-        $this->table($table);
-        $this->columns($table);
-        $this->resultLines($table);
+        $table = $this->table();
+        $table->columns($this->columns());
 
         return $table;
     }
 
-    abstract protected function table(Table $table): void;
+    abstract protected function table(): Table;
 
-    abstract protected function columns(Table $table): void;
-
-    protected function resultLines(Table $table): void
-    {
-        //
-    }
+    abstract protected function columns(): array;
 }

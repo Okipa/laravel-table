@@ -9,7 +9,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
 class Table
@@ -33,6 +32,11 @@ class Table
         $this->numberOfRowsPerPageOptions = Config::get('laravel-table.number_of_rows_per_page_options');
     }
 
+    public static function make(): self
+    {
+        return new static();
+    }
+
     public function model(string $modelClass): self
     {
         $this->model = app($modelClass);
@@ -40,9 +44,11 @@ class Table
         return $this;
     }
 
-    public function enableNumberOfRowsPerPageChoice(bool $numberOfRowsPerPageChoiceEnabled): bool
+    public function enableNumberOfRowsPerPageChoice(bool $numberOfRowsPerPageChoiceEnabled): self
     {
-        return $this->numberOfRowsPerPageChoiceEnabled = $numberOfRowsPerPageChoiceEnabled;
+        $this->numberOfRowsPerPageChoiceEnabled = $numberOfRowsPerPageChoiceEnabled;
+
+        return $this;
     }
 
     public function isNumberOfRowsPerPageChoiceEnabled(): bool
@@ -62,13 +68,9 @@ class Table
         return $this->numberOfRowsPerPageOptions;
     }
 
-    public function column(string $title, string $key = null): Column
+    public function columns(array $columns): void
     {
-        $key = $key ?: Str::snake($title);
-        $column = new Column($title, $key);
-        $this->columns->add($column);
-
-        return $column;
+        $this->columns = collect($columns);
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

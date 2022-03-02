@@ -2,23 +2,20 @@
 
 namespace DummyNamespace;
 
-use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class DummyClass extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
         //
     }
 
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        //
-    }
-
-    protected function resultLines(Table $table): void
-    {
-        //
+        return [
+            //
+        ];
     }
 }

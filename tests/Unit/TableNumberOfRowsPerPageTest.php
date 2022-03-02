@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\Unit\Bootstrap5;
+namespace Tests\Unit;
 
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -16,14 +17,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', false);
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -36,14 +39,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class)->enableNumberOfRowsPerPageChoice(false);
+                return Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(false);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -56,14 +61,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -76,14 +83,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', false);
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class)->enableNumberOfRowsPerPageChoice(true);
+                return Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(true);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -98,14 +107,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -131,14 +142,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_options', [10, 25, 50, 75, 100]);
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class)->numberOfRowsPerPageOptions([1, 2, 3, 4, 5]);
+                return Table::make()->model(User::class)->numberOfRowsPerPageOptions([1, 2, 3, 4, 5]);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -165,14 +178,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         $displayedHtml = [];
@@ -212,14 +227,16 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.number_of_rows_per_page_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         $values = [];

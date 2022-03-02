@@ -76,9 +76,7 @@ class Table extends Component
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     protected function buildTable(AbstractTableConfiguration $config): array
     {
-        /** @var \Okipa\LaravelTable\Table $table */
-        $table = app(\Okipa\LaravelTable\Table::class);
-        $config->setup($table);
+        $table = $config->setup();
         $columns = $table->getColumns();
         // Search
         $this->searchableLabels = $table->getSearchableLabels();
@@ -86,8 +84,9 @@ class Table extends Component
         $columnSortedByDefault = $table->getColumnSortedByDefault();
         $this->sortedColumnKey = $this->sortedColumnKey ?? $columnSortedByDefault?->getKey();
         $this->sortedColumnDir = $this->sortedColumnDir ?? $columnSortedByDefault?->getSortDirByDefault();
-        $sortableClosure =
-            $this->sortedColumnKey ? $table->getColumn($this->sortedColumnKey)->getSortableClosure() : null;
+        $sortableClosure = $this->sortedColumnKey
+            ? $table->getColumn($this->sortedColumnKey)->getSortableClosure()
+            : null;
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);

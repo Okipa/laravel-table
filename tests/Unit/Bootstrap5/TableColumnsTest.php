@@ -5,6 +5,7 @@ namespace Tests\Unit\Bootstrap5;
 use Illuminate\View\ViewException;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -15,14 +16,14 @@ class TableColumnsTest extends TestCase
     public function it_cant_generate_table_without_columns(): void
     {
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                //
+                return [];
             }
         };
         $this->expectException(ViewException::class);
@@ -34,15 +35,17 @@ class TableColumnsTest extends TestCase
     public function it_can_set_column_titles(): void
     {
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
-                $table->column('Name');
+                return [
+                    Column::make('Id'),
+                    Column::make('Name'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -66,15 +69,17 @@ class TableColumnsTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
-                $table->column('Name');
+                return [
+                    Column::make('Id'),
+                    Column::make('Name'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])

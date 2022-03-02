@@ -62,15 +62,16 @@ Set your table configuration in the generated file, which can be found in the `a
 ```php
 namespace App\Tables;
 
-use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-use Okipa\LaravelTable\Table;
 use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipe\LaravelTable\Formatters\DateFormatter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class)
+        return Table::make()->model(User::class)
             ->routes([
                 'index' => ['name' => 'users.index'],
                 'create' => ['name' => 'user.create'],
@@ -84,13 +85,15 @@ class UsersTable extends AbstractTableConfiguration
             ]);
     }
 
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id')->sortable();
-        $table->column('Name')->sortable()->searchable();
-        $table->column('Email')->sortable()->searchable();
-        $table->column('Created at')->format(new DateTimeFormatter('d/m/Y H:i'))->sortable();
-        $table->column('Updated at')->format(new DateTimeFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+        return [
+            Column::make('Id')->sortable();
+            Column::make('Name')->sortable()->searchable();
+            Column::make('Email')->sortable()->searchable();
+            Column::make('Created at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
+            Column::make('Updated at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+        ];
     }
 }
 ```
@@ -204,9 +207,9 @@ To generate a table from an Eloquent model, you'll just have to define it with t
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        Table::make()->model(User::class);
     }
 }
 ```
@@ -222,9 +225,9 @@ This closure will allow you to manipulate a `\Illuminate\Database\Eloquent\Build
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class)->query(fn(Builder $query) => $query->where('active', true));
+        Table::make()->model(User::class)->query(fn(Builder $query) => $query->where('active', true));
     }   
 }
 ```
@@ -238,9 +241,9 @@ You have two ways to allow or disallow users to choose the number of rows that w
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class)->enableNumberOfRowsPerPageChoice(false);
+        Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(false);
     }
 }
 ```
@@ -254,9 +257,9 @@ The first option will be selected and applied on initialization.
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class)->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
+        Table::make()->model(User::class)->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
     }
 }
 ```
@@ -279,15 +282,17 @@ Optionally, you can pass a second `string $key` argument to set a specific colum
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Column title set to `Id`, column key set to `id` and value set from `$user->id`
-        $table->column('Username', 'name'); // Column title set to `Username`, column key set to `name` and value set from `$user->name`
+        return [
+            Column::make('Id'); // Column title set to `Id`, column key set to `id` and value set from `$user->id`
+            Column::make('Username', 'name'); // Column title set to `Username`, column key set to `name` and value set from `$user->name`
+        ];
     }
 }
 ```
@@ -303,15 +308,17 @@ This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Value set from `$user->id`
-        $table->column('Username')->format(fn(User $user) => 'Custom formatted ' . $user->name); // Value set from closure
+        return [
+            Column::make('Id'); // Value set from `$user->id`
+            Column::make('Username')->format(fn(User $user) => 'Custom formatted ' . $user->name); // Value set from closure
+        ];
     }
 }
 ```
@@ -337,15 +344,17 @@ You'll be able to reuse this formatter in your tables.
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id')->format(new ActiveFormatter());
-        $table->column('Active')->format(new ActiveFormatter());
+        return [
+            Column::make('Id')->format(new ActiveFormatter());
+            Column::make('Active')->format(new ActiveFormatter());
+        ];
     }
 }
 ```
@@ -363,15 +372,17 @@ By default, searching will be applied to columns defined keys.
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Column will not be searchable
-        $table->column('Name')->searchable(); // Table will be searchable from `$user->name`
+        return [
+            Column::make('Id'); // Column will not be searchable
+            Column::make('Name')->searchable(); // Table will be searchable from `$user->name`
+        ];
     }
 }
 ```
@@ -385,17 +396,19 @@ This feature will be useful to configure specific searching behaviour.
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Column will not be searchable
-        $table->column('Owned companies')
-            // ... Custom formatting
-            ->sortable(fn(Builder $query, string $searched) => $query->whereRelation('companies', 'name', 'LIKE', '%' . $searched . '%'); // Column will be searchable using this closure
+        return [
+            Column::make('Id'); // Column will not be searchable
+            Column::make('Owned companies')
+                // ... Custom formatting
+                ->sortable(fn(Builder $query, string $searched) => $query->whereRelation('companies', 'name', 'LIKE', '%' . $searched . '%'); // Column will be searchable using this closure
+        ];
     }
 }
 ```
@@ -411,15 +424,17 @@ By default, sorting will be applied to columns defined keys.
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Column will not be sortable
-        $table->column('Name')->sortable(); // Column will be sortable from `$user->name`
+        return [
+            Column::make('Id'); // Column will not be sortable
+            Column::make('Name')->sortable(); // Column will be sortable from `$user->name`
+        ];
     }
 }
 ```
@@ -431,15 +446,17 @@ You can sort by default a column that is not sortable.
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Column will not be sortable
-        $table->column('Name')->sortByDefault('desc'); // Column will be sorted descending by default on `$user->name`
+        return [
+            Column::make('Id'); // Column will not be sortable
+            Column::make('Name')->sortByDefault('desc'); // Column will be sorted descending by default on `$user->name`
+        ];
     }
 }
 ```
@@ -454,18 +471,20 @@ This feature will be useful to configure specific sorting behaviour.
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        $table->model(User::class);
+        return Table::make()->model(User::class);
     }
     
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id'); // Column will not be sortable
-        $table->column('Companies count') 
-            // Custom formatting...
-            ->sortable(fn(Builder $query, bool $sortDir) => $query->withCount('companies')
-                ->orderBy('companies_count', $sortDir)); // Column will be sortable from this closure
+        return [
+            Column::make('Id'); // Column will not be sortable
+            Column::make('Companies count') 
+                // Custom formatting...
+                ->sortable(fn(Builder $query, bool $sortDir) => $query->withCount('companies')
+                    ->orderBy('companies_count', $sortDir)); // Column will be sortable from this closure
+        ];
     }
 }
 ```

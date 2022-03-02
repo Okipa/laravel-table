@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
@@ -18,15 +19,17 @@ class ColumnSortableTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
-                $table->column('Name');
+                return [
+                    Column::make('Id'),
+                    Column::make('Name'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -64,15 +67,17 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id')->sortable();
-                $table->column('Name')->sortable();
+                return [
+                    Column::make('Id')->sortable(),
+                    Column::make('Name')->sortable(),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -110,15 +115,17 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id')->sortable();
-                $table->column('Name')->sortable()->sortByDefault();
+                return [
+                    Column::make('Id')->sortable(),
+                    Column::make('Name')->sortable()->sortByDefault(),
+                ];
             }
         };
         $users = $users->sortBy('name');
@@ -157,15 +164,17 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id')->sortable();
-                $table->column('Name')->sortable()->sortByDefault('desc');
+                return [
+                    Column::make('Id')->sortable(),
+                    Column::make('Name')->sortable()->sortByDefault('desc'),
+                ];
             }
         };
         $users = $users->sortByDesc('name');
@@ -205,15 +214,17 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id')->sortable();
-                $table->column('Name')->sortable();
+                return [
+                    Column::make('Id')->sortable(),
+                    Column::make('Name')->sortable(),
+                ];
             }
         };
         $users = $users->sortBy('name');
@@ -282,15 +293,17 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Custom Id', 'id')->sortable();
-                $table->column('Custom Name', 'name')->sortable();
+                return [
+                    Column::make('Custom Id', 'id')->sortable(),
+                    Column::make('Custom Name', 'name')->sortable(),
+                ];
             }
         };
         $users = $users->sortBy('name');
@@ -334,20 +347,22 @@ class ColumnSortableTest extends TestCase
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Name')->sortable();
-                $table->column('Companies count')
-                    ->format(fn(User $user) => $user->companies->count())
-                    ->sortable(fn(Builder $query, string $sortDir) => $query
-                        ->withCount('companies')
-                        ->orderBy('companies_count', $sortDir))
-                    ->sortByDefault();
+                return [
+                    Column::make('Name')->sortable(),
+                    Column::make('Companies count')
+                        ->format(fn(User $user) => $user->companies->count())
+                        ->sortable(fn(Builder $query, string $sortDir) => $query
+                            ->withCount('companies')
+                            ->orderBy('companies_count', $sortDir))
+                        ->sortByDefault(),
+                ];
             }
         };
         $users = $users->loadCount('companies')->sortBy('companies_count');

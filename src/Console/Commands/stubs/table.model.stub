@@ -2,15 +2,16 @@
 
 namespace DummyNamespace;
 
-use Okipa\LaravelTable\AbstractTableConfiguration;
-use Okipa\LaravelTable\Table;
 use DummyFullModelClass;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Formatters\DateFormatter;
+use Okipa\LaravelTable\AbstractTableConfiguration;
 
 class DummyClass extends AbstractTableConfiguration
 {
-    protected function table(Table $table): void
+    protected function table(): Table
     {
-        return (new Table())->model(DummyModelClass::class)
+        return Table::make()->model(DummyModelClass::class)
             ->routes([
                 'index'   => ['name' => 'dummyRoutes.index'],
                 'create'  => ['name' => 'dummyRoute.create'],
@@ -24,15 +25,12 @@ class DummyClass extends AbstractTableConfiguration
             ]);
     }
 
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('Id')->sortable();
-        $table->column('Created at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('Updated at')->dateTimeFormat('d/m/Y H:i')->sortable()->sortByDefault('desc');
-    }
-
-    protected function resultLines(Table $table): void
-    {
-        //
+        return [
+            Column::make('Id')->sortable();
+            Column::make('Created at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
+            Column::make('Updated at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+        ];
     }
 }

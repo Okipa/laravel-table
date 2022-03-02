@@ -5,6 +5,7 @@ namespace Tests\Unit\Bootstrap5;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -17,14 +18,16 @@ class TablePaginationTest extends TestCase
         Config::set('laravel-table.number_of_rows_per_page', 10);
         User::factory()->count(10)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -39,14 +42,16 @@ class TablePaginationTest extends TestCase
         Config::set('laravel-table.number_of_rows_per_page', 10);
         User::factory()->count(15)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])

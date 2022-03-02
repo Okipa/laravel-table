@@ -1,11 +1,14 @@
 <?php
 
-namespace Tests\Unit\Bootstrap5;
+namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Formatters\DateFormatter;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -17,14 +20,16 @@ class ColumnFormatTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>');
+                return [
+                    Column::make('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -40,30 +45,28 @@ class ColumnFormatTest extends TestCase
     /** @test */
     public function it_can_format_column_from_formatter(): void
     {
-        $users = User::factory()->count(2)->create();
+        $user1 = User::factory()->create();
+        Date::setTestNow(Date::now()->addMinute());
+        $user2 = User::factory()->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $formatter = new class extends AbstractFormatter {
-                    public function format(Model $user): string
-                    {
-                        return '<b>Test ' . $user->name . '</b>';
-                    }
-                };
-                $table->column('Name')->format(new $formatter());
+                return [
+                    Column::make('Created At')->format(new DateFormatter('d/m:Y H:i:s')),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<b>Test ' . $users->first()->name . '</b>',
-                '<b>Test ' . $users->last()->name . '</b>',
+                $user1->created_at->format('d/m:Y H:i:s'),
+                $user2->created_at->format('d/m:Y H:i:s'),
                 '</tbody>',
             ]);
     }
@@ -73,14 +76,16 @@ class ColumnFormatTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class);
+                return Table::make()->model(User::class);
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>', true);
+                return [
+                    Column::make('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>', true),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])

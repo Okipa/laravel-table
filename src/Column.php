@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection;
 
@@ -24,9 +25,14 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string $title, protected string $key)
+    public function __construct(protected string $title, protected string|null $key = null)
     {
-        //
+        $this->key = $key ?: Str::snake($title);
+    }
+
+    public static function make(string $title, string $key = null): self
+    {
+        return new static($title, $key);
     }
 
     public function getKey(): string
@@ -105,7 +111,7 @@ class Column
             return $this->manageHtmlEscaping(($this->formatter)($row));
         }
         if ($this->formatter instanceof AbstractFormatter) {
-            return $this->manageHtmlEscaping($this->formatter->format($row));
+            return $this->manageHtmlEscaping($this->formatter->format($row, $this->key));
         }
 
         return $this->key ? $this->manageHtmlEscaping(data_get($row, $this->key)) : null;

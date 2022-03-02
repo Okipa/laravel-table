@@ -18,7 +18,7 @@ As so, you will have to install it properly before using this package : https://
 
 The following changes must be reported in your table configurations:
 * replace `extend AbstractTable` by `extend AbstractTableConfiguration`
-* replace `protected function table(): Table` function signatures by `protected function table(Table $table): void`
+* replace `protected function table(): Table` function signatures by `protected function table(): Table`
 * replace `return (new Table())` by `$table->` at the beginning of the `table()` function
 * replace `->activateRowsNumberDefinition(` method name by `->enableNumberOfRowsPerPageChoice(`
 * replace `->rowsNumber(` method name by `->numberOfRowsPerPageOptions(` and make sure your calls are compatible with the new method signature: `numberOfRowsPerPageOptions(array $numberOfRowsPerPageOptions): Table`

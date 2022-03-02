@@ -5,6 +5,7 @@ namespace Tests\Unit\Bootstrap5;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -21,15 +22,17 @@ class TableQueryTest extends TestCase
                 //
             }
 
-            protected function table(Table $table): void
+            protected function table(): Table
             {
-                $table->model(User::class)
+                return Table::make()->model(User::class)
                     ->query(fn(Builder $query) => $query->where('id', '!=', $this->userIdToExclude));
             }
 
-            protected function columns(Table $table): void
+            protected function columns(): array
             {
-                $table->column('Id');
+                return [
+                    Column::make('Id'),
+                ];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [
