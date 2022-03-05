@@ -35,12 +35,12 @@ Found this package helpful? Please consider supporting my work!
 
 | Laravel version | Livewire version | PHP version | Package version |
 |---|---|---|---|
-| ^8.0 | ^2.0 | ^8.0 | ^5.0 |
-| ^7.0 | X | ^7.4 | ^4.0 |
-| ^7.0 | X | ^7.4 | ^3.0 |
-| ^6.0 | X | ^7.4 | ^2.0 |
-| ^5.8 | X | ^7.2 | ^1.3 |
-| ^5.5 | X | ^7.1 | ^1.0 |
+| ^8.0 &#124; ^9.0 | ^2.0 | ^8.0 &#124; ^8.1 | ^5.0 |
+| ^7.0 &#124; ^8.0 | X | ^7.4 &#124; ^8.0 | ^4.0 |
+| ^7.0 &#124; ^8.0 | X | ^7.4 &#124; ^8.0 | ^3.0 |
+| ^6.0 &#124; ^7.0 | X | ^7.4 &#124; ^8.0 | ^2.0 |
+| ^5.8 &#124; ^6.0 &#124; ^7.0 | X | ^7.2 &#124; ^7.3 &#124; ^7.4 | ^1.3 |
+| ^5.5 &#124; ^5.6 &#124; ^5.7 &#124; ^5.8 &#124; ^6.0 | X | ^5.8 &#124; ^7.1 | ^1.0 |
 
 ## Upgrade guide
 
@@ -64,25 +64,14 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipe\LaravelTable\Formatters\DateFormatter;
+use Okipe\LaravelTable\Formatters\Date;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        return Table::make()->model(User::class)
-            ->routes([
-                'index' => ['name' => 'users.index'],
-                'create' => ['name' => 'user.create'],
-                'edit' => ['name' => 'user.edit'],
-                'destroy' => ['name' => 'user.destroy'],
-            ])
-            ->destroyConfirmationHtmlAttributes(fn(User $user) => [
-                'data-confirm' => __('Are you sure you want to delete the user :name ?', [
-                    'name' => $user->name
-                ])
-            ]);
+        return Table::make()->model(User::class);
     }
 
     protected function columns(): array
@@ -91,8 +80,8 @@ class UsersTable extends AbstractTableConfiguration
             Column::make('Id')->sortable();
             Column::make('Name')->sortable()->searchable();
             Column::make('Email')->sortable()->searchable();
-            Column::make('Created at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
-            Column::make('Updated at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+            Column::make('Created at')->format(new Date('d/m/Y H:i'))->sortable();
+            Column::make('Updated at')->format(new Date('d/m/Y H:i'))->sortable()->sortByDefault('desc');
         ];
     }
 }
@@ -113,7 +102,7 @@ And display it in a view:
 * [How to](#how-to)
   * [Create table configuration](#create-table-configurations)
   * [Display tables in views](#display-tables-in-views)
-  * [Generate tables from models](#generate-tables-from-models)
+  * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Declare columns on tables](#declare-columns-on-tables)
@@ -134,7 +123,7 @@ And display it in a view:
 composer require okipa/laravel-table
 ```
 
-This uses [Livewire](https://laravel-livewire.com) under the hood and its installation is required.
+This package uses [Livewire](https://laravel-livewire.com) under the hood and its installation is required.
 
 It will automatically be installed if you don't already have installed it.
 
@@ -200,9 +189,9 @@ In case you have specific attributes to transmit to your table configuration, yo
 <x:livewire.table :config="App\Tables\UsersTable::class" :configParams="['userCategoryId' => 1]"/>
 ```
 
-### Generate tables from models
+### Generate tables from Eloquent models
 
-To generate a table from an Eloquent model, you'll just have to define it with the `model()` method on your table.
+To generate a table from an Eloquent model, you'll just have to call the `model` method on your table.
 
 ```php
 class UsersTable extends AbstractTableConfiguration
@@ -227,7 +216,9 @@ class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        return Table::make()->model(User::class)->query(fn(Builder $query) => $query->where('active', true));
+        return Table::make()
+            ->model(User::class)
+            ->query(fn(Builder $query) => $query->where('active', true));
     }   
 }
 ```
@@ -243,23 +234,27 @@ class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        return Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(false);
+        return Table::make()
+            ->model(User::class)
+            ->enableNumberOfRowsPerPageChoice(false);
     }
 }
 ```
 
-Following the same logic, you'll be able to define the number of rows per page options that will be available to select:
+Following the same logic, you'll be able to define the number of rows per page options that will be available for selection:
 * Set options globally from the `laravel-table.number_of_rows_per_page_options` config array value
 * Override global options by executing the `numberOfRowsPerPageOptions()` method on your table
 
-The first option will be selected and applied on initialization.
+The first available option will be automatically selected and applied on table initialization.
 
 ```php
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        return Table::make()->model(User::class)->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
+        return Table::make()
+            ->model(User::class)
+            ->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]); // Table will display initialized 5 rows by default.
     }
 }
 ```
@@ -274,7 +269,7 @@ Declare columns on tables with the `columns` method available in your generated 
 
 You'll have to pass a `string $title` param to the `column` method, that will be used to:
 * Display the column title on the table
-* Define a default column key guessed from a snake_case formatting of the column title 
+* Define a default column key guessed from a snake_case formatting of the column title
 * Define a default column/rows value from the column key
 
 Optionally, you can pass a second `string $key` argument to set a specific column key.
@@ -299,7 +294,7 @@ class UsersTable extends AbstractTableConfiguration
 
 ### Format column values
 
-You'll sometimes need to format column values. There are a few ways to achieve this.
+You'll sometimes need to apply specific formatting for your columns. There are a few ways to achieve this.
 
 For specific cases, you should pass a closure parameter to the `format` method on your column.
 
@@ -323,16 +318,16 @@ class UsersTable extends AbstractTableConfigurations
 }
 ```
 
-If you want to apply the same formatting treatment repeatedly, you should create a formatter with the following command: `php artisan make:table:formatter ActiveFormatter`.
+If you want to apply the same formatting treatment repeatedly, you should create a formatter with the following command: `php artisan make:table:formatter Boolean`.
 
 You'll find the generated formatter in the `app\Table\Formatters` directory.
 
 ```php
-class BooleanFormatter extends AbstractFormatter
+class Boolean extends AbstractFormatter
 {
     public function format(Model $model, string $key): string
     {
-        return $user->{$key}
+        return $model->{$key}
             ? '<i class="fa-solid fa-check text-success"></i>'
             : '<i class="fa-solid fa-xmark text-danger"></i>';
     }
@@ -353,11 +348,16 @@ class UsersTable extends AbstractTableConfigurations
     {
         return [
             Column::make('Id');
-            Column::make('Active')->format(new BooleanFormatter());
+            Column::make('Active')->format(new Boolean());
         ];
     }
 }
 ```
+
+This package provided a few default formatters, you can use them as is or using them as examples to create your own:
+* Boolean
+* Date
+* StrLimit
 
 ### Configure columns searching
 
@@ -391,8 +391,6 @@ You will be able to set up a custom searching behaviour by passing a closure to 
 
 This closure will be executed when searching will be triggered on the table and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` argument.
 
-This feature will be useful to configure specific searching behaviour.
-
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
@@ -407,7 +405,12 @@ class UsersTable extends AbstractTableConfigurations
             Column::make('Id'); // Column will not be searchable
             Column::make('Owned companies')
                 // ... Custom formatting
-                ->searchable(fn(Builder $query, string $searched) => $query->whereRelation('companies', 'name', 'LIKE', '%' . $searched . '%'); // Column will be searchable using this closure
+                ->searchable(fn(Builder $query, string $searched) => $query->whereRelation(
+                    'companies',
+                    'name',
+                    'LIKE',
+                    '%' . $searched . '%'
+                ); // Column will be searchable using this closure
         ];
     }
 }
@@ -465,8 +468,6 @@ You will be able to set up a custom sorting behaviour by passing a closure to th
 
 This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `string $direction` arguments.
 
-This feature will be useful to configure specific sorting behaviour.
-
 ```php
 class UsersTable extends AbstractTableConfigurations
 {
@@ -481,7 +482,8 @@ class UsersTable extends AbstractTableConfigurations
             Column::make('Id'); // Column will not be sortable
             Column::make('Companies count') 
                 // Custom formatting...
-                ->sortable(fn(Builder $query, bool $sortDir) => $query->withCount('companies')
+                ->sortable(fn(Builder $query, bool $sortDir) => $query
+                    ->withCount('companies')
                     ->orderBy('companies_count', $sortDir)); // Column will be sortable from this closure
         ];
     }

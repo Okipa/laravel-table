@@ -29,7 +29,7 @@ class MakeTableTest extends TestCase
         self::assertStringContainsString('namespace App\Tables;', $fileContent);
         self::assertStringContainsString('use App\Models\User;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Formatters\DateFormatter;', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\Formatters\Date;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\AbstractTableConfiguration;', $fileContent);
         self::assertStringContainsString('class UsersTable', $fileContent);
         self::assertStringContainsString('protected function table(): Table', $fileContent);
@@ -47,11 +47,11 @@ class MakeTableTest extends TestCase
             $fileContent
         );
         self::assertStringContainsString(
-            'Column::make(\'Created at\')->format(new DateFormatter(\'d/m/Y H:i\'))->sortable();',
+            'Column::make(\'Created at\')->format(new Date(\'d/m/Y H:i\'))->sortable();',
             $fileContent
         );
         self::assertStringContainsString(
-            'Column::make(\'Updated at\')->format(new DateFormatter(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
+            'Column::make(\'Updated at\')->format(new Date(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
             $fileContent
         );
     }

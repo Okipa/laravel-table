@@ -8,7 +8,7 @@ use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\Formatters\DateFormatter;
+use Okipa\LaravelTable\Formatters\Date;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -57,7 +57,7 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Created At')->format(new DateFormatter('d/m:Y H:i:s')),
+                    Column::make('Created At')->format(new Date('d/m:Y H:i:s')),
                 ];
             }
         };

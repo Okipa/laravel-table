@@ -5,15 +5,12 @@ namespace Okipa\LaravelTable\Formatters;
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
-class DateFormatter extends AbstractFormatter
+class Boolean extends AbstractFormatter
 {
-    public function __construct(protected string $format)
-    {
-        //
-    }
-
     public function format(Model $model, string $key): string
     {
-        return $model->{$key}->format($this->format);
+        return $model->{$key}
+            ? '<i class="fa-solid fa-check text-success"></i>'
+            : '<i class="fa-solid fa-xmark text-danger"></i>';
     }
 }
