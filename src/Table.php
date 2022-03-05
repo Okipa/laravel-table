@@ -17,6 +17,8 @@ class Table
 
     protected Collection $columns;
 
+    protected Collection $rowActions;
+
     protected LengthAwarePaginator $rows;
 
     protected bool $numberOfRowsPerPageChoiceEnabled;
@@ -71,6 +73,13 @@ class Table
     public function columns(array $columns): void
     {
         $this->columns = collect($columns);
+    }
+
+    public function rowActions(array $rowActions): self
+    {
+        $this->rowActions = collect($rowActions);
+
+        return $this;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
