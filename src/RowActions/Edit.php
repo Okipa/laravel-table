@@ -9,18 +9,18 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Edit extends AbstractRowAction
 {
-    public function __construct(protected string $route)
+    public function __construct(protected string $editRouteName)
     {
         //
     }
 
-    public function action(Model $model, string $key): void
+    protected function icon(): string
     {
-        // TODO: Implement rowAction() method.
+        return config('laravel-table.icon.edit');
     }
 
-    public function render(): View
+    public function action(): mixed
     {
-        return view('laravel-table::' . Config::get('laravel-table.ui') . '.row-actions.edit');
+        return redirect()->route($this->editRouteName, $this->model);
     }
 }

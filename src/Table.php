@@ -17,7 +17,7 @@ class Table
 
     protected Collection $columns;
 
-    protected Collection $rowActions;
+    protected Closure $rowActions;
 
     protected LengthAwarePaginator $rows;
 
@@ -75,11 +75,16 @@ class Table
         $this->columns = collect($columns);
     }
 
-    public function rowActions(array $rowActions): self
+    public function rowActions(Closure $rowActionsClosure): self
     {
-        $this->rowActions = collect($rowActions);
+        $this->rowActionsClosure = $rowActionsClosure;
 
         return $this;
+    }
+
+    public function getRowActions(): Collection
+    {
+        return $this->rowActions;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -125,7 +130,7 @@ class Table
         string|null $search,
         string|Closure|null $sortBy,
         string|null $sortDir,
-        int $numberOfRowsPerPage
+        int $numberOfRowsPerPage,
     ): void {
         $query = $this->model->query();
         // Query

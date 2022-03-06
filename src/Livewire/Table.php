@@ -4,10 +4,12 @@ namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
 
@@ -36,6 +38,8 @@ class Table extends Component
     public string|null $sortedColumnKey;
 
     public string|null $sortedColumnDir;
+
+    public Collection $rowActions;
 
     protected $listeners = ['search:executed' => '$refresh'];
 
@@ -90,17 +94,19 @@ class Table extends Component
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
+        // Row actions
+        $this->rowActions = $table->getRowActions();
         // Generate
         $table->generateRows(
             $this->search,
             $sortableClosure ?: $this->sortedColumnKey,
             $this->sortedColumnDir,
-            $this->numberOfRowsPerPage
+            $this->numberOfRowsPerPage,
         );
 
         return [
             'columns' => $columns,
-            'columnsCount' => $columns->count(),
+            'columnsCount' => $columns->count() + ($this->rowActions->isNotEmpty() ? 1 : 0),
             'rows' => $table->getRows(),
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
@@ -124,5 +130,14 @@ class Table extends Component
             ? 'asc'
             : 'desc';
         $this->sortedColumnKey = $columnKey;
+    }
+
+    public function rowAction(string $rowActionKey)
+    {
+        $rowAction = $this->rowActions
+            ->filter(fn(AbstractRowAction $rowAction) => $rowAction->key === $rowActionKey)
+            ->first();
+
+        return $rowAction->action();
     }
 }

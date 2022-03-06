@@ -106,6 +106,11 @@
                                 @endif
                             </th>
                         @endforeach
+                        @if($rowActions->isNotEmpty())
+                            <th class="align-middle" scope="col">
+                                {{ __('Actions') }}
+                            </th>
+                        @endif
                     </tr>
                 </thead>
                 {{-- Table body--}}
@@ -119,6 +124,13 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
+                            @if($rowActions->isNotEmpty())
+                                <td class="align-middle">
+                                    @foreach($rowActions as $rowAction)
+                                        {{ $rowAction->render($row) }}
+                                    @endforeach
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
