@@ -124,9 +124,9 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($rowActions->isNotEmpty())
+                            @if($rowActions->offsetGet($row->getKey())->isNotEmpty())
                                 <td class="align-middle">
-                                    @foreach($rowActions as $rowAction)
+                                    @foreach($rowActions->offsetGet($row->getKey()) as $rowAction)
                                         {{ $rowAction->render($row) }}
                                     @endforeach
                                 </td>

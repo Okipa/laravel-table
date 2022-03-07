@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
 
@@ -41,7 +40,10 @@ class Table extends Component
 
     public Collection $rowActions;
 
-    protected $listeners = ['search:executed' => '$refresh'];
+    protected $listeners = [
+        'search:executed' => '$refresh',
+        'row:action:confirmed' => 'rowAction',
+    ];
 
     public function init(): void
     {
@@ -94,8 +96,6 @@ class Table extends Component
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
-        // Row actions
-        $this->rowActions = $table->getRowActions();
         // Generate
         $table->generateRows(
             $this->search,
@@ -103,6 +103,8 @@ class Table extends Component
             $this->sortedColumnDir,
             $this->numberOfRowsPerPage,
         );
+        // Row actions
+        $this->rowActions = $table->generateActions();
 
         return [
             'columns' => $columns,
@@ -132,12 +134,12 @@ class Table extends Component
         $this->sortedColumnKey = $columnKey;
     }
 
-    public function rowAction(string $rowActionKey)
+    public function rowAction(string $rowActionKey, mixed $primary, bool $requiresConfirmation): mixed
     {
-        $rowAction = $this->rowActions
-            ->filter(fn(AbstractRowAction $rowAction) => $rowAction->key === $rowActionKey)
-            ->first();
+        $rowAction = collect($this->rowActions->get($primary))->firstWhere('key', $rowActionKey);
 
-        return $rowAction->action();
+        return $requiresConfirmation
+            ? $this->emit('row:action:confirm', $rowActionKey, $primary, $rowAction->confirmationMessage)
+            : $rowAction->action();
     }
 }

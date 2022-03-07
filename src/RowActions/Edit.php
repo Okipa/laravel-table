@@ -2,16 +2,24 @@
 
 namespace Okipa\LaravelTable\RowActions;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
+use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Edit extends AbstractRowAction
 {
-    public function __construct(protected string $editRouteName)
+    public function __construct(protected string $editUrl)
     {
         //
+    }
+
+    protected function key(): string
+    {
+        return 'edit';
+    }
+
+    protected function title(): string
+    {
+        return __('Edit');
     }
 
     protected function icon(): string
@@ -19,8 +27,13 @@ class Edit extends AbstractRowAction
         return config('laravel-table.icon.edit');
     }
 
-    public function action(): mixed
+    protected function shouldBeConfirmed(): bool
     {
-        return redirect()->route($this->editRouteName, $this->model);
+        return false;
+    }
+
+    public function action(): Redirector
+    {
+        return redirect()->to($this->editUrl);
     }
 }

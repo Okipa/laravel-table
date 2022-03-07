@@ -17,7 +17,7 @@ class Table
 
     protected Collection $columns;
 
-    protected Closure $rowActions;
+    protected Closure $rowActionsClosure;
 
     protected LengthAwarePaginator $rows;
 
@@ -84,7 +84,7 @@ class Table
 
     public function getRowActions(): Collection
     {
-        return $this->rowActions;
+        return $this->rowActionsClosure;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -167,6 +167,17 @@ class Table
         $driver = config('database.connections.' . $connection . '.driver');
 
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
+    }
+
+    public function generateActions(): Collection
+    {
+        $tableRowActions = collect();
+        foreach ($this->rows->getCollection() as $row) {
+            $rowActions = ($this->rowActionsClosure)($row);
+            $tableRowActions->put($row->getKey(), collect($rowActions));
+        }
+
+        return $tableRowActions;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

@@ -2,38 +2,37 @@
 
 namespace Okipa\LaravelTable\RowActions;
 
-use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
-class Show extends AbstractRowAction
+class Destroy extends AbstractRowAction
 {
-    public function __construct(protected string $showUrl)
+    public function __construct(public string $confirmationMessage)
     {
         //
     }
 
     protected function key(): string
     {
-        return 'show';
+        return 'destroy';
     }
 
     protected function title(): string
     {
-        return __('Show');
+        return __('Destroy');
     }
 
     protected function icon(): string
     {
-        return config('laravel-table.icon.show');
+        return config('laravel-table.icon.destroy');
     }
 
     protected function shouldBeConfirmed(): bool
     {
-        return false;
+        return true;
     }
 
-    public function action(): Redirector
+    public function action()
     {
-        return redirect()->to($this->showUrl);
+        $this->model->delete();
     }
 }
