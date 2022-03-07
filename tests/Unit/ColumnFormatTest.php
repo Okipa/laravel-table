@@ -2,13 +2,13 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
-use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\Formatters\Date;
+use Okipa\LaravelTable\Formatters\Boolean;
+use Okipa\LaravelTable\Formatters\StrLimit;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -43,11 +43,11 @@ class ColumnFormatTest extends TestCase
     }
 
     /** @test */
-    public function it_can_format_column_from_formatter(): void
+    public function it_can_format_columns_from_formatters(): void
     {
-        $user1 = User::factory()->create();
+        $user1 = User::factory()->create(['active' => true]);
         Date::setTestNow(Date::now()->addMinute());
-        $user2 = User::factory()->create();
+        $user2 = User::factory()->create(['active' => false]);
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
@@ -57,7 +57,9 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Created At')->format(new Date('d/m:Y H:i:s')),
+                    Column::make('Name')->format(new StrLimit(5)),
+                    Column::make('Created At')->format(new \Okipa\LaravelTable\Formatters\Date('d/m:Y H:i:s')),
+                    Column::make('Active')->format(new Boolean()),
                 ];
             }
         };
@@ -65,8 +67,12 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
+                Str::limit($user1->name, 5),
                 $user1->created_at->format('d/m:Y H:i:s'),
+                '<i class="fa-solid fa-check text-success"></i>',
+                Str::limit($user2->name, 5),
                 $user2->created_at->format('d/m:Y H:i:s'),
+                '<i class="fa-solid fa-xmark text-danger"></i>',
                 '</tbody>',
             ]);
     }

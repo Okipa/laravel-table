@@ -124,10 +124,10 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($rowActions->offsetGet($row->getKey())->isNotEmpty())
+                            @if($actions = $rowActions->get($row->getKey()))
                                 <td class="align-middle">
-                                    @foreach($rowActions->offsetGet($row->getKey()) as $rowAction)
-                                        {{ $rowAction->render($row) }}
+                                    @foreach($actions as $action)
+                                        {{ $action->render($row) }}
                                     @endforeach
                                 </td>
                             @endif

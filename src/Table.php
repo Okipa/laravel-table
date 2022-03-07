@@ -17,7 +17,7 @@ class Table
 
     protected Collection $columns;
 
-    protected Closure $rowActionsClosure;
+    protected Closure|null $rowActionsClosure = null;
 
     protected LengthAwarePaginator $rows;
 
@@ -80,11 +80,6 @@ class Table
         $this->rowActionsClosure = $rowActionsClosure;
 
         return $this;
-    }
-
-    public function getRowActions(): Collection
-    {
-        return $this->rowActionsClosure;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -172,6 +167,9 @@ class Table
     public function generateActions(): Collection
     {
         $tableRowActions = collect();
+        if (! $this->rowActionsClosure) {
+            return $tableRowActions;
+        }
         foreach ($this->rows->getCollection() as $row) {
             $rowActions = ($this->rowActionsClosure)($row);
             $tableRowActions->put($row->getKey(), collect($rowActions));
