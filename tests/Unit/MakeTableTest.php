@@ -15,8 +15,8 @@ class MakeTableTest extends TestCase
         $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
         self::assertStringContainsString('namespace App\Tables;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\AbstractTableConfiguration;', $fileContent);
-        self::assertStringContainsString('class UsersTable', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;', $fileContent);
+        self::assertStringContainsString('class UsersTable extends AbstractTableConfiguration', $fileContent);
         self::assertStringContainsString('protected function table(): Table', $fileContent);
         self::assertStringContainsString('protected function columns(): array', $fileContent);
     }
@@ -30,22 +30,17 @@ class MakeTableTest extends TestCase
         self::assertStringContainsString('use App\Models\User;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Formatters\Date;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\AbstractTableConfiguration;', $fileContent);
-        self::assertStringContainsString('class UsersTable', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\RowActions\Edit;', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\RowActions\Destroy;', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;', $fileContent);
+        self::assertStringContainsString('class UsersTable extends AbstractTableConfiguration', $fileContent);
         self::assertStringContainsString('protected function table(): Table', $fileContent);
         self::assertStringContainsString('Table::make()->model(User::class)', $fileContent);
-        self::assertStringContainsString('fn(User $user)', $fileContent);
-        self::assertStringContainsString('[\'name\' => \'users.index\']', $fileContent);
-        self::assertStringContainsString('[\'name\' => \'user.create\']', $fileContent);
-        self::assertStringContainsString('[\'name\' => \'user.edit\']', $fileContent);
-        self::assertStringContainsString('[\'name\' => \'user.destroy\']', $fileContent);
-        self::assertStringContainsString('\'data-confirm\' => __(\'Are you sure you want to delete the entry :entry?\', [', $fileContent);
-        self::assertStringContainsString('\'entry\' => $user->database_attribute', $fileContent);
+        self::assertStringContainsString('->rowActions(fn(User $user) => [', $fileContent);
+        self::assertStringContainsString('new Edit(route(\'user.edit\', $user)),', $fileContent);
+        self::assertStringContainsString('new Destroy(),', $fileContent);
         self::assertStringContainsString('protected function columns(): array', $fileContent);
-        self::assertStringContainsString(
-            'Column::make(\'Id\')->sortable();',
-            $fileContent
-        );
+        self::assertStringContainsString('Column::make(\'Id\')->sortable();', $fileContent);
         self::assertStringContainsString(
             'Column::make(\'Created at\')->format(new Date(\'d/m/Y H:i\'))->sortable();',
             $fileContent

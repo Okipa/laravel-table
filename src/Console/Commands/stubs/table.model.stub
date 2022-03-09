@@ -5,23 +5,18 @@ namespace DummyNamespace;
 use DummyFullModelClass;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Formatters\Date;
-use Okipa\LaravelTable\AbstractTableConfiguration;
+use Okipa\LaravelTable\RowActions\Edit;
+use Okipa\LaravelTable\RowActions\Destroy;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class DummyClass extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
         return Table::make()->model(DummyModelClass::class)
-            ->routes([
-                'index'   => ['name' => 'dummyRoutes.index'],
-                'create'  => ['name' => 'dummyRoute.create'],
-                'edit'    => ['name' => 'dummyRoute.edit'],
-                'destroy' => ['name' => 'dummyRoute.destroy'],
-            ])
-            ->destroyConfirmationHtmlAttributes(fn(DummyModelClass $dummyModel) => [
-                'data-confirm' => __('Are you sure you want to delete the entry :entry?', [
-                    'entry' => $dummyModel->database_attribute,
-                ]),
+            ->rowActions(fn(DummyModelClass $dummyModel) => [
+                new Edit(route('dummyRoute.edit', $dummyModel)),
+                new Destroy(),
             ]);
     }
 
