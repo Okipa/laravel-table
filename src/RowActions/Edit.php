@@ -8,7 +8,7 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Edit extends AbstractRowAction
 {
-    public function __construct(protected string $editUrl)
+    public function __construct(public string $editUrl)
     {
         //
     }

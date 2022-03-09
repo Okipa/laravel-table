@@ -76,7 +76,10 @@ class Table extends Component
         return app($this->config, $this->configParams);
     }
 
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    /**
+     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     * @throws \JsonException
+     */
     protected function buildTable(AbstractTableConfiguration $config): array
     {
         $table = $config->setup();
@@ -129,13 +132,10 @@ class Table extends Component
 
     public function rowAction(string $rowActionKey, mixed $primary, bool $requiresConfirmation): mixed
     {
-        /** @var \Okipa\LaravelTable\Abstracts\AbstractRowAction $rowAction */
-        $rowAction = collect($this->rowActions->get($primary))->firstWhere('key', $rowActionKey);
-        /** @var \Illuminate\Database\Eloquent\Model $model */
-        $model = app($rowAction->modelClass)->findOrFail($rowAction->modelKey);
+        $rowAction = collect(Arr::get($this->rowActions, $primary))->firstWhere('key', $rowActionKey);
 
         return $requiresConfirmation
-            ? $this->emit('table:row:action:confirm', $rowActionKey, $primary, $rowAction->confirmationMessage)
-            : $rowAction->action($model);
+            ? $this->emit('table:row:action:confirm', $rowActionKey, $primary, $rowAction['confirmationMessage'])
+            : app($rowAction['rowActionClass'], $rowAction)->action(app($rowAction['modelClass'])->findOrFail($rowAction['modelKey']));
     }
 }

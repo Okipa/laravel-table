@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
 class Table
@@ -169,6 +170,7 @@ class Table
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
+    /** @throws \JsonException */
     public function generateActions(): Collection
     {
         $tableRowActions = collect();
@@ -177,7 +179,9 @@ class Table
         }
         foreach ($this->rows->getCollection() as $row) {
             $rowActions = ($this->rowActionsClosure)($row);
-            $tableRowActions->put($row->getKey(), collect($rowActions));
+            array_map(static fn(AbstractRowAction $rowAction) => $rowAction->setup($row), $rowActions);
+            $rowActions = json_decode(json_encode($rowActions, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
+            $tableRowActions->put($row->getKey(), $rowActions);
         }
 
         return $tableRowActions;

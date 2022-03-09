@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Config;
 
 abstract class AbstractRowAction
 {
+    public string $rowActionClass;
+
     public string $modelClass;
 
     public string $modelKey;
@@ -19,8 +21,6 @@ abstract class AbstractRowAction
     protected string $title;
 
     protected string $icon;
-
-    protected bool $shouldBeConfirmed;
 
     public string $confirmationMessage;
 
@@ -37,24 +37,37 @@ abstract class AbstractRowAction
 
     abstract protected function shouldBeConfirmed(): bool;
 
-    public function render(Model $model): View
+    public function setup(Model $model): void
     {
+        $this->rowActionClass = $this::class;
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
-        $this->class = $this->class();
         $this->key = $this->key();
-        $this->title = $this->title();
-        $this->icon = $this->icon();
-        $this->shouldBeConfirmed = $this->shouldBeConfirmed();
         $this->confirmationMessage = $this->confirmationMessage ?? __('Are you sure you want to perform this action?');
+    }
 
+    public function render(): View
+    {
         return view('laravel-table::' . Config::get('laravel-table.ui') . '.row-action', [
-            'model' => $model,
+            'modelKey' => $this->modelKey,
             'class' => $this->class(),
             'key' => $this->key,
-            'title' => $this->title,
-            'icon' => $this->icon,
-            'shouldBeConfirmed' => $this->shouldBeConfirmed,
+            'title' => $this->title(),
+            'icon' => $this->icon(),
+            'shouldBeConfirmed' => $this->shouldBeConfirmed(),
         ]);
+    }
+
+    public static function make(array $rowAction): self
+    {
+        /** @var self $instance */
+        $instance = app($rowAction['rowActionClass'], $rowAction);
+        $instance->rowActionClass = $rowAction['rowActionClass'];
+        $instance->modelClass = $rowAction['modelClass'];
+        $instance->modelKey = $rowAction['modelKey'];
+        $instance->key = $rowAction['key'];
+        $instance->confirmationMessage = $rowAction['confirmationMessage'];
+
+        return $instance;
     }
 }

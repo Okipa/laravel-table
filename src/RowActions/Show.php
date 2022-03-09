@@ -8,7 +8,7 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Show extends AbstractRowAction
 {
-    public function __construct(protected string $showUrl)
+    public function __construct(public string $showUrl)
     {
         //
     }
