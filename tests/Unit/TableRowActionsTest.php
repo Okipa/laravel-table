@@ -13,7 +13,7 @@ use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
 
-class TableRowActionTest extends TestCase
+class TableRowActionsTest extends TestCase
 {
     /** @test */
     public function it_can_set_table_row_actions(): void
@@ -47,12 +47,15 @@ class TableRowActionTest extends TestCase
                 '<tbody>',
                 '<tr class="border-bottom">',
                 '<a wire:click.prevent="rowAction(\'show\', ' . $users->first()->id . ', 0)"',
+                'class="btn btn-link btn-info p-0 mx-2"',
                 'title="Show">',
                 'show-icon',
                 '<a wire:click.prevent="rowAction(\'edit\', ' . $users->first()->id . ', 0)"',
+                'class="btn btn-link btn-primary p-0 mx-2"',
                 'title="Edit">',
                 'edit-icon',
                 '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->first()->id . ', 1)"',
+                'class="btn btn-link btn-danger p-0 mx-2"',
                 'title="Destroy">',
                 'destroy-icon',
                 '<a wire:click.prevent="rowAction(\'show\', ' . $users->last()->id . ', 0)"',

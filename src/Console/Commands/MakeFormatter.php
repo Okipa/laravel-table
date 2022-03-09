@@ -17,9 +17,7 @@ class MakeFormatter extends GeneratorCommand
 
     protected function getStub(): string
     {
-        $stub = '/stubs/formatter.stub';
-
-        return __DIR__ . $stub;
+        return __DIR__ . '/stubs/formatter.stub';
     }
 
     /** @param string $rootNamespace */

@@ -11,6 +11,11 @@ class Destroy extends AbstractRowAction
         //
     }
 
+    protected function icon(): string
+    {
+        return config('laravel-table.icon.destroy');
+    }
+
     protected function key(): string
     {
         return 'destroy';
@@ -21,9 +26,9 @@ class Destroy extends AbstractRowAction
         return __('Destroy');
     }
 
-    protected function icon(): string
+    protected function class(): string
     {
-        return config('laravel-table.icon.destroy');
+        return 'btn-danger';
     }
 
     protected function shouldBeConfirmed(): bool
@@ -35,4 +40,5 @@ class Destroy extends AbstractRowAction
     {
         $this->model->delete();
     }
+
 }

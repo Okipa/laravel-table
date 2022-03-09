@@ -158,6 +158,7 @@ Here is the list of the words and sentences available for translation:
 * `Show`
 * `Edit`
 * `Destroy`
+* `Are you sure you want to perform this action?`
 * `Number of rows per page`
 * `Search by:`
 * `Reset research`
