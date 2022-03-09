@@ -78,8 +78,8 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             Column::make('Id')->sortable(),
-            Column::make('Name')->sortable()->searchable(),
-            Column::make('Email')->sortable()->searchable(),
+            Column::make('Name')->searchable()->sortable(),
+            Column::make('Email')->searchable()->sortable(),
             Column::make('Created at')->format(new Date('d/m/Y H:i'))->sortable(),
             Column::make('Updated at')->format(new Date('d/m/Y H:i'))->sortable()->sortByDefault('desc'),
         ];
