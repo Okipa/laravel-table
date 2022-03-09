@@ -131,12 +131,12 @@ class Table extends Component
         $this->sortBy = $columnKey;
     }
 
-    public function rowAction(string $rowActionKey, mixed $primary, bool $requiresConfirmation): mixed
+    public function rowAction(string $rowActionKey, mixed $modelKey, bool $requiresConfirmation): mixed
     {
-        $rowAction = collect(Arr::get($this->rowActions, $primary))->firstWhere('key', $rowActionKey);
+        $rowAction = collect(Arr::get($this->rowActions, $modelKey))->firstWhere('key', $rowActionKey);
 
         return $requiresConfirmation
-            ? $this->emit('table:row:action:confirm', $rowActionKey, $primary, $rowAction['confirmationMessage'])
-            : AbstractRowAction::make($rowAction)->action(app($rowAction['modelClass'])->findOrFail($rowAction['modelKey']));
+            ? $this->emit('table:row:action:confirm', $rowActionKey, $modelKey, $rowAction['confirmationMessage'])
+            : AbstractRowAction::make($rowAction)->action(app($rowAction['modelClass'])->findOrFail($modelKey));
     }
 }
