@@ -21,6 +21,8 @@ class Column
 
     protected bool $searchable = false;
 
+    protected Closure|null $searchableClosure = null;
+
     protected Closure|AbstractFormatter|null $formatter = null;
 
     protected bool $escapeHtml = false;
@@ -85,9 +87,10 @@ class Column
         return $this->sortDirByDefault;
     }
 
-    public function searchable(): self
+    public function searchable(Closure $searchableClosure = null): self
     {
         $this->searchable = true;
+        $this->searchableClosure = $searchableClosure;
 
         return $this;
     }
@@ -95,6 +98,11 @@ class Column
     public function isSearchable(): bool
     {
         return $this->searchable;
+    }
+
+    public function getSearchableClosure(): Closure|null
+    {
+        return $this->searchableClosure;
     }
 
     public function format(Closure|AbstractFormatter $formatter, bool $escapeHtml = false): self

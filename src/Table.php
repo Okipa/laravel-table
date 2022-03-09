@@ -122,7 +122,7 @@ class Table
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function generateRows(
-        string|null $search,
+        string|null $searchBy,
         string|Closure|null $sortBy,
         string|null $sortDir,
         int $numberOfRowsPerPage,
@@ -133,13 +133,18 @@ class Table
             ($this->queryClosure)($query);
         }
         // Search
-        $query->when($search, function (Builder $searchQuery) use ($search) {
-            $this->getSearchableColumns()->each(fn(Column $searchableColumn) => $searchQuery->orWhere(
-                DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                $this->getCaseInsensitiveSearchingLikeOperator(),
-                '%' . mb_strtolower($search) . '%'
-            ));
-        });
+        if ($searchBy) {
+            $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
+                $searchableClosure = $searchableColumn->getSearchableClosure();
+                $searchableClosure
+                    ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
+                    : $query->orWhere(
+                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                        $this->getCaseInsensitiveSearchingLikeOperator(),
+                        '%' . mb_strtolower($searchBy) . '%'
+                    );
+            });
+        }
         // Sort
         if ($sortBy && $sortDir) {
             $sortBy instanceof Closure

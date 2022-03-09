@@ -18,7 +18,7 @@
                                                           class="input-group-text">
                                                         {!! config('laravel-table.icon.search') !!}
                                                     </span>
-                                                    <input wire:model.defer="search"
+                                                    <input wire:model.defer="searchBy"
                                                            class="form-control"
                                                            placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
@@ -30,9 +30,9 @@
                                                             {!! config('laravel-table.icon.validate') !!}
                                                         </button>
                                                     </span>
-                                                    @if($search)
+                                                    @if($searchBy)
                                                         <span class="input-group-text">
-                                                            <a wire:click.prevent="$set('search', ''), $refresh"
+                                                            <a wire:click.prevent="$set('searchBy', ''), $refresh"
                                                                class="btn btn-sm btn-link text-danger p-0"
                                                                title="{{ __('Reset research') }}">
                                                                 <span>{!! config('laravel-table.icon.reset') !!}</span>
@@ -84,11 +84,11 @@
                             <th class="align-middle" scope="col">
                                 {{-- Sorting --}}
                                 @if($column->isSortable())
-                                    @if($sortedColumnKey === $column->getKey())
+                                    @if($sortBy === $column->getKey())
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
                                            href=""
-                                           title="{{ $sortedColumnDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}">
-                                            {!! $sortedColumnDir === 'asc'
+                                           title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}">
+                                            {!! $sortDir === 'asc'
                                                 ? Config::get('laravel-table.icon.sort_desc')
                                                 : Config::get('laravel-table.icon.sort_asc') !!}
                                             {{ $column->getTitle() }}

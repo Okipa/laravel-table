@@ -26,7 +26,7 @@ class Table extends Component
 
     public string $paginationTheme = 'bootstrap';
 
-    public string $search = '';
+    public string $searchBy = '';
 
     public string $searchableLabels;
 
@@ -34,16 +34,13 @@ class Table extends Component
 
     public int $numberOfRowsPerPage;
 
-    public string|null $sortedColumnKey;
+    public string|null $sortBy;
 
-    public string|null $sortedColumnDir;
+    public string|null $sortDir;
 
     public Collection $rowActions;
 
-    protected $listeners = [
-        'search:executed' => '$refresh',
-        'row:action:confirmed' => 'rowAction',
-    ];
+    protected $listeners = ['row:action:confirmed' => 'rowAction'];
 
     public function init(): void
     {
@@ -88,19 +85,19 @@ class Table extends Component
         $this->searchableLabels = $table->getSearchableLabels();
         // Sort
         $columnSortedByDefault = $table->getColumnSortedByDefault();
-        $this->sortedColumnKey = $this->sortedColumnKey ?? $columnSortedByDefault?->getKey();
-        $this->sortedColumnDir = $this->sortedColumnDir ?? $columnSortedByDefault?->getSortDirByDefault();
-        $sortableClosure = $this->sortedColumnKey
-            ? $table->getColumn($this->sortedColumnKey)->getSortableClosure()
+        $this->sortBy = $this->sortBy ?? $columnSortedByDefault?->getKey();
+        $this->sortDir = $this->sortDir ?? $columnSortedByDefault?->getSortDirByDefault();
+        $sortableClosure = $this->sortBy
+            ? $table->getColumn($this->sortBy)->getSortableClosure()
             : null;
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
         // Generate
         $table->generateRows(
-            $this->search,
-            $sortableClosure ?: $this->sortedColumnKey,
-            $this->sortedColumnDir,
+            $this->searchBy,
+            $sortableClosure ?: $this->sortBy,
+            $this->sortDir,
             $this->numberOfRowsPerPage,
         );
         // Row actions
@@ -116,11 +113,6 @@ class Table extends Component
         ];
     }
 
-    public function searchForRows(): void
-    {
-        $this->emitSelf('search:executed');
-    }
-
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void
     {
         $this->numberOfRowsPerPage = $numberOfRowsPerPage;
@@ -128,10 +120,10 @@ class Table extends Component
 
     public function sortBy(string $columnKey): void
     {
-        $this->sortedColumnDir = $this->sortedColumnKey !== $columnKey || $this->sortedColumnDir === 'desc'
+        $this->sortDir = $this->sortBy !== $columnKey || $this->sortDir === 'desc'
             ? 'asc'
             : 'desc';
-        $this->sortedColumnKey = $columnKey;
+        $this->sortBy = $columnKey;
     }
 
     public function rowAction(string $rowActionKey, mixed $primary, bool $requiresConfirmation): mixed

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Bootstrap5;
+namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Livewire;

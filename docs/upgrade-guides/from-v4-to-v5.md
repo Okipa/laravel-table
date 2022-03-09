@@ -18,11 +18,12 @@ As so, you will have to install it properly before using this package : https://
 
 The following changes must be reported in your table configurations:
 * replace `extend AbstractTable` by `extend AbstractTableConfiguration`
-* replace `protected function table(): Table` function signatures by `protected function table(): Table`
-* replace `return (new Table())` by `$table->` at the beginning of the `table()` function
+* replace `return (new Table())` by `return Table::make()->` at the beginning of the `table()` function
 * replace `->activateRowsNumberDefinition(` method name by `->enableNumberOfRowsPerPageChoice(`
 * replace `->rowsNumber(` method name by `->numberOfRowsPerPageOptions(` and make sure your calls are compatible with the new method signature: `numberOfRowsPerPageOptions(array $numberOfRowsPerPageOptions): Table`
-* make sure your `->sortable()` calls are compatible with new method signature: `sortable(bool $sortByDefault = false, bool $sortAscByDefault = true): Column`
+* replace default sorting configuration, previously done with `->sortable(bool $sortByDefault = false, $sortDirection = 'asc')` by new dedicated method : `sortByDefault(string $sort = 'asc')`
+* replace `protected function columns(Table $table): void` function signatures by `protected function columns(): array`
+* replace columns declaration previously done with `$table->column()` by [new column declaration](../../README.md#declare-columns-on-tables)
 
 ## Table displaying changes
 

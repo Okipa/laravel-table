@@ -2,11 +2,13 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
+use Tests\Models\Company;
 use Tests\Models\User;
 use Tests\TestCase;
 
@@ -92,14 +94,14 @@ class ColumnSearchableTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSet('search', '')
+            ->assertSet('searchBy', '')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 $users->first()->name,
                 $users->last()->name,
                 '</tbody>',
             ])
-            ->set('search', $users->first()->name)
+            ->set('searchBy', $users->first()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
@@ -107,7 +109,67 @@ class ColumnSearchableTest extends TestCase
                 '</tbody>',
             ])
             ->assertDontSeeHtml($users->last()->name)
-            ->set('search', $users->last()->email)
+            ->set('searchBy', $users->last()->email)
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $users->last()->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml($users->first()->name);
+    }
+
+    /** @test */
+    public function it_can_search_from_closure(): void
+    {
+        $users = User::factory()->count(2)->create();
+        $user1Companies = Company::factory()->withOwner($users->first())->count(3)->create();
+        $user2Companies = Company::factory()->withOwner($users->last())->count(3)->create();
+
+        //        $test = User::whereHas(
+        //            'companies',
+        //            static fn(Builder $companies) => $companies->where('name', 'LIKE', '%' . $user1Companies->first()->name . '%')
+        //        )->toSql();
+        //        dd($test);
+
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Name')->searchable(),
+                    Column::make('Owned companies')
+                        ->searchable(fn(Builder $query, string $searchBy) => $query->whereRelation(
+                            'companies',
+                            'name',
+                            'LIKE',
+                            '%' . $searchBy . '%'
+                        )),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSet('searchBy', '')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $users->first()->name,
+                $users->last()->name,
+                '</tbody>',
+            ])
+            ->set('searchBy', $user1Companies->first()->name)
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $users->first()->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml($users->last()->name,)
+            ->set('searchBy', $user2Companies->last()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
@@ -138,7 +200,7 @@ class ColumnSearchableTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->set('search', $users->first()->name)
+            ->set('searchBy', $users->first()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
@@ -146,7 +208,7 @@ class ColumnSearchableTest extends TestCase
                 '</tbody>',
             ])
             ->assertDontSeeHtml($users->last()->name)
-            ->set('search', '')
+            ->set('searchBy', '')
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',

@@ -10,6 +10,7 @@ use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Formatters\Boolean;
 use Okipa\LaravelTable\Formatters\StrLimit;
 use Okipa\LaravelTable\Table;
+use Tests\Models\Company;
 use Tests\Models\User;
 use Tests\TestCase;
 
@@ -19,6 +20,7 @@ class ColumnFormatTest extends TestCase
     public function it_can_format_column_from_closure(): void
     {
         $users = User::factory()->count(2)->create();
+        Company::factory()->count(6)->create();
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
@@ -28,7 +30,8 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>'),
+                    Column::make('Owned companies')
+                        ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
                 ];
             }
         };
@@ -36,8 +39,8 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<b>Test ' . $users->first()->name . '</b>',
-                '<b>Test ' . $users->last()->name . '</b>',
+                '<b> ' . $users->first()->companies->implode('name', ', ') . '</b>',
+                '<b> ' . $users->last()->companies->implode('name', ', ') . '</b>',
                 '</tbody>',
             ]);
     }
@@ -81,6 +84,7 @@ class ColumnFormatTest extends TestCase
     public function it_can_format_column_with_html_escaping(): void
     {
         $users = User::factory()->count(2)->create();
+        Company::factory()->count(6)->create();
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
@@ -90,7 +94,8 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->format(fn(User $user) => '<b>Test ' . $user->name . '</b>', true),
+                    Column::make('Owned companies')
+                        ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>', true),
                 ];
             }
         };
@@ -98,8 +103,8 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                e('<b>Test ' . $users->first()->name . '</b>'),
-                e('<b>Test ' . $users->last()->name . '</b>'),
+                e('<b> ' . $users->first()->companies->implode('name', ', ') . '</b>'),
+                e('<b> ' . $users->last()->companies->implode('name', ', ') . '</b>'),
                 '</tbody>',
             ]);
     }
