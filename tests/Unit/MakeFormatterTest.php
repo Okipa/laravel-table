@@ -18,7 +18,7 @@ class MakeFormatterTest extends TestCase
         self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractFormatter;', $fileContent);
         self::assertStringContainsString('class BooleanFormatter', $fileContent);
-        self::assertStringContainsString('protected function format(Model $model, string $key): mixed', $fileContent);
+        self::assertStringContainsString('public function format(Model $model, string $key): string', $fileContent);
     }
 
     protected function setUp(): void

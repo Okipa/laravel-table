@@ -2,11 +2,12 @@
 
 namespace DummyNamespace;
 
+use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
 class DummyClass extends AbstractFormatter
 {
-    protected function format(Model $model): mixed
+    public function format(Model $model, string $key): string
     {
         //
     }
