@@ -14,7 +14,7 @@ class Destroy extends AbstractRowAction
 
     protected function class(): string
     {
-        return 'text-danger';
+        return 'link-danger';
     }
 
     protected function key(): string

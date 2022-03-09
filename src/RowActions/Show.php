@@ -15,7 +15,7 @@ class Show extends AbstractRowAction
 
     protected function class(): string
     {
-        return 'text-info';
+        return 'link-info';
     }
 
     protected function key(): string
