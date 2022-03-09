@@ -109,6 +109,7 @@ class Table extends Component
             'rows' => $table->getRows(),
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
+            'rowActions' => $this->rowActions,
             'navigationStatus' => $table->getNavigationStatus(),
         ];
     }
@@ -128,10 +129,13 @@ class Table extends Component
 
     public function rowAction(string $rowActionKey, mixed $primary, bool $requiresConfirmation): mixed
     {
+        /** @var \Okipa\LaravelTable\Abstracts\AbstractRowAction $rowAction */
         $rowAction = collect($this->rowActions->get($primary))->firstWhere('key', $rowActionKey);
+        /** @var \Illuminate\Database\Eloquent\Model $model */
+        $model = app($rowAction->modelClass)->findOrFail($rowAction->modelKey);
 
         return $requiresConfirmation
             ? $this->emit('table:row:action:confirm', $rowActionKey, $primary, $rowAction->confirmationMessage)
-            : $rowAction->action();
+            : $rowAction->action($model);
     }
 }

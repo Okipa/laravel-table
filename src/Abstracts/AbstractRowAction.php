@@ -8,19 +8,21 @@ use Illuminate\Support\Facades\Config;
 
 abstract class AbstractRowAction
 {
+    public string $modelClass;
+
+    public string $modelKey;
+
+    protected string|null $class;
+
     public string $key;
 
     protected string $title;
 
     protected string $icon;
 
-    protected string|null $class;
-
     protected bool $shouldBeConfirmed;
 
     public string $confirmationMessage;
-
-    protected Model $model;
 
     abstract protected function class(): string|null;
 
@@ -31,13 +33,14 @@ abstract class AbstractRowAction
     abstract protected function icon(): string;
 
     /** @return mixed|void */
-    abstract protected function action();
+    abstract public function action(Model $model);
 
     abstract protected function shouldBeConfirmed(): bool;
 
     public function render(Model $model): View
     {
-        $this->model = $model;
+        $this->modelClass = $model::class;
+        $this->modelKey = $model->getKey();
         $this->class = $this->class();
         $this->key = $this->key();
         $this->title = $this->title();

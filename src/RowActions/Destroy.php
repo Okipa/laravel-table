@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\RowActions;
 
+use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Destroy extends AbstractRowAction
@@ -36,8 +37,8 @@ class Destroy extends AbstractRowAction
         return true;
     }
 
-    public function action()
+    public function action(Model $model)
     {
-        $this->model->delete();
+        $model->delete();
     }
 }

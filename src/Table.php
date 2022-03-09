@@ -137,11 +137,11 @@ class Table
             $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
                 $searchableClosure = $searchableColumn->getSearchableClosure();
                 $searchableClosure
-                    ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searched))
+                    ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
                         DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
                         $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searched) . '%'
+                        '%' . mb_strtolower($searchBy) . '%'
                     );
             });
         }
