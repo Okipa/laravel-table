@@ -22,7 +22,7 @@ abstract class AbstractRowAction
 
     protected string $icon;
 
-    public string $confirmationMessage;
+    public string|null $confirmationMessage = null;
 
     abstract protected function class(): string|null;
 
@@ -43,7 +43,7 @@ abstract class AbstractRowAction
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
         $this->key = $this->key();
-        $this->confirmationMessage = $this->confirmationMessage ?? __('Are you sure you want to perform this action?');
+        $this->confirmationMessage = $this->confirmationMessage ?: __('Are you sure you want to perform this action?');
     }
 
     public function render(): View
