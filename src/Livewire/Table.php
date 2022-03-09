@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
 
@@ -136,6 +137,6 @@ class Table extends Component
 
         return $requiresConfirmation
             ? $this->emit('table:row:action:confirm', $rowActionKey, $primary, $rowAction['confirmationMessage'])
-            : app($rowAction['rowActionClass'], $rowAction)->action(app($rowAction['modelClass'])->findOrFail($rowAction['modelKey']));
+            : AbstractRowAction::make($rowAction)->action(app($rowAction['modelClass'])->findOrFail($rowAction['modelKey']));
     }
 }
