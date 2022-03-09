@@ -137,11 +137,11 @@ class Table
             $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
                 $searchableClosure = $searchableColumn->getSearchableClosure();
                 $searchableClosure
-                    ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
+                    ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searched))
                     : $query->orWhere(
                         DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
                         $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
+                        '%' . mb_strtolower($searched) . '%'
                     );
             });
         }
@@ -169,15 +169,15 @@ class Table
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
-    public function generateActions(): array
+    public function generateActions(): Collection
     {
-        $tableRowActions = [];
+        $tableRowActions = collect();
         if (! $this->rowActionsClosure) {
             return $tableRowActions;
         }
         foreach ($this->rows->getCollection() as $row) {
             $rowActions = ($this->rowActionsClosure)($row);
-            $tableRowActions[$row->getKey()] = $rowActions;
+            $tableRowActions->put($row->getKey(), collect($rowActions));
         }
 
         return $tableRowActions;
