@@ -169,15 +169,15 @@ class Table
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
-    public function generateActions(): Collection
+    public function generateActions(): array
     {
-        $tableRowActions = collect();
+        $tableRowActions = [];
         if (! $this->rowActionsClosure) {
             return $tableRowActions;
         }
         foreach ($this->rows->getCollection() as $row) {
             $rowActions = ($this->rowActionsClosure)($row);
-            $tableRowActions->put($row->getKey(), collect($rowActions));
+            $tableRowActions[$row->getKey()] = $rowActions;
         }
 
         return $tableRowActions;

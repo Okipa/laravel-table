@@ -106,7 +106,7 @@
                                 @endif
                             </th>
                         @endforeach
-                        @if($rowActions->isNotEmpty())
+                        @if($rowActions)
                             <th class="align-middle" scope="col">
                                 {{ __('Actions') }}
                             </th>
@@ -124,7 +124,7 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($actions = $rowActions->get($row->getKey()))
+                            @if($actions = Arr::get($rowActions, $row->getKey()))
                                 <td class="align-middle">
                                     @foreach($actions as $action)
                                         {{ $action->render($row) }}
