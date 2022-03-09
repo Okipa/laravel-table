@@ -40,7 +40,7 @@ class Table extends Component
 
     public Collection $rowActions;
 
-    protected $listeners = ['row:action:confirmed' => 'rowAction'];
+    protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
 
     public function init(): void
     {
@@ -131,7 +131,7 @@ class Table extends Component
         $rowAction = collect($this->rowActions->get($primary))->firstWhere('key', $rowActionKey);
 
         return $requiresConfirmation
-            ? $this->emit('row:action:confirm', $rowActionKey, $primary, $rowAction->confirmationMessage)
+            ? $this->emit('table:row:action:confirm', $rowActionKey, $primary, $rowAction->confirmationMessage)
             : $rowAction->action();
     }
 }

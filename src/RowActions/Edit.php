@@ -14,7 +14,7 @@ class Edit extends AbstractRowAction
 
     protected function class(): string
     {
-        return 'btn-primary';
+        return 'text-primary';
     }
 
     protected function key(): string

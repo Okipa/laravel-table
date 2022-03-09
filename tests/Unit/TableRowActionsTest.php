@@ -76,12 +76,12 @@ class TableRowActionsTest extends TestCase
             ->assertRedirect(route('user.edit', $users->last()))
             ->call('rowAction', 'destroy', $users->first()->id, true)
             ->assertEmitted(
-                'row:action:confirm',
+                'table:row:action:confirm',
                 'destroy',
                 $users->first()->id,
                 __('Are you sure you want to delete user :name ?', ['name' => $users->first()->name])
             )
-            ->emit('row:action:confirmed', 'destroy', $users->first()->id, false);
+            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id, false);
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 }
