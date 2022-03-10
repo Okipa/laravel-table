@@ -4,8 +4,9 @@
 
 2022-03-10
 
-* Updated column `dateTimeFormat` method signature to `dateTimeFormat(string $dateTimeFormat, string $timezone = null): \Okipa\LaravelTable\Column`
-* If no timezone is set, the default one, defined in `config('app.timezone')` is used
+* Added ability to set a timezone when formatting a date/time column with the `dateTimeFormat` method:
+  * Updated column `dateTimeFormat` method signature to `dateTimeFormat(string $dateTimeFormat, string $timezone = null): \Okipa\LaravelTable\Column`
+  * If no timezone is set, the default one, defined in `config('app.timezone')` is used
 
 ## [4.0.4](https://github.com/Okipa/laravel-table/compare/4.0.3...4.0.4)
 
