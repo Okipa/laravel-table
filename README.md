@@ -1068,7 +1068,7 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 <h3 id="column-dateTimeFormat">dateTimeFormat</h3>
 
 > Set the format for a datetime, date or time database column (optional).  
-> (Carbon::parse($value)->timezone($timezone)->->format($format) method is used under the hood).
+> (Carbon::parse($value)->timezone($timezone)->format($format) method is used under the hood).
 
 **Note:**
 
