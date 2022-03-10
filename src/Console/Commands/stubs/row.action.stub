@@ -1,0 +1,39 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+
+class DummyClass extends AbstractFormatter
+{
+    protected function class(): string
+    {
+        // The CSS class to apply to the clickable link.
+    }
+
+    protected function key(): string
+    {
+        // The clickable link key that has to be unique among row actions.
+    }
+
+    protected function title(): string
+    {
+        // The clickable link title.
+    }
+
+    protected function icon(): string
+    {
+        // The clickable icon that will wrapped in the clickable link.
+    }
+
+    protected function shouldBeConfirmed(): bool
+    {
+        // Whether the action you be confirmed or not before being executed.
+    }
+
+    public function action(Model $model)
+    {
+        // The action that will be executed on click on the icon.
+    }
+}

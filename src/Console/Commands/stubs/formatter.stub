@@ -9,6 +9,6 @@ class DummyClass extends AbstractFormatter
 {
     public function format(Model $model, string $key): string
     {
-        //
+        // The formatting that will be applied to the column on rows generation.
     }
 }

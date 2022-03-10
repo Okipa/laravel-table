@@ -7,13 +7,15 @@ use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
 class Date extends AbstractFormatter
 {
-    public function __construct(protected string $format)
+    public function __construct(protected string $format, protected string $timezone)
     {
         //
     }
 
     public function format(Model $model, string $key): string
     {
-        return $model->{$key}->format($this->format);
+        return $this->timezone
+            ? $model->{$key}->timezone($this->timezone)->format($this->format)
+            : $model->{$key}->format($this->format);
     }
 }

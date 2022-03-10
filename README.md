@@ -64,6 +64,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
 use Okipe\LaravelTable\Formatters\Date;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
@@ -80,8 +81,8 @@ class UsersTable extends AbstractTableConfiguration
             Column::make('Id')->sortable(),
             Column::make('Name')->searchable()->sortable(),
             Column::make('Email')->searchable()->sortable(),
-            Column::make('Created at')->format(new Date('d/m/Y H:i'))->sortable(),
-            Column::make('Updated at')->format(new Date('d/m/Y H:i'))->sortable()->sortByDefault('desc'),
+            Column::make('Created at')->format(new Date('d/m/Y H:i', 'Europe/Paris'))->sortable(),
+            Column::make('Updated at')->format(new Date('d/m/Y H:i', 'Europe/Paris'))->sortable()->sortByDefault('desc'),
         ];
     }
 }
@@ -105,6 +106,7 @@ And display it in a view:
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Define row actions](#define-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Format column values](#format-column-values)
   * [Configure columns searching](#configure-columns-searching)
@@ -195,6 +197,12 @@ In case you have specific attributes to transmit to your table configuration, yo
 To generate a table from an Eloquent model, you'll just have to call the `model` method on your table.
 
 ```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
@@ -213,6 +221,13 @@ You'll be able to set specific Eloquent instructions by passing a closure parame
 This closure will allow you to manipulate a `\Illuminate\Database\Eloquent\Builder $query` argument.
 
 ```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
@@ -231,6 +246,12 @@ You have two ways to allow or disallow users to choose the number of rows that w
 * Override global activation status by executing the `enableNumberOfRowsPerPageChoice()` method on your table
 
 ```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
@@ -249,6 +270,12 @@ Following the same logic, you'll be able to define the number of rows per page o
 The first available option will be automatically selected and applied on table initialization.
 
 ```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
@@ -264,6 +291,113 @@ Pagination will automatically be handled, according to the number of rows to dis
 
 Both of them will be displayed in the table footer.
 
+### Define table row actions
+
+Configure row actions on your table by calling the `rowAction` method.
+
+This package provides the following actions :
+* `Show`: requires a `string $showUrl` parameter on instantiation
+* `Edit`: requires a `string $editUrl` parameter on instantiation
+* `Destroy`: allows an optional `string $confirmationMessage` parameter on instantiation
+
+To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
+
+This closure will have to return an array containing your row actions.
+
+```
+namespace App\Tables;
+
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\RowActions\Edit;
+use App\Tables\RowActions\Show;
+use App\Tables\RowActions\Destroy;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowAction(fn(User $user) => [
+                new Show(route('user.show', $user)),
+                new Edit(route('user.edit', $user)),
+                new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
+            ]).
+    }
+}
+```
+
+You may want to create your own actions. To do so, execute the following command: `php artisan make:row:action Disable`.
+
+You'll find your generated table row actions in the `app/Tables/RowActions` directory.
+
+Here is an example of the generated row action after being correctly configured.
+
+```
+namespace Okipa\LaravelTable\RowActions;
+
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractRowAction;
+
+class Disable extends AbstractRowAction
+{
+    protected function class(): string
+    {
+        return 'link-danger';
+    }
+
+    protected function key(): string
+    {
+        return 'disable';
+    }
+
+    protected function title(): string
+    {
+        return __('Disable');
+    }
+
+    protected function icon(): string
+    {
+        return '<i class="fa-solid fa-power-off"></i>';
+    }
+
+    protected function shouldBeConfirmed(): bool
+    {
+        return true;
+    }
+
+    public function action(Model $model): void
+    {
+        $model->update(['active' => false]);
+    }
+}
+```
+
+You will now be able to use your row action in your tables.
+
+```
+namespace App\Tables;
+
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\RowActions\Disable;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowAction(fn(User $user) => [
+                new Disable(),
+            ]);
+    }
+}
+```
+
 ### Declare columns on tables
 
 Declare columns on tables with the `columns` method available in your generated table configuration.
@@ -276,6 +410,13 @@ You'll have to pass a `string $title` param to the `column` method, that will be
 Optionally, you can pass a second `string $key` argument to set a specific column key.
 
 ```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
 class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
@@ -302,7 +443,14 @@ For specific cases, you should pass a closure parameter to the `format` method o
 This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
@@ -324,7 +472,14 @@ If you want to apply the same formatting treatment repeatedly, you should create
 
 You'll find the generated formatter in the `app\Table\Formatters` directory.
 
+Here is an example of the generated formatted after being correctly configured.
+
 ```php
+namespace App\Tables\Formatters;
+
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+
 class Boolean extends AbstractFormatter
 {
     public function format(Model $model, string $key): string
@@ -339,7 +494,15 @@ class Boolean extends AbstractFormatter
 You'll be able to reuse this formatter in your tables.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use App\Tables\Formatters\Boolean;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
@@ -356,10 +519,10 @@ class UsersTable extends AbstractTableConfigurations
 }
 ```
 
-This package provided a few default formatters, you can use them as is or using them as examples to create your own:
-* Boolean
-* Date
-* StrLimit
+This package provides the following formatters :
+* `Boolean`
+* `Date`: requires `string $editUrl` and `string $timezone` parameters on instantiation
+* `StrLimit`: allows optional `int $limit` and `string $end` parameters on instantiation
 
 ### Configure columns searching
 
@@ -372,7 +535,7 @@ Searchable column titles will be used to indicate which field can be searched on
 By default, searching will be applied to columns defined keys.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
@@ -394,7 +557,7 @@ You will be able to set up a custom searching behaviour by passing a closure to 
 This closure will be executed when searching will be triggered on the table and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` argument.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
@@ -427,7 +590,7 @@ Sortable columns will display clickable sort icons before their titles that will
 By default, sorting will be applied to columns defined keys.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
@@ -449,7 +612,7 @@ To sort a column by default, use the `sortByDefault` column method, which will a
 You can sort by default a column that is not sortable.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
@@ -471,7 +634,7 @@ You will be able to set up a custom sorting behaviour by passing a closure to th
 This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `string $direction` arguments.
 
 ```php
-class UsersTable extends AbstractTableConfigurations
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
