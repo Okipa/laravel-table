@@ -84,8 +84,8 @@ class UsersTable extends AbstractTable
         $table->column('id')->sortable(true);
         $table->column('name')->sortable()->searchable();
         $table->column('email')->sortable()->searchable();
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable();
+        $table->column('created_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
+        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
     }
 }
 ```
@@ -304,9 +304,9 @@ class NewsTable extends AbstractTable
             ->title(__('Display'))
             ->link(fn(News $news) => route('news.show', $news))
             ->button(['btn', 'btn-sm', 'btn-primary']);
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('published_at')->dateTimeFormat('d/m/Y H:i')->sortable(true, 'desc');
+        $table->column('created_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
+        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
+        $table->column('published_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable(true, 'desc');
     }
 
     protected function resultLines(Table $table): void
@@ -1068,17 +1068,18 @@ $table->column('company')->searchable('companiesAliasedTable', ['name', 'activit
 <h3 id="column-dateTimeFormat">dateTimeFormat</h3>
 
 > Set the format for a datetime, date or time database column (optional).  
-> (Carbon::parse($value)->format($format) method is used under the hood).
+> (Carbon::parse($value)->timezone($timezone)->format($format) method is used under the hood).
 
 **Note:**
 
-* Signature: `dateTimeFormat(string $dateTimeFormat): \Okipa\LaravelTable\Column`
+* Signature: `dateTimeFormat(string $dateTimeFormat, string $timezone = null): \Okipa\LaravelTable\Column`
 * Optional
+* If no timezone is set, the default one, defined in `config('app.timezone')` is used
 
 **Use case example:**
 
 ```php
-$table->column('created_at')->dateTimeFormat('d/m/Y H:i');
+$table->column('created_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris');
 ```
 
 <h3 id="column-button">button</h3>
