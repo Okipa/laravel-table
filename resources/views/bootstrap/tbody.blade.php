@@ -54,7 +54,7 @@
                                 {{-- Datetime format --}}
                                 @elseif($column->getDateTimeFormat())
                                     {{ $value
-                                        ? \Carbon\Carbon::parse($value)->format($column->getDateTimeFormat())
+                                        ? \Carbon\Carbon::parse($value)->timezone($column->getTimezone())->format($column->getDateTimeFormat())
                                         : null }}
                                 {{-- Basic value --}}
                                 @else
