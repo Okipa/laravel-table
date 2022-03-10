@@ -156,4 +156,36 @@ class RowsNumberTest extends LaravelTableTestCase
             self::assertStringContainsString($user->email, $html);
         }
     }
+
+    public function testGenerateHiddenFieldsOnRowsNumberFormHtml(): void
+    {
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->routes(['index' => ['name' => 'users.index']])->model(User::class)->appendData([
+            'foo' => 'bar',
+            'baz' => [
+                'qux',
+                'quux' => [
+                    'corge' => 'grault',
+                    'garply',
+                ],
+                'waldo',
+            ],
+            7 => 'fred',
+        ]);
+        $table->column('name')->title('Name')->searchable();
+        $table->configure();
+        $rowsNumberHtml = view(
+            'laravel-table::' . $table->getRowsNumberDefinitionTemplatePath(),
+            compact('table')
+        )->toHtml();
+        self::assertStringContainsString('<input type="hidden" name="foo" value="bar">', $rowsNumberHtml);
+        self::assertStringContainsString('<input type="hidden" name="baz[0]" value="qux">', $rowsNumberHtml);
+        self::assertStringContainsString(
+            '<input type="hidden" name="baz[quux][corge]" value="grault">',
+            $rowsNumberHtml
+        );
+        self::assertStringContainsString('<input type="hidden" name="baz[quux][0]" value="garply">', $rowsNumberHtml);
+        self::assertStringContainsString('<input type="hidden" name="baz[1]" value="waldo">', $rowsNumberHtml);
+        self::assertStringContainsString('<input type="hidden" name="7" value="fred">', $rowsNumberHtml);
+    }
 }

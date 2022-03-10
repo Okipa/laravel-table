@@ -20,12 +20,31 @@ trait HasPagination
     {
         $appendedToPaginator = array_filter($appendedToPaginator);
         $this->appendedToPaginator = $appendedToPaginator;
-        // Todo: remove `generatedHiddenFields` management in a future major version,
-        // which is a duplicate of `appendedToPaginator`.
-        $this->generatedHiddenFields = $appendedToPaginator;
+        $this->generatedHiddenFields = $this->generateHiddenInputsArray($appendedToPaginator);
 
         /** @var \Okipa\LaravelTable\Table $this */
         return $this;
+    }
+
+    protected function generateHiddenInputsArray(array $data = [], string $prefix = null): array
+    {
+        $inputsArray = [];
+        $prefix = trim($prefix);
+        foreach ($data as $key => $value) {
+            if ($prefix) {
+                $key = $prefix . "[{$key}]";
+            }
+            if (is_array($value)) {
+                $arrayData = $this->generateHiddenInputsArray($value, $key);
+                foreach ($arrayData as $arrayKey => $arrayValue) {
+                    $inputsArray[$arrayKey] = $arrayValue;
+                }
+            } else {
+                $inputsArray[$key] = $value;
+            }
+        }
+
+        return $inputsArray;
     }
 
     public function getGeneratedHiddenFields(): array
@@ -50,6 +69,18 @@ trait HasPagination
 
     abstract public function getDestroyConfirmationClosure(): ?Closure;
 
+    abstract public function getRowsNumberField(): string;
+
+    abstract public function getSearchField(): string;
+
+    abstract public function getSortByField(): string;
+
+    abstract public function getSortByValue(): ?string;
+
+    abstract public function getSortDirField(): string;
+
+    abstract public function getSortDirValue(): ?string;
+
     protected function paginateFromQuery(Builder $query): void
     {
         /** @var int|null $perPage */
@@ -64,18 +95,6 @@ trait HasPagination
     }
 
     abstract public function getRowsNumberValue(): ?int;
-
-    abstract public function getRowsNumberField(): string;
-
-    abstract public function getSearchField(): string;
-
-    abstract public function getSortByField(): string;
-
-    abstract public function getSortByValue(): ?string;
-
-    abstract public function getSortDirField(): string;
-
-    abstract public function getSortDirValue(): ?string;
 
     public function getAppendedToPaginator(): array
     {

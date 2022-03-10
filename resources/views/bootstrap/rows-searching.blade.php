@@ -1,9 +1,12 @@
 @if($table->getSearchableColumns()->count())
     <div class="flex-fill pr-xl-3 py-1 searching">
-        <form role="form" method="GET" action="{{ $table->getRoute('index') . '?' . http_build_query($table->getAppendedToPaginator()) }}">
+        <form role="form" method="GET" action="{{ $table->getRoute('index') }}">
             <input type="hidden" name="{{ $table->getRowsNumberField() }}" value="{{ $table->getRequest()->get($table->getRowsNumberField()) }}">
             <input type="hidden" name="{{ $table->getSortByField() }}" value="{{ $table->getRequest()->get($table->getSortByField()) }}">
             <input type="hidden" name="{{ $table->getSortDirField() }}" value="{{ $table->getRequest()->get($table->getSortDirField()) }}">
+            @foreach($table->getGeneratedHiddenFields() as $name => $value)
+                <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+            @endforeach
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text text-secondary">
