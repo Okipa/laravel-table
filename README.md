@@ -81,8 +81,13 @@ class UsersTable extends AbstractTableConfiguration
             Column::make('Id')->sortable(),
             Column::make('Name')->searchable()->sortable(),
             Column::make('Email')->searchable()->sortable(),
-            Column::make('Created at')->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))->sortable(),
-            Column::make('Updated at')->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))->sortable()->sortByDefault('desc'),
+            Column::make('Created at')
+                ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
+                ->sortable(),
+            Column::make('Updated at')
+                ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
+                ->sortable()
+                ->sortByDefault('desc'),
         ];
     }
 }
