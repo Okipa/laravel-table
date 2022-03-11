@@ -32,10 +32,10 @@ abstract class AbstractRowAction
 
     abstract protected function icon(): string;
 
+    abstract protected function shouldBeConfirmed(): bool;
+
     /** @return mixed|void */
     abstract public function action(Model $model);
-
-    abstract protected function shouldBeConfirmed(): bool;
 
     public function setup(Model $model): void
     {

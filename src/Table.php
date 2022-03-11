@@ -178,9 +178,12 @@ class Table
             return $tableRowActions;
         }
         foreach ($this->rows->getCollection() as $row) {
-            $rowActions = ($this->rowActionsClosure)($row);
-            array_map(static fn(AbstractRowAction $rowAction) => $rowAction->setup($row), $rowActions);
-            $rowActions = json_decode(json_encode($rowActions, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
+            $rowActions = collect(($this->rowActionsClosure)($row))->filter();
+            $rowActions->each(static fn(AbstractRowAction $rowAction) => $rowAction->setup($row));
+            $rowActions = json_decode(json_encode(
+                $rowActions->toArray(),
+                JSON_THROW_ON_ERROR
+            ), true, 512, JSON_THROW_ON_ERROR);
             $tableRowActions->put($row->getKey(), $rowActions);
         }
 

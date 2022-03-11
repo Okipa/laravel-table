@@ -5,9 +5,9 @@ namespace Okipa\LaravelTable\Formatters;
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
-class Date extends AbstractFormatter
+class Datetime extends AbstractFormatter
 {
-    public function __construct(protected string $format, protected string $timezone)
+    public function __construct(protected string $format, protected string|null $timezone = null)
     {
         //
     }

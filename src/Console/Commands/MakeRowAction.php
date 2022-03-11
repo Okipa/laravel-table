@@ -4,7 +4,7 @@ namespace Okipa\LaravelTable\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
-class MakeFormatter extends GeneratorCommand
+class MakeRowAction extends GeneratorCommand
 {
     /** @var string */
     protected $type = 'RowAction';

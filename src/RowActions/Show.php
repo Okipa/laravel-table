@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Show extends AbstractRowAction

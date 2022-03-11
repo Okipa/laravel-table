@@ -81,8 +81,8 @@ class UsersTable extends AbstractTableConfiguration
             Column::make('Id')->sortable(),
             Column::make('Name')->searchable()->sortable(),
             Column::make('Email')->searchable()->sortable(),
-            Column::make('Created at')->format(new Date('d/m/Y H:i', 'Europe/Paris'))->sortable(),
-            Column::make('Updated at')->format(new Date('d/m/Y H:i', 'Europe/Paris'))->sortable()->sortByDefault('desc'),
+            Column::make('Created at')->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))->sortable(),
+            Column::make('Updated at')->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))->sortable()->sortByDefault('desc'),
         ];
     }
 }
@@ -106,7 +106,7 @@ And display it in a view:
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
-  * [Define row actions](#define-row-actions)
+  * [Define table row actions](#define-table-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Format column values](#format-column-values)
   * [Configure columns searching](#configure-columns-searching)

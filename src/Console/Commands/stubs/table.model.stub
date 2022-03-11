@@ -24,8 +24,8 @@ class DummyClass extends AbstractTableConfiguration
     {
         return [
             Column::make('Id')->sortable();
-            Column::make('Created at')->format(new Date('d/m/Y H:i'))->sortable();
-            Column::make('Updated at')->format(new Date('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+            Column::make('Created at')->format(new Datetime('d/m/Y H:i'))->sortable();
+            Column::make('Updated at')->format(new Datetime('d/m/Y H:i'))->sortable()->sortByDefault('desc');
         ];
     }
 }

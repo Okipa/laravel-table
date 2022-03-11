@@ -3,9 +3,9 @@
 namespace DummyNamespace;
 
 use Illuminate\Database\Eloquent\Model;
-use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
-class DummyClass extends AbstractFormatter
+class DummyClass extends AbstractRowAction
 {
     protected function class(): string
     {
@@ -32,6 +32,7 @@ class DummyClass extends AbstractFormatter
         // Whether the action you be confirmed or not before being executed.
     }
 
+    /** @return mixed|void */
     public function action(Model $model)
     {
         // The action that will be executed on click on the icon.

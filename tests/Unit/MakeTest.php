@@ -3,10 +3,12 @@
 namespace Tests\Unit;
 
 use Illuminate\Support\Facades\File;
+use Okipa\LaravelTable\Console\Commands\MakeFormatter;
+use Okipa\LaravelTable\Console\Commands\MakeRowAction;
 use Okipa\LaravelTable\Console\Commands\MakeTable;
 use Tests\TestCase;
 
-class MakeTableTest extends TestCase
+class MakeTest extends TestCase
 {
     public function testMakeTable(): void
     {
@@ -42,13 +44,43 @@ class MakeTableTest extends TestCase
         self::assertStringContainsString('protected function columns(): array', $fileContent);
         self::assertStringContainsString('Column::make(\'Id\')->sortable();', $fileContent);
         self::assertStringContainsString(
-            'Column::make(\'Created at\')->format(new Date(\'d/m/Y H:i\'))->sortable();',
+            'Column::make(\'Created at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable();',
             $fileContent
         );
         self::assertStringContainsString(
-            'Column::make(\'Updated at\')->format(new Date(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
+            'Column::make(\'Updated at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
             $fileContent
         );
+    }
+
+    public function testMakeFormatter(): void
+    {
+        $this->artisan(MakeFormatter::class, ['name' => 'Boolean']);
+        self::assertFileExists(base_path('app/Tables/Formatters/Boolean.php'));
+        $fileContent = File::get(base_path('app/Tables/Formatters/Boolean.php'));
+        self::assertStringContainsString('namespace App\Tables\Formatters;', $fileContent);
+        self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractFormatter;', $fileContent);
+        self::assertStringContainsString('class Boolean extends AbstractFormatter', $fileContent);
+        self::assertStringContainsString('public function format(Model $model, string $key): string', $fileContent);
+    }
+
+    public function testMakeRowAction(): void
+    {
+        $this->artisan(MakeRowAction::class, ['name' => 'Deactivate']);
+        self::assertFileExists(base_path('app/Tables/RowActions/Deactivate.php'));
+        $fileContent = File::get(base_path('app/Tables/RowActions/Deactivate.php'));
+        self::assertStringContainsString('namespace App\Tables\RowActions;', $fileContent);
+        self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractRowAction;', $fileContent);
+        self::assertStringContainsString('class Deactivate extends AbstractRowAction', $fileContent);
+        self::assertStringContainsString('protected function class(): string', $fileContent);
+        self::assertStringContainsString('protected function key(): string', $fileContent);
+        self::assertStringContainsString('protected function title(): string', $fileContent);
+        self::assertStringContainsString('protected function icon(): string', $fileContent);
+        self::assertStringContainsString('protected function shouldBeConfirmed(): bool', $fileContent);
+        self::assertStringContainsString('/** @return mixed|void */', $fileContent);
+        self::assertStringContainsString('public function action(Model $model)', $fileContent);
     }
 
     protected function setUp(): void

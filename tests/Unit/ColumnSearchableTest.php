@@ -125,13 +125,6 @@ class ColumnSearchableTest extends TestCase
         $users = User::factory()->count(2)->create();
         $user1Companies = Company::factory()->withOwner($users->first())->count(3)->create();
         $user2Companies = Company::factory()->withOwner($users->last())->count(3)->create();
-
-        //        $test = User::whereHas(
-        //            'companies',
-        //            static fn(Builder $companies) => $companies->where('name', 'LIKE', '%' . $user1Companies->first()->name . '%')
-        //        )->toSql();
-        //        dd($test);
-
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
@@ -168,7 +161,7 @@ class ColumnSearchableTest extends TestCase
                 $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->last()->name,)
+            ->assertDontSeeHtml($users->last()->name)
             ->set('searchBy', $user2Companies->last()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([

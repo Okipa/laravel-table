@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -83,5 +84,53 @@ class TableRowActionsTest extends TestCase
             )
             ->emit('table:row:action:confirmed', 'destroy', $users->first()->id, false);
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
+    }
+
+    /** @test */
+    public function it_can_display_row_action_conditionally(): void
+    {
+        app('router')->get('/user/{user}/edit', ['as' => 'user.edit']);
+        Config::set('laravel-table.icon.edit', 'edit-icon');
+        Config::set('laravel-table.icon.destroy', 'destroy-icon');
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)->rowActions(fn(User $user) => [
+                    new Edit(route('user.edit', $user)),
+                    Auth::user()->is($user)
+                        ? null
+                        : new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
+                ]);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Name'),
+                ];
+            }
+        };
+        Livewire::actingAs($users->first())
+            ->test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                '<tr class="border-bottom">',
+                '<a wire:click.prevent="rowAction(\'edit\', ' . $users->first()->id . ', 0)"',
+                'class="link-primary p-1"',
+                'title="Edit">',
+                'edit-icon',
+                '<a wire:click.prevent="rowAction(\'edit\', ' . $users->last()->id . ', 0)"',
+                'title="Edit">',
+                'edit-icon',
+                '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->last()->id . ', 1)"',
+                'title="Destroy">',
+                'destroy-icon',
+                '</tr>',
+                '</tbody>',
+            ])->assertDontSeeHtml([
+                '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->first()->id . ', 1)"',
+            ]);
     }
 }
