@@ -311,7 +311,7 @@ This closure will have to return an array containing your row actions.
 
 Also note that you'll be able to display row action conditionally in the closure.
 
-```
+```php
 namespace App\Tables;
 
 use App\Models\Users\User;
@@ -346,7 +346,7 @@ You'll find your generated table row actions in the `app/Tables/RowActions` dire
 
 Here is an example of the generated row action after being correctly configured.
 
-```
+```php
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
@@ -388,7 +388,7 @@ class Disable extends AbstractRowAction
 
 You will now be able to use your row action in your tables.
 
-```
+```php
 namespace App\Tables;
 
 use App\Models\Users\User;
