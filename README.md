@@ -304,6 +304,8 @@ To use them, you'll have to declare a closure parameter that will allow you to m
 
 This closure will have to return an array containing your row actions.
 
+Also note that you'll be able to display row action conditionally in the closure.
+
 ```
 namespace App\Tables;
 
@@ -323,7 +325,9 @@ class UsersTable extends AbstractTableConfiguration
             ->rowAction(fn(User $user) => [
                 new Show(route('user.show', $user)),
                 new Edit(route('user.edit', $user)),
-                new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
+                Auth::user()->is($user) // Destroy action will not be available for auth user row.
+                    ? null
+                    : new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
             ]).
     }
 }
