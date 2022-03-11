@@ -340,7 +340,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may want to create your own actions. To do so, execute the following command: `php artisan make:row:action Disable`.
+You may want to create your own actions. To do so, execute the following command: `php artisan make:row:action Deactivate`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
@@ -352,7 +352,7 @@ namespace Okipa\LaravelTable\RowActions;
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
-class Disable extends AbstractRowAction
+class Deactivate extends AbstractRowAction
 {
     protected function class(): string
     {
@@ -366,7 +366,7 @@ class Disable extends AbstractRowAction
 
     protected function title(): string
     {
-        return __('Disable');
+        return __('Deactivate');
     }
 
     protected function icon(): string
@@ -393,7 +393,7 @@ namespace App\Tables;
 
 use App\Models\Users\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\RowActions\Disable;
+use App\Tables\RowActions\Deactivate;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -403,7 +403,7 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->rowAction(fn(User $user) => [
-                new Disable(),
+                new Deactivate(),
             ]);
     }
 }
