@@ -332,7 +332,9 @@ class UsersTable extends AbstractTableConfiguration
                 new Edit(route('user.edit', $user)),
                 Auth::user()->is($user) // Destroy action will not be available for auth user row.
                     ? null
-                    : new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
+                    : new Destroy(__('Are you sure you want to delete user :name ?', [
+                        'name' => $user->name,
+                    ])),
             ]).
     }
 }
