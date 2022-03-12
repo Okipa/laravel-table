@@ -49,7 +49,8 @@
                                     @if($numberOfRowsPerPageChoiceEnabled)
                                         <div class="px-xl-3 py-1">
                                             <div class="input-group">
-                                                <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
+                                                <span id="rows-number-per-page-icon"
+                                                      class="input-group-text text-secondary">
                                                     {!! Config::get('laravel-table.icon.rows_number') !!}
                                                 </span>
                                                 <select wire:change="changeNumberOfRowsPerPage($event.target.value)"
@@ -133,10 +134,14 @@
                             @endif
                         </tr>
                     @empty
-                        <span class="text-info">
-                            {!! config('laravel-table.icon.info') !!}
-                        </span>
-                        {{ __('No results were found.') }}
+                        <tr class="border-bottom">
+                            <th{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                                <span class="text-info">
+                                    {!! config('laravel-table.icon.info') !!}
+                                </span>
+                                {{ __('No results were found.') }}
+                            </th>
+                        </tr>
                     @endforelse
                 </tbody>
                 {{-- Table footer--}}
