@@ -135,7 +135,7 @@
                         </tr>
                     @empty
                         <tr class="border-bottom">
-                            <th class="alig-middle text-center p-3" scope="row"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                            <th class="align-middle text-center p-3" scope="row"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                                 <span class="text-info">
                                     {!! config('laravel-table.icon.info') !!}
                                 </span>
