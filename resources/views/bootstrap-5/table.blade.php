@@ -110,7 +110,7 @@
                                 {!! config('laravel-table.icon.info') !!}
                             </span>
                             {{ __('No results were found.') }}
-                        @endforeach
+                        @endforelse
                         @if($rowActions->isNotEmpty())
                             <th class="align-middle" scope="col">
                                 {{ __('Actions') }}
