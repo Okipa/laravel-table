@@ -80,7 +80,7 @@
                     </tr>
                     {{-- Column titles --}}
                     <tr class="bg-light border-bottom">
-                        @foreach($columns as $column)
+                        @forelse($columns as $column)
                             <th class="align-middle" scope="col">
                                 {{-- Sorting --}}
                                 @if($column->isSortable())
@@ -105,6 +105,11 @@
                                     {{ $column->getTitle() }}
                                 @endif
                             </th>
+                        @empty
+                            <span class="text-info">
+                                {!! config('laravel-table.icon.info') !!}
+                            </span>
+                            {{ __('No results were found.') }}
                         @endforeach
                         @if($rowActions->isNotEmpty())
                             <th class="align-middle" scope="col">

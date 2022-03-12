@@ -14,17 +14,17 @@ return [
     /** Set all the displayed action icons. */
     'icon' => [
         'rows_number' => '<i class="fa-solid fa-list-ol"></i>',
-        'sort' => '<i class="fa-solid fa-sort"></i>',
-        'sort_asc' => '<i class="fa-solid fa-sort-up"></i>',
-        'sort_desc' => '<i class="fa-solid fa-sort-down"></i>',
+        'sort' => '<i class="fa-solid fa-sort fa-fw"></i>',
+        'sort_asc' => '<i class="fa-solid fa-sort-up fa-fw"></i>',
+        'sort_desc' => '<i class="fa-solid fa-sort-down fa-fw"></i>',
         'search' => '<i class="fa-solid fa-magnifying-glass"></i>',
         'validate' => '<i class="fa-solid fa-check"></i>',
         'info' => '<i class="fa-solid fa-circle-info"></i>',
         'reset' => '<i class="fa-solid fa-rotate-left"></i>',
-        'create' => '<i class="fa-solid fa-circle-plus"></i>',
-        'show' => '<i class="fa-solid fa-eye"></i>',
-        'edit' => '<i class="fa-solid fa-pencil"></i>',
-        'destroy' => '<i class="fa-solid fa-trash-can"></i>',
+        'create' => '<i class="fa-solid fa-circle-plus fa-fw"></i>',
+        'show' => '<i class="fa-solid fa-eye fa-fw"></i>',
+        'edit' => '<i class="fa-solid fa-pencil fa-fw"></i>',
+        'destroy' => '<i class="fa-solid fa-trash-can fa-fw"></i>',
     ],
 
     /** Whether the select allowing to choose the number of rows per page should be displayed by default. */
