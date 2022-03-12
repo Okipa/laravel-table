@@ -117,7 +117,7 @@ class TableColumnsTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<th class="align-middle text-center p-3" scope="row" colspan="2">',
+                '<th class="fw-normal text-center align-middle p-3" scope="row" colspan="2">',
                 '<span class="text-info">',
                 'info-icon',
                 '</span>',
