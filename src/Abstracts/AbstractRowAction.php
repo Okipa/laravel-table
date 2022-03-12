@@ -16,9 +16,13 @@ abstract class AbstractRowAction
 
     public string $modelKey;
 
-    protected string|null $class;
-
     public string $key;
+
+    public string|null $confirmMessage = null;
+
+    public Closure|null $hookClosure = null;
+
+    protected string|null $class;
 
     protected string $title;
 
@@ -26,19 +30,19 @@ abstract class AbstractRowAction
 
     protected Closure|null $whenClosure = null;
 
-    public string|null $confirmMessage = null;
+    public static function make(array $rowAction): self
+    {
+        /** @var self $instance */
+        $instance = app($rowAction['rowActionClass'], $rowAction);
+        $instance->rowActionClass = $rowAction['rowActionClass'];
+        $instance->modelClass = $rowAction['modelClass'];
+        $instance->modelKey = $rowAction['modelKey'];
+        $instance->key = $rowAction['key'];
+        $instance->confirmMessage = $rowAction['confirmMessage'];
+        $instance->hookClosure = $rowAction['hookClosure'];
 
-    protected Closure|null $hookClosure = null;
-
-    abstract protected function class(): string|null;
-
-    abstract protected function key(): string;
-
-    abstract protected function title(): string;
-
-    abstract protected function icon(): string;
-
-    abstract protected function shouldBeConfirmed(): bool;
+        return $instance;
+    }
 
     /** @return mixed|void */
     abstract public function action(Model $model);
@@ -52,7 +56,7 @@ abstract class AbstractRowAction
 
     public function isAllowed(Model $model): bool
     {
-        if(! $this->whenClosure) {
+        if (! $this->whenClosure) {
             return true;
         }
 
@@ -66,9 +70,12 @@ abstract class AbstractRowAction
         return $this;
     }
 
-    public function executeHook(Component $table, Model $model): void
+    public function executeHook(Component $livewire, Model $model): void
     {
-        ($this->hookClosure)($table, $model);
+        if (! $this->hookClosure) {
+            return;
+        }
+        ($this->hookClosure)($livewire, $model);
     }
 
     public function setup(Model $model): void
@@ -79,6 +86,8 @@ abstract class AbstractRowAction
         $this->key = $this->key();
         $this->confirmMessage = $this->confirmMessage ?: __('Are you sure you want to perform this action?');
     }
+
+    abstract protected function key(): string;
 
     public function render(): View
     {
@@ -92,16 +101,11 @@ abstract class AbstractRowAction
         ]);
     }
 
-    public static function make(array $rowAction): self
-    {
-        /** @var self $instance */
-        $instance = app($rowAction['rowActionClass'], $rowAction);
-        $instance->rowActionClass = $rowAction['rowActionClass'];
-        $instance->modelClass = $rowAction['modelClass'];
-        $instance->modelKey = $rowAction['modelKey'];
-        $instance->key = $rowAction['key'];
-        $instance->confirmMessage = $rowAction['confirmMessage'];
+    abstract protected function class(): string|null;
 
-        return $instance;
-    }
+    abstract protected function title(): string;
+
+    abstract protected function icon(): string;
+
+    abstract protected function shouldBeConfirmed(): bool;
 }

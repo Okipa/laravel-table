@@ -306,11 +306,11 @@ This package provides the following actions :
 * `Edit`: requires a `string $editUrl` parameter on instantiation
 * `Destroy`: allows an optional `string confirmMessage` parameter on instantiation
 
-To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
+To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument. This closure will have to return an array containing your row actions.
 
-This closure will have to return an array containing your row actions.
+You can display an action conditionally with the `when` method, chainable on actions. This method will accept a closure parameter hat will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
 
-Also note that you'll be able to display row action conditionally in the closure.
+You also can execute a hook on action execution with the `hook` method, chainable on actions. This method will accepts a closure parameter hat will allow you to manipulate a `Livewire\Component $livewire` and a `Illuminate\Database\Eloquent $model` arguments.
 
 ```php
 namespace App\Tables;
@@ -331,8 +331,11 @@ class UsersTable extends AbstractTableConfiguration
             ->rowAction(fn(User $user) => [
                 new Show(route('user.show', $user)),
                 new Edit(route('user.edit', $user)),
-                // Destroy action will not be available for authenticated user
-                (new Destroy())->when(fn(User $user) => ! Auth::user()->is($user)),
+                (new Destroy())
+                    // Destroy action will not be available for authenticated user
+                    ->when(fn(User $user) => ! Auth::user()->is($user))
+                    // Execute specific Livewire (or not) treatment on action execution
+                    ->hook(fn(Component $livewire, User $user) => $livewire->emit('whatever:event', $user->id)),
             ]).
     }
 }
@@ -436,7 +439,7 @@ Declare columns on tables with the `columns` method available in your generated 
 You'll have to pass a `string $title` param to the `column` method, that will be used to:
 * Display the column title on the table
 * Define a default column key guessed from a snake_case formatting of the column title
-* Define a default column/rows value from the column key
+* Define a default cell value from the column key
 
 Optionally, you can pass a second `string $key` argument to set a specific column key.
 

@@ -180,11 +180,16 @@ class Table
         foreach ($this->rows->getCollection() as $row) {
             $rowActions = collect(($this->rowActionsClosure)($row))
                 ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed($row));
-            $rowActions->each(static fn(AbstractRowAction $rowAction) => $rowAction->setup($row));
-            $rowActionsArray = json_decode(json_encode(
-                $rowActions->toArray(),
-                JSON_THROW_ON_ERROR
-            ), true, 512, JSON_THROW_ON_ERROR);
+            $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($row) {
+                $rowAction->setup($row);
+                $rowActionArray = json_decode(json_encode(
+                    $rowAction,
+                    JSON_THROW_ON_ERROR
+                ), true, 512, JSON_THROW_ON_ERROR);
+                $rowActionArray['hookClosure'] = $rowAction->hookClosure;
+
+                return $rowActionArray;
+            })->toArray();
             $tableRowActions->put($row->getKey(), $rowActionsArray);
         }
 

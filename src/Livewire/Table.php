@@ -59,6 +59,7 @@ class Table extends Component
     /**
      * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     * @throws \JsonException
      */
     public function render(): View
     {
@@ -135,11 +136,12 @@ class Table extends Component
     {
         $rowAction = collect(Arr::get($this->rowActions, $modelKey))->firstWhere('key', $rowActionKey);
         $rowActionInstance = AbstractRowAction::make($rowAction);
-        if($requiresConfirmation) {
-            return $this->emit('table:row:action:confirm', $rowActionKey, $modelKey, $rowActionInstance->confirmMessage);
+        if ($requiresConfirmation) {
+            return $this->emit('table:row:action:confirm', $rowActionKey, $modelKey,
+                $rowActionInstance->confirmMessage);
         }
         $model = app($rowAction['modelClass'])->findOrFail($modelKey);
-        //$rowActionInstance->executeHook($this, $model);
+        $rowActionInstance->executeHook($this, $model);
 
         return $rowActionInstance->action($model);
     }
