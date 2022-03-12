@@ -7,7 +7,7 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Destroy extends AbstractRowAction
 {
-    public function __construct(public string|null $confirmationMessage = null)
+    public function __construct(public string|null $confirmMessage = null)
     {
         //
     }

@@ -140,10 +140,10 @@ class Table
                 $searchableClosure
                     ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
-                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                        $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
-                    );
+                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                    $this->getCaseInsensitiveSearchingLikeOperator(),
+                    '%' . mb_strtolower($searchBy) . '%'
+                );
             });
         }
         // Sort
@@ -178,13 +178,14 @@ class Table
             return $tableRowActions;
         }
         foreach ($this->rows->getCollection() as $row) {
-            $rowActions = collect(($this->rowActionsClosure)($row))->filter();
+            $rowActions = collect(($this->rowActionsClosure)($row))
+                ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed($row));
             $rowActions->each(static fn(AbstractRowAction $rowAction) => $rowAction->setup($row));
-            $rowActions = json_decode(json_encode(
+            $rowActionsArray = json_decode(json_encode(
                 $rowActions->toArray(),
                 JSON_THROW_ON_ERROR
             ), true, 512, JSON_THROW_ON_ERROR);
-            $tableRowActions->put($row->getKey(), $rowActions);
+            $tableRowActions->put($row->getKey(), $rowActionsArray);
         }
 
         return $tableRowActions;

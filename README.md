@@ -304,7 +304,7 @@ Configure row actions on your table by calling the `rowAction` method.
 This package provides the following actions :
 * `Show`: requires a `string $showUrl` parameter on instantiation
 * `Edit`: requires a `string $editUrl` parameter on instantiation
-* `Destroy`: allows an optional `string $confirmationMessage` parameter on instantiation
+* `Destroy`: allows an optional `string confirmMessage` parameter on instantiation
 
 To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
 
@@ -331,12 +331,8 @@ class UsersTable extends AbstractTableConfiguration
             ->rowAction(fn(User $user) => [
                 new Show(route('user.show', $user)),
                 new Edit(route('user.edit', $user)),
-                // Destroy action will not be available for auth user row
-                Auth::user()->is($user)
-                    ? null
-                    : new Destroy(__('Are you sure you want to delete user :name ?', [
-                        'name' => $user->name,
-                    ])),
+                // Destroy action will not be available for authenticated user
+                (new Destroy())->when(fn(User $user) => ! Auth::user()->is($user)),
             ]).
     }
 }
@@ -388,7 +384,29 @@ class Deactivate extends AbstractRowAction
 }
 ```
 
-You will now be able to use your row action in your tables.
+As you can see, you can return a boolean from the `shouldBeConfirmed` method: if `true` is returned, action will not be executed but a `table:row:action:confirm` event will be emitted with the following parameters:
+1. The value returned from the `key` method of your row action
+2. The related model primary
+3. The `confirmMessage` attribute of your row action (set by default to `__('Are you sure you want to perform this action?')` but you can override from your row action constructor if you need to)
+
+You will have to intercept this event from a JS script and manage the action confirmation prompt from your favorite modal/toast library.
+
+When confirmed, you'll have to emit a new `table:row:action:confirmed` event that will trigger the action execution. You'll have to pass it the following parameters:
+1. The value returned from the `key` method of your row action
+2. The related model primary
+
+Here is an JS snippet to show you how to proceed:
+
+```javascript
+Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmMessage) => {
+    // Replace this native JS confirm dialog by your favorite modal/toast library. Or not!
+    if (window.confirm(confirmMessage)) {
+        Livewire.emit('table:row:action:confirmed', rowActionKey, modelKey);
+    }
+});
+```
+
+You will now be able to use your new row action in your tables.
 
 ```php
 namespace App\Tables;

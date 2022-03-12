@@ -2,9 +2,11 @@
 
 namespace Okipa\LaravelTable\Abstracts;
 
+use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use Livewire\Component;
 
 abstract class AbstractRowAction
 {
@@ -22,7 +24,11 @@ abstract class AbstractRowAction
 
     protected string $icon;
 
-    public string|null $confirmationMessage = null;
+    protected Closure|null $whenClosure = null;
+
+    public string|null $confirmMessage = null;
+
+    protected Closure|null $hookClosure = null;
 
     abstract protected function class(): string|null;
 
@@ -37,13 +43,41 @@ abstract class AbstractRowAction
     /** @return mixed|void */
     abstract public function action(Model $model);
 
+    public function when(Closure $whenClosure): self
+    {
+        $this->whenClosure = $whenClosure;
+
+        return $this;
+    }
+
+    public function isAllowed(Model $model): bool
+    {
+        if(! $this->whenClosure) {
+            return true;
+        }
+
+        return ($this->whenClosure)($model);
+    }
+
+    public function hook(Closure $hookClosure): self
+    {
+        $this->hookClosure = $hookClosure;
+
+        return $this;
+    }
+
+    public function executeHook(Component $table, Model $model): void
+    {
+        ($this->hookClosure)($table, $model);
+    }
+
     public function setup(Model $model): void
     {
         $this->rowActionClass = $this::class;
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
         $this->key = $this->key();
-        $this->confirmationMessage = $this->confirmationMessage ?: __('Are you sure you want to perform this action?');
+        $this->confirmMessage = $this->confirmMessage ?: __('Are you sure you want to perform this action?');
     }
 
     public function render(): View
@@ -66,7 +100,7 @@ abstract class AbstractRowAction
         $instance->modelClass = $rowAction['modelClass'];
         $instance->modelKey = $rowAction['modelKey'];
         $instance->key = $rowAction['key'];
-        $instance->confirmationMessage = $rowAction['confirmationMessage'];
+        $instance->confirmMessage = $rowAction['confirmMessage'];
 
         return $instance;
     }

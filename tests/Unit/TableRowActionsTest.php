@@ -31,7 +31,7 @@ class TableRowActionsTest extends TestCase
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
                     new Show(route('user.show', $user)),
                     new Edit(route('user.edit', $user)),
-                    new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
+                    new Destroy('Are you sure you want to delete user ' . $user->name . '?'),
                 ]);
             }
 
@@ -80,9 +80,9 @@ class TableRowActionsTest extends TestCase
                 'table:row:action:confirm',
                 'destroy',
                 $users->first()->id,
-                __('Are you sure you want to delete user :name ?', ['name' => $users->first()->name])
+                'Are you sure you want to delete user ' . $users->first()->name . '?'
             )
-            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id, false);
+            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id);
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 
@@ -98,9 +98,7 @@ class TableRowActionsTest extends TestCase
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
                     new Edit(route('user.edit', $user)),
-                    Auth::user()->is($user)
-                        ? null
-                        : new Destroy(__('Are you sure you want to delete user :name ?', ['name' => $user->name])),
+                    (new Destroy())->when(fn(User $user) => ! Auth::user()->is($user)),
                 ]);
             }
 
