@@ -126,7 +126,7 @@
                                 @endif
                             @endforeach
                             @if($actions = $rowActions->get($row->getKey()))
-                                <td class="align-middle text-center p-3">
+                                <td class="align-middle">
                                     @foreach($actions as $action)
                                         {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($action)->render() }}
                                     @endforeach
@@ -135,7 +135,7 @@
                         </tr>
                     @empty
                         <tr class="border-bottom">
-                            <th{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                            <th class="alig-middle text-center p-3"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                                 <span class="text-info">
                                     {!! config('laravel-table.icon.info') !!}
                                 </span>
