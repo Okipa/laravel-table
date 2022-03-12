@@ -126,7 +126,7 @@
                                 @endif
                             @endforeach
                             @if($actions = $rowActions->get($row->getKey()))
-                                <td class="align-middle">
+                                <td class="align-middle text-center p-3">
                                     @foreach($actions as $action)
                                         {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($action)->render() }}
                                     @endforeach
