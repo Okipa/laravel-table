@@ -46,8 +46,15 @@ class TableRowActionsTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
+                '<th wire:key="column-actions" class="align-middle" scope="col">',
+                'Actions',
+                '</th>',
+                '</tr>',
+                '</thead>',
                 '<tbody>',
-                '<tr class="border-bottom">',
+                '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="rowAction(\'show\', ' . $users->first()->id . ', 0)"',
                 'class="link-info p-1"',
                 'title="Show">',
@@ -60,6 +67,8 @@ class TableRowActionsTest extends TestCase
                 'class="link-danger p-1"',
                 'title="Destroy">',
                 'destroy-icon',
+                '</tr>',
+                '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="rowAction(\'show\', ' . $users->last()->id . ', 0)"',
                 'title="Show">',
                 'show-icon',
@@ -115,7 +124,7 @@ class TableRowActionsTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<tr class="border-bottom">',
+                '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="rowAction(\'edit\', ' . $users->first()->id . ', 0)"',
                 'class="link-primary p-1"',
                 'title="Edit">',

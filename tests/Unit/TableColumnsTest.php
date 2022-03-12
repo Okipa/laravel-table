@@ -54,10 +54,10 @@ class TableColumnsTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
-                '<th class="align-middle" scope="col">',
+                '<th wire:key="column-id" class="align-middle" scope="col">',
                 'Id',
                 '</th>',
-                '<th class="align-middle" scope="col">',
+                '<th wire:key="column-name" class="align-middle" scope="col">',
                 'Name',
                 '</th>',
                 '</tr>',

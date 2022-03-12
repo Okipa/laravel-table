@@ -39,7 +39,7 @@ class Table extends Component
 
     public string|null $sortDir;
 
-    public Collection $rowActions;
+    public array $rowActions;
 
     protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
 
@@ -110,7 +110,7 @@ class Table extends Component
 
         return [
             'columns' => $columns,
-            'columnsCount' => $columns->count() + ($this->rowActions->isNotEmpty() ? 1 : 0),
+            'columnsCount' => $columns->count() + ($this->rowActions ? 1 : 0),
             'rows' => $table->getRows(),
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
@@ -137,8 +137,12 @@ class Table extends Component
         $rowAction = collect(Arr::get($this->rowActions, $modelKey))->firstWhere('key', $rowActionKey);
         $rowActionInstance = AbstractRowAction::make($rowAction);
         if ($requiresConfirmation) {
-            return $this->emit('table:row:action:confirm', $rowActionKey, $modelKey,
-                $rowActionInstance->confirmMessage);
+            return $this->emit(
+                'table:row:action:confirm',
+                $rowActionKey,
+                $modelKey,
+                $rowActionInstance->confirmMessage
+            );
         }
         $model = app($rowAction['modelClass'])->findOrFail($modelKey);
         $rowActionInstance->executeHook($this, $model);

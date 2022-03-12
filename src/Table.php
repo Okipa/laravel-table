@@ -171,9 +171,9 @@ class Table
     }
 
     /** @throws \JsonException */
-    public function generateActions(): Collection
+    public function generateActions(): array
     {
-        $tableRowActions = collect();
+        $tableRowActions = [];
         if (! $this->rowActionsClosure) {
             return $tableRowActions;
         }
@@ -190,7 +190,7 @@ class Table
 
                 return $rowActionArray;
             })->toArray();
-            $tableRowActions->put($row->getKey(), $rowActionsArray);
+            $tableRowActions[$row->getKey()] = $rowActionsArray;
         }
 
         return $tableRowActions;

@@ -82,7 +82,7 @@
                     {{-- Column titles --}}
                     <tr class="bg-light border-bottom">
                         @foreach($columns as $column)
-                            <th class="align-middle" scope="col">
+                            <th wire:key="column-{{ Str::slug($column->getKey()) }}" class="align-middle" scope="col">
                                 {{-- Sorting --}}
                                 @if($column->isSortable())
                                     @if($sortBy === $column->getKey())
@@ -107,8 +107,8 @@
                                 @endif
                             </th>
                         @endforeach
-                        @if($rowActions->isNotEmpty())
-                            <th class="align-middle" scope="col">
+                        @if($rowActions)
+                            <th wire:key="column-actions" class="align-middle" scope="col">
                                 {{ __('Actions') }}
                             </th>
                         @endif
@@ -117,7 +117,7 @@
                 {{-- Table body--}}
                 <tbody>
                     @forelse($rows as $row)
-                        <tr class="border-bottom">
+                        <tr wire:key="row-{{ Str::slug($row->getKey()) }}" class="border-bottom">
                             @foreach($columns as $column)
                                 @if($loop->first)
                                     <th class="align-middle" scope="row">{{ $column->getValue($row) }}</th>
@@ -125,7 +125,7 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($actions = $rowActions->get($row->getKey()))
+                            @if($actions = Arr::get($rowActions, $row->getKey()))
                                 <td class="align-middle">
                                     @foreach($actions as $action)
                                         {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($action)->render() }}
