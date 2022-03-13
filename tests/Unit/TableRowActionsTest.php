@@ -110,7 +110,7 @@ class TableRowActionsTest extends TestCase
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
                     new Edit(route('user.edit', $user)),
-                    (new Destroy())->allowWhen(fn(User $user) => ! Auth::user()->is($user)),
+                    (new Destroy())->onlyWhen(fn(User $user) => ! Auth::user()->is($user)),
                 ]);
             }
 

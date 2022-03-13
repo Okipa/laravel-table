@@ -309,7 +309,7 @@ This package provides the built-in following actions:
 To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument. This closure will have to return an array containing your row actions.
 
 You'll ben able to chain the following methods to your actions:
-* `allowWhen(Closure $allowWhenClosure): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+* `onlyWhen(Closure $allowWhenClosure): Okipa\LaravelTable\Abstracts\AbstractRowAction`
   * this closure will let you manipulate a `Illuminate\Database\Eloquent $model` argument and must return a `boolean`
   * this method allows you to choose if actions should be allowed or not
 * `confirmationMessage(string $confirmationMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`
@@ -339,7 +339,7 @@ class UsersTable extends AbstractTableConfiguration
                 new Edit(route('user.edit', $user)),
                 (new Destroy())
                     // Destroy action will not be available for authenticated user
-                    ->allowWhen(fn(User $user) => ! Auth::user()->is($user))
+                    ->onlyWhen(fn(User $user) => ! Auth::user()->is($user))
                     // Define specific confirmation message
                     ->confirmationMessage('Are you sure you want to delete user ' . $user->name . '?')
                     // Define specific executed message

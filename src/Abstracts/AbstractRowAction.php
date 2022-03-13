@@ -52,7 +52,7 @@ abstract class AbstractRowAction
     /** @return mixed|void */
     abstract public function action(Model $model);
 
-    public function allowWhen(Closure $allowWhenClosure): self
+    public function onlyWhen(Closure $allowWhenClosure): self
     {
         $this->allowWhenClosure = $allowWhenClosure;
 
