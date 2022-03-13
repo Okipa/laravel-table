@@ -4,7 +4,6 @@ namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;

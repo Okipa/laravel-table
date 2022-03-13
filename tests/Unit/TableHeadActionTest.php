@@ -36,7 +36,7 @@ class TableHeadActionTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<a wire:click.prevent="headAction()"',
-                'class="btn btn-primary"',
+                'class="btn btn-success"',
                 'href=""',
                 'title="Create">',
                 'create-icon Create',

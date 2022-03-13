@@ -3,7 +3,6 @@
 namespace Okipa\LaravelTable\Abstracts;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Config;
 
 abstract class AbstractHeadAction
 {

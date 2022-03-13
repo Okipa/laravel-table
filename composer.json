@@ -31,6 +31,7 @@
         "livewire/livewire": "^2.10"
     },
     "require-dev": {
+        "ext-pdo": "*",
         "brianium/paratest": "^6.4",
         "nunomaduro/collision": "^5.10|^6.0",
         "nunomaduro/larastan": "^1.0|^2.0",

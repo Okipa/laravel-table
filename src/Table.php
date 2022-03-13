@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
@@ -150,10 +149,10 @@ class Table
                 $searchableClosure
                     ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
-                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                    $this->getCaseInsensitiveSearchingLikeOperator(),
-                    '%' . mb_strtolower($searchBy) . '%'
-                );
+                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                        $this->getCaseInsensitiveSearchingLikeOperator(),
+                        '%' . mb_strtolower($searchBy) . '%'
+                    );
             });
         }
         // Sort

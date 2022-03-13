@@ -14,7 +14,7 @@ class Create extends AbstractHeadAction
 
     protected function class(): string
     {
-        return 'btn btn-primary';
+        return 'btn btn-success';
     }
 
     protected function key(): string
