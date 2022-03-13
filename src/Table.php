@@ -190,7 +190,7 @@ class Table
 
                 return $rowActionArray;
             })->toArray();
-            $tableRowActions[$row->getKey()] = $rowActionsArray;
+            $tableRowActions = [...$tableRowActions, ...$rowActionsArray];
         }
 
         return $tableRowActions;

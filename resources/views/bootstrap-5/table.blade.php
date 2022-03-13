@@ -107,7 +107,7 @@
                                 @endif
                             </th>
                         @endforeach
-                        @if($rowActions)
+                        @if($tableRowActions)
                             <th wire:key="column-actions" class="align-middle" scope="col">
                                 {{ __('Actions') }}
                             </th>
@@ -125,10 +125,10 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($actions = Arr::get($rowActions, $row->getKey()))
+                            @if($rowActions = Okipa\LaravelTable\Abstracts\AbstractRowAction::getFromModelKey($tableRowActions, $row->getKey()))
                                 <td class="align-middle">
-                                    @foreach($actions as $action)
-                                        {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($action)->render() }}
+                                    @foreach($rowActions as $rowAction)
+                                        {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowAction)->render() }}
                                     @endforeach
                                 </td>
                             @endif

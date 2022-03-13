@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable\Abstracts;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Livewire\Component;
 
@@ -42,6 +43,11 @@ abstract class AbstractRowAction
         $instance->hookClosure = $rowAction['hookClosure'];
 
         return $instance;
+    }
+
+    public static function getFromModelKey(array $rowActions, string $modelKey): array
+    {
+        return Arr::where($rowActions, static fn(array $rowAction) => $rowAction['modelKey'] === $modelKey);
     }
 
     /** @return mixed|void */

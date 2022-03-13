@@ -4,7 +4,6 @@ namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -39,7 +38,7 @@ class Table extends Component
 
     public string|null $sortDir;
 
-    public array $rowActions;
+    public array $tableRowActions;
 
     protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
 
@@ -106,15 +105,15 @@ class Table extends Component
             $this->numberOfRowsPerPage,
         );
         // Row actions
-        $this->rowActions = $table->generateActions();
+        $this->tableRowActions = $table->generateActions();
 
         return [
             'columns' => $columns,
-            'columnsCount' => $columns->count() + ($this->rowActions ? 1 : 0),
+            'columnsCount' => $columns->count() + ($this->tableRowActions ? 1 : 0),
             'rows' => $table->getRows(),
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
-            'rowActions' => $this->rowActions,
+            'tableRowActions' => $this->tableRowActions,
             'navigationStatus' => $table->getNavigationStatus(),
         ];
     }
@@ -134,7 +133,8 @@ class Table extends Component
 
     public function rowAction(string $rowActionKey, mixed $modelKey, bool $requiresConfirmation = false): mixed
     {
-        $rowAction = collect(Arr::get($this->rowActions, $modelKey))->firstWhere('key', $rowActionKey);
+        $rowActions = AbstractRowAction::getFromModelKey($this->tableRowActions, $modelKey);
+        $rowAction = collect($rowActions)->where('key', $rowActionKey)->first();
         $rowActionInstance = AbstractRowAction::make($rowAction);
         if ($requiresConfirmation) {
             return $this->emit(
