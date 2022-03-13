@@ -349,6 +349,39 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
+You'll sometimes want actions to be confirmed before they'll be executed. This behavior is handled by the action method `shouldBeConfirmed`: if set to `true`, action will not be directly executed but a `table:row:action:confirm` Livewire event will be emitted instead with the following parameters:
+1. The value returned from the `key` method of your row action
+2. The model primary key related to your action
+3. The `$confirmationMessage` attribute from your row action
+
+You will have to intercept this event from a JS script and manage the action confirmation prompt from your favorite modal/toast library.
+
+When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the following parameters:
+1. The value returned from the `key` method of your row action
+2. The related model primary
+
+Here is an JS snippet to show you how to proceed:
+
+```javascript
+Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmationMessage) => {
+    // Replace this native JS confirm dialog by your favorite modal/toast library implementation. Or not!
+    if (window.confirm(confirmationMessage)) {
+        Livewire.emit('table:row:action:confirmed', rowActionKey, modelKey);
+    }
+});
+```
+
+Once executed, action are emitting a last `table:row:action:executed` Livewire event with the action `$executedMessage` parameter.
+
+Following the same logic, you'll have to intercept it from a JS script like this one:
+
+```javascript
+Livewire.on('table:row:action:executed', (executedMessage) => {
+    // Replace this native JS alert by your favorite modal/toast library implementation. Or not!
+    window.alert(executedMessage);
+});
+```
+
 You may want to create your own actions. To do so, execute the following command: `php artisan make:row:action Deactivate`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
@@ -393,39 +426,6 @@ class Deactivate extends AbstractRowAction
         $model->update(['active' => false]);
     }
 }
-```
-
-As you can see, you can return a boolean from the `shouldBeConfirmed` method: if set to `true`, action will not be directly executed but a `table:row:action:confirm` Livewire event will be emitted instead with the following parameters:
-1. The value returned from the `key` method of your row action
-2. The model primary key related to your action
-3. The `$confirmationMessage` attribute from your row action
-
-You will have to intercept this event from a JS script and manage the action confirmation prompt from your favorite modal/toast library.
-
-When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the following parameters:
-1. The value returned from the `key` method of your row action
-2. The related model primary
-
-Here is an JS snippet to show you how to proceed:
-
-```javascript
-Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmationMessage) => {
-    // Replace this native JS confirm dialog by your favorite modal/toast library implementation. Or not!
-    if (window.confirm(confirmationMessage)) {
-        Livewire.emit('table:row:action:confirmed', rowActionKey, modelKey);
-    }
-});
-```
-
-Once executed, action are emitting a last `table:row:action:executed` Livewire event with the action `$executedMessage` parameter.
-
-Following the same logic, you'll have to intercept it from a JS script like this one:
-
-```javascript
-Livewire.on('table:row:action:executed', (executedMessage) => {
-    // Replace this native JS alert by your favorite modal/toast library implementation. Or not!
-    window.alert(executedMessage);
-});
 ```
 
 You will now be able to use your new row action in your tables.
