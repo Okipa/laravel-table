@@ -77,10 +77,7 @@ class Table extends Component
         return app($this->config, $this->configParams);
     }
 
-    /**
-     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
-     * @throws \JsonException
-     */
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     protected function buildTable(AbstractTableConfiguration $config): array
     {
         $table = $config->setup();
@@ -141,11 +138,11 @@ class Table extends Component
                 'table:row:action:confirm',
                 $rowActionKey,
                 $modelKey,
-                $rowActionInstance->confirmMessage
+                $rowActionInstance->confirmationMessage
             );
         }
         $model = app($rowAction['modelClass'])->findOrFail($modelKey);
-        $rowActionInstance->executeHook($this, $model);
+        $this->emit('table:row:action:executed', $rowActionInstance->getExecutedMessage());
 
         return $rowActionInstance->action($model);
     }

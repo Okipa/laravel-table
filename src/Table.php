@@ -170,7 +170,6 @@ class Table
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
-    /** @throws \JsonException */
     public function generateActions(): array
     {
         $tableRowActions = [];
@@ -182,13 +181,11 @@ class Table
                 ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed($row));
             $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($row) {
                 $rowAction->setup($row);
-                $rowActionArray = json_decode(json_encode(
+
+                return json_decode(json_encode(
                     $rowAction,
                     JSON_THROW_ON_ERROR
                 ), true, 512, JSON_THROW_ON_ERROR);
-                $rowActionArray['hookClosure'] = $rowAction->hookClosure;
-
-                return $rowActionArray;
             })->toArray();
             $tableRowActions = [...$tableRowActions, ...$rowActionsArray];
         }

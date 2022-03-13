@@ -7,11 +7,6 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Destroy extends AbstractRowAction
 {
-    public function __construct(public string|null $confirmMessage = null)
-    {
-        //
-    }
-
     protected function class(): string
     {
         return 'link-danger';

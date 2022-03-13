@@ -301,16 +301,22 @@ Both of them will be displayed in the table footer.
 
 Configure row actions on your table by calling the `rowAction` method.
 
-This package provides the following actions :
+This package provides the built-in following actions:
 * `Show`: requires a `string $showUrl` parameter on instantiation
 * `Edit`: requires a `string $editUrl` parameter on instantiation
-* `Destroy`: allows an optional `string confirmMessage` parameter on instantiation
+* `Destroy`
 
 To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument. This closure will have to return an array containing your row actions.
 
-You can display an action conditionally with the `when` method, chainable on actions. This method will accept a closure parameter hat will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
-
-You also can execute a hook on action execution with the `hook` method, chainable on actions. This method will accepts a closure parameter hat will allow you to manipulate a `Livewire\Component $livewire` and a `Illuminate\Database\Eloquent $model` arguments.
+You'll ben able to chain the following methods to your actions:
+* `allowWhen(Closure $allowWhenClosure): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+  * this closure will let you manipulate a `Illuminate\Database\Eloquent $model` argument and must return a `boolean`
+  * this method allows you to choose if actions should be allowed or not
+* `confirmationMessage(string $confirmationMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+  * this method allows you to define a custom confirmation message for your action that will override the default `__('Are you sure you want to perform this action?')` one
+  * will only be useful for actions that are requiring a confirmation
+* `executedMessage(string $executedMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`:
+  * this method allows you to define a custom executed message for your action that will override the default `__('Action has been executed.')` one
 
 ```php
 namespace App\Tables;
@@ -333,9 +339,11 @@ class UsersTable extends AbstractTableConfiguration
                 new Edit(route('user.edit', $user)),
                 (new Destroy())
                     // Destroy action will not be available for authenticated user
-                    ->when(fn(User $user) => ! Auth::user()->is($user))
-                    // Execute specific Livewire (or not) treatment on action execution
-                    ->hook(fn(Component $livewire, User $user) => $livewire->emit('whatever:event', $user->id)),
+                    ->allowWhen(fn(User $user) => ! Auth::user()->is($user))
+                    // Define specific confirmation message
+                    ->confirmationMessage('Are you sure you want to delete user ' . $user->name . '?')
+                    // Define specific executed message
+                    ->executedMessage('User ' . $user->name . ' has been deleted.'),
             ]).
     }
 }
@@ -387,25 +395,36 @@ class Deactivate extends AbstractRowAction
 }
 ```
 
-As you can see, you can return a boolean from the `shouldBeConfirmed` method: if `true` is returned, action will not be executed but a `table:row:action:confirm` event will be emitted with the following parameters:
+As you can see, you can return a boolean from the `shouldBeConfirmed` method: if set to `true`, action will not be directly executed but a `table:row:action:confirm` Livewire event will be emitted instead with the following parameters:
 1. The value returned from the `key` method of your row action
-2. The related model primary
-3. The `confirmMessage` attribute of your row action (set by default to `__('Are you sure you want to perform this action?')` but you can override from your row action constructor if you need to)
+2. The model primary key related to your action
+3. The `$confirmationMessage` attribute from your row action
 
 You will have to intercept this event from a JS script and manage the action confirmation prompt from your favorite modal/toast library.
 
-When confirmed, you'll have to emit a new `table:row:action:confirmed` event that will trigger the action execution. You'll have to pass it the following parameters:
+When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the following parameters:
 1. The value returned from the `key` method of your row action
 2. The related model primary
 
 Here is an JS snippet to show you how to proceed:
 
 ```javascript
-Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmMessage) => {
-    // Replace this native JS confirm dialog by your favorite modal/toast library. Or not!
-    if (window.confirm(confirmMessage)) {
+Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmationMessage) => {
+    // Replace this native JS confirm dialog by your favorite modal/toast library implementation. Or not!
+    if (window.confirm(confirmationMessage)) {
         Livewire.emit('table:row:action:confirmed', rowActionKey, modelKey);
     }
+});
+```
+
+Once executed, action are emitting a last `table:row:action:executed` Livewire event with the action `$executedMessage` parameter.
+
+Following the same logic, you'll have to intercept it from a JS script like this one:
+
+```javascript
+Livewire.on('table:row:action:executed', (executedMessage) => {
+    // Replace this native JS alert by your favorite modal/toast library implementation. Or not!
+    window.alert(executedMessage);
 });
 ```
 

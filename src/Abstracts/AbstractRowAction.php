@@ -7,7 +7,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
-use Livewire\Component;
 
 abstract class AbstractRowAction
 {
@@ -19,9 +18,9 @@ abstract class AbstractRowAction
 
     public string $key;
 
-    public string|null $confirmMessage = null;
+    public string|null $confirmationMessage = null;
 
-    public Closure|null $hookClosure = null;
+    public string|null $executedMessage = null;
 
     protected string|null $class;
 
@@ -29,7 +28,7 @@ abstract class AbstractRowAction
 
     protected string $icon;
 
-    protected Closure|null $whenClosure = null;
+    protected Closure|null $allowWhenClosure = null;
 
     public static function make(array $rowAction): self
     {
@@ -39,8 +38,8 @@ abstract class AbstractRowAction
         $instance->modelClass = $rowAction['modelClass'];
         $instance->modelKey = $rowAction['modelKey'];
         $instance->key = $rowAction['key'];
-        $instance->confirmMessage = $rowAction['confirmMessage'];
-        $instance->hookClosure = $rowAction['hookClosure'];
+        $instance->confirmationMessage = $rowAction['confirmationMessage'];
+        $instance->executedMessage = $rowAction['executedMessage'];
 
         return $instance;
     }
@@ -53,35 +52,44 @@ abstract class AbstractRowAction
     /** @return mixed|void */
     abstract public function action(Model $model);
 
-    public function when(Closure $whenClosure): self
+    public function allowWhen(Closure $allowWhenClosure): self
     {
-        $this->whenClosure = $whenClosure;
+        $this->allowWhenClosure = $allowWhenClosure;
 
         return $this;
     }
 
     public function isAllowed(Model $model): bool
     {
-        if (! $this->whenClosure) {
+        if (! $this->allowWhenClosure) {
             return true;
         }
 
-        return ($this->whenClosure)($model);
+        return ($this->allowWhenClosure)($model);
     }
 
-    public function hook(Closure $hookClosure): self
+    public function confirmationMessage(string $confirmationMessage): self
     {
-        $this->hookClosure = $hookClosure;
+        $this->confirmationMessage = $confirmationMessage;
 
         return $this;
     }
 
-    public function executeHook(Component $livewire, Model $model): void
+    public function getConfirmationMessage(): string
     {
-        if (! $this->hookClosure) {
-            return;
-        }
-        ($this->hookClosure)($livewire, $model);
+        return $this->confirmationMessage ?: __('Are you sure you want to perform this action?');
+    }
+
+    public function executedMessage(string $executedMessage): self
+    {
+        $this->executedMessage = $executedMessage;
+
+        return $this;
+    }
+
+    public function getExecutedMessage(): string
+    {
+        return $this->executedMessage ?: __('Action has been executed.');
     }
 
     public function setup(Model $model): void
@@ -90,7 +98,6 @@ abstract class AbstractRowAction
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
         $this->key = $this->key();
-        $this->confirmMessage = $this->confirmMessage ?: __('Are you sure you want to perform this action?');
     }
 
     abstract protected function key(): string;

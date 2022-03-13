@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Livewire\Component;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
@@ -32,7 +31,9 @@ class TableRowActionsTest extends TestCase
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
                     new Show(route('user.show', $user)),
                     new Edit(route('user.edit', $user)),
-                    new Destroy('Are you sure you want to delete user ' . $user->name . '?'),
+                    (new Destroy())
+                        ->confirmationMessage('Are you sure you want to delete user ' . $user->name . '?')
+                        ->executedMessage('User ' . $user->name . ' has been deleted.'),
                 ]);
             }
 
@@ -92,7 +93,8 @@ class TableRowActionsTest extends TestCase
                 $users->first()->id,
                 'Are you sure you want to delete user ' . $users->first()->name . '?'
             )
-            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id);
+            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id)
+            ->assertEmitted('table:row:action:executed', 'User ' . $users->first()->name . ' has been deleted.');
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 
@@ -108,7 +110,7 @@ class TableRowActionsTest extends TestCase
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
                     new Edit(route('user.edit', $user)),
-                    (new Destroy())->when(fn(User $user) => ! Auth::user()->is($user)),
+                    (new Destroy())->allowWhen(fn(User $user) => ! Auth::user()->is($user)),
                 ]);
             }
 
@@ -140,41 +142,5 @@ class TableRowActionsTest extends TestCase
             ])->assertDontSeeHtml([
                 '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->first()->id . ', 1)"',
             ]);
-    }
-
-    /** @test */
-    public function it_can_execute_action_hook(): void
-    {
-        $user = User::factory()->create();
-        $config = new class extends AbstractTableConfiguration {
-            protected function table(): Table
-            {
-                return Table::make()->model(User::class)->rowActions(fn(User $user) => [
-                    (new Destroy())->hook(fn(Component $livewire, User $user) => $livewire->emit(
-                        'whatever:event',
-                        $user->id
-                    )),
-                ]);
-            }
-
-            protected function columns(): array
-            {
-                return [
-                    Column::make('Name'),
-                ];
-            }
-        };
-        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
-            ->call('init')
-            ->call('rowAction', 'destroy', $user->id, true)
-            ->assertEmitted(
-                'table:row:action:confirm',
-                'destroy',
-                $user->id,
-                'Are you sure you want to perform this action?'
-            )
-            ->emit('table:row:action:confirmed', 'destroy', $user->id)
-            ->assertEmitted('whatever:event', $user->id);
-        $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 }
