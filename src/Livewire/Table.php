@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
@@ -38,7 +39,9 @@ class Table extends Component
 
     public string|null $sortDir;
 
-    public array $tableRowActions;
+    public array|null $headActionArray;
+
+    public array $tableRowActionsArray;
 
     protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
 
@@ -50,7 +53,7 @@ class Table extends Component
 
     protected function initPaginationTheme(): void
     {
-        $this->paginationTheme = Str::contains(Config::get('laravel-table.ui'), 'bootstrap')
+        $this->paginationTheme = Str::contains(config('laravel-table.ui'), 'bootstrap')
             ? 'bootstrap'
             : 'tailwind';
     }
@@ -64,7 +67,7 @@ class Table extends Component
     {
         $config = $this->buildConfig();
 
-        return view('laravel-table::' . Config::get('laravel-table.ui') . '.table', $this->buildTable($config));
+        return view('laravel-table::' . config('laravel-table.ui') . '.table', $this->buildTable($config));
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration */
@@ -101,16 +104,17 @@ class Table extends Component
             $this->sortDir,
             $this->numberOfRowsPerPage,
         );
+        // Head action
+        $this->headActionArray = $table->getHeadActionArray();
         // Row actions
-        $this->tableRowActions = $table->generateActions();
+        $this->tableRowActionsArray = $table->generateRowActionsArray();
 
         return [
             'columns' => $columns,
-            'columnsCount' => $columns->count() + ($this->tableRowActions ? 1 : 0),
+            'columnsCount' => $columns->count() + ($this->tableRowActionsArray ? 1 : 0),
             'rows' => $table->getRows(),
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
-            'tableRowActions' => $this->tableRowActions,
             'navigationStatus' => $table->getNavigationStatus(),
         ];
     }
@@ -128,11 +132,18 @@ class Table extends Component
         $this->sortBy = $columnKey;
     }
 
+    public function headAction(): mixed
+    {
+        $headActionInstance = AbstractHeadAction::make($this->headActionArray);
+
+        return $headActionInstance->action();
+    }
+
     public function rowAction(string $rowActionKey, mixed $modelKey, bool $requiresConfirmation = false): mixed
     {
-        $rowActions = AbstractRowAction::getFromModelKey($this->tableRowActions, $modelKey);
-        $rowAction = collect($rowActions)->where('key', $rowActionKey)->first();
-        $rowActionInstance = AbstractRowAction::make($rowAction);
+        $rowActionsArray = AbstractRowAction::getFromModelKey($this->tableRowActionsArray, $modelKey);
+        $rowActionArray = collect($rowActionsArray)->where('key', $rowActionKey)->first();
+        $rowActionInstance = AbstractRowAction::make($rowActionArray);
         if ($requiresConfirmation) {
             return $this->emit(
                 'table:row:action:confirm',
@@ -141,7 +152,7 @@ class Table extends Component
                 $rowActionInstance->confirmationMessage
             );
         }
-        $model = app($rowAction['modelClass'])->findOrFail($modelKey);
+        $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
         $this->emit('table:row:action:executed', $rowActionInstance->getExecutedMessage());
 
         return $rowActionInstance->action($model);

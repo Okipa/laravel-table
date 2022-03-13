@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
@@ -16,23 +17,25 @@ class Table
 {
     protected Model $model;
 
-    protected Collection $columns;
-
-    protected Closure|null $rowActionsClosure = null;
-
-    protected LengthAwarePaginator $rows;
-
     protected bool $numberOfRowsPerPageChoiceEnabled;
 
     protected array $numberOfRowsPerPageOptions;
 
+    protected AbstractHeadAction|null $headAction = null;
+
+    protected Closure|null $rowActionsClosure = null;
+
     protected Closure|null $queryClosure = null;
+
+    protected Collection $columns;
+
+    protected LengthAwarePaginator $rows;
 
     public function __construct()
     {
+        $this->numberOfRowsPerPageChoiceEnabled = config('laravel-table.enable_number_of_rows_per_page_choice');
+        $this->numberOfRowsPerPageOptions = config('laravel-table.number_of_rows_per_page_options');
         $this->columns = collect();
-        $this->numberOfRowsPerPageChoiceEnabled = Config::get('laravel-table.enable_number_of_rows_per_page_choice');
-        $this->numberOfRowsPerPageOptions = Config::get('laravel-table.number_of_rows_per_page_options');
     }
 
     public static function make(): self
@@ -59,6 +62,13 @@ class Table
         return $this->numberOfRowsPerPageChoiceEnabled;
     }
 
+    public function headAction(AbstractHeadAction $headAction): self
+    {
+        $this->headAction = $headAction;
+
+        return $this;
+    }
+
     public function numberOfRowsPerPageOptions(array $numberOfRowsPerPageOptions): self
     {
         $this->numberOfRowsPerPageOptions = $numberOfRowsPerPageOptions;
@@ -71,16 +81,16 @@ class Table
         return $this->numberOfRowsPerPageOptions;
     }
 
-    public function columns(array $columns): void
-    {
-        $this->columns = collect($columns);
-    }
-
     public function rowActions(Closure $rowActionsClosure): self
     {
         $this->rowActionsClosure = $rowActionsClosure;
 
         return $this;
+    }
+
+    public function columns(array $columns): void
+    {
+        $this->columns = collect($columns);
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -170,11 +180,21 @@ class Table
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
-    public function generateActions(): array
+    public function getHeadActionArray(): array|null
     {
-        $tableRowActions = [];
+        if (! $this->headAction) {
+            return null;
+        }
+        $this->headAction->setup();
+
+        return (array) $this->headAction;
+    }
+
+    public function generateRowActionsArray(): array
+    {
+        $tableRowActionsArray = [];
         if (! $this->rowActionsClosure) {
-            return $tableRowActions;
+            return $tableRowActionsArray;
         }
         foreach ($this->rows->getCollection() as $row) {
             $rowActions = collect(($this->rowActionsClosure)($row))
@@ -187,10 +207,10 @@ class Table
                     JSON_THROW_ON_ERROR
                 ), true, 512, JSON_THROW_ON_ERROR);
             })->toArray();
-            $tableRowActions = [...$tableRowActions, ...$rowActionsArray];
+            $tableRowActionsArray = [...$tableRowActionsArray, ...$rowActionsArray];
         }
 
-        return $tableRowActions;
+        return $tableRowActionsArray;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

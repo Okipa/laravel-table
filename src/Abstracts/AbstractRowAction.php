@@ -30,18 +30,17 @@ abstract class AbstractRowAction
 
     protected Closure|null $allowWhenClosure = null;
 
-    public static function make(array $rowAction): self
+    public static function make(array $rowActionArray): self
     {
-        /** @var self $instance */
-        $instance = app($rowAction['rowActionClass'], $rowAction);
-        $instance->rowActionClass = $rowAction['rowActionClass'];
-        $instance->modelClass = $rowAction['modelClass'];
-        $instance->modelKey = $rowAction['modelKey'];
-        $instance->key = $rowAction['key'];
-        $instance->confirmationMessage = $rowAction['confirmationMessage'];
-        $instance->executedMessage = $rowAction['executedMessage'];
+        $rowActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
+        $rowActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
+        $rowActionInstance->modelClass = $rowActionArray['modelClass'];
+        $rowActionInstance->modelKey = $rowActionArray['modelKey'];
+        $rowActionInstance->key = $rowActionArray['key'];
+        $rowActionInstance->confirmationMessage = $rowActionArray['confirmationMessage'];
+        $rowActionInstance->executedMessage = $rowActionArray['executedMessage'];
 
-        return $instance;
+        return $rowActionInstance;
     }
 
     public static function getFromModelKey(array $rowActions, string $modelKey): array
@@ -104,7 +103,7 @@ abstract class AbstractRowAction
 
     public function render(): View
     {
-        return view('laravel-table::' . Config::get('laravel-table.ui') . '.row-action', [
+        return view('laravel-table::' . config('laravel-table.ui') . '.row-action', [
             'modelKey' => $this->modelKey,
             'class' => $this->class(),
             'key' => $this->key,

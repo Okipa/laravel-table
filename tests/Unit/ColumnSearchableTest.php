@@ -8,6 +8,7 @@ use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
+use PDOException;
 use Tests\Models\Company;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -209,5 +210,32 @@ class ColumnSearchableTest extends TestCase
                 $users->last()->name,
                 '</tbody>',
             ]);
+    }
+
+    /** @test */
+    public function it_can_search_with_insensitive_case_with_postgres(): void
+    {
+        $this->expectException(PDOException::class);
+        $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: '
+            . 'select count(*) as aggregate from "users" where LOWER(name) ILIKE %test%)');
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Name')->searchable(),
+                ];
+            }
+        };
+        $connection = config('database.default');
+        Config::set('database.connections.' . $connection . '.driver', 'pgsql');
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->set('searchBy', 'Test')
+            ->call('$refresh');
     }
 }

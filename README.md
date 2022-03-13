@@ -111,6 +111,7 @@ And display it in a view:
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Define table head action](#define-table-head-action)
   * [Define table row actions](#define-table-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Format column values](#format-column-values)
@@ -296,6 +297,10 @@ class UsersTable extends AbstractTableConfiguration
 Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as well as a navigation status.
 
 Both of them will be displayed in the table footer.
+
+### Define table head action
+
+ToDo
 
 ### Define table row actions
 

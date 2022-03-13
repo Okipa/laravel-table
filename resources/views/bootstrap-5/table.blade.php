@@ -51,7 +51,7 @@
                                             <div class="input-group">
                                                 <span id="rows-number-per-page-icon"
                                                       class="input-group-text text-secondary">
-                                                    {!! Config::get('laravel-table.icon.rows_number') !!}
+                                                    {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
                                                 <select wire:change="changeNumberOfRowsPerPage($event.target.value)"
                                                         class="form-select"
@@ -66,15 +66,12 @@
                                             </div>
                                         </div>
                                     @endif
-                                    {{-- Create --}}
-                                    <div class="d-flex align-items-center pl-3 py-1">
-                                        <a class="btn btn-success"
-                                           href=""
-                                           title="{{ __('Create') }}">
-                                            {!! Config::get('laravel-table.icon.create') !!}
-                                            {{ __('Create') }}
-                                        </a>
-                                    </div>
+                                    {{-- Head action --}}
+                                    @if($headActionArray)
+                                        <div class="d-flex align-items-center pl-3 py-1">
+                                            {{ Okipa\LaravelTable\Abstracts\AbstractHeadAction::make($headActionArray)->render() }}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </td>
@@ -90,15 +87,15 @@
                                            href=""
                                            title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}">
                                             {!! $sortDir === 'asc'
-                                                ? Config::get('laravel-table.icon.sort_desc')
-                                                : Config::get('laravel-table.icon.sort_asc') !!}
+                                                ? config('laravel-table.icon.sort_desc')
+                                                : config('laravel-table.icon.sort_asc') !!}
                                             {{ $column->getTitle() }}
                                         </a>
                                     @else
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
                                            href=""
                                            title="{{ __('Sort ascending') }}">
-                                            {!! Config::get('laravel-table.icon.sort') !!}
+                                            {!! config('laravel-table.icon.sort') !!}
                                             {{ $column->getTitle() }}
                                         </a>
                                     @endif
@@ -107,7 +104,7 @@
                                 @endif
                             </th>
                         @endforeach
-                        @if($tableRowActions)
+                        @if($tableRowActionsArray)
                             <th wire:key="column-actions" class="align-middle" scope="col">
                                 {{ __('Actions') }}
                             </th>
@@ -125,10 +122,10 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($rowActions = Okipa\LaravelTable\Abstracts\AbstractRowAction::getFromModelKey($tableRowActions, $row->getKey()))
+                            @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::getFromModelKey($tableRowActionsArray, $row->getKey()))
                                 <td class="align-middle">
-                                    @foreach($rowActions as $rowAction)
-                                        {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowAction)->render() }}
+                                    @foreach($rowActionsArray as $rowActionArray)
+                                        {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render() }}
                                     @endforeach
                                 </td>
                             @endif
