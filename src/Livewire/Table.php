@@ -60,7 +60,6 @@ class Table extends Component
     /**
      * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
-     * @throws \JsonException
      */
     public function render(): View
     {
@@ -133,9 +132,7 @@ class Table extends Component
 
     public function headAction(): mixed
     {
-        $headActionInstance = AbstractHeadAction::make($this->headActionArray);
-
-        return $headActionInstance->action();
+        return AbstractHeadAction::make($this->headActionArray)->action($this);
     }
 
     public function rowAction(string $rowActionKey, mixed $modelKey, bool $requiresConfirmation = false): mixed
@@ -154,6 +151,6 @@ class Table extends Component
         $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
         $this->emit('table:row:action:executed', $rowActionInstance->getExecutedMessage());
 
-        return $rowActionInstance->action($model);
+        return $rowActionInstance->action($model, $this);
     }
 }

@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
@@ -38,7 +39,7 @@ class Show extends AbstractRowAction
         return false;
     }
 
-    public function action(Model $model): Redirector
+    public function action(Model $model, Component $livewire): Redirector
     {
         return redirect()->to($this->showUrl);
     }

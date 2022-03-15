@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Illuminate\Support\Facades\File;
 use Okipa\LaravelTable\Console\Commands\MakeFormatter;
+use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
 use Okipa\LaravelTable\Console\Commands\MakeRowAction;
 use Okipa\LaravelTable\Console\Commands\MakeTable;
 use Tests\TestCase;
@@ -65,12 +66,29 @@ class MakeTest extends TestCase
         self::assertStringContainsString('public function format(Model $model, string $key): string', $fileContent);
     }
 
+    public function testMakeHeadAction(): void
+    {
+        $this->artisan(MakeHeadAction::class, ['name' => 'Configure']);
+        self::assertFileExists(base_path('app/Tables/HeadActions/Configure.php'));
+        $fileContent = File::get(base_path('app/Tables/HeadActions/Configure.php'));
+        self::assertStringContainsString('namespace App\Tables\HeadActions;', $fileContent);
+        self::assertStringContainsString('use Livewire\Component;', $fileContent);
+        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractHeadAction;', $fileContent);
+        self::assertStringContainsString('class Configure extends AbstractHeadAction', $fileContent);
+        self::assertStringContainsString('protected function class(): string', $fileContent);
+        self::assertStringContainsString('protected function title(): string', $fileContent);
+        self::assertStringContainsString('protected function icon(): string', $fileContent);
+        self::assertStringContainsString('/** @return mixed|void */', $fileContent);
+        self::assertStringContainsString('public function action(Component $livewire)', $fileContent);
+    }
+
     public function testMakeRowAction(): void
     {
         $this->artisan(MakeRowAction::class, ['name' => 'Deactivate']);
         self::assertFileExists(base_path('app/Tables/RowActions/Deactivate.php'));
         $fileContent = File::get(base_path('app/Tables/RowActions/Deactivate.php'));
         self::assertStringContainsString('namespace App\Tables\RowActions;', $fileContent);
+        self::assertStringContainsString('use Livewire\Component;', $fileContent);
         self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractRowAction;', $fileContent);
         self::assertStringContainsString('class Deactivate extends AbstractRowAction', $fileContent);
@@ -80,7 +98,7 @@ class MakeTest extends TestCase
         self::assertStringContainsString('protected function icon(): string', $fileContent);
         self::assertStringContainsString('protected function shouldBeConfirmed(): bool', $fileContent);
         self::assertStringContainsString('/** @return mixed|void */', $fileContent);
-        self::assertStringContainsString('public function action(Model $model)', $fileContent);
+        self::assertStringContainsString('public function action(Model $model, Component $livewire)', $fileContent);
     }
 
     protected function setUp(): void

@@ -26,6 +26,16 @@ Tables can be generated under the following UI frameworks:
 * Bootstrap 4
 * TailwindCSS 2 (upcoming feature)
 
+DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.
+
+V5 roadmap:
+* Column `cellClass` => set class on cells conditionally
+* Table `rowClass` => set class on rows conditionally
+* Table config `results` => set table result lines
+* Table `reorderable` => allow rows reordering with drag & drop
+* Table `bulkActions` => set bulk actions for checked rows
+* Table `filters` => set actionable filters
+
 Found this package helpful? Please consider supporting my work!
 
 [![Donate](https://img.shields.io/badge/Buy_me_a-Ko--fi-ff5f5f.svg)](https://ko-fi.com/arthurlorent)
@@ -300,37 +310,18 @@ Both of them will be displayed in the table footer.
 
 ### Define table head action
 
-ToDo
+Configure a table action that will be displayed as a button positionned at the end of the table head.
 
-### Define table row actions
+This package provides a built-in `Create` headAction that requires a `string $createUrl` argument on instantiation.
 
-Configure row actions on your table by calling the `rowAction` method.
-
-This package provides the built-in following actions:
-* `Show`: requires a `string $showUrl` parameter on instantiation
-* `Edit`: requires a `string $editUrl` parameter on instantiation
-* `Destroy`
-
-To use them, you'll have to declare a closure parameter that will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument. This closure will have to return an array containing your row actions.
-
-You'll ben able to chain the following methods to your actions:
-* `onlyWhen(Closure $allowWhenClosure): Okipa\LaravelTable\Abstracts\AbstractRowAction`
-  * this closure will let you manipulate a `Illuminate\Database\Eloquent $model` argument and must return a `boolean`
-  * this method allows you to choose if actions should be allowed or not
-* `confirmationMessage(string $confirmationMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`
-  * this method allows you to define a custom confirmation message for your action that will override the default `__('Are you sure you want to perform this action?')` one
-  * will only be useful for actions that are requiring a confirmation
-* `executedMessage(string $executedMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`:
-  * this method allows you to define a custom executed message for your action that will override the default `__('Action has been executed.')` one
+To use it, you'll have to pass an instance of it to the `headAction` method.
 
 ```php
 namespace App\Tables;
 
 use App\Models\Users\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\RowActions\Edit;
-use App\Tables\RowActions\Show;
-use App\Tables\RowActions\Destroy;
+use Okipa\LaravelTable\HeadActions\Create;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -339,7 +330,112 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->rowAction(fn(User $user) => [
+            ->headAction(new Create(route('user.create')));
+    }
+}
+```
+
+You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action Configure`.
+
+You'll find your generated table head action in the `app/Tables/HeadActions` directory.
+
+Here is an example of the generated head action after being correctly configured.
+
+```php
+namespace Okipa\LaravelTable\HeadActions;
+
+use Livewire\Component;
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
+
+class Configure extends AbstractHeadAction
+{
+    protected function class(): string
+    {
+        return 'btn btn-secondary';
+    }
+
+    protected function key(): string
+    {
+        return 'configure';
+    }
+
+    protected function title(): string
+    {
+        return __('Configure');
+    }
+
+    protected function icon(): string
+    {
+        return '<i class="fa-solid fa-rotate-right"></i>';
+    }
+
+    public function action(Component $livewire): void
+    {
+        $livewire->emit('modal:user:configure');
+    }
+}
+```
+
+You will now be able to use your new head action in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\HeadActions\Configure;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->headAction(new Configure());
+    }
+}
+```
+
+### Define table row actions
+
+Configure row actions on your table that will be displayed at the end of each row.
+
+This package provides the built-in following actions:
+* `Show`: requires a `string $showUrl` argument on instantiation
+* `Edit`: requires a `string $editUrl` argument on instantiation
+* `Destroy`
+
+To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row actions instances.
+
+You'll ben able to chain the following methods to your actions:
+* `onlyWhen(Closure $allowWhenClosure): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+  * This closure will let you manipulate a `Illuminate\Database\Eloquent $model` argument and must return a `boolean`
+  * This method allows you to choose if actions should be allowed or not
+* `confirmationMessage(string $confirmationMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+  * This method allows you to define a custom confirmation message for your action that will override the default `__('Are you sure you want to perform this action?')` one
+  * This will only be useful for actions that are requiring a confirmation
+* `executedMessage(string $executedMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`:
+  * This method allows you to define a custom executed message for your action that will override the default `__('Action has been executed.')` one
+
+```php
+namespace App\Tables;
+
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\RowActions\Edit;
+use Okipa\LaravelTable\RowActions\Show;
+use Okipa\LaravelTable\RowActions\Destroy;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowActions(fn(User $user) => [
                 new Show(route('user.show', $user)),
                 new Edit(route('user.edit', $user)),
                 (new Destroy())
@@ -361,7 +457,7 @@ You'll sometimes want actions to be confirmed before they'll be executed. This b
 
 You will have to intercept this event from a JS script and manage the action confirmation prompt from your favorite modal/toast library.
 
-When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the following parameters:
+When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the following arguments:
 1. The value returned from the `key` method of your row action
 2. The related model primary
 
@@ -376,7 +472,7 @@ Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmationMes
 });
 ```
 
-Once executed, action are emitting a last `table:row:action:executed` Livewire event with the action `$executedMessage` parameter.
+Once executed, all actions are emitting a `table:row:action:executed` Livewire event with the action `string $executedMessage` argument.
 
 Following the same logic, you'll have to intercept it from a JS script like this one:
 
@@ -387,7 +483,7 @@ Livewire.on('table:row:action:executed', (executedMessage) => {
 });
 ```
 
-You may want to create your own actions. To do so, execute the following command: `php artisan make:row:action Deactivate`.
+You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action Deactivate`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
@@ -396,6 +492,7 @@ Here is an example of the generated row action after being correctly configured.
 ```php
 namespace Okipa\LaravelTable\RowActions;
 
+use Livewire\Component;
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
@@ -426,9 +523,11 @@ class Deactivate extends AbstractRowAction
         return true;
     }
 
-    public function action(Model $model): void
+    public function action(Model $model, Component $livewire): void
     {
         $model->update(['active' => false]);
+        // You could also use the `$livewire` argument to interact with the Livewire table component,
+        // as emitting event for example.
     }
 }
 ```
@@ -449,7 +548,7 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->rowAction(fn(User $user) => [
+            ->rowActions(fn(User $user) => [
                 new Deactivate(),
             ]);
     }
@@ -583,8 +682,8 @@ class UsersTable extends AbstractTableConfiguration
 
 This package provides the following formatters :
 * `Boolean`
-* `Date`: requires `string $editUrl` and `string $timezone` parameters on instantiation
-* `StrLimit`: allows optional `int $limit` and `string $end` parameters on instantiation
+* `Date`: requires `string $editUrl` and `string $timezone` arguments on instantiation
+* `StrLimit`: allows optional `int $limit` and `string $end` arguments on instantiation
 
 ### Configure columns searching
 

@@ -4,26 +4,26 @@ namespace Okipa\LaravelTable\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
-class MakeRowAction extends GeneratorCommand
+class MakeHeadAction extends GeneratorCommand
 {
     /** @var string */
-    protected $type = 'RowAction';
+    protected $type = 'HeadAction';
 
     /** @var string */
-    protected $name = 'make:table:row:action';
+    protected $name = 'make:table:head:action';
 
     /** @var string */
-    protected $description = 'Create a new table row action.';
+    protected $description = 'Create a new table head action.';
 
     protected function getStub(): string
     {
-        return __DIR__ . '/stubs/row.action.stub';
+        return __DIR__ . '/stubs/head.action.stub';
     }
 
     /** @param string $rootNamespace */
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace . '\Tables\RowActions';
+        return $rootNamespace . '\Tables\HeadActions';
     }
 
     /**

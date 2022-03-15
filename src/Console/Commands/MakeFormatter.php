@@ -10,7 +10,7 @@ class MakeFormatter extends GeneratorCommand
     protected $type = 'Formatter';
 
     /** @var string */
-    protected $name = 'make:formatter';
+    protected $name = 'make:table:formatter';
 
     /** @var string */
     protected $description = 'Create a new table formatter.';

@@ -3,10 +3,16 @@
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Destroy extends AbstractRowAction
 {
+    public function action(Model $model, Component $livewire): void
+    {
+        $model->delete();
+    }
+
     protected function class(): string
     {
         return 'link-danger';
@@ -30,10 +36,5 @@ class Destroy extends AbstractRowAction
     protected function shouldBeConfirmed(): bool
     {
         return true;
-    }
-
-    public function action(Model $model)
-    {
-        $model->delete();
     }
 }

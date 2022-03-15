@@ -3,12 +3,11 @@
 namespace Okipa\LaravelTable\Abstracts;
 
 use Illuminate\Contracts\View\View;
+use Livewire\Component;
 
 abstract class AbstractHeadAction
 {
     public string $rowActionClass;
-
-    public string $key;
 
     protected string|null $class;
 
@@ -20,27 +19,22 @@ abstract class AbstractHeadAction
     {
         $headActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
         $headActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
-        $headActionInstance->key = $rowActionArray['key'];
 
         return $headActionInstance;
     }
 
     /** @return mixed|void */
-    abstract public function action();
+    abstract public function action(Component $livewire);
 
     public function setup(): void
     {
         $this->rowActionClass = $this::class;
-        $this->key = $this->key();
     }
-
-    abstract protected function key(): string;
 
     public function render(): View
     {
         return view('laravel-table::' . config('laravel-table.ui') . '.head-action', [
             'class' => $this->class(),
-            'key' => $this->key,
             'title' => $this->title(),
             'icon' => $this->icon(),
         ]);

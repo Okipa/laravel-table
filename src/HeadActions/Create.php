@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\HeadActions;
 
+use Livewire\Component;
 use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 
@@ -17,11 +18,6 @@ class Create extends AbstractHeadAction
         return 'btn btn-success';
     }
 
-    protected function key(): string
-    {
-        return 'create';
-    }
-
     protected function title(): string
     {
         return __('Create');
@@ -32,7 +28,7 @@ class Create extends AbstractHeadAction
         return config('laravel-table.icon.create');
     }
 
-    public function action(): Redirector
+    public function action(Component $livewire): Redirector
     {
         return redirect()->to($this->createUrl);
     }

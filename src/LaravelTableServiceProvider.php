@@ -5,6 +5,7 @@ namespace Okipa\LaravelTable;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Console\Commands\MakeFormatter;
+use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
 use Okipa\LaravelTable\Console\Commands\MakeRowAction;
 use Okipa\LaravelTable\Console\Commands\MakeTable;
 
@@ -32,8 +33,9 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-table.php', 'laravel-table');
         $this->commands([
             MakeTable::class,
-            MakeFormatter::class,
+            MakeHeadAction::class,
             MakeRowAction::class,
+            MakeFormatter::class,
         ]);
     }
 }

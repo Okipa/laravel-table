@@ -2,6 +2,7 @@
 
 namespace DummyNamespace;
 
+use Livewire\Component;
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
@@ -9,32 +10,32 @@ class DummyClass extends AbstractRowAction
 {
     protected function class(): string
     {
-        // The CSS class to apply to the clickable link.
+        // The CSS class that will be applies to the row action link.
     }
 
     protected function key(): string
     {
-        // The clickable link key that has to be unique among row actions.
+        // The unique key that will allow the row action to be identified.
     }
 
     protected function title(): string
     {
-        // The clickable link title.
+        // The title that will be set to the row action link.
     }
 
     protected function icon(): string
     {
-        // The clickable icon that will wrapped in the clickable link.
+        // The icon that will be displayed in the row action link.
     }
 
     protected function shouldBeConfirmed(): bool
     {
-        // Whether the action you be confirmed or not before being executed.
+        // Whether the action should be confirmed before being executed.
     }
 
     /** @return mixed|void */
-    public function action(Model $model)
+    public function action(Model $model, Component $livewire)
     {
-        // The action that will be executed on click on the icon.
+        // The treatment that will be executed on click on the row action link.
     }
 }

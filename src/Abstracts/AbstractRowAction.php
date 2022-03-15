@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Livewire\Component;
 
 abstract class AbstractRowAction
 {
@@ -48,7 +49,7 @@ abstract class AbstractRowAction
     }
 
     /** @return mixed|void */
-    abstract public function action(Model $model);
+    abstract public function action(Model $model, Component $livewire);
 
     public function onlyWhen(Closure $allowWhenClosure): self
     {
