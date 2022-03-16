@@ -111,6 +111,7 @@ class Table extends Component
             'columns' => $columns,
             'columnsCount' => $columns->count() + ($this->tableRowActionsArray ? 1 : 0),
             'rows' => $table->getRows(),
+            'tableRowClass' => $table->getRowClass(),
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
             'navigationStatus' => $table->getNavigationStatus(),

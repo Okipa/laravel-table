@@ -121,6 +121,7 @@ And display it in a view:
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Set conditional row class](#set-conditional-row-class)
   * [Define table head action](#define-table-head-action)
   * [Define table row actions](#define-table-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
@@ -307,6 +308,32 @@ class UsersTable extends AbstractTableConfiguration
 Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as well as a navigation status.
 
 Both of them will be displayed in the table footer.
+
+### Set conditional row class
+
+Define conditional row class on tables by passing a closure argument to the `rowClass` method.
+
+This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array of classes where the array key contains the class or classes you wish to add, while the value is a boolean expression.
+
+```php
+namespace App\Tables;
+
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowClass(fn(User $user) => [
+                'table-danger' => ! $user->active,
+            ]);
+    }
+}
+```
 
 ### Define table head action
 

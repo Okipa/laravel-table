@@ -26,6 +26,8 @@ class Table
 
     protected Closure|null $queryClosure = null;
 
+    protected Closure|null $rowClassesClosure = null;
+
     protected Collection $columns;
 
     protected LengthAwarePaginator $rows;
@@ -83,6 +85,13 @@ class Table
     public function rowActions(Closure $rowActionsClosure): self
     {
         $this->rowActionsClosure = $rowActionsClosure;
+
+        return $this;
+    }
+
+    public function rowClass(Closure $rowClassesClosure): self
+    {
+        $this->rowClassesClosure = $rowClassesClosure;
 
         return $this;
     }
@@ -149,10 +158,10 @@ class Table
                 $searchableClosure
                     ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
-                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                        $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
-                    );
+                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                    $this->getCaseInsensitiveSearchingLikeOperator(),
+                    '%' . mb_strtolower($searchBy) . '%'
+                );
             });
         }
         // Sort
@@ -187,6 +196,19 @@ class Table
         $this->headAction->setup();
 
         return (array) $this->headAction;
+    }
+
+    public function getRowClass(): array
+    {
+        $tableRowClass = [];
+        if (! $this->rowClassesClosure) {
+            return $tableRowClass;
+        }
+        foreach ($this->rows->getCollection() as $row) {
+            $tableRowClass[$row->getKey()] = ($this->rowClassesClosure)($row);
+        }
+
+        return $tableRowClass;
     }
 
     public function generateRowActionsArray(): array

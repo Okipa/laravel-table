@@ -114,7 +114,7 @@
                 {{-- Table body--}}
                 <tbody>
                     @forelse($rows as $row)
-                        <tr wire:key="row-{{ Str::slug($row->getKey()) }}" class="border-bottom">
+                        <tr wire:key="row-{{ Str::slug($row->getKey()) }}" @class([...Arr::get($tableRowClass, $row->getKey(), []), 'border-bottom'])>
                             @foreach($columns as $column)
                                 @if($loop->first)
                                     <th class="align-middle" scope="row">{{ $column->getValue($row) }}</th>
