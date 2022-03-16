@@ -29,8 +29,6 @@ Tables can be generated under the following UI frameworks:
 DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.
 
 V5 roadmap:
-* Column `cellClass` => set class on cells conditionally
-* Table `rowClass` => set class on rows conditionally
 * Table config `results` => set table result lines
 * Table `reorderable` => allow rows reordering with drag & drop
 * Table `bulkActions` => set bulk actions for checked rows
