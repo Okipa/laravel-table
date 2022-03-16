@@ -122,11 +122,13 @@
                                     <td class="align-middle">{{ $column->getValue($row) }}</td>
                                 @endif
                             @endforeach
-                            @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::getFromModelKey($tableRowActionsArray, $row->getKey()))
+                            @if($tableRowActionsArray)
                                 <td class="align-middle">
-                                    @foreach($rowActionsArray as $rowActionArray)
-                                        {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render() }}
-                                    @endforeach
+                                    @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::getFromModelKey($tableRowActionsArray, $row->getKey()))
+                                        @foreach($rowActionsArray as $rowActionArray)
+                                            {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render() }}
+                                        @endforeach
+                                    @endif
                                 </td>
                             @endif
                         </tr>
