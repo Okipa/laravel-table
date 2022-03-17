@@ -175,6 +175,7 @@ Here is the list of the words and sentences available for translation:
 * `Show`
 * `Edit`
 * `Destroy`
+* `Display`
 * `Are you sure you want to perform this action?`
 * `Number of rows per page`
 * `Search by:`

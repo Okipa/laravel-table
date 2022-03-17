@@ -19,11 +19,12 @@ class Display extends AbstractFormatter
         if (! $url) {
             return null;
         }
+        $display = __('Display');
 
         return <<<BLADE
-        <a class="btn-outline-primary btn-sm" href="{$url}" target="_blank">
+        <a class="btn-outline-primary btn-sm" href="$url" target="_blank">
            <i class="fa-solid fa-up-right-from-square"></i>
-           {__('Display')}
+           $display
         </a>
         BLADE;
     }
