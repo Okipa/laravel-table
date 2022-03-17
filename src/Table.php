@@ -158,10 +158,10 @@ class Table
                 $searchableClosure
                     ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
-                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                    $this->getCaseInsensitiveSearchingLikeOperator(),
-                    '%' . mb_strtolower($searchBy) . '%'
-                );
+                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                        $this->getCaseInsensitiveSearchingLikeOperator(),
+                        '%' . mb_strtolower($searchBy) . '%'
+                    );
             });
         }
         // Sort
