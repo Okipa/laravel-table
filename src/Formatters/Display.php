@@ -21,9 +21,9 @@ class Display extends AbstractFormatter
         }
 
         return <<<BLADE
-        <a class="btn-outline-primary btn-sm" href="$url" target="_blank">
+        <a class="btn-outline-primary btn-sm" href="{$url}" target="_blank">
            <i class="fa-solid fa-up-right-from-square"></i>
-           {{ __('Display') }}
+           {__('Display')}
         </a>
         BLADE;
     }
