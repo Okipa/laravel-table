@@ -22,7 +22,7 @@ class Display extends AbstractFormatter
         $display = __('Display');
 
         return <<<BLADE
-        <a class="btn-outline-primary btn-sm" href="$url" target="_blank">
+        <a class="btn btn-outline-primary btn-sm" href="$url" target="_blank">
            <i class="fa-solid fa-up-right-from-square"></i>
            $display
         </a>
