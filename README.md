@@ -376,6 +376,11 @@ use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 
 class Configure extends AbstractHeadAction
 {
+    public function __construct(protected string $eventParam)
+    {
+        //
+    }
+
     protected function class(): string
     {
         return 'btn btn-secondary';
@@ -398,7 +403,8 @@ class Configure extends AbstractHeadAction
 
     public function action(Component $livewire): void
     {
-        $livewire->emit('modal:user:configure');
+        $livewire->emit('any:event:needed', $this->eventParam);
+        // Or redirect to some page for example...
     }
 }
 ```
@@ -419,7 +425,7 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->headAction(new Configure());
+            ->headAction(new Configure('withThisParam'));
     }
 }
 ```
@@ -553,7 +559,7 @@ class Deactivate extends AbstractRowAction
     {
         $model->update(['active' => false]);
         // You could also use the `$livewire` argument to interact with the Livewire table component,
-        // as emitting event for example.
+        // as emitting an event for example.
     }
 }
 ```
