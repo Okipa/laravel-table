@@ -25,6 +25,8 @@ return [
         'show' => '<i class="fa-solid fa-eye fa-fw"></i>',
         'edit' => '<i class="fa-solid fa-pencil fa-fw"></i>',
         'destroy' => '<i class="fa-solid fa-trash-can fa-fw"></i>',
+        'active' => '<i class="fa-solid fa-check text-success"></i>',
+        'inactive' => '<i class="fa-solid fa-xmark text-danger"></i>',
     ],
 
     /** Whether the select allowing to choose the number of rows per page should be displayed by default. */

@@ -12,10 +12,10 @@ class Datetime extends AbstractFormatter
         //
     }
 
-    public function format(Model $model, string $key): string
+    public function format(Model $model, string $attribute): string
     {
         return $this->timezone
-            ? $model->{$key}->timezone($this->timezone)->format($this->format)
-            : $model->{$key}->format($this->format);
+            ? $model->{$attribute}->timezone($this->timezone)->format($this->format)
+            : $model->{$attribute}->format($this->format);
     }
 }

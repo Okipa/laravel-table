@@ -1,6 +1,6 @@
 <?php
 
-namespace Okipa\LaravelTable\Formatters;
+namespace Okipa\LaravelTable\CellActions;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +13,7 @@ class Display extends AbstractFormatter
         //
     }
 
-    public function format(Model $model, string $key): string|null
+    public function format(Model $model, string $attribute): string|null
     {
         $url = ($this->displayClosure)($model);
         if (! $url) {

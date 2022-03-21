@@ -669,9 +669,9 @@ use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
 class Boolean extends AbstractFormatter
 {
-    public function format(Model $model, string $key): string
+    public function format(Model $model, string $attribute): string
     {
-        return $model->{$key}
+        return $model->{$attribute}
             ? '<i class="fa-solid fa-check text-success"></i>'
             : '<i class="fa-solid fa-xmark text-danger"></i>';
     }
@@ -706,9 +706,9 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-This package provides the following formatters :
+This package provides the following built-in formatters :
 * `Boolean`
-* `Date`: requires `string $editUrl` and `string $timezone` arguments on instantiation
+* `Datetime`: requires`string $format` and `string $timezone` arguments on instantiation
 * `StrLimit`: allows optional `int $limit` and `string $end` arguments on instantiation
 
 ### Configure columns searching

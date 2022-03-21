@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class AbstractFormatter
 {
-    abstract public function format(Model $model, string $key): mixed;
+    abstract public function format(Model $model, string $attribute): mixed;
 }

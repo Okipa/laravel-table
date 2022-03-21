@@ -7,10 +7,10 @@ use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
 class Boolean extends AbstractFormatter
 {
-    public function format(Model $model, string $key): string
+    public function format(Model $model, string $attribute): string
     {
-        return $model->{$key}
-            ? '<i class="fa-solid fa-check text-success"></i>'
-            : '<i class="fa-solid fa-xmark text-danger"></i>';
+        return $model->{$attribute}
+            ? '<span class="text-success">' . config('laravel-table.icon.active' ). '</span>'
+            : '<span class="text-danger">' . config('laravel-table.icon.inactive') . '</span>';
     }
 }

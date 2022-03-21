@@ -13,8 +13,8 @@ class StrLimit extends AbstractFormatter
         //
     }
 
-    public function format(Model $model, string $key): string
+    public function format(Model $model, string $attribute): string
     {
-        return Str::limit($model->{$key}, $this->limit, $this->end);
+        return Str::limit($model->{$attribute}, $this->limit, $this->end);
     }
 }

@@ -63,7 +63,7 @@ class MakeTest extends TestCase
         self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
         self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractFormatter;', $fileContent);
         self::assertStringContainsString('class Boolean extends AbstractFormatter', $fileContent);
-        self::assertStringContainsString('public function format(Model $model, string $key): string', $fileContent);
+        self::assertStringContainsString('public function format(Model $model, string $attribute): string', $fileContent);
     }
 
     public function testMakeHeadAction(): void
