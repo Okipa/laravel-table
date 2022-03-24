@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Livewire\Component;
 
-abstract class AbstractRowAction
+abstract class AbstractCellAction
 {
     public string $identifier;
 
@@ -32,46 +32,43 @@ abstract class AbstractRowAction
 
     abstract protected function identifier(): string;
 
-    abstract protected function class(): string|null;
+    abstract protected function class(Model $model, string $attribute): string|null;
 
-    abstract protected function title(): string;
+    abstract protected function title(Model $model, string $attribute): string;
 
-    abstract protected function icon(): string;
+    abstract protected function icon(Model $model, string $attribute): string;
 
     abstract protected function shouldBeConfirmed(): bool;
 
     /** @return mixed|void */
-    abstract public function action(Model $model, Component $livewire);
-
-    public function setup(Model $model): void
-    {
-        $this->identifier = $this->identifier();
-        $this->rowActionClass = $this::class;
-        $this->modelClass = $model::class;
-        $this->modelKey = $model->getKey();
-    }
+    abstract public function action(Model $model, string $attribute, Component $livewire);
 
     public static function make(array $rowActionArray): self
     {
         $rowActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
+        $rowActionInstance->identifier = $rowActionArray['identifier'];
         $rowActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
         $rowActionInstance->modelClass = $rowActionArray['modelClass'];
         $rowActionInstance->modelKey = $rowActionArray['modelKey'];
-        $rowActionInstance->key = $rowActionArray['key'];
         $rowActionInstance->confirmationMessage = $rowActionArray['confirmationMessage'];
         $rowActionInstance->executedMessage = $rowActionArray['executedMessage'];
 
         return $rowActionInstance;
     }
 
-    public function render(): View
+    public function render(Model $model, string $attribute): View
     {
-        return view('laravel-table::' . config('laravel-table.ui') . '.row-action', [
+        $this->identifier = $this->identifier();
+        $this->rowActionClass = $this::class;
+        $this->modelClass = $model::class;
+        $this->modelKey = $model->getKey();
+
+        return view('laravel-table::' . config('laravel-table.ui') . '.cell-action', [
             'modelKey' => $this->modelKey,
-            'class' => $this->class(),
+            'class' => $this->class($model, $attribute),
             'identifier' => $this->identifier,
-            'title' => $this->title(),
-            'icon' => $this->icon(),
+            'title' => $this->title($model, $attribute),
+            'icon' => $this->icon($model, $attribute),
             'shouldBeConfirmed' => $this->shouldBeConfirmed(),
         ]);
     }

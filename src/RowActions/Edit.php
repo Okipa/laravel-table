@@ -14,24 +14,24 @@ class Edit extends AbstractRowAction
         //
     }
 
+    protected function identifier(): string
+    {
+        return 'edit';
+    }
+
     protected function class(): string
     {
         return 'link-primary';
     }
 
-    protected function key(): string
+    protected function icon(): string
     {
-        return 'edit';
+        return config('laravel-table.icon.edit');
     }
 
     protected function title(): string
     {
         return __('Edit');
-    }
-
-    protected function icon(): string
-    {
-        return config('laravel-table.icon.edit');
     }
 
     protected function shouldBeConfirmed(): bool

@@ -117,9 +117,9 @@
                         <tr wire:key="row-{{ Str::slug($row->getKey()) }}" @class([...Arr::get($tableRowClass, $row->getKey(), []), 'border-bottom'])>
                             @foreach($columns as $column)
                                 @if($loop->first)
-                                    <th class="align-middle" scope="row">{{ $column->getValue($row) }}</th>
+                                    <th class="align-middle" scope="row">{!! $column->getValue($row) !!}</th>
                                 @else
-                                    <td class="align-middle">{{ $column->getValue($row) }}</td>
+                                    <td class="align-middle">{!! $column->getValue($row) !!}</td>
                                 @endif
                             @endforeach
                             @if($tableRowActionsArray)

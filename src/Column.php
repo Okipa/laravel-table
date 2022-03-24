@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Okipa\LaravelTable\Abstracts\AbstractCellAction;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection;
 
@@ -24,6 +25,8 @@ class Column
     protected Closure|null $searchableClosure = null;
 
     protected Closure|AbstractFormatter|null $formatter = null;
+
+    protected AbstractCellAction|null $cellAction = null;
 
     protected bool $escapeHtml = false;
 
@@ -113,16 +116,26 @@ class Column
         return $this;
     }
 
-    public function getValue(Model $row): HtmlString|string|null
+    public function cellAction(AbstractCellAction $cellAction): self
+    {
+        $this->cellAction = $cellAction;
+
+        return $this;
+    }
+
+    public function getValue(Model $model): HtmlString|string|null
     {
         if ($this->formatter instanceof Closure) {
-            return $this->manageHtmlEscaping(($this->formatter)($row));
+            return $this->manageHtmlEscaping(($this->formatter)($model));
         }
         if ($this->formatter instanceof AbstractFormatter) {
-            return $this->manageHtmlEscaping($this->formatter->format($row, $this->key));
+            return $this->manageHtmlEscaping($this->formatter->format($model, $this->key));
+        }
+        if ($this->cellAction) {
+            return $this->cellAction->render($model, $this->key);
         }
 
-        return $this->key ? $this->manageHtmlEscaping(data_get($row, $this->key)) : null;
+        return $this->key ? $this->manageHtmlEscaping(data_get($model, $this->key)) : null;
     }
 
     protected function manageHtmlEscaping(mixed $value): HtmlString|string

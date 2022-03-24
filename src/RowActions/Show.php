@@ -14,24 +14,24 @@ class Show extends AbstractRowAction
         //
     }
 
+    protected function identifier(): string
+    {
+        return 'show';
+    }
+
     protected function class(): string
     {
         return 'link-info';
     }
 
-    protected function key(): string
+    protected function icon(): string
     {
-        return 'show';
+        return config('laravel-table.icon.show');
     }
 
     protected function title(): string
     {
         return __('Show');
-    }
-
-    protected function icon(): string
-    {
-        return config('laravel-table.icon.show');
     }
 
     protected function shouldBeConfirmed(): bool

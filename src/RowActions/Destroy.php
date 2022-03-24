@@ -8,9 +8,9 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class Destroy extends AbstractRowAction
 {
-    public function action(Model $model, Component $livewire): void
+    protected function identifier(): string
     {
-        $model->delete();
+        return 'destroy';
     }
 
     protected function class(): string
@@ -18,9 +18,9 @@ class Destroy extends AbstractRowAction
         return 'link-danger';
     }
 
-    protected function key(): string
+    protected function icon(): string
     {
-        return 'destroy';
+        return config('laravel-table.icon.destroy');
     }
 
     protected function title(): string
@@ -28,13 +28,13 @@ class Destroy extends AbstractRowAction
         return __('Destroy');
     }
 
-    protected function icon(): string
-    {
-        return config('laravel-table.icon.destroy');
-    }
-
     protected function shouldBeConfirmed(): bool
     {
         return true;
+    }
+
+    public function action(Model $model, Component $livewire): void
+    {
+        $model->delete();
     }
 }

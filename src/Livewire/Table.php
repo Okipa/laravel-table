@@ -10,6 +10,7 @@ use Livewire\WithPagination;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
 
 class Table extends Component
@@ -41,6 +42,8 @@ class Table extends Component
     public array|null $headActionArray;
 
     public array $tableRowActionsArray;
+
+    public array $tableCellActionsArray;
 
     protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
 
@@ -95,16 +98,15 @@ class Table extends Component
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
-        // Generate
+        // Rows generation
         $table->generateRows(
             $this->searchBy,
             $sortableClosure ?: $this->sortBy,
             $this->sortDir,
             $this->numberOfRowsPerPage,
         );
-        // Head action
+        // Actions
         $this->headActionArray = $table->getHeadActionArray();
-        // Row actions
         $this->tableRowActionsArray = $table->generateRowActionsArray();
 
         return [
