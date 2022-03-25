@@ -7,6 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Okipa\LaravelTable\Abstracts\AbstractCellAction;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -81,7 +82,10 @@ class Table extends Component
         return app($this->config, $this->configParams);
     }
 
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    /**
+     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     * @throws \JsonException
+     */
     protected function buildTable(AbstractTableConfiguration $config): array
     {
         $table = $config->setup();
@@ -108,6 +112,7 @@ class Table extends Component
         // Actions
         $this->headActionArray = $table->getHeadActionArray();
         $this->tableRowActionsArray = $table->generateRowActionsArray();
+        $this->tableCellActionsArray = $table->generateCellActionsArray();
 
         return [
             'columns' => $columns,
@@ -155,5 +160,12 @@ class Table extends Component
         $this->emit('table:row:action:executed', $rowActionInstance->getExecutedMessage());
 
         return $rowActionInstance->action($model, $this);
+    }
+
+    public function cellAction(string $identifier, mixed $modelKey, bool $requiresConfirmation = false): mixed
+    {
+        $cellActionArray = AbstractCellAction::retrieve($this->tableCellActionsArray, $modelKey, $attribute);
+        dd($cellActionArray, $modelKey, $attribute);
+//        dd($cellActionArray);
     }
 }

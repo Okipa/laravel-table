@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Okipa\LaravelTable\Abstracts\AbstractCellAction;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
@@ -158,10 +159,10 @@ class Table
                 $searchableClosure
                     ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
-                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                        $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
-                    );
+                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                    $this->getCaseInsensitiveSearchingLikeOperator(),
+                    '%' . mb_strtolower($searchBy) . '%'
+                );
             });
         }
         // Sort
@@ -217,11 +218,12 @@ class Table
         if (! $this->rowActionsClosure) {
             return $tableRowActionsArray;
         }
-        foreach ($this->rows->getCollection() as $row) {
-            $rowActions = collect(($this->rowActionsClosure)($row))
-                ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed($row));
-            $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($row) {
-                $rowAction->setup($row);
+        foreach ($this->rows->getCollection() as $model) {
+            $rowActions = collect(($this->rowActionsClosure)($model))
+                ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed($model));
+
+            $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($model) {
+                $rowAction->setup($model);
 
                 return json_decode(json_encode(
                     $rowAction,
@@ -232,6 +234,31 @@ class Table
         }
 
         return $tableRowActionsArray;
+    }
+
+    /**
+     * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     * @throws \JsonException
+     */
+    public function generateCellActionsArray(): array
+    {
+        $tableCellActionsArray = [];
+        foreach ($this->rows->getCollection() as $model) {
+            $cellActions = $this->getColumns()
+                ->mapWithKeys(fn(Column $column) => [$column->getKey() => $column->getCellAction()
+                    ? $column->getCellAction()($model)
+                    : null])
+                ->filter(fn(AbstractCellAction|null $cellAction) => $cellAction?->isAllowed($model));
+            foreach ($cellActions as $attribute => $cellAction) {
+                $cellAction->setup($model, $attribute);
+                $tableCellActionsArray[] = json_decode(json_encode(
+                    $cellAction,
+                    JSON_THROW_ON_ERROR
+                ), true, 512, JSON_THROW_ON_ERROR);
+            }
+        }
+
+        return $tableCellActionsArray;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

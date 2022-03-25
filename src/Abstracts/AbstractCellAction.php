@@ -12,11 +12,17 @@ abstract class AbstractCellAction
 {
     public string $identifier;
 
-    public string $rowActionClass;
+    public string $cellActionClass;
 
     public string $modelClass;
 
     public string $modelKey;
+
+    public string $attribute;
+
+    public string|null $confirmationMessage = null;
+
+    public string|null $executedMessage = null;
 
     protected string|null $class;
 
@@ -24,47 +30,47 @@ abstract class AbstractCellAction
 
     protected string $icon;
 
-    public string|null $confirmationMessage = null;
-
-    public string|null $executedMessage = null;
-
     protected Closure|null $allowWhenClosure = null;
 
-    abstract protected function identifier(): string;
+    public static function make(array $cellActionArray): self
+    {
+        $cellActionInstance = app($cellActionArray['cellActionClass'], $cellActionArray);
+        $cellActionInstance->identifier = $cellActionArray['identifier'];
+        $cellActionInstance->cellActionClass = $cellActionArray['cellActionClass'];
+        $cellActionInstance->modelClass = $cellActionArray['modelClass'];
+        $cellActionInstance->modelKey = $cellActionArray['modelKey'];
+        $cellActionInstance->attribute = $cellActionArray['attribute'];
+        $cellActionInstance->confirmationMessage = $cellActionArray['confirmationMessage'];
+        $cellActionInstance->executedMessage = $cellActionArray['executedMessage'];
 
-    abstract protected function class(Model $model, string $attribute): string|null;
+        return $cellActionInstance;
+    }
 
-    abstract protected function title(Model $model, string $attribute): string;
-
-    abstract protected function icon(Model $model, string $attribute): string;
-
-    abstract protected function shouldBeConfirmed(): bool;
+    public static function retrieve(array $cellActions, string $modelKey, string $attribute): array|null
+    {
+        return Arr::first($cellActions, static fn(array $cellAction) => $cellAction['modelKey'] === $modelKey
+            && $cellAction['attribute'] === $attribute);
+    }
 
     /** @return mixed|void */
     abstract public function action(Model $model, string $attribute, Component $livewire);
 
-    public static function make(array $rowActionArray): self
+    public function setup(Model $model, string $attribute)
     {
-        $rowActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
-        $rowActionInstance->identifier = $rowActionArray['identifier'];
-        $rowActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
-        $rowActionInstance->modelClass = $rowActionArray['modelClass'];
-        $rowActionInstance->modelKey = $rowActionArray['modelKey'];
-        $rowActionInstance->confirmationMessage = $rowActionArray['confirmationMessage'];
-        $rowActionInstance->executedMessage = $rowActionArray['executedMessage'];
-
-        return $rowActionInstance;
+        $this->identifier = $this->identifier();
+        $this->cellActionClass = $this::class;
+        $this->modelClass = $model::class;
+        $this->modelKey = $model->getKey();
+        $this->attribute = $attribute;
     }
+
+    abstract protected function identifier(): string;
 
     public function render(Model $model, string $attribute): View
     {
-        $this->identifier = $this->identifier();
-        $this->rowActionClass = $this::class;
-        $this->modelClass = $model::class;
-        $this->modelKey = $model->getKey();
-
         return view('laravel-table::' . config('laravel-table.ui') . '.cell-action', [
             'modelKey' => $this->modelKey,
+            'attribute' => $this->attribute,
             'class' => $this->class($model, $attribute),
             'identifier' => $this->identifier,
             'title' => $this->title($model, $attribute),
@@ -73,10 +79,13 @@ abstract class AbstractCellAction
         ]);
     }
 
-    public static function getFromModelKey(array $rowActions, string $modelKey): array
-    {
-        return Arr::where($rowActions, static fn(array $rowAction) => $rowAction['modelKey'] === $modelKey);
-    }
+    abstract protected function class(Model $model, string $attribute): string|null;
+
+    abstract protected function title(Model $model, string $attribute): string;
+
+    abstract protected function icon(Model $model, string $attribute): string;
+
+    abstract protected function shouldBeConfirmed(): bool;
 
     public function onlyWhen(Closure $allowWhenClosure): self
     {

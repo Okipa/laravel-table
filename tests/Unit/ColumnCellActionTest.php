@@ -33,7 +33,7 @@ class ColumnCellActionTest extends TestCase
             {
                 return [
                     Column::make('Name'),
-                    Column::make('Toggle', 'active')->cellAction(new Toggle()),
+                    Column::make('Toggle', 'active')->cellAction(fn() => new Toggle()),
                 ];
             }
         };
@@ -42,33 +42,20 @@ class ColumnCellActionTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $userActive->id . '" class="border-bottom">',
-                '<a wire:click.prevent="cellAction(\'toggle\', ' . $userActive->id . ', 0)"',
+                '<a wire:click.prevent="cellAction(\'toggle\', \'' . $userActive->id . '\', \'active\', 0)"',
                 'class="link-danger p-1"',
                 'title="Toggle">',
                 'inactive-icon',
                 '</tr>',
                 '<tr wire:key="row-' . $userInactive->id . '" class="border-bottom">',
-                '<a wire:click.prevent="cellAction(\'toggle\', ' . $userInactive->id . ', 0)"',
+                '<a wire:click.prevent="cellAction(\'toggle\', \'' . $userInactive->id . '\', \'active\', 0)"',
                 'class="link-success p-1"',
                 'title="Toggle">',
                 'active-icon',
                 '</tr>',
                 '</tbody>',
             ])
-//            ->call('rowAction', 'show', $users->first()->id, false)
-//            ->assertRedirect(route('user.show', $users->first()))
-//            ->call('rowAction', 'edit', $users->last()->id, false)
-//            ->assertRedirect(route('user.edit', $users->last()))
-//            ->call('rowAction', 'destroy', $users->first()->id, true)
-//            ->assertEmitted(
-//                'table:row:action:confirm',
-//                'destroy',
-//                $users->first()->id,
-//                'Are you sure you want to delete user ' . $users->first()->name . '?'
-//            )
-//            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id)
-//            ->assertEmitted('table:row:action:executed', 'User ' . $users->first()->name . ' has been deleted.')
-        ;
-//        $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
+            ->call('cellAction', 'toggle', $userActive->id, false);
+        $this->assertFalse($userActive->fresh()->active);
     }
 }

@@ -26,7 +26,7 @@ class Column
 
     protected Closure|AbstractFormatter|null $formatter = null;
 
-    protected AbstractCellAction|null $cellAction = null;
+    protected Closure|null $cellActionClosure = null;
 
     protected bool $escapeHtml = false;
 
@@ -116,14 +116,19 @@ class Column
         return $this;
     }
 
-    public function cellAction(AbstractCellAction $cellAction): self
+    public function cellAction(Closure $cellActionClosure): self
     {
-        $this->cellAction = $cellAction;
+        $this->cellActionClosure = $cellActionClosure;
 
         return $this;
     }
 
-    public function getValue(Model $model): HtmlString|string|null
+    public function getCellAction(): Closure|null
+    {
+        return $this->cellActionClosure;
+    }
+
+    public function getValue(Model $model, array $tableCellActionsArray): HtmlString|string|null
     {
         if ($this->formatter instanceof Closure) {
             return $this->manageHtmlEscaping(($this->formatter)($model));
@@ -131,8 +136,9 @@ class Column
         if ($this->formatter instanceof AbstractFormatter) {
             return $this->manageHtmlEscaping($this->formatter->format($model, $this->key));
         }
-        if ($this->cellAction) {
-            return $this->cellAction->render($model, $this->key);
+        $cellActionArray = AbstractCellAction::retrieve($tableCellActionsArray, $model->getKey(), $this->getKey());
+        if ($cellActionArray) {
+            return AbstractCellAction::make($cellActionArray)->render($model, $this->key);
         }
 
         return $this->key ? $this->manageHtmlEscaping(data_get($model, $this->key)) : null;
