@@ -15,13 +15,11 @@ abstract class AbstractHeadAction
 
     protected string $icon;
 
-    public static function make(array $rowActionArray): self
-    {
-        $headActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
-        $headActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
+    abstract protected function class(): string|null;
 
-        return $headActionInstance;
-    }
+    abstract protected function title(): string;
+
+    abstract protected function icon(): string;
 
     /** @return mixed|void */
     abstract public function action(Component $livewire);
@@ -29,6 +27,14 @@ abstract class AbstractHeadAction
     public function setup(): void
     {
         $this->rowActionClass = $this::class;
+    }
+
+    public static function make(array $rowActionArray): self
+    {
+        $headActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
+        $headActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
+
+        return $headActionInstance;
     }
 
     public function render(): View
@@ -39,10 +45,4 @@ abstract class AbstractHeadAction
             'icon' => $this->icon(),
         ]);
     }
-
-    abstract protected function class(): string|null;
-
-    abstract protected function title(): string;
-
-    abstract protected function icon(): string;
 }

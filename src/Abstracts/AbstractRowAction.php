@@ -51,13 +51,18 @@ abstract class AbstractRowAction
         $this->modelKey = $model->getKey();
     }
 
+    public static function retrieve(array $rowActions, string $modelKey): array
+    {
+        return Arr::where($rowActions, static fn(array $rowAction) => $rowAction['modelKey'] === $modelKey);
+    }
+
     public static function make(array $rowActionArray): self
     {
         $rowActionInstance = app($rowActionArray['rowActionClass'], $rowActionArray);
         $rowActionInstance->rowActionClass = $rowActionArray['rowActionClass'];
         $rowActionInstance->modelClass = $rowActionArray['modelClass'];
         $rowActionInstance->modelKey = $rowActionArray['modelKey'];
-        $rowActionInstance->key = $rowActionArray['key'];
+        $rowActionInstance->identifier = $rowActionArray['identifier'];
         $rowActionInstance->confirmationMessage = $rowActionArray['confirmationMessage'];
         $rowActionInstance->executedMessage = $rowActionArray['executedMessage'];
 
@@ -76,10 +81,6 @@ abstract class AbstractRowAction
         ]);
     }
 
-    public static function getFromModelKey(array $rowActions, string $modelKey): array
-    {
-        return Arr::where($rowActions, static fn(array $rowAction) => $rowAction['modelKey'] === $modelKey);
-    }
 
     public function onlyWhen(Closure $allowWhenClosure): self
     {

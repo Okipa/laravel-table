@@ -10,8 +10,6 @@ use Livewire\Component;
 
 abstract class AbstractCellAction
 {
-    public string $identifier;
-
     public string $cellActionClass;
 
     public string $modelClass;
@@ -32,10 +30,34 @@ abstract class AbstractCellAction
 
     protected Closure|null $allowWhenClosure = null;
 
+    abstract protected function class(Model $model, string $attribute): string|null;
+
+    abstract protected function title(Model $model, string $attribute): string;
+
+    abstract protected function icon(Model $model, string $attribute): string;
+
+    abstract protected function shouldBeConfirmed(): bool;
+
+    /** @return mixed|void */
+    abstract public function action(Model $model, string $attribute, Component $livewire);
+
+    public function setup(Model $model, string $attribute): void
+    {
+        $this->cellActionClass = $this::class;
+        $this->modelClass = $model::class;
+        $this->modelKey = $model->getKey();
+        $this->attribute = $attribute;
+    }
+
+    public static function retrieve(array $cellActions, string $modelKey, string $attribute): array|null
+    {
+        return Arr::first($cellActions, static fn(array $cellAction) => $cellAction['modelKey'] === $modelKey
+            && $cellAction['attribute'] === $attribute);
+    }
+
     public static function make(array $cellActionArray): self
     {
         $cellActionInstance = app($cellActionArray['cellActionClass'], $cellActionArray);
-        $cellActionInstance->identifier = $cellActionArray['identifier'];
         $cellActionInstance->cellActionClass = $cellActionArray['cellActionClass'];
         $cellActionInstance->modelClass = $cellActionArray['modelClass'];
         $cellActionInstance->modelKey = $cellActionArray['modelKey'];
@@ -46,25 +68,6 @@ abstract class AbstractCellAction
         return $cellActionInstance;
     }
 
-    public static function retrieve(array $cellActions, string $modelKey, string $attribute): array|null
-    {
-        return Arr::first($cellActions, static fn(array $cellAction) => $cellAction['modelKey'] === $modelKey
-            && $cellAction['attribute'] === $attribute);
-    }
-
-    /** @return mixed|void */
-    abstract public function action(Model $model, string $attribute, Component $livewire);
-
-    public function setup(Model $model, string $attribute)
-    {
-        $this->identifier = $this->identifier();
-        $this->cellActionClass = $this::class;
-        $this->modelClass = $model::class;
-        $this->modelKey = $model->getKey();
-        $this->attribute = $attribute;
-    }
-
-    abstract protected function identifier(): string;
 
     public function render(Model $model, string $attribute): View
     {
@@ -72,20 +75,11 @@ abstract class AbstractCellAction
             'modelKey' => $this->modelKey,
             'attribute' => $this->attribute,
             'class' => $this->class($model, $attribute),
-            'identifier' => $this->identifier,
             'title' => $this->title($model, $attribute),
             'icon' => $this->icon($model, $attribute),
             'shouldBeConfirmed' => $this->shouldBeConfirmed(),
         ]);
     }
-
-    abstract protected function class(Model $model, string $attribute): string|null;
-
-    abstract protected function title(Model $model, string $attribute): string;
-
-    abstract protected function icon(Model $model, string $attribute): string;
-
-    abstract protected function shouldBeConfirmed(): bool;
 
     public function onlyWhen(Closure $allowWhenClosure): self
     {

@@ -1,5 +1,5 @@
-<a wire:click.prevent="cellAction('{{ $identifier }}', '{{ $modelKey }}', '{{ $attribute }}', {{ $shouldBeConfirmed ? 1 : 0 }})"
-   @class([$class, 'p-1'])
+<a wire:click.prevent="cellAction('{{ $modelKey }}', '{{ $attribute }}', {{ $shouldBeConfirmed ? 1 : 0 }})"
+   @class([$class])
    href=""
    title="{{ $title }}">
     {!! $icon !!} {{ $title }}

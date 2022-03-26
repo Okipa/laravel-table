@@ -117,14 +117,14 @@
                         <tr wire:key="row-{{ Str::slug($model->getKey()) }}" @class([...Arr::get($tableRowClass, $model->getKey(), []), 'border-bottom'])>
                             @foreach($columns as $column)
                                 @if($loop->first)
-                                    <th class="align-middle" scope="row">{!! $column->getValue($model, $tableCellActionsArray) !!}</th>
+                                    <th class="align-middle" scope="row">{{ $column->getValue($model, $tableCellActionsArray) }}</th>
                                 @else
-                                    <td class="align-middle">{!! $column->getValue($model, $tableCellActionsArray) !!}</td>
+                                    <td class="align-middle">{{ $column->getValue($model, $tableCellActionsArray) }}</td>
                                 @endif
                             @endforeach
                             @if($tableRowActionsArray)
                                 <td class="align-middle">
-                                    @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::getFromModelKey($tableRowActionsArray, $model->getKey()))
+                                    @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
                                         @foreach($rowActionsArray as $rowActionArray)
                                             {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render() }}
                                         @endforeach

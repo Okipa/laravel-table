@@ -4,25 +4,29 @@ namespace Okipa\LaravelTable\CellActions;
 
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractCellAction;
 
-class Toggle extends AbstractCellAction
+class Display extends AbstractCellAction
 {
+    public function __construct(public string $displayUrl)
+    {
+        //
+    }
+
     protected function class(Model $model, string $attribute): string|null
     {
-        return $model->{$attribute} ? 'link-danger p-1' : 'link-success p-1';
+        return 'btn btn-outline-primary';
     }
 
     protected function title(Model $model, string $attribute): string
     {
-        return __('Toggle');
+        return __('Display');
     }
 
     protected function icon(Model $model, string $attribute): string
     {
-        return $model->{$attribute}
-            ? config('laravel-table.icon.inactive')
-            : config('laravel-table.icon.active');
+        return config('laravel-table.icon.display');
     }
 
     protected function shouldBeConfirmed(): bool
@@ -30,8 +34,8 @@ class Toggle extends AbstractCellAction
         return false;
     }
 
-    public function action(Model $model, string $attribute, Component $livewire)
+    public function action(Model $model, string $attribute, Component $livewire): Redirector
     {
-        return $model->update([$attribute => ! $model->{$attribute}]);
+        return redirect()->to($this->displayUrl);
     }
 }

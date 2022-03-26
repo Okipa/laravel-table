@@ -27,6 +27,7 @@ return [
         'destroy' => '<i class="fa-solid fa-trash-can fa-fw"></i>',
         'active' => '<i class="fa-solid fa-check text-success"></i>',
         'inactive' => '<i class="fa-solid fa-xmark text-danger"></i>',
+        'display' => '<i class="fa-solid fa-up-right-from-square"></i>'
     ],
 
     /** Whether the select allowing to choose the number of rows per page should be displayed by default. */

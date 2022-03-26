@@ -138,7 +138,7 @@ class Column
         }
         $cellActionArray = AbstractCellAction::retrieve($tableCellActionsArray, $model->getKey(), $this->getKey());
         if ($cellActionArray) {
-            return AbstractCellAction::make($cellActionArray)->render($model, $this->key);
+            return new HtmlString(AbstractCellAction::make($cellActionArray)->render($model, $this->key));
         }
 
         return $this->key ? $this->manageHtmlEscaping(data_get($model, $this->key)) : null;

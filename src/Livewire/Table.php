@@ -143,15 +143,15 @@ class Table extends Component
         return AbstractHeadAction::make($this->headActionArray)->action($this);
     }
 
-    public function rowAction(string $rowActionKey, mixed $modelKey, bool $requiresConfirmation = false): mixed
+    public function rowAction(string $identifier, mixed $modelKey, bool $requiresConfirmation = false): mixed
     {
-        $rowActionsArray = AbstractRowAction::getFromModelKey($this->tableRowActionsArray, $modelKey);
-        $rowActionArray = collect($rowActionsArray)->where('key', $rowActionKey)->first();
+        $rowActionsArray = AbstractRowAction::retrieve($this->tableRowActionsArray, $modelKey);
+        $rowActionArray = collect($rowActionsArray)->where('identifier', $identifier)->first();
         $rowActionInstance = AbstractRowAction::make($rowActionArray);
         if ($requiresConfirmation) {
             return $this->emit(
                 'table:row:action:confirm',
-                $rowActionKey,
+                $identifier,
                 $modelKey,
                 $rowActionInstance->confirmationMessage
             );
@@ -162,10 +162,12 @@ class Table extends Component
         return $rowActionInstance->action($model, $this);
     }
 
-    public function cellAction(string $identifier, mixed $modelKey, bool $requiresConfirmation = false): mixed
+    public function cellAction(string $modelKey, string $attribute, bool $requiresConfirmation = false)
     {
         $cellActionArray = AbstractCellAction::retrieve($this->tableCellActionsArray, $modelKey, $attribute);
-        dd($cellActionArray, $modelKey, $attribute);
-//        dd($cellActionArray);
+        $cellActionInstance = AbstractCellAction::make($cellActionArray);
+        $model = app($cellActionArray['modelClass'])->findOrFail($modelKey);
+
+        return $cellActionInstance->action($model, $attribute, $this);
     }
 }

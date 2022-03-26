@@ -496,10 +496,10 @@ When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire 
 Here is an JS snippet to show you how to proceed:
 
 ```javascript
-Livewire.on('table:row:action:confirm', (rowActionKey, modelKey, confirmationMessage) => {
+Livewire.on('table:row:action:confirm', (identifier, modelKey, confirmationMessage) => {
     // Replace this native JS confirm dialog by your favorite modal/toast library implementation. Or not!
     if (window.confirm(confirmationMessage)) {
-        Livewire.emit('table:row:action:confirmed', rowActionKey, modelKey);
+        Livewire.emit('table:row:action:confirmed', identifier, modelKey);
     }
 });
 ```
