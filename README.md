@@ -124,6 +124,7 @@ And display it in a view:
   * [Define table row actions](#define-table-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Format column values](#format-column-values)
+  * [Define column cell actions](#define-column-cell-actions)
   * [Configure columns searching](#configure-columns-searching)
   * [Configure columns sorting](#configure-columns-sorting)
 * [Testing](#testing)
@@ -777,6 +778,10 @@ class UsersTable extends AbstractTableConfiguration
     }
 }
 ```
+
+### Define column cell actions
+
+ToDo
 
 ### Configure columns sorting
 
