@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Livewire\Component;
 
-abstract class AbstractCellAction
+abstract class AbstractColumnAction
 {
-    public string $cellActionClass;
+    public string $columnActionClass;
 
     public string $modelClass;
 
@@ -24,17 +24,17 @@ abstract class AbstractCellAction
 
     protected string|null $class;
 
-    protected string $title;
-
     protected string $icon;
+
+    protected string $title;
 
     protected Closure|null $allowWhenClosure = null;
 
     abstract protected function class(Model $model, string $attribute): string|null;
 
-    abstract protected function title(Model $model, string $attribute): string;
-
     abstract protected function icon(Model $model, string $attribute): string;
+
+    abstract protected function title(Model $model, string $attribute): string;
 
     abstract protected function shouldBeConfirmed(): bool;
 
@@ -43,29 +43,29 @@ abstract class AbstractCellAction
 
     public function setup(Model $model, string $attribute): void
     {
-        $this->cellActionClass = $this::class;
+        $this->columnActionClass = $this::class;
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
         $this->attribute = $attribute;
     }
 
-    public static function retrieve(array $cellActions, string $modelKey, string $attribute): array|null
+    public static function retrieve(array $columnActions, string $modelKey, string $attribute): array|null
     {
-        return Arr::first($cellActions, static fn(array $cellAction) => $cellAction['modelKey'] === $modelKey
-            && $cellAction['attribute'] === $attribute);
+        return Arr::first($columnActions, static fn(array $columnAction) => $columnAction['modelKey'] === $modelKey
+            && $columnAction['attribute'] === $attribute);
     }
 
-    public static function make(array $cellActionArray): self
+    public static function make(array $columnActionArray): self
     {
-        $cellActionInstance = app($cellActionArray['cellActionClass'], $cellActionArray);
-        $cellActionInstance->cellActionClass = $cellActionArray['cellActionClass'];
-        $cellActionInstance->modelClass = $cellActionArray['modelClass'];
-        $cellActionInstance->modelKey = $cellActionArray['modelKey'];
-        $cellActionInstance->attribute = $cellActionArray['attribute'];
-        $cellActionInstance->confirmationMessage = $cellActionArray['confirmationMessage'];
-        $cellActionInstance->executedMessage = $cellActionArray['executedMessage'];
+        $columnActionInstance = app($columnActionArray['columnActionClass'], $columnActionArray);
+        $columnActionInstance->columnActionClass = $columnActionArray['columnActionClass'];
+        $columnActionInstance->modelClass = $columnActionArray['modelClass'];
+        $columnActionInstance->modelKey = $columnActionArray['modelKey'];
+        $columnActionInstance->attribute = $columnActionArray['attribute'];
+        $columnActionInstance->confirmationMessage = $columnActionArray['confirmationMessage'];
+        $columnActionInstance->executedMessage = $columnActionArray['executedMessage'];
 
-        return $cellActionInstance;
+        return $columnActionInstance;
     }
 
 

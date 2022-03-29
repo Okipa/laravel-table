@@ -1,0 +1,36 @@
+<?php
+
+namespace DummyNamespace;
+
+use Livewire\Component;
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
+
+class DummyClass extends AbstractColumnAction
+{
+    protected function class(): string
+    {
+        // The CSS class that will be applies to the column action link.
+    }
+
+    protected function icon(): string
+    {
+        // The icon that will be displayed in the column action link.
+    }
+
+    protected function title(): string
+    {
+        // The title that will be set to the column action link.
+    }
+
+    protected function shouldBeConfirmed(): bool
+    {
+        // Whether the column action should be confirmed before being executed.
+    }
+
+    /** @return mixed|void */
+    public function action(Model $model, string $attribute, Component $livewire)
+    {
+        // The treatment that will be executed on click on the column action link.
+    }
+}

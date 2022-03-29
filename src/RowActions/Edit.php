@@ -19,17 +19,17 @@ class Edit extends AbstractRowAction
         return 'edit';
     }
 
-    protected function class(): string
+    protected function class(Model $model): string
     {
         return 'link-primary';
     }
 
-    protected function icon(): string
+    protected function icon(Model $model): string
     {
         return config('laravel-table.icon.edit');
     }
 
-    protected function title(): string
+    protected function title(Model $model): string
     {
         return __('Edit');
     }

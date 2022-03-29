@@ -1,4 +1,4 @@
-<a wire:click.prevent="cellAction('{{ $modelKey }}', '{{ $attribute }}', {{ $shouldBeConfirmed ? 1 : 0 }})"
+<a wire:click.prevent="columnAction('{{ $modelKey }}', '{{ $attribute }}', {{ $shouldBeConfirmed ? 1 : 0 }})"
    @class([$class])
    href=""
    title="{{ $title }}">

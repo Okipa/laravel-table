@@ -13,17 +13,17 @@ class Destroy extends AbstractRowAction
         return 'destroy';
     }
 
-    protected function class(): string
+    protected function class(Model $model): string
     {
         return 'link-danger';
     }
 
-    protected function icon(): string
+    protected function icon(Model $model): string
     {
         return config('laravel-table.icon.destroy');
     }
 
-    protected function title(): string
+    protected function title(Model $model): string
     {
         return __('Destroy');
     }

@@ -20,9 +20,9 @@ abstract class AbstractRowAction
 
     protected string|null $class;
 
-    protected string $title;
-
     protected string $icon;
+
+    protected string $title;
 
     public string|null $confirmationMessage = null;
 
@@ -32,11 +32,11 @@ abstract class AbstractRowAction
 
     abstract protected function identifier(): string;
 
-    abstract protected function class(): string|null;
+    abstract protected function class(Model $model): string|null;
 
-    abstract protected function title(): string;
+    abstract protected function icon(Model $model): string;
 
-    abstract protected function icon(): string;
+    abstract protected function title(Model $model): string;
 
     abstract protected function shouldBeConfirmed(): bool;
 
@@ -45,10 +45,10 @@ abstract class AbstractRowAction
 
     public function setup(Model $model): void
     {
-        $this->identifier = $this->identifier();
         $this->rowActionClass = $this::class;
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
+        $this->identifier = $this->identifier();
     }
 
     public static function retrieve(array $rowActions, string $modelKey): array
@@ -69,18 +69,17 @@ abstract class AbstractRowAction
         return $rowActionInstance;
     }
 
-    public function render(): View
+    public function render(Model $model): View
     {
         return view('laravel-table::' . config('laravel-table.ui') . '.row-action', [
             'modelKey' => $this->modelKey,
-            'class' => $this->class(),
+            'class' => $this->class($model),
             'identifier' => $this->identifier,
-            'title' => $this->title(),
-            'icon' => $this->icon(),
+            'title' => $this->title($model),
+            'icon' => $this->icon($model),
             'shouldBeConfirmed' => $this->shouldBeConfirmed(),
         ]);
     }
-
 
     public function onlyWhen(Closure $allowWhenClosure): self
     {

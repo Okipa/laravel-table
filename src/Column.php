@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use Okipa\LaravelTable\Abstracts\AbstractCellAction;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection;
 
@@ -26,7 +26,7 @@ class Column
 
     protected Closure|AbstractFormatter|null $formatter = null;
 
-    protected Closure|null $cellActionClosure = null;
+    protected Closure|null $columnActionClosure = null;
 
     protected bool $escapeHtml = false;
 
@@ -38,11 +38,6 @@ class Column
     public static function make(string $title, string $key = null): self
     {
         return new static($title, $key);
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
     }
 
     public function getTitle(): string
@@ -116,19 +111,19 @@ class Column
         return $this;
     }
 
-    public function cellAction(Closure $cellActionClosure): self
+    public function action(Closure $columnActionClosure): self
     {
-        $this->cellActionClosure = $cellActionClosure;
+        $this->columnActionClosure = $columnActionClosure;
 
         return $this;
     }
 
-    public function getCellAction(): Closure|null
+    public function getAction(): Closure|null
     {
-        return $this->cellActionClosure;
+        return $this->columnActionClosure;
     }
 
-    public function getValue(Model $model, array $tableCellActionsArray): HtmlString|string|null
+    public function getValue(Model $model, array $tableColumnActionsArray): HtmlString|string|null
     {
         if ($this->formatter instanceof Closure) {
             return $this->manageHtmlEscaping(($this->formatter)($model));
@@ -136,9 +131,13 @@ class Column
         if ($this->formatter instanceof AbstractFormatter) {
             return $this->manageHtmlEscaping($this->formatter->format($model, $this->key));
         }
-        $cellActionArray = AbstractCellAction::retrieve($tableCellActionsArray, $model->getKey(), $this->getKey());
-        if ($cellActionArray) {
-            return new HtmlString(AbstractCellAction::make($cellActionArray)->render($model, $this->key));
+        $columnActionArray = AbstractColumnAction::retrieve(
+            $tableColumnActionsArray,
+            $model->getKey(),
+            $this->getKey()
+        );
+        if ($columnActionArray) {
+            return new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->key));
         }
 
         return $this->key ? $this->manageHtmlEscaping(data_get($model, $this->key)) : null;
@@ -147,5 +146,10 @@ class Column
     protected function manageHtmlEscaping(mixed $value): HtmlString|string
     {
         return $this->escapeHtml ? $value : new HtmlString($value);
+    }
+
+    public function getKey(): string
+    {
+        return $this->key;
     }
 }

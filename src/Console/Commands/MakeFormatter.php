@@ -26,11 +26,7 @@ class MakeFormatter extends GeneratorCommand
         return $rootNamespace . '\Tables\Formatters';
     }
 
-    /**
-     * @param string $name
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
+    /** @throws \Illuminate\Contracts\Filesystem\FileNotFoundException */
     protected function buildClass($name): string
     {
         $replace = [];

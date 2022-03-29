@@ -15,6 +15,11 @@ class StrLimit extends AbstractFormatter
 
     public function format(Model $model, string $attribute): string
     {
-        return Str::limit($model->{$attribute}, $this->limit, $this->end);
+        $string = $model->{$attribute};
+        $truncatedString = Str::limit($model->{$attribute}, $this->limit, $this->end);
+
+        return <<<HTML
+        <span title="$string" data-bs-toggle="tooltip">$truncatedString</span>
+        HTML;
     }
 }

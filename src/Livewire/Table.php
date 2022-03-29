@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Okipa\LaravelTable\Abstracts\AbstractCellAction;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -44,7 +44,7 @@ class Table extends Component
 
     public array $tableRowActionsArray;
 
-    public array $tableCellActionsArray;
+    public array $tableColumnActionsArray;
 
     protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
 
@@ -112,7 +112,7 @@ class Table extends Component
         // Actions
         $this->headActionArray = $table->getHeadActionArray();
         $this->tableRowActionsArray = $table->generateRowActionsArray();
-        $this->tableCellActionsArray = $table->generateCellActionsArray();
+        $this->tableColumnActionsArray = $table->generateColumnActionsArray();
 
         return [
             'columns' => $columns,
@@ -162,12 +162,12 @@ class Table extends Component
         return $rowActionInstance->action($model, $this);
     }
 
-    public function cellAction(string $modelKey, string $attribute, bool $requiresConfirmation = false)
+    public function columnAction(string $modelKey, string $attribute, bool $requiresConfirmation = false)
     {
-        $cellActionArray = AbstractCellAction::retrieve($this->tableCellActionsArray, $modelKey, $attribute);
-        $cellActionInstance = AbstractCellAction::make($cellActionArray);
-        $model = app($cellActionArray['modelClass'])->findOrFail($modelKey);
+        $columnActionArray = AbstractColumnAction::retrieve($this->tableColumnActionsArray, $modelKey, $attribute);
+        $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+        $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
 
-        return $cellActionInstance->action($model, $attribute, $this);
+        return $columnActionInstance->action($model, $attribute, $this);
     }
 }

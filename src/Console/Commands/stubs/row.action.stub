@@ -8,19 +8,14 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class DummyClass extends AbstractRowAction
 {
+    protected function identifier(): string
+    {
+        // The unique identifier that is required to retrieve the row action.
+    }
+
     protected function class(): string
     {
         // The CSS class that will be applies to the row action link.
-    }
-
-    protected function key(): string
-    {
-        // The unique key that will allow the row action to be identified.
-    }
-
-    protected function title(): string
-    {
-        // The title that will be set to the row action link.
     }
 
     protected function icon(): string
@@ -28,9 +23,14 @@ class DummyClass extends AbstractRowAction
         // The icon that will be displayed in the row action link.
     }
 
+    protected function title(): string
+    {
+        // The title that will be set to the row action link.
+    }
+
     protected function shouldBeConfirmed(): bool
     {
-        // Whether the action should be confirmed before being executed.
+        // Whether the row action should be confirmed before being executed.
     }
 
     /** @return mixed|void */

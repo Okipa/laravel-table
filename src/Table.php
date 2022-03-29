@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Okipa\LaravelTable\Abstracts\AbstractCellAction;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
@@ -240,25 +240,25 @@ class Table
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
      * @throws \JsonException
      */
-    public function generateCellActionsArray(): array
+    public function generateColumnActionsArray(): array
     {
-        $tableCellActionsArray = [];
+        $tableColumnActionsArray = [];
         foreach ($this->rows->getCollection() as $model) {
-            $cellActions = $this->getColumns()
-                ->mapWithKeys(fn(Column $column) => [$column->getKey() => $column->getCellAction()
-                    ? $column->getCellAction()($model)
+            $columnActions = $this->getColumns()
+                ->mapWithKeys(fn(Column $column) => [$column->getKey() => $column->getAction()
+                    ? $column->getAction()($model)
                     : null])
-                ->filter(fn(AbstractCellAction|null $cellAction) => $cellAction?->isAllowed($model));
-            foreach ($cellActions as $attribute => $cellAction) {
-                $cellAction->setup($model, $attribute);
-                $tableCellActionsArray[] = json_decode(json_encode(
-                    $cellAction,
+                ->filter(fn(AbstractColumnAction|null $columnAction) => $columnAction?->isAllowed($model));
+            foreach ($columnActions as $attribute => $columnAction) {
+                $columnAction->setup($model, $attribute);
+                $tableColumnActionsArray[] = json_decode(json_encode(
+                    $columnAction,
                     JSON_THROW_ON_ERROR
                 ), true, 512, JSON_THROW_ON_ERROR);
             }
         }
 
-        return $tableCellActionsArray;
+        return $tableColumnActionsArray;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */

@@ -4,26 +4,26 @@ namespace Okipa\LaravelTable\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
-class MakeRowAction extends GeneratorCommand
+class MakeColumnAction extends GeneratorCommand
 {
     /** @var string */
-    protected $type = 'RowAction';
+    protected $type = 'ColumnAction';
 
     /** @var string */
-    protected $name = 'make:table:row:action';
+    protected $name = 'make:table:column:action';
 
     /** @var string */
-    protected $description = 'Create a new table row action.';
+    protected $description = 'Create a new table column action.';
 
     protected function getStub(): string
     {
-        return __DIR__ . '/stubs/row.action.stub';
+        return __DIR__ . '/stubs/column.action.stub';
     }
 
     /** @param string $rootNamespace */
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace . '\Tables\RowActions';
+        return $rootNamespace . '\Tables\ColumnActions';
     }
 
     /** @throws \Illuminate\Contracts\Filesystem\FileNotFoundException */

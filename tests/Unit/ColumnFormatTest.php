@@ -10,6 +10,7 @@ use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Formatters\Boolean;
 use Okipa\LaravelTable\Formatters\Datetime;
+use Okipa\LaravelTable\Formatters\Display;
 use Okipa\LaravelTable\Formatters\StrLimit;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
@@ -50,8 +51,8 @@ class ColumnFormatTest extends TestCase
     /** @test */
     public function it_can_format_columns_from_formatters(): void
     {
-        Config::set('laravel-table.icon.active', 'icon-active');
-        Config::set('laravel-table.icon.inactive', 'icon-inactive');
+        Config::set('laravel-table.icon.active', 'active-icon');
+        Config::set('laravel-table.icon.inactive', 'inactive-icon');
         app('router')->get('/user/{user}/show', ['as' => 'user.show']);
         $user1 = User::factory()->create(['active' => true]);
         Date::setTestNow(Date::now()->addMinute());
@@ -66,8 +67,8 @@ class ColumnFormatTest extends TestCase
             {
                 return [
                     Column::make('Name')->format(new StrLimit(5)),
-                    Column::make('Created At')->format(new Datetime('d/m:Y H:i:s', 'Europe/Paris')),
                     Column::make('Active')->format(new Boolean()),
+                    Column::make('Created At')->format(new Datetime('d/m:Y H:i:s', 'Europe/Paris')),
                 ];
             }
         };
@@ -75,12 +76,12 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                Str::limit($user1->name, 5),
+                '<span title="' . $user1->name . '" data-bs-toggle="tooltip">' . Str::limit($user1->name, 5) . '</span>',
+                '<span class="text-success">active-icon</span>',
                 $user1->created_at->timezone('Europe/Paris')->format('d/m:Y H:i:s'),
-                '<span class="text-success">icon-active</span>',
-                Str::limit($user2->name, 5),
+                '<span title="' . $user2->name . '" data-bs-toggle="tooltip">' . Str::limit($user2->name, 5) . '</span>',
+                '<span class="text-danger">inactive-icon</span>',
                 $user2->created_at->timezone('Europe/Paris')->format('d/m:Y H:i:s'),
-                '<span class="text-danger">icon-inactive</span>',
                 '</tbody>',
             ]);
     }

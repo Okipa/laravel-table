@@ -19,17 +19,17 @@ class Show extends AbstractRowAction
         return 'show';
     }
 
-    protected function class(): string
+    protected function class(Model $model): string
     {
         return 'link-info';
     }
 
-    protected function icon(): string
+    protected function icon(Model $model): string
     {
         return config('laravel-table.icon.show');
     }
 
-    protected function title(): string
+    protected function title(Model $model): string
     {
         return __('Show');
     }

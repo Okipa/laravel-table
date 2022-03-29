@@ -12,19 +12,19 @@ class DummyClass extends AbstractHeadAction
         // The CSS class that will be applied to the head action button.
     }
 
-    protected function title(): string
-    {
-        // The title that will be displayed in the head action button.
-    }
-
     protected function icon(): string
     {
         // The icon that will be displayed in the head action button.
     }
 
+    protected function title(): string
+    {
+        // The title that will be displayed in the head action button.
+    }
+
     /** @return mixed|void */
     public function action(Component $livewire)
     {
-        // The treatment that will be executed on the head action button.
+        // The treatment that will be executed on click on the the head action button.
     }
 }

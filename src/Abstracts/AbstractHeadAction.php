@@ -11,15 +11,15 @@ abstract class AbstractHeadAction
 
     protected string|null $class;
 
-    protected string $title;
-
     protected string $icon;
+
+    protected string $title;
 
     abstract protected function class(): string|null;
 
-    abstract protected function title(): string;
-
     abstract protected function icon(): string;
+
+    abstract protected function title(): string;
 
     /** @return mixed|void */
     abstract public function action(Component $livewire);

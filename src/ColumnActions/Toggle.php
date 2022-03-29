@@ -1,21 +1,16 @@
 <?php
 
-namespace Okipa\LaravelTable\CellActions;
+namespace Okipa\LaravelTable\ColumnActions;
 
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
-use Okipa\LaravelTable\Abstracts\AbstractCellAction;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 
-class Toggle extends AbstractCellAction
+class Toggle extends AbstractColumnAction
 {
     protected function class(Model $model, string $attribute): string|null
     {
         return $model->{$attribute} ? 'link-danger p-1' : 'link-success p-1';
-    }
-
-    protected function title(Model $model, string $attribute): string
-    {
-        return __('Toggle');
     }
 
     protected function icon(Model $model, string $attribute): string
@@ -23,6 +18,11 @@ class Toggle extends AbstractCellAction
         return $model->{$attribute}
             ? config('laravel-table.icon.inactive')
             : config('laravel-table.icon.active');
+    }
+
+    protected function title(Model $model, string $attribute): string
+    {
+        return __('Toggle');
     }
 
     protected function shouldBeConfirmed(): bool
