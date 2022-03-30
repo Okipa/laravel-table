@@ -87,7 +87,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Toggle', 'active')
-                        ->action(fn() => (new Toggle())->onlyWhen(fn(User $user) => ! Auth::user()->is($user))),
+                        ->action(fn(User $user) => (new Toggle())->when(! Auth::user()->is($user))),
                 ];
             }
         };

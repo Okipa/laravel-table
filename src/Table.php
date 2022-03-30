@@ -220,7 +220,7 @@ class Table
         }
         foreach ($this->rows->getCollection() as $model) {
             $rowActions = collect(($this->rowActionsClosure)($model))
-                ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed($model));
+                ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed());
 
             $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($model) {
                 $rowAction->setup($model);
@@ -248,7 +248,7 @@ class Table
                 ->mapWithKeys(fn(Column $column) => [$column->getKey() => $column->getAction()
                     ? $column->getAction()($model)
                     : null])
-                ->filter(fn(AbstractColumnAction|null $columnAction) => $columnAction?->isAllowed($model));
+                ->filter(fn(AbstractColumnAction|null $columnAction) => $columnAction?->isAllowed());
             foreach ($columnActions as $attribute => $columnAction) {
                 $columnAction->setup($model, $attribute);
                 $tableColumnActionsArray[] = json_decode(json_encode(

@@ -452,9 +452,8 @@ This package provides the built-in following actions:
 To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row actions instances.
 
 You'll ben able to chain the following methods to your actions:
-* `onlyWhen(Closure $allowWhenClosure): Okipa\LaravelTable\Abstracts\AbstractRowAction`
-  * This closure will let you manipulate a `Illuminate\Database\Eloquent $model` argument and must return a `boolean`
-  * This method allows you to determine if actions should be available or not on your rows
+* `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+  * This method allows you to determine if action should be available on table rows
 * `confirmationMessage(string $confirmationMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`
   * This method allows you to define a custom confirmation message for your action that will override the default `__('Are you sure you want to perform this action?')` one
   * This will only be useful for actions that are requiring a confirmation
@@ -482,7 +481,7 @@ class UsersTable extends AbstractTableConfiguration
                 new Edit(route('user.edit', $user)),
                 (new Destroy())
                     // Destroy action will not be available for authenticated user
-                    ->onlyWhen(fn(User $user) => ! Auth::user()->is($user))
+                    ->when(! Auth::user()->is($user))
                     // Define specific confirmation message
                     ->confirmationMessage('Are you sure you want to delete user ' . $user->name . '?')
                     // Define specific executed message
@@ -773,7 +772,7 @@ class UsersTable extends AbstractTableConfiguration
             Column::make('Id'),
             Column::make('Toggle', 'active')
                 // Toggle action will not be available for authenticated user
-                ->action(fn() => (new Toggle())->onlyWhen(fn(User $user) => ! Auth::user()->is($user))),
+                ->action(fn(User $user) => (new Toggle())->when(! Auth::user()->is($user))),
         ];
     }
 }

@@ -28,7 +28,7 @@ abstract class AbstractColumnAction
 
     protected string $title;
 
-    protected Closure|null $allowWhenClosure = null;
+    protected bool $isAllowed = true;
 
     abstract protected function class(Model $model, string $attribute): string|null;
 
@@ -81,20 +81,16 @@ abstract class AbstractColumnAction
         ]);
     }
 
-    public function onlyWhen(Closure $allowWhenClosure): self
+    public function when(bool $condition): self
     {
-        $this->allowWhenClosure = $allowWhenClosure;
+        $this->isAllowed = $condition;
 
         return $this;
     }
 
-    public function isAllowed(Model $model): bool
+    public function isAllowed(): bool
     {
-        if (! $this->allowWhenClosure) {
-            return true;
-        }
-
-        return ($this->allowWhenClosure)($model);
+        return $this->isAllowed;
     }
 
     public function confirmationMessage(string $confirmationMessage): self
