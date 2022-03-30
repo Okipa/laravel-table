@@ -56,27 +56,27 @@ class TableRowActionsTest extends TestCase
                 '</thead>',
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="rowAction(\'show\', ' . $users->first()->id . ', 0)"',
+                '<a wire:click.prevent="rowAction(\'show\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-info p-1"',
                 'title="Show">',
                 'show-icon',
-                '<a wire:click.prevent="rowAction(\'edit\', ' . $users->first()->id . ', 0)"',
+                '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-primary p-1"',
                 'title="Edit">',
                 'edit-icon',
-                '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->first()->id . ', 1)"',
+                '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
                 'class="link-danger p-1"',
                 'title="Destroy">',
                 'destroy-icon',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="rowAction(\'show\', ' . $users->last()->id . ', 0)"',
+                '<a wire:click.prevent="rowAction(\'show\', \'' . $users->last()->id . '\', 0)"',
                 'title="Show">',
                 'show-icon',
-                '<a wire:click.prevent="rowAction(\'edit\', ' . $users->last()->id . ', 0)"',
+                '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
                 'title="Edit">',
                 'edit-icon',
-                '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->last()->id . ', 1)"',
+                '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
                 'title="Destroy">',
                 'destroy-icon',
                 '</tr>',
@@ -88,13 +88,14 @@ class TableRowActionsTest extends TestCase
             ->assertRedirect(route('user.edit', $users->last()))
             ->call('rowAction', 'destroy', $users->first()->id, true)
             ->assertEmitted(
-                'table:row:action:confirm',
+                'table:action:confirm',
+                'rowAction',
                 'destroy',
-                $users->first()->id,
+                (string) $users->first()->id,
                 'Are you sure you want to delete user ' . $users->first()->name . '?'
             )
-            ->emit('table:row:action:confirmed', 'destroy', $users->first()->id)
-            ->assertEmitted('table:row:action:executed', 'User ' . $users->first()->name . ' has been deleted.');
+            ->emit('table:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
+            ->assertEmitted('table:action:executed', 'User ' . $users->first()->name . ' has been deleted.');
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 
@@ -127,20 +128,20 @@ class TableRowActionsTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="rowAction(\'edit\', ' . $users->first()->id . ', 0)"',
+                '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-primary p-1"',
                 'title="Edit">',
                 'edit-icon',
-                '<a wire:click.prevent="rowAction(\'edit\', ' . $users->last()->id . ', 0)"',
+                '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
                 'title="Edit">',
                 'edit-icon',
-                '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->last()->id . ', 1)"',
+                '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
                 'title="Destroy">',
                 'destroy-icon',
                 '</tr>',
                 '</tbody>',
             ])->assertDontSeeHtml([
-                '<a wire:click.prevent="rowAction(\'destroy\', ' . $users->first()->id . ', 1)"',
+                '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
             ]);
     }
 }

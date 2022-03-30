@@ -492,7 +492,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action Deactivate`.
+You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action ToggleActivation`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
@@ -507,9 +507,9 @@ use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class ToggleActivation extends AbstractRowAction
 {
-    protected function key(): string
+    protected function identifier(): string
     {
-        return 'disable';
+        return 'toggle_activation';
     }
     
     protected function class(Model $model): string
@@ -524,7 +524,7 @@ class ToggleActivation extends AbstractRowAction
     
     protected function title(Model $model): string
     {
-        return $model->active ? __('Deactivate') : __('Activate');
+        return $model->active ? __('Toggle activation') : __('Activate');
     }
 
     protected function shouldBeConfirmed(): bool
@@ -548,7 +548,7 @@ namespace App\Tables;
 
 use App\Models\Users\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\RowActions\Deactivate;
+use App\Tables\RowActions\ToggleActivation;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -558,7 +558,7 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->rowActions(fn(User $user) => [
-                new Deactivate(),
+                new ToggleActivation(),
             ]);
     }
 }
@@ -578,10 +578,10 @@ When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire 
 Here is an JS snippet to show you how to proceed:
 
 ```javascript
-Livewire.on('table:row:action:confirm', (identifier, modelKey, confirmationMessage) => {
+Livewire.on('table:action:confirm', (identifier, modelKey, confirmationMessage) => {
     // Replace this native JS confirm dialog by your favorite modal/toast library implementation. Or not!
     if (window.confirm(confirmationMessage)) {
-        Livewire.emit('table:row:action:confirmed', identifier, modelKey);
+        Livewire.emit('table:action:confirmed', identifier, modelKey);
     }
 });
 ```
@@ -591,7 +591,7 @@ Once executed, all actions are emitting a `table:row:action:executed` Livewire e
 Following the same logic, you'll have to intercept it from a JS script like this one:
 
 ```javascript
-Livewire.on('table:row:action:executed', (executedMessage) => {
+Livewire.on('table:action:executed', (executedMessage) => {
     // Replace this native JS alert by your favorite modal/toast library implementation. Or not!
     window.alert(executedMessage);
 });
@@ -742,269 +742,112 @@ This package provides the built-in following actions:
 * `Toggle`:
   * Toggles a boolean value directly from the table
 
-[comment]: <> (To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row actions instances.)
+To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
 
-[comment]: <> (You'll ben able to chain the following methods to your actions:)
+You'll be able to chain the same methods as for a row action => [See row actions](#define-table-row-actions).
 
-[comment]: <> (* `onlyWhen&#40;Closure $allowWhenClosure&#41;: Okipa\LaravelTable\Abstracts\AbstractRowAction`)
+```php
+namespace App\Tables;
 
-[comment]: <> (    * This closure will let you manipulate a `Illuminate\Database\Eloquent $model` argument and must return a `boolean`)
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\ColumnActions\Toggle;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-[comment]: <> (    * This method allows you to determine if actions should be available or not on your rows)
-
-[comment]: <> (* `confirmationMessage&#40;string $confirmationMessage&#41;: Okipa\LaravelTable\Abstracts\AbstractRowAction`)
-
-[comment]: <> (    * This method allows you to define a custom confirmation message for your action that will override the default `__&#40;'Are you sure you want to perform this action?'&#41;` one)
-
-[comment]: <> (    * This will only be useful for actions that are requiring a confirmation)
-
-[comment]: <> (* `executedMessage&#40;string $executedMessage&#41;: Okipa\LaravelTable\Abstracts\AbstractRowAction`:)
-
-[comment]: <> (    * This method allows you to define a custom executed message for your action that will override the default `__&#40;'Action has been executed.'&#41;` one)
-
-[comment]: <> (```php)
-
-[comment]: <> (namespace App\Tables;)
-
-[comment]: <> (use App\Models\Users\User;)
-
-[comment]: <> (use Okipa\LaravelTable\Table;)
-
-[comment]: <> (use Okipa\LaravelTable\RowActions\Edit;)
-
-[comment]: <> (use Okipa\LaravelTable\RowActions\Show;)
-
-[comment]: <> (use Okipa\LaravelTable\RowActions\Destroy;)
-
-[comment]: <> (use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;)
-
-[comment]: <> (class UsersTable extends AbstractTableConfiguration)
-
-[comment]: <> ({)
-
-[comment]: <> (    protected function table&#40;&#41;: Table)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return Table::make&#40;&#41;)
-
-[comment]: <> (            ->model&#40;User::class&#41;)
-
-[comment]: <> (            ->rowActions&#40;fn&#40;User $user&#41; => [)
-
-[comment]: <> (                new Show&#40;route&#40;'user.show', $user&#41;&#41;,)
-
-[comment]: <> (                new Edit&#40;route&#40;'user.edit', $user&#41;&#41;,)
-
-[comment]: <> (                &#40;new Destroy&#40;&#41;&#41;)
-
-[comment]: <> (                    // Destroy action will not be available for authenticated user)
-
-[comment]: <> (                    ->onlyWhen&#40;fn&#40;User $user&#41; => ! Auth::user&#40;&#41;->is&#40;$user&#41;&#41;)
-
-[comment]: <> (                    // Define specific confirmation message)
-
-[comment]: <> (                    ->confirmationMessage&#40;'Are you sure you want to delete user ' . $user->name . '?'&#41;)
-
-[comment]: <> (                    // Define specific executed message)
-
-[comment]: <> (                    ->executedMessage&#40;'User ' . $user->name . ' has been deleted.'&#41;,)
-
-[comment]: <> (            ]&#41;.)
-
-[comment]: <> (    })
-
-[comment]: <> (})
-
-[comment]: <> (```)
-
-[comment]: <> (You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action Deactivate`.)
-
-[comment]: <> (You'll find your generated table row actions in the `app/Tables/RowActions` directory.)
-
-[comment]: <> (Here is an example of the generated row action after being correctly configured.)
-
-[comment]: <> (```php)
-
-[comment]: <> (namespace Okipa\LaravelTable\RowActions;)
-
-[comment]: <> (use Livewire\Component;)
-
-[comment]: <> (use Illuminate\Database\Eloquent\Model;)
-
-[comment]: <> (use Okipa\LaravelTable\Abstracts\AbstractRowAction;)
-
-[comment]: <> (class ToggleActivation extends AbstractRowAction)
-
-[comment]: <> ({)
-
-[comment]: <> (    protected function key&#40;&#41;: string)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return 'disable';)
-
-[comment]: <> (    })
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
     
-[comment]: <> (    protected function class&#40;Model $model&#41;: string)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return $model->active ? 'link-danger' : 'link-success';)
-
-[comment]: <> (    })
-
-[comment]: <> (    protected function icon&#40;Model $model&#41;: string)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return '<i class="fa-solid fa-power-off"></i>';)
-
-[comment]: <> (    })
-    
-[comment]: <> (    protected function title&#40;Model $model&#41;: string)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return $model->active ? __&#40;'Deactivate'&#41; : __&#40;'Activate'&#41;;)
-
-[comment]: <> (    })
-
-[comment]: <> (    protected function shouldBeConfirmed&#40;&#41;: bool)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return true;)
-
-[comment]: <> (    })
-
-[comment]: <> (    public function action&#40;Model $model, Component $livewire&#41;: void)
-
-[comment]: <> (    {)
-
-[comment]: <> (        $model->update&#40;['active' => ! $model->active]&#41;;)
-
-[comment]: <> (        // You could also use the `$livewire` argument to interact with the Livewire table component,)
-
-[comment]: <> (        // as emitting an event for example.)
-
-[comment]: <> (    })
-
-[comment]: <> (})
-
-[comment]: <> (```)
-
-[comment]: <> (You will now be able to use your new row action in your tables.)
-
-[comment]: <> (```php)
-
-[comment]: <> (namespace App\Tables;)
-
-[comment]: <> (use App\Models\Users\User;)
-
-[comment]: <> (use Okipa\LaravelTable\Table;)
-
-[comment]: <> (use App\Tables\RowActions\Deactivate;)
-
-[comment]: <> (use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;)
-
-[comment]: <> (class UsersTable extends AbstractTableConfiguration)
-
-[comment]: <> ({)
-
-[comment]: <> (    protected function table&#40;&#41;: Table)
-
-[comment]: <> (    {)
-
-[comment]: <> (        return Table::make&#40;&#41;)
-
-[comment]: <> (            ->model&#40;User::class&#41;)
-
-[comment]: <> (            ->rowActions&#40;fn&#40;User $user&#41; => [)
-
-[comment]: <> (                new Deactivate&#40;&#41;,)
-
-[comment]: <> (            ]&#41;;)
-
-[comment]: <> (    })
-
-[comment]: <> (})
-
-[comment]: <> (```)
-
-[comment]: <> (As you'll sometimes want actions to be confirmed before they'll be executed. This behavior is handled by the action method `shouldBeConfirmed`: if set to `true`, action will not be directly executed but a `table:row:action:confirm` Livewire event will be emitted instead with the following parameters:)
-
-[comment]: <> (1. The value returned from the `key` method of your row action)
-
-[comment]: <> (2. The model primary key related to your action)
-
-[comment]: <> (3. The `$confirmationMessage` attribute from your row action)
-
-[comment]: <> (You will have to intercept this event from a JS script and manage the action confirmation prompt from your favorite modal/toast library.)
-
-[comment]: <> (When confirmed, you'll have to emit a new `table:row:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the following arguments:)
-
-[comment]: <> (1. The value returned from the `key` method of your row action)
-
-[comment]: <> (2. The related model primary)
-
-[comment]: <> (Here is an JS snippet to show you how to proceed:)
-
-[comment]: <> (```javascript)
-
-[comment]: <> (Livewire.on&#40;'table:row:action:confirm', &#40;identifier, modelKey, confirmationMessage&#41; => {)
-
-[comment]: <> (    // Replace this native JS confirm dialog by your favorite modal/toast library implementation. Or not!)
-
-[comment]: <> (    if &#40;window.confirm&#40;confirmationMessage&#41;&#41; {)
-
-[comment]: <> (        Livewire.emit&#40;'table:row:action:confirmed', identifier, modelKey&#41;;)
-
-[comment]: <> (    })
-
-[comment]: <> (}&#41;;)
-
-[comment]: <> (```)
-
-[comment]: <> (Once executed, all actions are emitting a `table:row:action:executed` Livewire event with the action `string $executedMessage` argument.)
-
-[comment]: <> (Following the same logic, you'll have to intercept it from a JS script like this one:)
-
-[comment]: <> (```javascript)
-
-[comment]: <> (Livewire.on&#40;'table:row:action:executed', &#40;executedMessage&#41; => {)
-
-[comment]: <> (    // Replace this native JS alert by your favorite modal/toast library implementation. Or not!)
-
-[comment]: <> (    window.alert&#40;executedMessage&#41;;)
-
-[comment]: <> (}&#41;;)
-
-[comment]: <> (```)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    protected function columns(): array
+    {
+        return [
+            Column::make('Id'),
+            Column::make('Toggle', 'active')
+                // Toggle action will not be available for authenticated user
+                ->action(fn() => (new Toggle())->onlyWhen(fn(User $user) => ! Auth::user()->is($user))),
+        ];
+    }
+}
+```
+
+You may need to create your own column actions. To do so, execute the following command: `php artisan make:table:column:action ToggleEmailVerified`.
+
+You'll find your generated table column actions in the `app/Tables/ColumnActions` directory.
+
+Here is an example of the generated column action after being correctly configured.
+
+```php
+
+namespace Okipa\LaravelTable\ColumnActions;
+
+use Livewire\Component;
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
+
+class ToggleEmailVerified extends AbstractColumnAction
+{
+    protected function class(Model $model, string $attribute): string|null
+    {
+        return $model->email_verified_at ? 'link-danger' : 'link-success';
+    }
+
+    protected function icon(Model $model, string $attribute): string
+    {
+        return '<i class="fa-solid fa-envelope fa-fw"></i>';
+    }
+
+    protected function title(Model $model, string $attribute): string
+    {
+        return $model->email_verified_at ? __('Set Email Unverified') : __('Set Email Verified');
+    }
+
+    protected function shouldBeConfirmed(): bool
+    {
+        return true;
+    }
+
+    public function action(Model $model, string $attribute, Component $livewire)
+    {
+        $model->update(['email_verified_at' => $model->email_verified_at ? null : Date::now()]);
+    }
+}
+```
+
+You will now be able to use your new column action in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\Users\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\ColumnActions\ManageReviews;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+
+    protected function columns(): array
+    {
+        return [
+            Column::make('Id'),
+            Column::make('Email Verified')->action(fn() => new ToggleEmailVerified()),
+        ];
+    }
+}
+```
+
+You may need your column actions to be confirmed before they'll be executed.
+
+Column actions confirmation procedure will be strictly the same as seen previously for [row actions](#define-table-row-actions). 
+
+Please refer to this part of the documentation to implement it.
 
 ### Configure columns searching
 

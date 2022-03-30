@@ -18,6 +18,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->email,
             'password' => Hash::make('secret'),
             'active' => $this->faker->boolean,
+            'email_verified_at' => $this->faker->dateTime,
         ];
     }
 }

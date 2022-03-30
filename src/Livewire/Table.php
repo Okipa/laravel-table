@@ -11,7 +11,6 @@ use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
 
 class Table extends Component
@@ -46,7 +45,7 @@ class Table extends Component
 
     public array $tableColumnActionsArray;
 
-    protected $listeners = ['table:row:action:confirmed' => 'rowAction'];
+    protected $listeners = ['table:action:confirmed' => 'actionConfirmed'];
 
     public function init(): void
     {
@@ -143,31 +142,47 @@ class Table extends Component
         return AbstractHeadAction::make($this->headActionArray)->action($this);
     }
 
-    public function rowAction(string $identifier, mixed $modelKey, bool $requiresConfirmation = false): mixed
+    public function rowAction(string $identifier, string $modelKey, bool $requiresConfirmation = false): mixed
     {
         $rowActionsArray = AbstractRowAction::retrieve($this->tableRowActionsArray, $modelKey);
         $rowActionArray = collect($rowActionsArray)->where('identifier', $identifier)->first();
         $rowActionInstance = AbstractRowAction::make($rowActionArray);
         if ($requiresConfirmation) {
             return $this->emit(
-                'table:row:action:confirm',
+                'table:action:confirm',
+                'rowAction',
                 $identifier,
                 $modelKey,
                 $rowActionInstance->confirmationMessage
             );
         }
         $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
-        $this->emit('table:row:action:executed', $rowActionInstance->getExecutedMessage());
+        $this->emit('table:action:executed', $rowActionInstance->getExecutedMessage());
 
         return $rowActionInstance->action($model, $this);
     }
 
-    public function columnAction(string $modelKey, string $attribute, bool $requiresConfirmation = false)
+    public function columnAction(string $identifier, string $modelKey, bool $requiresConfirmation = false): mixed
     {
-        $columnActionArray = AbstractColumnAction::retrieve($this->tableColumnActionsArray, $modelKey, $attribute);
+        $columnActionArray = AbstractColumnAction::retrieve($this->tableColumnActionsArray, $modelKey, $identifier);
         $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+        if ($requiresConfirmation) {
+            return $this->emit(
+                'table:action:confirm',
+                'columnAction',
+                $identifier,
+                $modelKey,
+                $columnActionInstance->confirmationMessage
+            );
+        }
         $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
+        $this->emit('table:action:executed', $columnActionInstance->getExecutedMessage());
 
-        return $columnActionInstance->action($model, $attribute, $this);
+        return $columnActionInstance->action($model, $identifier, $this);
+    }
+
+    public function actionConfirmed(string $actionType, string $identifier, string $modelKey): mixed
+    {
+        return $this->{$actionType}($identifier, $modelKey);
     }
 }

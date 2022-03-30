@@ -71,7 +71,7 @@ abstract class AbstractColumnAction
 
     public function render(Model $model, string $attribute): View
     {
-        return view('laravel-table::' . config('laravel-table.ui') . '.cell-action', [
+        return view('laravel-table::' . config('laravel-table.ui') . '.column-action', [
             'modelKey' => $this->modelKey,
             'attribute' => $this->attribute,
             'class' => $this->class($model, $attribute),

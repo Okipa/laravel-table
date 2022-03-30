@@ -15,9 +15,9 @@ class User extends Authenticatable
     protected $table = 'users';
 
     /** @var array */
-    protected $fillable = ['name', 'email', 'password', 'active'];
+    protected $fillable = ['name', 'email', 'password', 'active', 'email_verified_at'];
 
-    protected $casts = ['active' => 'boolean'];
+    protected $casts = ['active' => 'boolean', 'email_verified_at' => 'datetime'];
 
     protected static function newFactory(): UserFactory
     {
