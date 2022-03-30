@@ -565,17 +565,17 @@ class UsersTable extends AbstractTableConfiguration
 ```
 
 As you'll sometimes want actions to be confirmed before they'll be executed. This behavior is handled by the action method `shouldBeConfirmed`: if set to `true`, action will not be directly executed but a `table:action:confirm` Livewire event will be emitted instead with the following parameters:
-1. The action type (e.g. `rowAction` in this case)
+1. The action type
 2. The action identifier
 3. The model primary key related to your action
 4. The `$confirmationMessage` attribute from your action
 
-As you will see below, the 4th param is the only one you'll have to use for in order to request the user confirmation. The 3 first params will only be sent back to a new event when the action is confirmed by the user.
+As you will see below, the 4th param is the only one you'll have to use for in order to request the user confirmation. The 3 first params are only here to be sent back to a new event when the action is confirmed by the user, so you should just ignore them in your treatment.
 
 You will have to intercept this event from your own JS script and display the action confirmation request from your favorite modal/alert/toast library (a basic example is provided below).
 
 When action is confirmed by the user, you'll have to emit a new `table:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
-1. The action type (e.g. `rowAction` in this case) 
+1. The action type 
 2. The action identifier
 3. The model primary key related to your action
 
