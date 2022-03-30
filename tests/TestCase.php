@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Illuminate\Testing\Constraints\SeeInOrder;
 use Livewire\LivewireServiceProvider;
 use Okipa\LaravelTable\LaravelTableServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -45,5 +46,10 @@ class TestCase extends Orchestra
             LivewireServiceProvider::class,
             LaravelTableServiceProvider::class,
         ];
+    }
+
+    protected function assertSeeHtmlInOrder(string $html, array $values): void
+    {
+        self::assertTrue((new SeeInOrder($html))->matches($values));
     }
 }

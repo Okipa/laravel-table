@@ -7,7 +7,7 @@ use Illuminate\Console\GeneratorCommand;
 class MakeHeadAction extends GeneratorCommand
 {
     /** @var string */
-    protected $type = 'HeadAction';
+    protected $type = 'AbstractHeadAction';
 
     /** @var string */
     protected $name = 'make:table:head:action';

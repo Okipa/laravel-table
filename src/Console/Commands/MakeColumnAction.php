@@ -7,7 +7,7 @@ use Illuminate\Console\GeneratorCommand;
 class MakeColumnAction extends GeneratorCommand
 {
     /** @var string */
-    protected $type = 'ColumnAction';
+    protected $type = 'AbstractColumnAction';
 
     /** @var string */
     protected $name = 'make:table:column:action';

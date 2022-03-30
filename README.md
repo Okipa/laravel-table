@@ -320,7 +320,7 @@ This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
@@ -353,7 +353,7 @@ To use it, you'll have to pass an instance of it to the `headAction` method.
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\HeadActions\Create;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -417,7 +417,7 @@ You will now be able to use your new head action in your tables.
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use App\Tables\HeadActions\Configure;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -464,7 +464,7 @@ You'll ben able to chain the following methods to your actions:
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\RowActions\Edit;
 use Okipa\LaravelTable\RowActions\Show;
@@ -546,7 +546,7 @@ You will now be able to use your new row action in your tables.
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use App\Tables\RowActions\ToggleActivation;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -749,7 +749,7 @@ You'll be able to chain the same methods as for a row action => [See row actions
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\ColumnActions\Toggle;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -821,7 +821,7 @@ You will now be able to use your new column action in your tables.
 ```php
 namespace App\Tables;
 
-use App\Models\Users\User;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
 use App\Tables\ColumnActions\ManageReviews;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;

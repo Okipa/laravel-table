@@ -57,7 +57,6 @@ class MakeTable extends GeneratorCommand
             'DummyFullModelClass' => $modelClass,
             'DummyModelClass' => class_basename($modelClass),
             '$dummyModel' => '$' . Str::camel(class_basename($modelClass)),
-            'dummyRoutes' => Str::plural(Str::camel(class_basename($modelClass))),
             'dummyRoute' => Str::camel(class_basename($modelClass)),
         ]);
     }

@@ -7,7 +7,7 @@ use Illuminate\Console\GeneratorCommand;
 class MakeRowAction extends GeneratorCommand
 {
     /** @var string */
-    protected $type = 'RowAction';
+    protected $type = 'AbstractRowAction';
 
     /** @var string */
     protected $name = 'make:table:row:action';

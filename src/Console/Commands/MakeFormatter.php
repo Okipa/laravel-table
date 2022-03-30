@@ -7,7 +7,7 @@ use Illuminate\Console\GeneratorCommand;
 class MakeFormatter extends GeneratorCommand
 {
     /** @var string */
-    protected $type = 'Formatter';
+    protected $type = 'AbstractFormatter';
 
     /** @var string */
     protected $name = 'make:table:formatter';

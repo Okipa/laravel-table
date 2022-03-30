@@ -12,117 +12,202 @@ use Tests\TestCase;
 
 class MakeTest extends TestCase
 {
-    public function testMakeTable(): void
-    {
-        $this->artisan(MakeTable::class, ['name' => 'UsersTable']);
-        self::assertFileExists(base_path('app/Tables/UsersTable.php'));
-        $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
-        self::assertStringContainsString('namespace App\Tables;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;', $fileContent);
-        self::assertStringContainsString('class UsersTable extends AbstractTableConfiguration', $fileContent);
-        self::assertStringContainsString('protected function table(): Table', $fileContent);
-        self::assertStringContainsString('protected function columns(): array', $fileContent);
-    }
-
-    public function testMakeModelTable(): void
-    {
-        $this->artisan(MakeTable::class, ['name' => 'UsersTable', '--model' => 'App\Models\User']);
-        self::assertFileExists(base_path('app/Tables/UsersTable.php'));
-        $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
-        self::assertStringContainsString('namespace App\Tables;', $fileContent);
-        self::assertStringContainsString('use App\Models\User;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Table;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Formatters\Date;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\RowActions\Edit;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\RowActions\Destroy;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;', $fileContent);
-        self::assertStringContainsString('class UsersTable extends AbstractTableConfiguration', $fileContent);
-        self::assertStringContainsString('protected function table(): Table', $fileContent);
-        self::assertStringContainsString('Table::make()->model(User::class)', $fileContent);
-        self::assertStringContainsString('->rowActions(fn(User $user) => [', $fileContent);
-        self::assertStringContainsString('new Edit(route(\'user.edit\', $user)),', $fileContent);
-        self::assertStringContainsString('new Destroy(),', $fileContent);
-        self::assertStringContainsString('protected function columns(): array', $fileContent);
-        self::assertStringContainsString('Column::make(\'Id\')->sortable();', $fileContent);
-        self::assertStringContainsString(
-            'Column::make(\'Created at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable();',
-            $fileContent
-        );
-        self::assertStringContainsString(
-            'Column::make(\'Updated at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
-            $fileContent
-        );
-    }
-
-    public function testMakeFormatter(): void
-    {
-        $this->artisan(MakeFormatter::class, ['name' => 'Boolean']);
-        self::assertFileExists(base_path('app/Tables/Formatters/Boolean.php'));
-        $fileContent = File::get(base_path('app/Tables/Formatters/Boolean.php'));
-        self::assertStringContainsString('namespace App\Tables\Formatters;', $fileContent);
-        self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractFormatter;', $fileContent);
-        self::assertStringContainsString('class Boolean extends AbstractFormatter', $fileContent);
-        self::assertStringContainsString('public function format(Model $model, string $attribute): string', $fileContent);
-    }
-
-    public function testMakeHeadAction(): void
-    {
-        $this->artisan(MakeHeadAction::class, ['name' => 'Configure']);
-        self::assertFileExists(base_path('app/Tables/HeadActions/Configure.php'));
-        $fileContent = File::get(base_path('app/Tables/HeadActions/Configure.php'));
-        self::assertStringContainsString('namespace App\Tables\HeadActions;', $fileContent);
-        self::assertStringContainsString('use Livewire\Component;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractHeadAction;', $fileContent);
-        self::assertStringContainsString('class Configure extends AbstractHeadAction', $fileContent);
-        self::assertStringContainsString('protected function class(): string', $fileContent);
-        self::assertStringContainsString('protected function title(): string', $fileContent);
-        self::assertStringContainsString('protected function icon(): string', $fileContent);
-        self::assertStringContainsString('/** @return mixed|void */', $fileContent);
-        self::assertStringContainsString('public function action(Component $livewire)', $fileContent);
-    }
-
-    public function testMakeRowAction(): void
-    {
-        $this->artisan(MakeRowAction::class, ['name' => 'ToggleActivation']);
-        self::assertFileExists(base_path('app/Tables/RowActions/ToggleActivation.php'));
-        $fileContent = File::get(base_path('app/Tables/RowActions/ToggleActivation.php'));
-        self::assertStringContainsString('namespace App\Tables\RowActions;', $fileContent);
-        self::assertStringContainsString('use Livewire\Component;', $fileContent);
-        self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractRowAction;', $fileContent);
-        self::assertStringContainsString('class ToggleActivation extends AbstractRowAction', $fileContent);
-        self::assertStringContainsString('protected function identifier(): string', $fileContent);
-        self::assertStringContainsString('protected function class(): string', $fileContent);
-        self::assertStringContainsString('protected function title(): string', $fileContent);
-        self::assertStringContainsString('protected function icon(): string', $fileContent);
-        self::assertStringContainsString('protected function shouldBeConfirmed(): bool', $fileContent);
-        self::assertStringContainsString('/** @return mixed|void */', $fileContent);
-        self::assertStringContainsString('public function action(Model $model, Component $livewire)', $fileContent);
-    }
-
-    public function testMakeColumnAction(): void
-    {
-        $this->artisan(MakeColumnAction::class, ['name' => 'Toggle']);
-        self::assertFileExists(base_path('app/Tables/ColumnActions/Toggle.php'));
-        $fileContent = File::get(base_path('app/Tables/ColumnActions/Toggle.php'));
-        self::assertStringContainsString('namespace App\Tables\ColumnActions;', $fileContent);
-        self::assertStringContainsString('use Livewire\Component;', $fileContent);
-        self::assertStringContainsString('use Illuminate\Database\Eloquent\Model;', $fileContent);
-        self::assertStringContainsString('use Okipa\LaravelTable\Abstracts\AbstractColumnAction;', $fileContent);
-        self::assertStringContainsString('class Toggle extends AbstractColumnAction', $fileContent);
-        self::assertStringContainsString('protected function class(): string', $fileContent);
-        self::assertStringContainsString('protected function title(): string', $fileContent);
-        self::assertStringContainsString('protected function icon(): string', $fileContent);
-        self::assertStringContainsString('protected function shouldBeConfirmed(): bool', $fileContent);
-        self::assertStringContainsString('/** @return mixed|void */', $fileContent);
-        self::assertStringContainsString('public function action(Model $model, string $attribute, Component $livewire)', $fileContent);
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
         File::deleteDirectory(base_path('app/Tables'));
+    }
+
+    /** @test */
+    public function it_can_make_table(): void
+    {
+        $this->artisan(MakeTable::class, ['name' => 'UsersTable']);
+        self::assertFileExists(base_path('app/Tables/UsersTable.php'));
+        $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables;',
+            'use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;',
+            'use Okipa\LaravelTable\Table;',
+            'class UsersTable extends AbstractTableConfiguration',
+            '{',
+            'protected function table(): Table',
+            '{',
+            '// The table declaration.',
+            '}',
+            'protected function columns(): array',
+            '{',
+            '// The table columns declaration.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_make_table_with_model_option(): void
+    {
+        $this->artisan(MakeTable::class, ['name' => 'UsersTable', '--model' => 'App\Models\User']);
+        self::assertFileExists(base_path('app/Tables/UsersTable.php'));
+        $fileContent = File::get(base_path('app/Tables/UsersTable.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables;',
+            'use App\Models\User;',
+            'use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;',
+            'use Okipa\LaravelTable\Formatters\Date;',
+            'use Okipa\LaravelTable\RowActions\Destroy;',
+            'use Okipa\LaravelTable\RowActions\Edit;',
+            'use Okipa\LaravelTable\Table;',
+            'class UsersTable extends AbstractTableConfiguration',
+            '{',
+            'protected function table(): Table',
+            '{',
+            'return Table::make()->model(User::class)',
+            '->rowActions(fn(User $user) => [',
+            'new Edit(route(\'user.edit\', $user)),',
+            'new Destroy(),',
+            ']);',
+            '}',
+            'protected function columns(): array',
+            '{',
+            'return [',
+            'Column::make(\'Id\')->sortable();',
+            'Column::make(\'Created at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable();',
+            'Column::make(\'Updated at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
+            '];',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_make_formatter(): void
+    {
+        $this->artisan(MakeFormatter::class, ['name' => 'Boolean']);
+        self::assertFileExists(base_path('app/Tables/Formatters/Boolean.php'));
+        $fileContent = File::get(base_path('app/Tables/Formatters/Boolean.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\Formatters;',
+            'use Illuminate\Database\Eloquent\Model;',
+            'use Okipa\LaravelTable\Abstracts\AbstractFormatter;',
+            'class Boolean extends AbstractFormatter',
+            '{',
+            'public function format(Model $model, string $attribute): string',
+            '{',
+            '// The formatting that will be displayed in column cells.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_make_head_action(): void
+    {
+        $this->artisan(MakeHeadAction::class, ['name' => 'Configure']);
+        self::assertFileExists(base_path('app/Tables/HeadActions/Configure.php'));
+        $fileContent = File::get(base_path('app/Tables/HeadActions/Configure.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\HeadActions;',
+            'use Livewire\Component;',
+            'use Okipa\LaravelTable\Abstracts\AbstractHeadAction;',
+            'class Configure extends AbstractHeadAction',
+            '{',
+            'protected function class(): string',
+            '{',
+            '// The CSS class that will be applied to the head action button.',
+            '}',
+            'protected function icon(): string',
+            '{',
+            '// The icon that will be displayed in the head action button.',
+            '}',
+            'protected function title(): string',
+            '{',
+            '// The title that will be displayed in the head action button.',
+            '}',
+            '/** @return mixed|void */',
+            'public function action(Component $livewire)',
+            '{',
+            '// The treatment that will be executed on click on the the head action button.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_make_row_action(): void
+    {
+        $this->artisan(MakeRowAction::class, ['name' => 'ToggleActivation']);
+        self::assertFileExists(base_path('app/Tables/RowActions/ToggleActivation.php'));
+        $fileContent = File::get(base_path('app/Tables/RowActions/ToggleActivation.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\RowActions;',
+            'use Illuminate\Database\Eloquent\Model;',
+            'use Livewire\Component;',
+            'use Okipa\LaravelTable\Abstracts\AbstractRowAction;',
+            'class ToggleActivation extends AbstractRowAction',
+            '{',
+            'protected function identifier(): string',
+            '{',
+            '// The unique identifier that is required to retrieve the row action.',
+            '}',
+            'protected function class(): string',
+            '{',
+            '// The CSS class that will be applies to the row action link.',
+            '}',
+            'protected function icon(): string',
+            '{',
+            '// The icon that will be displayed in the row action link.',
+            '}',
+            'protected function title(): string',
+            '{',
+            '// The title that will be set to the row action link.',
+            '}',
+            'protected function shouldBeConfirmed(): bool',
+            '{',
+            '// Whether the row action should be confirmed before being executed.',
+            '}',
+            '/** @return mixed|void */',
+            'public function action(Model $model, Component $livewire)',
+            '{',
+            '// The treatment that will be executed on click on the row action link.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_make_column_action(): void
+    {
+        $this->artisan(MakeColumnAction::class, ['name' => 'Toggle']);
+        self::assertFileExists(base_path('app/Tables/ColumnActions/Toggle.php'));
+        $fileContent = File::get(base_path('app/Tables/ColumnActions/Toggle.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\ColumnActions;',
+            'use Illuminate\Database\Eloquent\Model;',
+            'use Livewire\Component;',
+            'use Okipa\LaravelTable\Abstracts\AbstractColumnAction;',
+            'class Toggle extends AbstractColumnAction',
+            '{',
+            'protected function class(): string',
+            '{',
+            '// The CSS class that will be applies to the column action link.',
+            '}',
+            'protected function icon(): string',
+            '{',
+            '// The icon that will be displayed in the column action link.',
+            '}',
+            'protected function title(): string',
+            '{',
+            '// The title that will be set to the column action link.',
+            '}',
+            'protected function shouldBeConfirmed(): bool',
+            '{',
+            '// Whether the column action should be confirmed before being executed.',
+            '}',
+            '/** @return mixed|void */',
+            'public function action(Model $model, string $attribute, Component $livewire)',
+            '{',
+            '// The treatment that will be executed on click on the column action link.',
+            '}',
+            '}',
+        ]);
     }
 }
