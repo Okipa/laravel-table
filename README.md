@@ -583,11 +583,11 @@ Here is an JS snippet to show you how to proceed:
 
 ```javascript
 // Listen to the action confirmation request
-Livewire.on('table:action:confirm', (actionType, identifier, modelPrimary, confirmationMessage) => {
+Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationMessage) => {
     // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it basic!
     if (window.confirm(confirmationMessage)) {
         // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
-        Livewire.emit('table:action:confirmed', actionType, identifier, modelPrimary);
+        Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
     }
 });
 ```
