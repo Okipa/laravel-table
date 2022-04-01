@@ -32,8 +32,8 @@ class TableRowActionsTest extends TestCase
                     new Show(route('user.show', $user)),
                     new Edit(route('user.edit', $user)),
                     (new Destroy())
-                        ->confirmationMessage('Are you sure you want to delete user ' . $user->name . '?')
-                        ->executedMessage('User ' . $user->name . ' has been deleted.'),
+                        ->confirmationQuestion('Are you sure you want to delete user ' . $user->name . '?')
+                        ->feedbackMessage('User ' . $user->name . ' has been deleted.'),
                 ]);
             }
 
@@ -83,8 +83,10 @@ class TableRowActionsTest extends TestCase
                 '</tbody>',
             ])
             ->call('rowAction', 'show', $users->first()->id, false)
+            ->assertNotEmitted('table:action:feedback')
             ->assertRedirect(route('user.show', $users->first()))
             ->call('rowAction', 'edit', $users->last()->id, false)
+            ->assertNotEmitted('table:action:feedback')
             ->assertRedirect(route('user.edit', $users->last()))
             ->call('rowAction', 'destroy', $users->first()->id, true)
             ->assertEmitted(
@@ -95,7 +97,7 @@ class TableRowActionsTest extends TestCase
                 'Are you sure you want to delete user ' . $users->first()->name . '?'
             )
             ->emit('table:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
-            ->assertEmitted('table:action:executed', 'User ' . $users->first()->name . ' has been deleted.');
+            ->assertEmitted('table:action:feedback', 'User ' . $users->first()->name . ' has been deleted.');
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 

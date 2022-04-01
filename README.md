@@ -179,10 +179,6 @@ Here is the list of the words and sentences available for translation:
 * `Show`
 * `Edit`
 * `Destroy`
-* `Display`
-* `Toggle`
-* `Are you sure you want to perform this action?`
-* `Action has been executed.`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
 ## How to
@@ -454,10 +450,10 @@ To use them, you'll have to pass a closure parameter to the `rowActions` method.
 You'll ben able to chain the following methods to your actions:
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractRowAction`
   * This method allows you to determine if action should be available on table rows
-* `confirmationMessage(string $confirmationMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`
+* `confirmationQuestion(string $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractRowAction`
   * This method allows you to define a custom confirmation message for your action that will override the default `__('Are you sure you want to perform this action?')` one
   * This will only be useful for actions that are requiring a confirmation
-* `executedMessage(string $executedMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`:
+* `feedbackMessage(string $feedbackMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`:
   * This method allows you to define a custom executed message for your action that will override the default `__('Action has been executed.')` one
 
 ```php
@@ -482,10 +478,10 @@ class UsersTable extends AbstractTableConfiguration
                 (new Destroy())
                     // Destroy action will not be available for authenticated user
                     ->when(! Auth::user()->is($user))
-                    // Define specific confirmation message
-                    ->confirmationMessage('Are you sure you want to delete user ' . $user->name . '?')
-                    // Define specific executed message
-                    ->executedMessage('User ' . $user->name . ' has been deleted.'),
+                    // Override the action default confirmation question
+                    ->confirmationQuestion('Are you sure you want to delete user ' . $user->name . '?')
+                    // Override the action default feedback message
+                    ->feedbackMessage('User ' . $user->name . ' has been deleted.'),
             ]).
     }
 }
@@ -526,9 +522,24 @@ class ToggleActivation extends AbstractRowAction
         return $model->active ? __('Toggle activation') : __('Activate');
     }
 
-    protected function shouldBeConfirmed(): bool
+    protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        return true;
+        // Define a default confirmation question
+        return __('Line #:primary has been :action.', [
+            'primary' => $model->getKey(),
+            'action' => $model->active ? __('activated') : __('deactivated'),
+        ]);
+        // Return `null` if your do not want any confirmation to be asked for this action
+    }
+    
+    protected function defaultFeedbackMessage(Model $model): string|null
+    {
+        // Define a default feedback message
+        return __('Line #:primary has been :action.', [
+            'primary' => $model->getKey(),
+            'action' => $model->active ? __('activated') : __('deactivated'),
+        ]);
+        // Return `null` if your do not want any feedback message to be triggered once your action is executed
     }
 
     public function action(Model $model, Component $livewire): void
@@ -567,7 +578,7 @@ As you'll sometimes want actions to be confirmed before they'll be executed. Thi
 1. The action type
 2. The action identifier
 3. The model primary key related to your action
-4. The `$confirmationMessage` attribute from your action
+4. The `$confirmationQuestion` attribute from your action
 
 As you will see below, the 4th param is the only one you'll have to use for in order to request the user confirmation. The 3 first params are only here to be sent back to a new event when the action is confirmed by the user, so you should just ignore them in your treatment.
 
@@ -582,23 +593,23 @@ Here is an JS snippet to show you how to proceed:
 
 ```javascript
 // Listen to the action confirmation request
-Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationMessage) => {
+Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
     // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it basic!
-    if (window.confirm(confirmationMessage)) {
+    if (window.confirm(confirmationQuestion)) {
         // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
         Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
     }
 });
 ```
 
-Once executed, actions are emitting a `table:action:executed` Livewire event with the action `string $executedMessage` argument.
+Once executed, actions are emitting a `table:action:executed` Livewire event with the action `string $feedbackMessage` argument.
 
 Following the same logic, you'll have to intercept it from a JS script like this one to provide an immediate feedback to the user:
 
 ```javascript
-Livewire.on('table:action:executed', (executedMessage) => {
+Livewire.on('table:action:feedback', (feedbackMessage) => {
     // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or not!
-    window.alert(executedMessage);
+    window.alert(feedbackMessage);
 });
 ```
 
@@ -744,7 +755,7 @@ Configure column actions on your table that will be displayed on their own cells
 Column actions have a lot in common with row actions.
 
 This package provides the built-in following actions:
-* `Toggle`:
+* `BooleanToggle`:
   * Toggles a boolean value directly from the table
 
 To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
@@ -756,7 +767,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\ColumnActions\Toggle;
+use Okipa\LaravelTable\ColumnActions\BooleanToggle;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -771,8 +782,8 @@ class UsersTable extends AbstractTableConfiguration
         return [
             Column::make('Id'),
             Column::make('Toggle', 'active')
-                // Toggle action will not be available for authenticated user
-                ->action(fn(User $user) => (new Toggle())->when(! Auth::user()->is($user))),
+                // BooleanToggle action will not be available for authenticated user
+                ->action(fn(User $user) => (new BooleanToggle())->when(! Auth::user()->is($user))),
         ];
     }
 }
@@ -796,7 +807,7 @@ class ToggleEmailVerified extends AbstractColumnAction
 {
     protected function class(Model $model, string $attribute): string|null
     {
-        return $model->email_verified_at ? 'link-danger' : 'link-success';
+        return $model->email_verified_at ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm';
     }
 
     protected function icon(Model $model, string $attribute): string
@@ -806,7 +817,7 @@ class ToggleEmailVerified extends AbstractColumnAction
 
     protected function title(Model $model, string $attribute): string
     {
-        return $model->email_verified_at ? __('Set Email Unverified') : __('Set Email Verified');
+        return $model->email_verified_at ? __('Unverify') : __('Verify');
     }
 
     protected function shouldBeConfirmed(): bool

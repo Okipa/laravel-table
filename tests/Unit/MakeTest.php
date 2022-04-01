@@ -176,15 +176,15 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_column_action(): void
     {
-        $this->artisan(MakeColumnAction::class, ['name' => 'Toggle']);
-        self::assertFileExists(base_path('app/Tables/ColumnActions/Toggle.php'));
-        $fileContent = File::get(base_path('app/Tables/ColumnActions/Toggle.php'));
+        $this->artisan(MakeColumnAction::class, ['name' => 'BooleanToggle']);
+        self::assertFileExists(base_path('app/Tables/ColumnActions/BooleanToggle.php'));
+        $fileContent = File::get(base_path('app/Tables/ColumnActions/BooleanToggle.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\ColumnActions;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractColumnAction;',
-            'class Toggle extends AbstractColumnAction',
+            'class BooleanToggle extends AbstractColumnAction',
             '{',
             'protected function class(): string',
             '{',

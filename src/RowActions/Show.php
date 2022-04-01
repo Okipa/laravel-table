@@ -34,9 +34,14 @@ class Show extends AbstractRowAction
         return __('Show');
     }
 
-    protected function shouldBeConfirmed(): bool
+    protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        return false;
+        return null;
+    }
+
+    protected function defaultFeedbackMessage(Model $model): string|null
+    {
+        return null;
     }
 
     public function action(Model $model, Component $livewire): Redirector

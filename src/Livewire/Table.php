@@ -147,17 +147,20 @@ class Table extends Component
         $rowActionsArray = AbstractRowAction::retrieve($this->tableRowActionsArray, $modelKey);
         $rowActionArray = collect($rowActionsArray)->where('identifier', $identifier)->first();
         $rowActionInstance = AbstractRowAction::make($rowActionArray);
+        $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
         if ($requiresConfirmation) {
             return $this->emit(
                 'table:action:confirm',
                 'rowAction',
                 $identifier,
                 $modelKey,
-                $rowActionInstance->confirmationMessage
+                $rowActionInstance->getConfirmationQuestion($model)
             );
         }
-        $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
-        $this->emit('table:action:executed', $rowActionInstance->getExecutedMessage());
+        $feedbackMessage = $rowActionInstance->getFeedbackMessage($model);
+        if ($feedbackMessage) {
+            $this->emit('table:action:feedback', $feedbackMessage);
+        }
 
         return $rowActionInstance->action($model, $this);
     }
@@ -166,17 +169,20 @@ class Table extends Component
     {
         $columnActionArray = AbstractColumnAction::retrieve($this->tableColumnActionsArray, $modelKey, $identifier);
         $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+        $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
         if ($requiresConfirmation) {
             return $this->emit(
                 'table:action:confirm',
                 'columnAction',
                 $identifier,
                 $modelKey,
-                $columnActionInstance->confirmationMessage
+                $columnActionInstance->getConfirmationQuestion($model, $identifier)
             );
         }
-        $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
-        $this->emit('table:action:executed', $columnActionInstance->getExecutedMessage());
+        $feedbackMessage = $columnActionInstance->getFeedbackMessage($model, $identifier);
+        if ($feedbackMessage) {
+            $this->emit('table:action:feedback', $feedbackMessage);
+        }
 
         return $columnActionInstance->action($model, $identifier, $this);
     }

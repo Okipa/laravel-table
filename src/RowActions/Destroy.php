@@ -28,9 +28,14 @@ class Destroy extends AbstractRowAction
         return __('Destroy');
     }
 
-    protected function shouldBeConfirmed(): bool
+    protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        return true;
+        return __('Are you sure you want to destroy the line #:primary?', ['primary' => $model->getKey()]);
+    }
+
+    protected function defaultFeedbackMessage(Model $model): string|null
+    {
+        return __('Line #:primary has been destroyed.', ['primary' => $model->getKey()]);
     }
 
     public function action(Model $model, Component $livewire): void

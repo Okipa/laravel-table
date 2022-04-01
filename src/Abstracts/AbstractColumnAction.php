@@ -2,7 +2,6 @@
 
 namespace Okipa\LaravelTable\Abstracts;
 
-use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -10,17 +9,13 @@ use Livewire\Component;
 
 abstract class AbstractColumnAction
 {
+    public string $attribute;
+
     public string $columnActionClass;
 
     public string $modelClass;
 
     public string $modelKey;
-
-    public string $attribute;
-
-    public string|null $confirmationMessage = null;
-
-    public string|null $executedMessage = null;
 
     protected string|null $class;
 
@@ -30,13 +25,21 @@ abstract class AbstractColumnAction
 
     protected bool $isAllowed = true;
 
+    public string|false|null $confirmationQuestion = null;
+
+    public string|false|null $feedbackMessage;
+
     abstract protected function class(Model $model, string $attribute): string|null;
 
     abstract protected function icon(Model $model, string $attribute): string;
 
     abstract protected function title(Model $model, string $attribute): string;
 
-    abstract protected function shouldBeConfirmed(): bool;
+    abstract protected function label(Model $model, string $attribute): string|null;
+
+    abstract protected function defaultConfirmationQuestion(Model $model, string $attribute): string|null;
+
+    abstract protected function defaultFeedbackMessage(Model $model, string $attribute): string|null;
 
     /** @return mixed|void */
     abstract public function action(Model $model, string $attribute, Component $livewire);
@@ -62,8 +65,8 @@ abstract class AbstractColumnAction
         $columnActionInstance->modelClass = $columnActionArray['modelClass'];
         $columnActionInstance->modelKey = $columnActionArray['modelKey'];
         $columnActionInstance->attribute = $columnActionArray['attribute'];
-        $columnActionInstance->confirmationMessage = $columnActionArray['confirmationMessage'];
-        $columnActionInstance->executedMessage = $columnActionArray['executedMessage'];
+        $columnActionInstance->confirmationQuestion = $columnActionArray['confirmationQuestion'];
+        $columnActionInstance->feedbackMessage = $columnActionArray['feedbackMessage'];
 
         return $columnActionInstance;
     }
@@ -76,8 +79,9 @@ abstract class AbstractColumnAction
             'attribute' => $this->attribute,
             'class' => $this->class($model, $attribute),
             'title' => $this->title($model, $attribute),
+            'label' => $this->label($model, $attribute),
             'icon' => $this->icon($model, $attribute),
-            'shouldBeConfirmed' => $this->shouldBeConfirmed(),
+            'shouldBeConfirmed' => (bool) $this->getConfirmationQuestion($model, $attribute),
         ]);
     }
 
@@ -93,27 +97,27 @@ abstract class AbstractColumnAction
         return $this->isAllowed;
     }
 
-    public function confirmationMessage(string $confirmationMessage): self
+    public function confirmationQuestion(string|false $confirmationQuestion): self
     {
-        $this->confirmationMessage = $confirmationMessage;
+        $this->confirmationQuestion = $confirmationQuestion;
 
         return $this;
     }
 
-    public function getConfirmationMessage(): string
+    public function getConfirmationQuestion(Model $model, string $attribute): string|null
     {
-        return $this->confirmationMessage ?: __('Are you sure you want to perform this action?');
+        return $this->confirmationQuestion ?? $this->defaultConfirmationQuestion($model, $attribute);
     }
 
-    public function executedMessage(string $executedMessage): self
+    public function feedbackMessage(string|false $feedbackMessage): self
     {
-        $this->executedMessage = $executedMessage;
+        $this->feedbackMessage = $feedbackMessage;
 
         return $this;
     }
 
-    public function getExecutedMessage(): string
+    public function getFeedbackMessage(Model $model, string $attribute): string|null
     {
-        return $this->executedMessage ?: __('Action has been executed.');
+        return $this->feedbackMessage ?? $this->defaultFeedbackMessage($model, $attribute);
     }
 }

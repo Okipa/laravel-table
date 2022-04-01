@@ -25,9 +25,12 @@ return [
         'show' => '<i class="fa-solid fa-eye fa-fw"></i>',
         'edit' => '<i class="fa-solid fa-pencil fa-fw"></i>',
         'destroy' => '<i class="fa-solid fa-trash-can fa-fw"></i>',
-        'active' => '<i class="fa-solid fa-check text-success"></i>',
-        'inactive' => '<i class="fa-solid fa-xmark text-danger"></i>',
-        'display' => '<i class="fa-solid fa-up-right-from-square"></i>'
+        'active' => '<i class="fa-solid fa-check text-success fa-fw"></i>',
+        'inactive' => '<i class="fa-solid fa-xmark text-danger fa-fw"></i>',
+        'email_verified' => '<i class="fa-solid fa-envelope-circle-check fa-fw"></i>',
+        'email_unverified' => '<i class="fa-solid fa-envelope fa-fw"></i>',
+        'toggle_on' => '<i class="fa-solid fa-toggle-on fa-fw"></i>',
+        'toggle_off' => '<i class="fa-solid fa-toggle-off fa-fw"></i>',
     ],
 
     /** Whether the select allowing to choose the number of rows per page should be displayed by default. */

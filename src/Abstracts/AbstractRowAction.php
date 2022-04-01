@@ -2,7 +2,6 @@
 
 namespace Okipa\LaravelTable\Abstracts;
 
-use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -24,11 +23,11 @@ abstract class AbstractRowAction
 
     protected string $title;
 
-    public string|null $confirmationMessage = null;
-
-    public string|null $executedMessage = null;
-
     protected bool $isAllowed = true;
+
+    public string|null $confirmationQuestion = null;
+
+    public string|null $feedbackMessage = null;
 
     abstract protected function identifier(): string;
 
@@ -38,7 +37,9 @@ abstract class AbstractRowAction
 
     abstract protected function title(Model $model): string;
 
-    abstract protected function shouldBeConfirmed(): bool;
+    abstract protected function defaultConfirmationQuestion(Model $model): string|null;
+
+    abstract protected function defaultFeedbackMessage(Model $model): string|null;
 
     /** @return mixed|void */
     abstract public function action(Model $model, Component $livewire);
@@ -63,8 +64,8 @@ abstract class AbstractRowAction
         $rowActionInstance->modelClass = $rowActionArray['modelClass'];
         $rowActionInstance->modelKey = $rowActionArray['modelKey'];
         $rowActionInstance->identifier = $rowActionArray['identifier'];
-        $rowActionInstance->confirmationMessage = $rowActionArray['confirmationMessage'];
-        $rowActionInstance->executedMessage = $rowActionArray['executedMessage'];
+        $rowActionInstance->confirmationQuestion = $rowActionArray['confirmationQuestion'];
+        $rowActionInstance->feedbackMessage = $rowActionArray['feedbackMessage'];
 
         return $rowActionInstance;
     }
@@ -77,7 +78,7 @@ abstract class AbstractRowAction
             'identifier' => $this->identifier,
             'title' => $this->title($model),
             'icon' => $this->icon($model),
-            'shouldBeConfirmed' => $this->shouldBeConfirmed(),
+            'shouldBeConfirmed' => (bool) $this->defaultConfirmationQuestion($model),
         ]);
     }
 
@@ -93,27 +94,27 @@ abstract class AbstractRowAction
         return $this->isAllowed;
     }
 
-    public function confirmationMessage(string $confirmationMessage): self
+    public function confirmationQuestion(string $confirmationQuestion): self
     {
-        $this->confirmationMessage = $confirmationMessage;
+        $this->confirmationQuestion = $confirmationQuestion;
 
         return $this;
     }
 
-    public function getConfirmationMessage(): string
+    public function getConfirmationQuestion(Model $model): string
     {
-        return $this->confirmationMessage ?: __('Are you sure you want to perform this action?');
+        return $this->confirmationQuestion ?: $this->defaultConfirmationQuestion($model);
     }
 
-    public function executedMessage(string $executedMessage): self
+    public function feedbackMessage(string $feedbackMessage): self
     {
-        $this->executedMessage = $executedMessage;
+        $this->feedbackMessage = $feedbackMessage;
 
         return $this;
     }
 
-    public function getExecutedMessage(): string
+    public function getFeedbackMessage(Model $model): string|null
     {
-        return $this->executedMessage ?: __('Action has been executed.');
+        return $this->feedbackMessage ?: $this->defaultFeedbackMessage($model);
     }
 }

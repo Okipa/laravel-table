@@ -3,16 +3,14 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
-use Livewire\Component;
 use Livewire\Livewire;
-use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\ColumnActions\Toggle;
+use Okipa\LaravelTable\ColumnActions\ToggleBoolean;
+use Okipa\LaravelTable\ColumnActions\ToggleEmailVerified;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -20,15 +18,16 @@ use Tests\TestCase;
 class ColumnActionTest extends TestCase
 {
     /** @test */
-    public function it_can_set_column_set_action(): void
+    public function it_can_set_column_actions(): void
     {
-        app('router')->get('/user/{user}/show', ['as' => 'user.show']);
-        Config::set('laravel-table.icon.active', 'active-icon');
-        Config::set('laravel-table.icon.inactive', 'inactive-icon');
-        Config::set('laravel-table.icon.display', 'display-icon');
+        Date::setTestNow(Date::now()->startOfDay());
+        Config::set('laravel-table.icon.email_verified', 'email-verified-icon');
+        Config::set('laravel-table.icon.email_unverified', 'email-unverified-icon');
+        Config::set('laravel-table.icon.toggle_on', 'toggle-on-icon');
+        Config::set('laravel-table.icon.toggle_off', 'toggle-off-icon');
         $users = User::factory()->count(2)->state(new Sequence(
-            ['active' => true],
-            ['active' => false],
+            ['email_verified_at' => Date::now(), 'active' => true],
+            ['email_verified_at' => null, 'active' => false]
         ))->create();
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
@@ -40,7 +39,8 @@ class ColumnActionTest extends TestCase
             {
                 return [
                     Column::make('Name'),
-                    Column::make('Toggle', 'active')->action(fn() => new Toggle()),
+                    Column::make('Email Verified', 'email_verified_at')->action(fn() => new ToggleEmailVerified()),
+                    Column::make('Toggle', 'active')->action(fn() => new ToggleBoolean()),
                 ];
             }
         };
@@ -49,23 +49,54 @@ class ColumnActionTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
+                '<a wire:click.prevent="columnAction(\'email_verified_at\', \'' . $users->first()->id . '\', 1)"',
+                'class="link-success p-1"',
+                'title="Unverify"',
+                'data-bs-toggle="tooltip">',
+                'email-verified-icon',
                 '<a wire:click.prevent="columnAction(\'active\', \'' . $users->first()->id . '\', 0)"',
-                'class="link-danger p-1"',
-                'title="Toggle">',
-                'inactive-icon',
+                'class="link-success p-1"',
+                'title="Toggle off"',
+                'data-bs-toggle="tooltip">',
+                'toggle-on-icon',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
+                '<a wire:click.prevent="columnAction(\'email_verified_at\', \'' . $users->last()->id . '\', 1)"',
+                'class="link-danger p-1"',
+                'title="Verify"',
+                'data-bs-toggle="tooltip">',
+                'email-unverified-icon',
                 '<a wire:click.prevent="columnAction(\'active\', \'' . $users->last()->id . '\', 0)"',
-                'class="link-success p-1"',
-                'title="Toggle">',
-                'active-icon',
+                'class="link-danger p-1"',
+                'title="Toggle on"',
+                'data-bs-toggle="tooltip">',
+                'toggle-off-icon',
                 '</tr>',
                 '</tbody>',
             ])
             ->call('columnAction', 'active', $users->first()->id, false)
-            ->call('columnAction', 'active', $users->last()->id, false);
+            ->assertEmitted(
+                'table:action:feedback',
+                'The field validation.attributes.active from the line #' . $users->first()->id
+                . ' has been toggled off.'
+            )
+            ->call('columnAction', 'email_verified_at', $users->last()->id, true)
+            ->assertEmitted(
+                'table:action:confirm',
+                'columnAction',
+                'email_verified_at',
+                (string) $users->last()->id,
+                'Are you sure you want to set the field validation.attributes.email_verified_at as verified for the line #'
+                . $users->last()->id . '?'
+            )
+            ->emit('table:action:confirmed', 'columnAction', 'email_verified_at', $users->last()->id)
+            ->assertEmitted(
+                'table:action:feedback',
+                'The field validation.attributes.email_verified_at from the line #' . $users->last()->id
+                . ' has been verified.'
+            );
         $this->assertFalse($users->first()->fresh()->active);
-        $this->assertTrue($users->last()->fresh()->active);
+        $this->assertTrue(Date::now()->eq($users->last()->fresh()->email_verified_at));
     }
 
     /** @test */
@@ -87,7 +118,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Toggle', 'active')
-                        ->action(fn(User $user) => (new Toggle())->when(! Auth::user()->is($user))),
+                        ->action(fn(User $user) => (new ToggleBoolean())->when(! Auth::user()->is($user))),
                 ];
             }
         };
@@ -109,13 +140,10 @@ class ColumnActionTest extends TestCase
     }
 
     /** @test */
-    public function it_can_ask_confirmation_before_action_execution(): void
+    public function it_can_override_confirmation_question_and_feedback_message(): void
     {
-        Date::setTestNow(Date::now()->startOfDay());
-        $users = User::factory()->count(2)->state(new Sequence(
-            ['email_verified_at' => Date::now()],
-            ['email_verified_at' => null],
-        ))->create();
+        Config::set('laravel-table.icon.email_verified', 'email-verified-icon');
+        $user = User::factory()->create(['email_verified_at' => Date::now()]);
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
@@ -124,93 +152,31 @@ class ColumnActionTest extends TestCase
 
             protected function columns(): array
             {
-                $action = new class extends AbstractColumnAction {
-                    protected function class(Model $model, string $attribute): string|null
-                    {
-                        return $model->email_verified_at ? 'link-danger p-1' : 'link-success p-1';
-                    }
-
-                    protected function icon(Model $model, string $attribute): string
-                    {
-                        return '<i class="fa-solid fa-envelope fa-fw"></i>';
-                    }
-
-                    protected function title(Model $model, string $attribute): string
-                    {
-                        return $model->email_verified_at ? __('Set Email Unverified') : __('Set Email Verified');
-                    }
-
-                    protected function shouldBeConfirmed(): bool
-                    {
-                        return true;
-                    }
-
-                    public function action(Model $model, string $attribute, Component $livewire): void
-                    {
-                        $model->update(['email_verified_at' => $model->email_verified_at ? null : Date::now()]);
-                    }
-                };
-
                 return [
                     Column::make('Name'),
-                    Column::make('Email Verified')
-                        ->action(fn(User $user) => (new $action())
-                            ->confirmationMessage('Are you sure you want to set email as '
-                                . ($user->email_verified_at ? 'unverified' : 'verified')
-                                . ' for user ' . $user->name . '?')
-                            ->executedMessage('Email of user ' . $user->name . ' has been set as '
-                                . ($user->email_verified_at ? 'unverified' : 'verified') . '.')),
+                    Column::make('Email Verified', 'email_verified_at')
+                        ->action(fn() => (new ToggleEmailVerified())
+                            ->confirmationQuestion(false)
+                            ->feedbackMessage(false)),
                 ];
             }
         };
-        Livewire::actingAs($users->first())
-            ->test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="columnAction(\'email_verified\', \'' . $users->first()->id . '\', 1)"',
-                'class="link-danger p-1"',
-                'title="Set Email Unverified">',
-                '<i class="fa-solid fa-envelope fa-fw"></i>',
-                'Set Email Unverified',
-                '</tr>',
-                '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="columnAction(\'email_verified\', \'' . $users->last()->id . '\', 1)"',
+                '<tr wire:key="row-' . $user->id . '" class="border-bottom">',
+                '<a wire:click.prevent="columnAction(\'email_verified_at\', \'' . $user->id . '\', 0)"',
                 'class="link-success p-1"',
-                'title="Set Email Verified">',
-                '<i class="fa-solid fa-envelope fa-fw"></i>',
-                'Set Email Verified',
+                'title="Unverify"',
+                'data-bs-toggle="tooltip">',
+                'email-verified-icon',
                 '</tr>',
                 '</tbody>',
             ])
-            ->call('columnAction', 'email_verified', $users->first()->id, true)
-            ->assertEmitted(
-                'table:action:confirm',
-                'columnAction',
-                'email_verified',
-                (string) $users->first()->id,
-                'Are you sure you want to set email as unverified for user ' . $users->first()->name . '?'
-            )
-            ->emit('table:action:confirmed', 'columnAction', 'email_verified', $users->first()->id)
-            ->assertEmitted(
-                'table:action:executed',
-                'Email of user ' . $users->first()->name . ' has been set as unverified.'
-            )
-            ->call('columnAction', 'email_verified', $users->last()->id, true)
-            ->assertEmitted(
-                'table:action:confirm',
-                'columnAction',
-                'email_verified',
-                (string) $users->last()->id,
-                'Are you sure you want to set email as verified for user ' . $users->last()->name . '?'
-            )
-            ->emit('table:action:confirmed', 'columnAction', 'email_verified', $users->last()->id)
-            ->assertEmitted(
-                'table:action:executed',
-                'Email of user ' . $users->last()->name . ' has been set as verified.'
-            );
-        $this->assertNull($users->first()->fresh()->email_verified_at);
-        $this->assertTrue(Date::now()->eq($users->last()->fresh()->email_verified_at));
+            ->call('columnAction', 'email_verified_at', $user->id, false)
+            ->assertNotEmitted('table:action:confirm')
+            ->assertNotEmitted('table:action:feedback');
+        $this->assertNull($user->fresh()->email_verified_at);
     }
 }
