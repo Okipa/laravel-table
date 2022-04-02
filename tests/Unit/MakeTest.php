@@ -126,6 +126,7 @@ class MakeTest extends TestCase
             'public function action(Component $livewire)',
             '{',
             '// The treatment that will be executed on click on the the head action button.',
+            '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
             '}',
             '}',
         ]);
@@ -162,18 +163,19 @@ class MakeTest extends TestCase
             '}',
             'protected function defaultConfirmationQuestion(Model $model): string|null',
             '{',
-            '// The row action confirmation question that will be asked before execution.',
-            '// Set `null` if you do not want any confirmation question to be asked.',
+            '// The default row action confirmation question that will be asked before execution.',
+            '// Set `null` if you do not want any confirmation question to be asked by default.',
             '}',
             'protected function defaultFeedbackMessage(Model $model): string|null',
             '{',
-            '// The row action feedback message that will be triggered on execution.',
-            '// Set `null` if you do not want any feedback message to be triggered.',
+            '// The default row action feedback message that will be triggered on execution.',
+            '// Set `null` if you do not want any feedback message to be triggered by default.',
             '}',
             '/** @return mixed|void */',
             'public function action(Model $model, Component $livewire)',
             '{',
             '// The treatment that will be executed on click on the row action link.',
+            '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
             '}',
             '}',
         ]);
@@ -182,15 +184,15 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_column_action(): void
     {
-        $this->artisan(MakeColumnAction::class, ['name' => 'BooleanToggle']);
-        self::assertFileExists(base_path('app/Tables/ColumnActions/BooleanToggle.php'));
-        $fileContent = File::get(base_path('app/Tables/ColumnActions/BooleanToggle.php'));
+        $this->artisan(MakeColumnAction::class, ['name' => 'ToggleBoolean']);
+        self::assertFileExists(base_path('app/Tables/ColumnActions/ToggleBoolean.php'));
+        $fileContent = File::get(base_path('app/Tables/ColumnActions/ToggleBoolean.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\ColumnActions;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractColumnAction;',
-            'class BooleanToggle extends AbstractColumnAction',
+            'class ToggleBoolean extends AbstractColumnAction',
             '{',
             'protected function class(Model $model, string $attribute): string',
             '{',
@@ -210,18 +212,19 @@ class MakeTest extends TestCase
             '}',
             'protected function defaultConfirmationQuestion(Model $model, string $attribute): string|null',
             '{',
-            '// The column action confirmation question that will be asked before execution.',
-            '// Set `null` if you do not want any confirmation question to be asked.',
+            '// The default column action confirmation question that will be asked before execution.',
+            '// Set `null` if you do not want any confirmation question to be asked by default.',
             '}',
             'protected function defaultFeedbackMessage(Model $model, string $attribute): string|null',
             '{',
-            '// The column action feedback message that will be triggered on execution.',
-            '// Set `null` if you do not want any feedback message to be triggered.',
+            '// The default column action feedback message that will be triggered on execution.',
+            '// Set `null` if you do not want any feedback message to be triggered by default.',
             '}',
             '/** @return mixed|void */',
             'public function action(Model $model, string $attribute, Component $livewire)',
             '{',
             '// The treatment that will be executed on click on the column action link.',
+            '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
             '}',
             '}',
         ]);

@@ -30,19 +30,20 @@ class DummyClass extends AbstractRowAction
 
     protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        // The row action confirmation question that will be asked before execution.
-        // Set `null` if you do not want any confirmation question to be asked.
+        // The default row action confirmation question that will be asked before execution.
+        // Set `null` if you do not want any confirmation question to be asked by default.
     }
 
     protected function defaultFeedbackMessage(Model $model): string|null
     {
-        // The row action feedback message that will be triggered on execution.
-        // Set `null` if you do not want any feedback message to be triggered.
+        // The default row action feedback message that will be triggered on execution.
+        // Set `null` if you do not want any feedback message to be triggered by default.
     }
 
     /** @return mixed|void */
     public function action(Model $model, Component $livewire)
     {
         // The treatment that will be executed on click on the row action link.
+        // Use the `$livewire` param to interact with the Livewire table component and emit events for example.
     }
 }
