@@ -17,7 +17,7 @@ use Tests\TestCase;
 class TableRowActionsTest extends TestCase
 {
     /** @test */
-    public function it_can_set_table_row_actions(): void
+    public function it_can_set_row_actions(): void
     {
         app('router')->get('/user/{user}/show', ['as' => 'user.show']);
         app('router')->get('/user/{user}/edit', ['as' => 'user.edit']);
@@ -31,9 +31,7 @@ class TableRowActionsTest extends TestCase
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
                     new Show(route('user.show', $user)),
                     new Edit(route('user.edit', $user)),
-                    (new Destroy())
-                        ->confirmationQuestion('Are you sure you want to delete user ' . $user->name . '?')
-                        ->feedbackMessage('User ' . $user->name . ' has been deleted.'),
+                    new Destroy(),
                 ]);
             }
 
@@ -58,26 +56,32 @@ class TableRowActionsTest extends TestCase
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="rowAction(\'show\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-info p-1"',
-                'title="Show">',
+                'title="Show"',
+                'data-bs-toggle="tooltip">',
                 'show-icon',
                 '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-primary p-1"',
-                'title="Edit">',
+                'title="Edit"',
+                'data-bs-toggle="tooltip">',
                 'edit-icon',
                 '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
                 'class="link-danger p-1"',
-                'title="Destroy">',
+                'title="Destroy"',
+                'data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="rowAction(\'show\', \'' . $users->last()->id . '\', 0)"',
-                'title="Show">',
+                'title="Show"',
+                'data-bs-toggle="tooltip">',
                 'show-icon',
                 '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
-                'title="Edit">',
+                'title="Edit"',
+                'data-bs-toggle="tooltip">',
                 'edit-icon',
                 '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
-                'title="Destroy">',
+                'title="Destroy"',
+                'data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</tr>',
                 '</tbody>',
@@ -94,25 +98,22 @@ class TableRowActionsTest extends TestCase
                 'rowAction',
                 'destroy',
                 (string) $users->first()->id,
-                'Are you sure you want to delete user ' . $users->first()->name . '?'
+                'Are you sure you want to destroy the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
-            ->assertEmitted('table:action:feedback', 'User ' . $users->first()->name . ' has been deleted.');
+            ->assertEmitted('table:action:feedback', 'Line #' . $users->first()->id . ' has been destroyed.');
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 
     /** @test */
     public function it_can_display_row_action_conditionally(): void
     {
-        app('router')->get('/user/{user}/edit', ['as' => 'user.edit']);
-        Config::set('laravel-table.icon.edit', 'edit-icon');
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
-                    new Edit(route('user.edit', $user)),
                     (new Destroy())->when(! Auth::user()->is($user)),
                 ]);
             }
@@ -130,20 +131,53 @@ class TableRowActionsTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
-                'class="link-primary p-1"',
-                'title="Edit">',
-                'edit-icon',
-                '<a wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
-                'title="Edit">',
-                'edit-icon',
                 '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
-                'title="Destroy">',
+                'title="Destroy"',
+                'data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</tr>',
                 '</tbody>',
             ])->assertDontSeeHtml([
                 '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
             ]);
+    }
+
+    /** @test */
+    public function it_can_override_confirmation_question_and_feedback_message(): void
+    {
+        Config::set('laravel-table.icon.destroy', 'destroy-icon');
+        $user = User::factory()->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)
+                    ->rowActions(fn(User $user) => [
+                        (new Destroy())->confirmationQuestion(false)->feedbackMessage(false),
+                    ]);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Name'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                '<tr wire:key="row-' . $user->id . '" class="border-bottom">',
+                '<a wire:click.prevent="rowAction(\'destroy\', \'' . $user->id . '\', 0)"',
+                'title="Destroy"',
+                'data-bs-toggle="tooltip">',
+                'destroy-icon',
+                '</tr>',
+                '</tbody>',
+            ])
+            ->call('rowAction', 'destroy', $user->id, false)
+            ->assertNotEmitted('table:action:confirm')
+            ->assertNotEmitted('table:action:feedback');
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 }

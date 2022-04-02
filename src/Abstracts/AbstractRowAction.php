@@ -25,9 +25,9 @@ abstract class AbstractRowAction
 
     protected bool $isAllowed = true;
 
-    public string|null $confirmationQuestion = null;
+    public string|false|null $confirmationQuestion = null;
 
-    public string|null $feedbackMessage = null;
+    public string|false|null $feedbackMessage = null;
 
     abstract protected function identifier(): string;
 
@@ -46,10 +46,10 @@ abstract class AbstractRowAction
 
     public function setup(Model $model): void
     {
+        $this->identifier = $this->identifier();
         $this->rowActionClass = $this::class;
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
-        $this->identifier = $this->identifier();
     }
 
     public static function retrieve(array $rowActions, string $modelKey): array
@@ -78,7 +78,7 @@ abstract class AbstractRowAction
             'identifier' => $this->identifier,
             'title' => $this->title($model),
             'icon' => $this->icon($model),
-            'shouldBeConfirmed' => (bool) $this->defaultConfirmationQuestion($model),
+            'shouldBeConfirmed' => (bool) $this->getConfirmationQuestion($model),
         ]);
     }
 
@@ -94,19 +94,19 @@ abstract class AbstractRowAction
         return $this->isAllowed;
     }
 
-    public function confirmationQuestion(string $confirmationQuestion): self
+    public function confirmationQuestion(string|false $confirmationQuestion): self
     {
         $this->confirmationQuestion = $confirmationQuestion;
 
         return $this;
     }
 
-    public function getConfirmationQuestion(Model $model): string
+    public function getConfirmationQuestion(Model $model): string|null
     {
-        return $this->confirmationQuestion ?: $this->defaultConfirmationQuestion($model);
+        return $this->confirmationQuestion ?? $this->defaultConfirmationQuestion($model);
     }
 
-    public function feedbackMessage(string $feedbackMessage): self
+    public function feedbackMessage(string|false $feedbackMessage): self
     {
         $this->feedbackMessage = $feedbackMessage;
 
@@ -115,6 +115,6 @@ abstract class AbstractRowAction
 
     public function getFeedbackMessage(Model $model): string|null
     {
-        return $this->feedbackMessage ?: $this->defaultFeedbackMessage($model);
+        return $this->feedbackMessage ?? $this->defaultFeedbackMessage($model);
     }
 }

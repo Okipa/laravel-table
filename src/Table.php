@@ -221,7 +221,6 @@ class Table
         foreach ($this->rows->getCollection() as $model) {
             $rowActions = collect(($this->rowActionsClosure)($model))
                 ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed());
-
             $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($model) {
                 $rowAction->setup($model);
 

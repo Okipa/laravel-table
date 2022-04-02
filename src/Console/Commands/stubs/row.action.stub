@@ -18,19 +18,26 @@ class DummyClass extends AbstractRowAction
         // The CSS class that will be applies to the row action link.
     }
 
-    protected function icon(): string
-    {
-        // The icon that will be displayed in the row action link.
-    }
-
     protected function title(): string
     {
         // The title that will be set to the row action link.
     }
 
-    protected function shouldBeConfirmed(): bool
+    protected function icon(): string
     {
-        // Whether the row action should be confirmed before being executed.
+        // The icon that will appear in the row action link.
+    }
+
+    protected function defaultConfirmationQuestion(Model $model): string|null
+    {
+        // The row action confirmation question that will be asked before execution.
+        // Set `null` if you do not want any confirmation question to be asked.
+    }
+
+    protected function defaultFeedbackMessage(Model $model): string|null
+    {
+        // The row action feedback message that will be triggered on execution.
+        // Set `null` if you do not want any feedback message to be triggered.
     }
 
     /** @return mixed|void */

@@ -19,21 +19,21 @@ abstract class AbstractColumnAction
 
     protected string|null $class;
 
-    protected string $icon;
-
     protected string $title;
+
+    protected string $icon;
 
     protected bool $isAllowed = true;
 
     public string|false|null $confirmationQuestion = null;
 
-    public string|false|null $feedbackMessage;
+    public string|false|null $feedbackMessage = null;
 
     abstract protected function class(Model $model, string $attribute): string|null;
 
-    abstract protected function icon(Model $model, string $attribute): string;
-
     abstract protected function title(Model $model, string $attribute): string;
+
+    abstract protected function icon(Model $model, string $attribute): string;
 
     abstract protected function label(Model $model, string $attribute): string|null;
 

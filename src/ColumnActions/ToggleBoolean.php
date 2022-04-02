@@ -13,16 +13,16 @@ class ToggleBoolean extends AbstractColumnAction
         return $model->{$attribute} ? 'link-success p-1' : 'link-danger p-1';
     }
 
+    protected function title(Model $model, string $attribute): string
+    {
+        return $model->{$attribute} ? __('Toggle off') : __('Toggle on');
+    }
+
     protected function icon(Model $model, string $attribute): string
     {
         return $model->{$attribute}
             ? config('laravel-table.icon.toggle_on')
             : config('laravel-table.icon.toggle_off');
-    }
-
-    protected function title(Model $model, string $attribute): string
-    {
-        return $model->{$attribute} ? __('Toggle off') : __('Toggle on');
     }
 
     protected function label(Model $model, string $attribute): string|null

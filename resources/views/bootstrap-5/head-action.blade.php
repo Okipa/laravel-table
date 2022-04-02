@@ -1,7 +1,6 @@
 <a wire:click.prevent="headAction()"
    @class([$class])
    href=""
-   title="{{ $title }}"
-   data-bs-toggle="tooltip">
+   title="{{ $title }}">
     {!! $icon !!} {{ $title }}
 </a>

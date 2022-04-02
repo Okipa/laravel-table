@@ -63,6 +63,7 @@ class Table extends Component
     /**
      * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
+     * @throws \JsonException
      */
     public function render(): View
     {
