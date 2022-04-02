@@ -44,8 +44,8 @@ class ToggleBoolean extends AbstractColumnAction
         ]);
     }
 
-    public function action(Model $model, string $attribute, Component $livewire)
+    public function action(Model $model, string $attribute, Component $livewire): void
     {
-        return $model->update([$attribute => ! $model->{$attribute}]);
+        $model->update([$attribute => ! $model->{$attribute}]);
     }
 }

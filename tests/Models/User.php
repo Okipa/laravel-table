@@ -15,7 +15,7 @@ class User extends Authenticatable
     protected $table = 'users';
 
     /** @var array */
-    protected $fillable = ['name', 'email', 'password', 'active', 'email_verified_at'];
+    protected $fillable = ['name', 'email', 'password', 'active'];
 
     protected $casts = ['active' => 'boolean', 'email_verified_at' => 'datetime'];
 

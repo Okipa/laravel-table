@@ -51,6 +51,6 @@ class ToggleEmailVerified extends AbstractColumnAction
 
     public function action(Model $model, string $attribute, Component $livewire): void
     {
-        $model->update([$attribute => $model->{$attribute} ? null : Date::now()]);
+        $model->forceFill([$attribute => $model->{$attribute} ? null : Date::now()])->save();
     }
 }
