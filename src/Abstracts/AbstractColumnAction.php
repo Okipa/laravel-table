@@ -23,7 +23,7 @@ abstract class AbstractColumnAction
 
     protected string $icon;
 
-    protected bool $isAllowed = true;
+    public bool $isAllowed = true;
 
     public string|false|null $confirmationQuestion = null;
 
@@ -65,6 +65,7 @@ abstract class AbstractColumnAction
         $columnActionInstance->modelClass = $columnActionArray['modelClass'];
         $columnActionInstance->modelKey = $columnActionArray['modelKey'];
         $columnActionInstance->attribute = $columnActionArray['attribute'];
+        $columnActionInstance->isAllowed = $columnActionArray['isAllowed'];
         $columnActionInstance->confirmationQuestion = $columnActionArray['confirmationQuestion'];
         $columnActionInstance->feedbackMessage = $columnActionArray['feedbackMessage'];
 

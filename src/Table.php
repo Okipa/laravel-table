@@ -247,7 +247,7 @@ class Table
                 ->mapWithKeys(fn(Column $column) => [$column->getKey() => $column->getAction()
                     ? $column->getAction()($model)
                     : null])
-                ->filter(fn(AbstractColumnAction|null $columnAction) => $columnAction?->isAllowed());
+                ->filter();
             foreach ($columnActions as $attribute => $columnAction) {
                 $columnAction->setup($model, $attribute);
                 $tableColumnActionsArray[] = json_decode(json_encode(

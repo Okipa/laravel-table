@@ -125,19 +125,22 @@ class Column
 
     public function getValue(Model $model, array $tableColumnActionsArray): HtmlString|string|null
     {
-        if ($this->formatter instanceof Closure) {
-            return $this->manageHtmlEscaping(($this->formatter)($model));
-        }
-        if ($this->formatter instanceof AbstractFormatter) {
-            return $this->manageHtmlEscaping($this->formatter->format($model, $this->key));
-        }
         $columnActionArray = AbstractColumnAction::retrieve(
             $tableColumnActionsArray,
             $model->getKey(),
             $this->getKey()
         );
         if ($columnActionArray) {
-            return new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->key));
+            $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+            return $columnActionInstance->isAllowed()
+                ? new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->key))
+                : null;
+        }
+        if ($this->formatter instanceof Closure) {
+            return $this->manageHtmlEscaping(($this->formatter)($model));
+        }
+        if ($this->formatter instanceof AbstractFormatter) {
+            return $this->manageHtmlEscaping($this->formatter->format($model, $this->key));
         }
 
         return $this->key ? $this->manageHtmlEscaping(data_get($model, $this->key)) : null;

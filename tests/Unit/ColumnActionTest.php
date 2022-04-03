@@ -136,6 +136,7 @@ class ColumnActionTest extends TestCase
             ])
             ->assertDontSeeHtml([
                 '<a wire:click.prevent="columnAction(\'active\', \'' . $users->first()->id . '\', 0)"',
+                '<td class="align-middle">1</td>',
             ]);
     }
 

@@ -46,6 +46,7 @@ class ToggleBoolean extends AbstractColumnAction
 
     public function action(Model $model, string $attribute, Component $livewire): void
     {
-        $model->update([$attribute => ! $model->{$attribute}]);
+        // Update attribute event if it not in model `$fillable`.
+        $model->forceFill([$attribute => ! $model->{$attribute}])->save();
     }
 }
