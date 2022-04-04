@@ -105,7 +105,7 @@
                             </th>
                         @endforeach
                         @if($tableRowActionsArray)
-                            <th wire:key="column-actions" class="align-middle" scope="col">
+                            <th wire:key="column-actions" class="align-middle text-end" scope="col">
                                 {{ __('Actions') }}
                             </th>
                         @endif
@@ -123,7 +123,7 @@
                                 @endif
                             @endforeach
                             @if($tableRowActionsArray)
-                                <td class="align-middle">
+                                <td class="align-middle text-end">
                                     @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
                                         @foreach($rowActionsArray as $rowActionArray)
                                             {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render($model) }}

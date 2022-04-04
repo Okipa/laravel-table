@@ -47,7 +47,7 @@ class TableRowActionsTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
-                '<th wire:key="column-actions" class="align-middle" scope="col">',
+                '<th wire:key="column-actions" class="align-middle text-end" scope="col">',
                 'Actions',
                 '</th>',
                 '</tr>',
