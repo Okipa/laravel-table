@@ -14,6 +14,8 @@ class Column
 {
     protected string $key;
 
+    protected string $title;
+
     protected bool $sortable = false;
 
     protected Closure|null $sortableClosure = null;
@@ -32,9 +34,10 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string $title, string $key = null)
+    public function __construct(string $title, string $key = null)
     {
         $this->key = $key ?: Str::snake($title);
+        $this->title = __($title);
     }
 
     public static function make(string $title, string $key = null): self
@@ -134,6 +137,7 @@ class Column
         );
         if ($columnActionArray) {
             $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+
             return $columnActionInstance->isAllowed()
                 ? new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->key))
                 : null;
@@ -148,13 +152,13 @@ class Column
         return $this->manageHtmlEscaping($model->{$this->key});
     }
 
-    protected function manageHtmlEscaping(mixed $value): HtmlString|string
-    {
-        return $this->escapeHtml ? $value : new HtmlString($value);
-    }
-
     public function getKey(): string
     {
         return $this->key;
+    }
+
+    protected function manageHtmlEscaping(mixed $value): HtmlString|string
+    {
+        return $this->escapeHtml ? $value : new HtmlString($value);
     }
 }

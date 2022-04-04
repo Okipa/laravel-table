@@ -86,13 +86,13 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make(__('Id'))->sortable(),
-            Column::make(__('Name'))->searchable()->sortable(),
-            Column::make(__('Email'))->searchable()->sortable(),
-            Column::make(__('Created at'))
+            Column::make('Id')->sortable(),
+            Column::make('Name')->searchable()->sortable(),
+            Column::make('Email')->searchable()->sortable(),
+            Column::make('Created at')
                 ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
                 ->sortable(),
-            Column::make(__('Updated at'))
+            Column::make('Updated at')
                 ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
                 ->sortable()
                 ->sortByDefault('desc'),
@@ -547,7 +547,7 @@ class UsersTable extends AbstractTableConfiguration
             // Column title set to `Id`, column key set to `id` and value set from `$user->id`
             Column::make(__(Id')),
             // Column title set to `Username`, column key set to `name` and value set from `$user->name`
-            Column::make(__('Username'), 'name'),
+            Column::make('Username', 'name'),
         ];
     }
 }
@@ -580,9 +580,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Value set from `$user->id`
-            Column::make(__('Id')),
+            Column::make('Id'),
             // Value set from closure
-            Column::make(__('Username'))
+            Column::make('Username')
                 ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
         ];
     }
@@ -633,8 +633,8 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make(__('Id')),
-            Column::make(__('Active'))->format(new Boolean()),
+            Column::make('Id'),
+            Column::make('Active')->format(new Boolean()),
         ];
     }
 }
@@ -684,11 +684,11 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make(__('Id')),
-            Column::make(__('Email verified'), 'email_verified_at')
+            Column::make('Id'),
+            Column::make('Email verified', 'email_verified_at')
                 // ToggleEmailVerified action will not trigger any feedback message
                 ->action(fn(User $user) => (new ToggleEmailVerified()->feedbackMessage(false))
-            Column::make(__('Toggle'), 'active')
+            Column::make('Toggle', 'active')
                 // ToggleBoolean action will not be available for authenticated user
                 ->action(fn(User $user) => (new ToggleBoolean())->when(! Auth::user()->is($user))),
         ];
@@ -720,8 +720,8 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make(__('Id')),
-            Column::make(__('My new column action'))->action(fn() => new MyNewColumnAction()),
+            Column::make('Id'),
+            Column::make('My new column action')->action(fn() => new MyNewColumnAction()),
         ];
     }
 }
@@ -753,9 +753,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be searchable
-            Column::make(__('Id')),
+            Column::make('Id'),
             // Table will be searchable from `$user->name`
-            Column::make(__('Name'))->searchable(),
+            Column::make('Name')->searchable(),
         ];
     }
 }
@@ -777,9 +777,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be searchable
-            Column::make(__('Id')),
+            Column::make('Id'),
             // Column will be searchable using this closure
-            Column::make(__('Owned companies'))
+            Column::make('Owned companies')
                 // ... Your custom formatting here
                 ->searchable(fn(Builder $query, string $searchBy) => $query->whereRelation(
                     'companies',
@@ -812,9 +812,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be sortable
-            Column::make(__('Id')),
+            Column::make('Id'),
             // Column will be sortable from `$user->name`
-            Column::make(__('Name'))->sortable(),
+            Column::make('Name')->sortable(),
         ];
     }
 }
@@ -836,9 +836,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be sortable
-            Column::make(__('Id')),
+            Column::make('Id'),
             // Column will be sorted descending by default on `$user->name`
-            Column::make(__('Name'))->sortByDefault('desc'),
+            Column::make('Name')->sortByDefault('desc'),
         ];
     }
 }
@@ -860,9 +860,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be sortable
-            Column::make(__('Id')),
+            Column::make('Id'),
             // Column will be sortable from this closure
-            Column::make(__('Companies count')) 
+            Column::make('Companies count') 
                 // Custom formatting...
                 ->sortable(fn(Builder $query, string $sortDir) => $query
                     ->withCount('companies')
