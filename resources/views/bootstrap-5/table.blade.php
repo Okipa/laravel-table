@@ -76,11 +76,32 @@
                             </div>
                         </td>
                     </tr>
-                    {{-- Column titles --}}
+                    {{-- Column headings --}}
                     <tr class="bg-light border-bottom">
+                        {{-- Bulk actions --}}
+                        @if($tableBulkActionsArray)
+                            <th wire:key="bulk-actions" class="align-middle" scope="col">
+                                {{-- Bulk actions select all --}}
+                                <input wire:model="selectAllRowsForBulkAction" type="checkbox">
+                                {{-- Bulk actions dropdown --}}
+                                <div class="dropdown">
+                                    <a id="bulk-actions-dropdown"
+                                       class="dropdown-toggle"
+                                       type="button"
+                                       data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">
+                                        @foreach($tableBulkActionsArray as $bulkActionArray)
+                                            {{ Okipa\LaravelTable\Abstracts\AbstractBulkAction::make($bulkActionArray)->render() }}
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </th>
+                        @endif
+                        {{-- Sorting --}}
                         @foreach($columns as $column)
                             <th wire:key="column-{{ Str::slug($column->getKey()) }}" class="align-middle" scope="col">
-                                {{-- Sorting --}}
                                 @if($column->isSortable())
                                     @if($sortBy === $column->getKey())
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
@@ -104,8 +125,9 @@
                                 @endif
                             </th>
                         @endforeach
+                        {{-- Actions --}}
                         @if($tableRowActionsArray)
-                            <th wire:key="column-actions" class="align-middle text-end" scope="col">
+                            <th wire:key="row-actions" class="align-middle text-end" scope="col">
                                 {{ __('Actions') }}
                             </th>
                         @endif
@@ -115,6 +137,13 @@
                 <tbody>
                     @forelse($rows as $model)
                         <tr wire:key="row-{{ Str::slug($model->getKey()) }}" @class(array_merge(Arr::get($tableRowClass, $model->getKey(), []), ['border-bottom']))>
+                            {{-- Row bulk action selector --}}
+                            @if($tableBulkActionsArray)
+                                <td class="align-middle">
+                                    <input wire:model="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}">
+                                </td>
+                            @endif
+                            {{-- Row columns values --}}
                             @foreach($columns as $column)
                                 @if($loop->first)
                                     <th class="align-middle" scope="row">{{ $column->getValue($model, $tableColumnActionsArray) }}</th>
@@ -122,6 +151,7 @@
                                     <td class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
                                 @endif
                             @endforeach
+                            {{-- Row actions --}}
                             @if($tableRowActionsArray)
                                 <td class="align-middle text-end">
                                     @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))

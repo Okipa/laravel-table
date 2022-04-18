@@ -47,7 +47,7 @@ class TableRowActionsTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr',
-                '<th wire:key="column-actions" class="align-middle text-end" scope="col">',
+                '<th wire:key="row-actions" class="align-middle text-end" scope="col">',
                 'Actions',
                 '</th>',
                 '</tr>',
@@ -114,7 +114,7 @@ class TableRowActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
-                    (new Destroy())->when(! Auth::user()->is($user)),
+                    (new Destroy())->when(Auth::user()->isNot($user)),
                 ]);
             }
 

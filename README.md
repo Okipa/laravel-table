@@ -437,7 +437,7 @@ class UsersTable extends AbstractTableConfiguration
                 new Edit(route('user.edit', $user)),
                 (new Destroy())
                     // Destroy action will not be available for authenticated user
-                    ->when(! Auth::user()->is($user))
+                    ->when(Auth::user()->isNot($user))
                     // Override the action default confirmation question
                     // Or set `false` if you do not want to require any confirmation for this action
                     ->confirmationQuestion('Are you sure you want to delete user ' . $user->name . '?')
@@ -690,7 +690,7 @@ class UsersTable extends AbstractTableConfiguration
                 ->action(fn(User $user) => (new ToggleEmailVerified()->feedbackMessage(false))
             Column::make('Toggle', 'active')
                 // ToggleBoolean action will not be available for authenticated user
-                ->action(fn(User $user) => (new ToggleBoolean())->when(! Auth::user()->is($user))),
+                ->action(fn(User $user) => (new ToggleBoolean())->when(Auth::user()->isNot($user))),
         ];
     }
 }

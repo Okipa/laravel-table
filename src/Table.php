@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
 
+/** @SuppressWarnings(PHPMD.ExcessiveClassComplexity) */
 class Table
 {
     protected Model $model;
@@ -24,6 +24,8 @@ class Table
     protected AbstractHeadAction|null $headAction = null;
 
     protected Closure|null $rowActionsClosure = null;
+
+    protected Closure|null $bulkActionsClosure = null;
 
     protected Closure|null $queryClosure = null;
 
@@ -86,6 +88,13 @@ class Table
     public function rowActions(Closure $rowActionsClosure): self
     {
         $this->rowActionsClosure = $rowActionsClosure;
+
+        return $this;
+    }
+
+    public function bulkActions(Closure $bulkActionsClosure): self
+    {
+        $this->bulkActionsClosure = $bulkActionsClosure;
 
         return $this;
     }
@@ -212,6 +221,45 @@ class Table
         return $tableRowClass;
     }
 
+    /** @throws \JsonException */
+    public function generateBulkActionsArray(array $selectedModelKeys): array
+    {
+        $tableBulkActionsArray = [];
+        $tableRawBulkActionsArray = [];
+        if (! $this->bulkActionsClosure) {
+            return $tableBulkActionsArray;
+        }
+        $bulkActionsModelKeys = [];
+        foreach ($this->rows as $index => $model) {
+            $modelBulkActions = collect(($this->bulkActionsClosure)($model));
+            foreach ($modelBulkActions as $modelBulkAction) {
+                $modelBulkAction->setup($model);
+                if (! $index) {
+                    $tableRawBulkActionsArray[] = json_decode(json_encode(
+                        $modelBulkAction,
+                        JSON_THROW_ON_ERROR
+                    ), true, 512, JSON_THROW_ON_ERROR);
+                }
+                if (! in_array($model->getKey(), $selectedModelKeys, true)) {
+                    continue;
+                }
+                if (! $modelBulkAction->isAllowed()) {
+                    $bulkActionsModelKeys[$modelBulkAction->identifier]['disallowed'][] = $model->getKey();
+                    continue;
+                }
+                $bulkActionsModelKeys[$modelBulkAction->identifier]['allowed'][] = $model->getKey();
+            }
+        }
+        foreach ($tableRawBulkActionsArray as $tableBulkActionArray) {
+            $identifier = $tableBulkActionArray['identifier'];
+            $tableBulkActionArray['allowedModelKeys'] = $bulkActionsModelKeys[$identifier]['allowed'] ?? [];
+            $tableBulkActionArray['disallowedModelKeys'] = $bulkActionsModelKeys[$identifier]['disallowed'] ?? [];
+            $tableBulkActionsArray[] = $tableBulkActionArray;
+        }
+
+        return $tableBulkActionsArray;
+    }
+
     public function generateRowActionsArray(): array
     {
         $tableRowActionsArray = [];
@@ -244,9 +292,11 @@ class Table
         $tableColumnActionsArray = [];
         foreach ($this->rows->getCollection() as $model) {
             $columnActions = $this->getColumns()
-                ->mapWithKeys(fn(Column $column) => [$column->getKey() => $column->getAction()
-                    ? $column->getAction()($model)
-                    : null])
+                ->mapWithKeys(fn(Column $column) => [
+                    $column->getKey() => $column->getAction()
+                        ? $column->getAction()($model)
+                        : null,
+                ])
                 ->filter();
             foreach ($columnActions as $attribute => $columnAction) {
                 $columnAction->setup($model, $attribute);
