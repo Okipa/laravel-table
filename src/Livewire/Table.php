@@ -122,6 +122,11 @@ class Table extends Component
         );
         // Actions
         $this->headActionArray = $table->getHeadActionArray();
+        if (in_array($this->selectedModelKeys, [['selectAll'], ['unselectAll']], true)) {
+            $this->selectedModelKeys = $this->selectedModelKeys === ['selectAll']
+                ? $table->getRows()->pluck('id')->toArray()
+                : [];
+        }
         $this->tableBulkActionsArray = $table->generateBulkActionsArray($this->selectedModelKeys);
         $this->tableRowActionsArray = $table->generateRowActionsArray();
         $this->tableColumnActionsArray = $table->generateColumnActionsArray();
@@ -157,6 +162,11 @@ class Table extends Component
         return AbstractHeadAction::make($this->headActionArray)->action($this);
     }
 
+    public function updatedSelectAll(): void
+    {
+        $this->selectedModelKeys = $this->selectAll ? ['selectAll'] : ['unselectAll'];
+    }
+
     public function actionConfirmed(string $actionType, string $identifier, string|null $modelKey): mixed
     {
         return match ($actionType) {
@@ -170,6 +180,9 @@ class Table extends Component
     {
         $bulkActionArray = AbstractBulkAction::retrieve($this->tableBulkActionsArray, $identifier);
         $bulkActionInstance = AbstractBulkAction::make($bulkActionArray);
+        if (! $bulkActionInstance->allowedModelKeys) {
+            return null;
+        }
         if ($requiresConfirmation) {
             return $this->emit(
                 'table:action:confirm',

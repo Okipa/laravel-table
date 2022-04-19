@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\BulkActions\Activate;
+use Okipa\LaravelTable\BulkActions\Deactivate;
 use Okipa\LaravelTable\BulkActions\Destroy;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
@@ -16,11 +18,13 @@ class TableBulkActionsTest extends TestCase
     /** @test */
     public function it_can_set_bulk_actions(): void
     {
-        $users = User::factory()->count(2)->create();
+        $users = User::factory()->count(2)->create(['active' => false]);
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
+                    new Activate('active'),
+                    new Deactivate('active'),
                     new Destroy(),
                 ]);
             }
@@ -28,11 +32,11 @@ class TableBulkActionsTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
+                    Column::make('Id'),
                 ];
             }
         };
-        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [
+        $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [
             'config' => $config::class,
             'selectedModelKeys' => [$users->first()->id],
         ])
@@ -45,7 +49,7 @@ class TableBulkActionsTest extends TestCase
                 '</tr>',
                 '<tr',
                 '<th wire:key="bulk-actions" class="align-middle" scope="col">',
-                '<input wire:model="selectAllRowsForBulkAction" type="checkbox">',
+                '<input wire:model="selectAll" type="checkbox">',
                 '<div class="dropdown">',
                 '<a id="bulk-actions-dropdown"',
                 'class="dropdown-toggle"',
@@ -54,6 +58,22 @@ class TableBulkActionsTest extends TestCase
                 'aria-expanded="false">',
                 '</a>',
                 '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
+                '<li>',
+                '<button wire:click.prevent="bulkAction(\'activate\', 1)"',
+                'class="dropdown-item"',
+                'title="Activate (1)"',
+                'type="button">',
+                'Activate (1)',
+                '</button>',
+                '</li>',
+                '<li>',
+                '<button wire:click.prevent="bulkAction(\'deactivate\', 1)"',
+                'class="dropdown-item"',
+                'title="Deactivate (1)"',
+                'type="button">',
+                'Deactivate (1)',
+                '</button>',
+                '</li>',
                 '<li>',
                 '<button wire:click.prevent="bulkAction(\'destroy\', 1)"',
                 'class="dropdown-item"',
@@ -75,7 +95,50 @@ class TableBulkActionsTest extends TestCase
                 '</tr>',
                 '</tbody>',
             ])
-            ->call('bulkAction', 'destroy', true)
+            ->call('bulkAction', 'activate', true)
+            ->assertEmitted(
+                'table:action:confirm',
+                'bulkAction',
+                'activate',
+                null,
+                'Are you sure you want to activate the selected line #' . $users->first()->id . '?'
+            )
+            ->emit('table:action:confirmed', 'bulkAction', 'activate', null)
+            ->assertEmitted(
+                'table:action:feedback',
+                'The selected line #' . $users->first()->id . ' has been activated.'
+            );
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->first()->id,
+            'active' => true,
+        ]);
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->last()->id,
+            'active' => false,
+        ]);
+        User::get()->each->update(['active' => true]);
+        $component->call('bulkAction', 'deactivate', true)
+            ->assertEmitted(
+                'table:action:confirm',
+                'bulkAction',
+                'deactivate',
+                null,
+                'Are you sure you want to deactivate the selected line #' . $users->first()->id . '?'
+            )
+            ->emit('table:action:confirmed', 'bulkAction', 'deactivate', null)
+            ->assertEmitted(
+                'table:action:feedback',
+                'The selected line #' . $users->first()->id . ' has been deactivated.'
+            );
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->first()->id,
+            'active' => false,
+        ]);
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->last()->id,
+            'active' => true,
+        ]);
+        $component->call('bulkAction', 'destroy', true)
             ->assertEmitted(
                 'table:action:confirm',
                 'bulkAction',
@@ -109,7 +172,7 @@ class TableBulkActionsTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
+                    Column::make('Id'),
                 ];
             }
         };
@@ -127,7 +190,7 @@ class TableBulkActionsTest extends TestCase
                 '</tr>',
                 '<tr',
                 '<th wire:key="bulk-actions" class="align-middle" scope="col">',
-                '<input wire:model="selectAllRowsForBulkAction" type="checkbox">',
+                '<input wire:model="selectAll" type="checkbox">',
                 '<div class="dropdown">',
                 '<a id="bulk-actions-dropdown"',
                 'class="dropdown-toggle"',
@@ -187,16 +250,17 @@ class TableBulkActionsTest extends TestCase
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
-                return Table::make()->model(User::class)
-                    ->bulkActions(fn(User $user) => [
-                        (new Destroy())->confirmationQuestion(false)->feedbackMessage(false),
-                    ]);
+                return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
+                    (new Destroy())
+                        ->confirmationQuestion(false)
+                        ->feedbackMessage(false),
+                ]);
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
+                    Column::make('Id'),
                 ];
             }
         };
@@ -216,7 +280,66 @@ class TableBulkActionsTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 
-    // Test: zero selected line
-    // Test: checkall/uncheck all
-    // Harmonize action treatments
+    /** @test */
+    public function it_cant_trigger_bulk_action_with_no_selected_line(): void
+    {
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
+                    new Destroy(),
+                ]);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<button wire:click.prevent="bulkAction(\'destroy\', 1)"',
+                'title="Destroy (0)"',
+                'Destroy (0)',
+                '</thead>',
+            ])
+            ->call('bulkAction', 'destroy', true)
+            ->assertNotEmitted('table:action:confirm')
+            ->emit('table:action:confirmed', 'bulkAction', 'destroy', null)
+            ->assertNotEmitted('table:action:feedback');
+        $this->assertDatabaseHas(app(User::class)->getTable(), ['id' => $users->first()->id]);
+        $this->assertDatabaseHas(app(User::class)->getTable(), ['id' => $users->last()->id]);
+    }
+
+    /** @test */
+    public function it_can_select_all_lines(): void
+    {
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
+                    new Destroy(),
+                ]);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->set('selectAll', true)
+            ->assertSet('selectedModelKeys', $users->pluck('id')->toArray())
+            ->set('selectAll', false)
+            ->assertSet('selectedModelKeys', []);
+    }
 }

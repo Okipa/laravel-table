@@ -8,21 +8,21 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
-class Destroy extends AbstractBulkAction
+class Activate extends AbstractBulkAction
 {
-    public function action(Collection $models, Component $livewire): void
+    public function __construct(public string $attribute)
     {
-        $models->each->delete();
+        //
     }
 
     protected function identifier(): string
     {
-        return 'destroy';
+        return 'activate';
     }
 
     protected function label(array $allowedModelKeys): string
     {
-        return __('Destroy') . ' (' . count($allowedModelKeys) . ')';
+        return __('Activate') . ' (' . count($allowedModelKeys) . ')';
     }
 
     protected function defaultConfirmationQuestion(array $allowedModelKeys, array $disallowedModelKeys): string|null
@@ -30,24 +30,24 @@ class Destroy extends AbstractBulkAction
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => Str::lower(__('Destroy')),
+                'action' => Str::lower(__('Activate')),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the selected line #:key?', [
-                'action' => Str::lower(__('Destroy')),
-                'key' => Arr::first($allowedModelKeys),
+            : __('Are you sure you want to :action the selected line #:primary?', [
+                'action' => Str::lower(__('Activate')),
+                'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and will not be affected by this action.', [
-                    'action' => __('destruction'),
+                    'action' => __('activation'),
                     'count' => $disallowedLinesCount,
                 ])
-                : __('The line #:key does not allow :action and will not be affected by this action.', [
-                    'action' => __('destruction'),
-                    'key' => Arr::first($disallowedModelKeys),
+                : __('The line #:primary does not allow :action and will not be affected by this action.', [
+                    'action' => __('activation'),
+                    'primary' => Arr::first($disallowedModelKeys),
                 ]);
         }
 
@@ -60,11 +60,11 @@ class Destroy extends AbstractBulkAction
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __(':count selected lines have been :action.', [
                 'count' => count($allowedModelKeys),
-                'action' => __('destroyed'),
+                'action' => __('activated'),
             ])
-            : __('The selected line #:key has been :action.', [
-                'key' => Arr::first($allowedModelKeys),
-                'action' => __('destroyed'),
+            : __('The selected line #:primary has been :action.', [
+                'primary' => Arr::first($allowedModelKeys),
+                'action' => __('activated'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
@@ -72,14 +72,21 @@ class Destroy extends AbstractBulkAction
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and were not affected by this action.', [
                     'count' => $disallowedLinesCount,
-                    'action' => __('destruction'),
+                    'action' => __('activation'),
                 ])
-                : __('The line #:key does not allow :action and was not affected by this action.', [
-                    'key' => Arr::first($disallowedModelKeys),
-                    'action' => __('destruction'),
+                : __('The line #:primary does not allow :action and was not affected by this action.', [
+                    'primary' => Arr::first($disallowedModelKeys),
+                    'action' => __('activation'),
                 ]);
         }
 
         return $allowedLinesSentence . ($disallowedLinesSentence ?? '');
+    }
+
+    public function action(Collection $models, Component $livewire): void
+    {
+        foreach ($models as $model) {
+            $model->forceFill([$this->attribute => true])->save();
+        }
     }
 }

@@ -82,7 +82,7 @@
                         @if($tableBulkActionsArray)
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
                                 {{-- Bulk actions select all --}}
-                                <input wire:model="selectAllRowsForBulkAction" type="checkbox">
+                                <input wire:model="selectAll" type="checkbox">
                                 {{-- Bulk actions dropdown --}}
                                 <div class="dropdown">
                                     <a id="bulk-actions-dropdown"
