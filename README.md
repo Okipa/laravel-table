@@ -31,7 +31,6 @@ DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.
 **V5 roadmap:**
 * Table config `results` => set table result lines
 * Table `reorderable` => allow rows reordering with drag & drop
-* Table `bulkActions` => set bulk actions for checked rows
 * Table `filters` => set actionable filters
 
 Found this package helpful? Please consider supporting my work!
@@ -120,6 +119,7 @@ And display it in a view:
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Set conditional row class](#set-conditional-row-class)
+  * [Define table bulk actions](#define-table-bulk-actions)
   * [Define table head action](#define-table-head-action)
   * [Define table row actions](#define-table-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
@@ -333,6 +333,141 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
+### Define table bulk actions
+
+Configure table bulk actions that will be available in a dropdown positioned at the left of the table head.
+
+If no bulk action is declared on your table, the dedicated column will not be displayed.
+
+This package provides the built-in following bulk actions:
+* `VerifyEmail`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute with the current datetime for all selected lines
+* `CancelEmailVerification`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute to `null` for all selected lines
+* `Activate`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute to `true` for all selected lines
+* `Deactivate`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute to `false` for all selected lines
+* `Destroy`:
+    * Destroys all the selected lines
+
+To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
+
+You'll ben able to chain the following methods to your bulk actions:
+* `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
+    * Determines if action should be available on table rows
+* `confirmationQuestion(string|false $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
+    * Overrides the default action confirmation message
+* `feedbackMessage(string|false $feedbackMessage): Okipa\LaravelTable\Abstracts\AbstractBulkAction`:
+    * Overrides the default action feedback message
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\BulkActions\Destroy;
+use Okipa\LaravelTable\BulkActions\Activate;
+use Okipa\LaravelTable\BulkActions\Deactivate;
+use Okipa\LaravelTable\BulkActions\VerifyEmail;
+use Okipa\LaravelTable\BulkActions\CancelEmailVerification;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->bulkActions(fn(User $user) => [
+                new VerifyEmail('email_verified_at'),
+                new CancelEmailVerification('email_verified_at'),
+                new Activate('active'),
+                new Deactivate('active'),
+                (new Destroy())
+                    // Destroy action will not be available for authenticated user
+                    ->when(Auth::user()->isNot($user))
+                    // Override the action default confirmation question
+                    // Or set `false` if you do not want to require any confirmation for this action
+                    ->confirmationQuestion('Are you sure you want to delete selected users ?')
+                    // Override the action default feedback message
+                    // Or set `false` if you do not want to trigger any feedback message for this action
+                    ->feedbackMessage('Selected users have been deleted.'),
+            ]).
+    }
+}
+```
+
+You may need to create your own bulk actions. To do so, execute the following command: `php artisan make:table:bulk:action MyNewBulkAction`.
+
+You'll find your generated table bulk actions in the `app/Tables/BulkActions` directory.
+
+You will now be able to use your new bulk action in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\BulkActions\MyNewBulkAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->bulkActions(fn(User $user) => [
+                new MyNewBulkAction(),
+            ]);
+    }
+}
+```
+
+When an action has a confirmation question configured, it will not be directly executed but a `table:action:confirm` Livewire event will be emitted instead with the following parameters:
+1. The action type
+2. The action identifier
+3. The model primary key related to your action
+4. The `$confirmationQuestion` attribute from your action
+
+As you will see below, the 4th param of this event is the only one you'll have to use for in order to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is confirmed by the user. Just ignore them in your treatment.
+
+You will have to intercept this event from your own JS script and display the action confirmation request from your favorite modal/alert/toast library (a basic example is provided below).
+
+When action is confirmed by the user, you'll have to emit a new `table:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
+1. The action type
+2. The action identifier
+3. The model primary key related to your action
+
+Here is an JS snippet to show you how to proceed:
+
+```javascript
+// Listen to the action confirmation request
+Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
+    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
+    if (window.confirm(confirmationQuestion)) {
+        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
+        Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
+    }
+});
+```
+
+Once the action executed, a last `table:action:executed` Livewire event will be triggered if the action has a configured feedback message.
+
+Following the same logic, you'll have to intercept it from a JS script like this one to provide an immediate feedback to the user:
+
+```javascript
+Livewire.on('table:action:feedback', (feedbackMessage) => {
+    // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
+    window.alert(feedbackMessage);
+});
+```
+
 ### Define table head action
 
 Configure a table action that will be displayed as a button positioned at the right of the table head.
@@ -376,7 +511,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\HeadActions\Configure;
+use App\Tables\HeadActions\MyNewHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -396,7 +531,7 @@ Configure row actions on your table that will be displayed at the end of each ro
 
 If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be displayed.
 
-This package provides the built-in following actions:
+This package provides the built-in following row actions:
 * `Show`:
   * Requires a `string $showUrl` argument on instantiation
   * Redirects to the model edit page on click
@@ -406,15 +541,9 @@ This package provides the built-in following actions:
 * `Destroy`:
   * Destroys the line after being asked to confirm
 
-To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row actions instances.
+To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
 
-You'll ben able to chain the following methods to your actions:
-* `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractRowAction`
-  * Determines if action should be available on table rows
-* `confirmationQuestion(string|false $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractRowAction`
-  * Overrides the default action confirmation message
-* `feedbackMessage(string|false $feedbackMessage): Okipa\LaravelTable\Abstracts\AbstractRowAction`:
-  * Overrides the default action feedback message
+You'll be able to chain the same methods as for a row action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
 namespace App\Tables;
@@ -460,7 +589,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\RowActions\ToggleActivation;
+use App\Tables\RowActions\MyNewRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -476,44 +605,9 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-When an action has confirmation question configured, it will not be directly executed but a `table:action:confirm` Livewire event will be emitted instead with the following parameters:
-1. The action type
-2. The action identifier
-3. The model primary key related to your action
-4. The `$confirmationQuestion` attribute from your action
+You may need your row actions to be confirmed before they'll be executed and to trigger feedback messages.
 
-As you will see below, the 4th param of this event is the only one you'll have to use for in order to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is confirmed by the user. Just ignore them in your treatment.
-
-You will have to intercept this event from your own JS script and display the action confirmation request from your favorite modal/alert/toast library (a basic example is provided below).
-
-When action is confirmed by the user, you'll have to emit a new `table:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
-1. The action type 
-2. The action identifier
-3. The model primary key related to your action
-
-Here is an JS snippet to show you how to proceed:
-
-```javascript
-// Listen to the action confirmation request
-Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
-    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
-    if (window.confirm(confirmationQuestion)) {
-        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
-        Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
-    }
-});
-```
-
-Once the action executed, a last `table:action:executed` Livewire event will be triggered if the action has a configured feedback message.
-
-Following the same logic, you'll have to intercept it from a JS script like this one to provide an immediate feedback to the user:
-
-```javascript
-Livewire.on('table:action:feedback', (feedbackMessage) => {
-    // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
-    window.alert(feedbackMessage);
-});
-```
+You'll have to configure them in the same way you did for [bulk actions](#define-table-bulk-actions).
 
 ### Declare columns on tables
 
@@ -664,7 +758,7 @@ This package provides the built-in following actions:
 
 To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
 
-You'll be able to chain the same methods as for a row action => [See row actions configuration](#define-table-row-actions).
+You'll be able to chain the same methods as for a row action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
 namespace App\Tables;
@@ -729,7 +823,7 @@ class UsersTable extends AbstractTableConfiguration
 
 You may need your column actions to be confirmed before they'll be executed and to trigger feedback messages.
 
-You'll have to configure them in the same way you did for [row actions](#define-table-row-actions). 
+You'll have to configure them in the same way you did for [bulk actions](#define-table-bulk-actions). 
 
 ### Configure columns searching
 

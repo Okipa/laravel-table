@@ -243,11 +243,9 @@ class Table
                 if (! in_array($model->getKey(), $selectedModelKeys, true)) {
                     continue;
                 }
-                if (! $modelBulkAction->isAllowed()) {
-                    $bulkActionsModelKeys[$modelBulkAction->identifier]['disallowed'][] = $model->getKey();
-                    continue;
-                }
-                $bulkActionsModelKeys[$modelBulkAction->identifier]['allowed'][] = $model->getKey();
+                $modelBulkAction->isAllowed()
+                    ? $bulkActionsModelKeys[$modelBulkAction->identifier]['allowed'][] = $model->getKey()
+                    : $bulkActionsModelKeys[$modelBulkAction->identifier]['disallowed'][] = $model->getKey();
             }
         }
         foreach ($tableRawBulkActionsArray as $tableBulkActionArray) {

@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Illuminate\Support\Facades\File;
+use Okipa\LaravelTable\Console\Commands\MakeBulkAction;
 use Okipa\LaravelTable\Console\Commands\MakeColumnAction;
 use Okipa\LaravelTable\Console\Commands\MakeFormatter;
 use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
@@ -79,20 +80,41 @@ class MakeTest extends TestCase
     }
 
     /** @test */
-    public function it_can_make_formatter(): void
+    public function it_can_make_bulk_action(): void
     {
-        $this->artisan(MakeFormatter::class, ['name' => 'Boolean']);
-        self::assertFileExists(base_path('app/Tables/Formatters/Boolean.php'));
-        $fileContent = File::get(base_path('app/Tables/Formatters/Boolean.php'));
+        $this->artisan(MakeBulkAction::class, ['name' => 'Activate']);
+        self::assertFileExists(base_path('app/Tables/BulkActions/Activate.php'));
+        $fileContent = File::get(base_path('app/Tables/BulkActions/Activate.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
-            'namespace App\Tables\Formatters;',
-            'use Illuminate\Database\Eloquent\Model;',
-            'use Okipa\LaravelTable\Abstracts\AbstractFormatter;',
-            'class Boolean extends AbstractFormatter',
+            'namespace App\Tables\BulkActions;',
+            'use Illuminate\Support\Collection;',
+            'use Livewire\Component;',
+            'use Okipa\LaravelTable\Abstracts\AbstractBulkAction;',
+            'class Activate extends AbstractBulkAction',
             '{',
-            'public function format(Model $model, string $attribute): string',
+            'protected function identifier(): string',
             '{',
-            '// The formatting that will be displayed in column cells.',
+            '// The unique identifier that is required to retrieve the bulk action.',
+            '}',
+            'protected function label(array $allowedModelKeys): string|null',
+            '{',
+            '// The label that will appear in the bulk action link.',
+            '}',
+            'protected function defaultConfirmationQuestion(array $allowedModelKeys, array $disallowedModelKeys): string|null',
+            '{',
+            '// The default bulk action confirmation question that will be asked before execution.',
+            '// Set `null` if you do not want any confirmation question to be asked by default.',
+            '}',
+            'protected function defaultFeedbackMessage(array $allowedModelKeys, array $disallowedModelKeys): string|null',
+            '{',
+            '// The default bulk action feedback message that will be triggered on execution.',
+            '// Set `null` if you do not want any feedback message to be triggered by default.',
+            '}',
+            '/** @return mixed|void */',
+            'public function action(Collection $models, Component $livewire)',
+            '{',
+            '// The treatment that will be executed on click on the bulk action link.',
+            '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
             '}',
             '}',
         ]);
@@ -176,6 +198,26 @@ class MakeTest extends TestCase
             '{',
             '// The treatment that will be executed on click on the row action link.',
             '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
+    public function it_can_make_column_formatter(): void
+    {
+        $this->artisan(MakeFormatter::class, ['name' => 'Boolean']);
+        self::assertFileExists(base_path('app/Tables/Formatters/Boolean.php'));
+        $fileContent = File::get(base_path('app/Tables/Formatters/Boolean.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\Formatters;',
+            'use Illuminate\Database\Eloquent\Model;',
+            'use Okipa\LaravelTable\Abstracts\AbstractFormatter;',
+            'class Boolean extends AbstractFormatter',
+            '{',
+            'public function format(Model $model, string $attribute): string',
+            '{',
+            '// The formatting that will be displayed in column cells.',
             '}',
             '}',
         ]);

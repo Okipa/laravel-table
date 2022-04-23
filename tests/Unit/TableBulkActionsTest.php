@@ -3,11 +3,14 @@
 namespace Tests\Unit;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\BulkActions\Activate;
+use Okipa\LaravelTable\BulkActions\CancelEmailVerification;
 use Okipa\LaravelTable\BulkActions\Deactivate;
 use Okipa\LaravelTable\BulkActions\Destroy;
+use Okipa\LaravelTable\BulkActions\VerifyEmail;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
@@ -16,13 +19,49 @@ use Tests\TestCase;
 class TableBulkActionsTest extends TestCase
 {
     /** @test */
+    public function it_can_display_bulk_actions_dropdown_and_column_when_none_is_defined(): void
+    {
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertDontSeeHtml([
+                '<td class="px-0" colspan="',
+                '<th wire:key="bulk-actions" class="align-middle" scope="col">',
+                '<input wire:model="selectAll" type="checkbox">',
+                '<a id="bulk-actions-dropdown"',
+                '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->first()->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->last()->id . '">',
+            ]);
+    }
+
+    /** @test */
     public function it_can_set_bulk_actions(): void
     {
-        $users = User::factory()->count(2)->create(['active' => false]);
+        Date::setTestNow();
+        $users = User::factory()->count(2)->create([
+            'email_verified_at' => null,
+            'active' => false,
+        ]);
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
+                    new VerifyEmail('email_verified_at'),
+                    new CancelEmailVerification('email_verified_at'),
                     new Activate('active'),
                     new Deactivate('active'),
                     new Destroy(),
@@ -59,6 +98,22 @@ class TableBulkActionsTest extends TestCase
                 '</a>',
                 '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
                 '<li>',
+                '<button wire:click.prevent="bulkAction(\'verify_email\', 1)"',
+                'class="dropdown-item"',
+                'title="Verify Email (1)"',
+                'type="button">',
+                'Verify Email (1)',
+                '</button>',
+                '</li>',
+                '<li>',
+                '<button wire:click.prevent="bulkAction(\'cancel_email_verification\', 1)"',
+                'class="dropdown-item"',
+                'title="Cancel Email Verification (1)"',
+                'type="button">',
+                'Cancel Email Verification (1)',
+                '</button>',
+                '</li>',
+                '<li>',
                 '<button wire:click.prevent="bulkAction(\'activate\', 1)"',
                 'class="dropdown-item"',
                 'title="Activate (1)"',
@@ -94,8 +149,54 @@ class TableBulkActionsTest extends TestCase
                 '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->last()->id . '">',
                 '</tr>',
                 '</tbody>',
-            ])
-            ->call('bulkAction', 'activate', true)
+            ]);
+        // Verify Email
+        $component->call('bulkAction', 'verify_email', true)
+            ->assertEmitted(
+                'table:action:confirm',
+                'bulkAction',
+                'verify_email',
+                null,
+                'Are you sure you want to verify email of the the selected line #' . $users->first()->id . '?'
+            )
+            ->emit('table:action:confirmed', 'bulkAction', 'verify_email', null)
+            ->assertEmitted(
+                'table:action:feedback',
+                'The selected line #' . $users->first()->id . ' has been verified (email).'
+            );
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->first()->id,
+            'email_verified_at' => Date::now(),
+        ]);
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->last()->id,
+            'email_verified_at' => null,
+        ]);
+        // Cancel Email Verification
+        User::query()->update(['email_verified_at' => Date::now()]);
+        $component->call('bulkAction', 'cancel_email_verification', true)
+            ->assertEmitted(
+                'table:action:confirm',
+                'bulkAction',
+                'cancel_email_verification',
+                null,
+                'Are you sure you want to cancel email verification of the the selected line #' . $users->first()->id . '?'
+            )
+            ->emit('table:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
+            ->assertEmitted(
+                'table:action:feedback',
+                'The selected line #' . $users->first()->id . ' has been unverified (email).'
+            );
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->first()->id,
+            'email_verified_at' => null,
+        ]);
+        $this->assertDatabaseHas(app(User::class)->getTable(), [
+            'id' => $users->last()->id,
+            'email_verified_at' => Date::now(),
+        ]);
+        // Activate
+        $component->call('bulkAction', 'activate', true)
             ->assertEmitted(
                 'table:action:confirm',
                 'bulkAction',
@@ -116,7 +217,8 @@ class TableBulkActionsTest extends TestCase
             'id' => $users->last()->id,
             'active' => false,
         ]);
-        User::get()->each->update(['active' => true]);
+        // Deactivate
+        User::query()->update(['active' => true]);
         $component->call('bulkAction', 'deactivate', true)
             ->assertEmitted(
                 'table:action:confirm',
@@ -138,6 +240,7 @@ class TableBulkActionsTest extends TestCase
             'id' => $users->last()->id,
             'active' => true,
         ]);
+        // Destroy
         $component->call('bulkAction', 'destroy', true)
             ->assertEmitted(
                 'table:action:confirm',

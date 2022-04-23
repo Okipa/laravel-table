@@ -4,6 +4,7 @@ namespace Okipa\LaravelTable;
 
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Okipa\LaravelTable\Console\Commands\MakeBulkAction;
 use Okipa\LaravelTable\Console\Commands\MakeColumnAction;
 use Okipa\LaravelTable\Console\Commands\MakeFormatter;
 use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
@@ -35,6 +36,7 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->commands([
             MakeTable::class,
             MakeHeadAction::class,
+            MakeBulkAction::class,
             MakeRowAction::class,
             MakeColumnAction::class,
             MakeFormatter::class,
