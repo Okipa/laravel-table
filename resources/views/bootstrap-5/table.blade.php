@@ -81,21 +81,23 @@
                         {{-- Bulk actions --}}
                         @if($tableBulkActionsArray)
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
-                                {{-- Bulk actions select all --}}
-                                <input wire:model="selectAll" type="checkbox">
-                                {{-- Bulk actions dropdown --}}
-                                <div class="dropdown">
-                                    <a id="bulk-actions-dropdown"
-                                       class="dropdown-toggle"
-                                       type="button"
-                                       data-bs-toggle="dropdown"
-                                       aria-expanded="false">
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">
-                                        @foreach($tableBulkActionsArray as $bulkActionArray)
-                                            {{ Okipa\LaravelTable\Abstracts\AbstractBulkAction::make($bulkActionArray)->render() }}
-                                        @endforeach
-                                    </ul>
+                                <div class="d-flex">
+                                    {{-- Bulk actions select all --}}
+                                    <input wire:model="selectAll" type="checkbox">
+                                    {{-- Bulk actions dropdown --}}
+                                    <div class="dropdown">
+                                        <a id="bulk-actions-dropdown"
+                                           class="dropdown-toggle"
+                                           type="button"
+                                           data-bs-toggle="dropdown"
+                                           aria-expanded="false">
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">
+                                            @foreach($tableBulkActionsArray as $bulkActionArray)
+                                                {{ Okipa\LaravelTable\Abstracts\AbstractBulkAction::make($bulkActionArray)->render() }}
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             </th>
                         @endif
