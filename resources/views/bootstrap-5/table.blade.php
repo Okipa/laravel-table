@@ -144,7 +144,10 @@
                             {{-- Row bulk action selector --}}
                             @if($tableBulkActionsArray)
                                 <td class="align-middle">
-                                    <input wire:model="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}">
+                                    <input wire:key="select-model-key-{{ $model->getKey() }}"
+                                           wire:model="selectedModelKeys"
+                                           type="checkbox"
+                                           value="{{ $model->getKey() }}">
                                 </td>
                             @endif
                             {{-- Row columns values --}}
