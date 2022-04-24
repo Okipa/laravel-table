@@ -85,7 +85,7 @@
                                     {{-- Bulk actions select all --}}
                                     <input wire:model="selectAll" class="me-1" type="checkbox">
                                     {{-- Bulk actions dropdown --}}
-                                    <div class="dropdown">
+                                    <div class="dropdown" title="{{ __('Bulk Actions') }}" data-bs-toggle="tooltip">
                                         <a id="bulk-actions-dropdown"
                                            class="dropdown-toggle"
                                            type="button"
@@ -108,7 +108,8 @@
                                     @if($sortBy === $column->getKey())
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
                                            href=""
-                                           title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}">
+                                           title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}"
+                                           data-bs-toggle="tooltip">
                                             {!! $sortDir === 'asc'
                                                 ? config('laravel-table.icon.sort_desc')
                                                 : config('laravel-table.icon.sort_asc') !!}
@@ -117,7 +118,8 @@
                                     @else
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
                                            href=""
-                                           title="{{ __('Sort ascending') }}">
+                                           title="{{ __('Sort ascending') }}"
+                                           data-bs-toggle="tooltip">
                                             {!! config('laravel-table.icon.sort') !!}
                                             {{ $column->getTitle() }}
                                         </a>
