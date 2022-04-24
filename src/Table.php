@@ -240,7 +240,7 @@ class Table
                         JSON_THROW_ON_ERROR
                     ), true, 512, JSON_THROW_ON_ERROR);
                 }
-                if (! in_array($model->getKey(), $selectedModelKeys, true)) {
+                if (! in_array((string) $model->getKey(), $selectedModelKeys, true)) {
                     continue;
                 }
                 $modelBulkAction->isAllowed()

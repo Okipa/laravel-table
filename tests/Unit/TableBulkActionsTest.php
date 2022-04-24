@@ -40,7 +40,7 @@ class TableBulkActionsTest extends TestCase
             ->assertDontSeeHtml([
                 '<td class="px-0" colspan="',
                 '<th wire:key="bulk-actions" class="align-middle" scope="col">',
-                '<input wire:model="selectAll" type="checkbox">',
+                '<input wire:model="selectAll" class="me-1" type="checkbox">',
                 '<a id="bulk-actions-dropdown"',
                 '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
                 '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->first()->id . '">',
@@ -77,7 +77,7 @@ class TableBulkActionsTest extends TestCase
         };
         $component = Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [
             'config' => $config::class,
-            'selectedModelKeys' => [$users->first()->id],
+            'selectedModelKeys' => [(string) $users->first()->id],
         ])
             ->call('init')
             ->assertSeeHtmlInOrder([
@@ -88,8 +88,9 @@ class TableBulkActionsTest extends TestCase
                 '</tr>',
                 '<tr',
                 '<th wire:key="bulk-actions" class="align-middle" scope="col">',
-                '<input wire:model="selectAll" type="checkbox">',
-                '<div class="dropdown">',
+                '<div class="d-flex align-items-center">',
+                '<input wire:model="selectAll" class="me-1" type="checkbox">',
+                '<div class="dropdown" title="Bulk Actions" data-bs-toggle="tooltip">',
                 '<a id="bulk-actions-dropdown"',
                 'class="dropdown-toggle"',
                 'type="button"',
@@ -138,6 +139,8 @@ class TableBulkActionsTest extends TestCase
                 '</button>',
                 '</li>',
                 '</ul>',
+                '</div>',
+                '</div>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -180,7 +183,8 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'cancel_email_verification',
                 null,
-                'Are you sure you want to cancel email verification of the the selected line #' . $users->first()->id . '?'
+                'Are you sure you want to cancel email verification of the the selected line #' . $users->first()->id
+                . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
             ->assertEmitted(
@@ -282,7 +286,7 @@ class TableBulkActionsTest extends TestCase
         Livewire::actingAs($user1)
             ->test(\Okipa\LaravelTable\Livewire\Table::class, [
                 'config' => $config::class,
-                'selectedModelKeys' => User::pluck('id')->toArray(),
+                'selectedModelKeys' => User::pluck('id')->map(fn(int $id) => (string) $id)->toArray(),
             ])
             ->call('init')
             ->assertSeeHtmlInOrder([
@@ -293,8 +297,9 @@ class TableBulkActionsTest extends TestCase
                 '</tr>',
                 '<tr',
                 '<th wire:key="bulk-actions" class="align-middle" scope="col">',
-                '<input wire:model="selectAll" type="checkbox">',
-                '<div class="dropdown">',
+                '<div class="d-flex align-items-center">',
+                '<input wire:model="selectAll" class="me-1" type="checkbox">',
+                '<div class="dropdown" title="Bulk Actions" data-bs-toggle="tooltip">',
                 '<a id="bulk-actions-dropdown"',
                 'class="dropdown-toggle"',
                 'type="button"',
@@ -311,6 +316,8 @@ class TableBulkActionsTest extends TestCase
                 '</button>',
                 '</li>',
                 '</ul>',
+                '</div',
+                '</div',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -369,7 +376,7 @@ class TableBulkActionsTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [
             'config' => $config::class,
-            'selectedModelKeys' => User::pluck('id')->toArray(),
+            'selectedModelKeys' => User::pluck('id')->map(fn(int $id) => (string) $id)->toArray(),
         ])
             ->call('init')
             ->assertSeeHtmlInOrder([
@@ -441,7 +448,7 @@ class TableBulkActionsTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->set('selectAll', true)
-            ->assertSet('selectedModelKeys', $users->pluck('id')->toArray())
+            ->assertSet('selectedModelKeys', $users->pluck('id')->map(fn(int $id) => (string) $id)->toArray())
             ->set('selectAll', false)
             ->assertSet('selectedModelKeys', []);
     }
