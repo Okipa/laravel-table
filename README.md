@@ -119,8 +119,8 @@ And display it in a view:
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Set conditional row class](#set-conditional-row-class)
-  * [Define table bulk actions](#define-table-bulk-actions)
   * [Define table head action](#define-table-head-action)
+  * [Define table bulk actions](#define-table-bulk-actions)
   * [Define table row actions](#define-table-row-actions)
   * [Declare columns on tables](#declare-columns-on-tables)
   * [Format column values](#format-column-values)
@@ -333,6 +333,63 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
+### Define table head action
+
+Configure a table action that will be displayed as a button positioned at the right of the table head.
+
+If no head action is declared, the dedicated slot for it in the table head will remain empty.
+
+This package provides the following built-in head actions:
+* `Create`:
+    * Requires a `string $createUrl` argument on instantiation
+    * Redirects to the model create page from a click on a `Create` button
+
+To use it, you'll have to pass an instance of it to the `headAction` method.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\HeadActions\Create;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->headAction(new Create(route('user.create')));
+    }
+}
+```
+
+You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action MyNewHeadAction`.
+
+You'll find your generated table head action in the `app/Tables/HeadActions` directory.
+
+You will now be able to use your new head action in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\HeadActions\MyNewHeadAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->headAction(new MyNewHeadAction());
+    }
+}
+```
+
 ### Define table bulk actions
 
 Configure table bulk actions that will be available in a dropdown positioned at the left of the table head.
@@ -466,63 +523,6 @@ Livewire.on('table:action:feedback', (feedbackMessage) => {
     // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
     window.alert(feedbackMessage);
 });
-```
-
-### Define table head action
-
-Configure a table action that will be displayed as a button positioned at the right of the table head.
-
-If no head action is declared, the dedicated slot for it in the table head will remain empty.
-
-This package provides the following built-in head actions:
-* `Create`:
-  * Requires a `string $createUrl` argument on instantiation
-  * Redirects to the model create page from a click on a `Create` button
-
-To use it, you'll have to pass an instance of it to the `headAction` method.
-
-```php
-namespace App\Tables;
-
-use App\Models\User;
-use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\HeadActions\Create;
-use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-
-class UsersTable extends AbstractTableConfiguration
-{
-    protected function table(): Table
-    {
-        return Table::make()
-            ->model(User::class)
-            ->headAction(new Create(route('user.create')));
-    }
-}
-```
-
-You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action MyNewHeadAction`.
-
-You'll find your generated table head action in the `app/Tables/HeadActions` directory.
-
-You will now be able to use your new head action in your tables.
-
-```php
-namespace App\Tables;
-
-use App\Models\User;
-use Okipa\LaravelTable\Table;
-use App\Tables\HeadActions\MyNewHeadAction;
-use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-
-class UsersTable extends AbstractTableConfiguration
-{
-    protected function table(): Table
-    {
-        return Table::make()
-            ->model(User::class)
-            ->headAction(new MyNewHeadAction());
-    }
-}
 ```
 
 ### Define table row actions

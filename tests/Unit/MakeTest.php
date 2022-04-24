@@ -80,6 +80,40 @@ class MakeTest extends TestCase
     }
 
     /** @test */
+    public function it_can_make_head_action(): void
+    {
+        $this->artisan(MakeHeadAction::class, ['name' => 'Configure']);
+        self::assertFileExists(base_path('app/Tables/HeadActions/Configure.php'));
+        $fileContent = File::get(base_path('app/Tables/HeadActions/Configure.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\HeadActions;',
+            'use Livewire\Component;',
+            'use Okipa\LaravelTable\Abstracts\AbstractHeadAction;',
+            'class Configure extends AbstractHeadAction',
+            '{',
+            'protected function class(): string',
+            '{',
+            '// The CSS class that will be applied to the head action button.',
+            '}',
+            'protected function icon(): string',
+            '{',
+            '// The icon that will be displayed in the head action button.',
+            '}',
+            'protected function title(): string',
+            '{',
+            '// The title that will be displayed in the head action button.',
+            '}',
+            '/** @return mixed|void */',
+            'public function action(Component $livewire)',
+            '{',
+            '// The treatment that will be executed on click on the the head action button.',
+            '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
     public function it_can_make_bulk_action(): void
     {
         $this->artisan(MakeBulkAction::class, ['name' => 'Activate']);
@@ -114,40 +148,6 @@ class MakeTest extends TestCase
             'public function action(Collection $models, Component $livewire)',
             '{',
             '// The treatment that will be executed on click on the bulk action link.',
-            '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
-            '}',
-            '}',
-        ]);
-    }
-
-    /** @test */
-    public function it_can_make_head_action(): void
-    {
-        $this->artisan(MakeHeadAction::class, ['name' => 'Configure']);
-        self::assertFileExists(base_path('app/Tables/HeadActions/Configure.php'));
-        $fileContent = File::get(base_path('app/Tables/HeadActions/Configure.php'));
-        $this->assertSeeHtmlInOrder($fileContent, [
-            'namespace App\Tables\HeadActions;',
-            'use Livewire\Component;',
-            'use Okipa\LaravelTable\Abstracts\AbstractHeadAction;',
-            'class Configure extends AbstractHeadAction',
-            '{',
-            'protected function class(): string',
-            '{',
-            '// The CSS class that will be applied to the head action button.',
-            '}',
-            'protected function icon(): string',
-            '{',
-            '// The icon that will be displayed in the head action button.',
-            '}',
-            'protected function title(): string',
-            '{',
-            '// The title that will be displayed in the head action button.',
-            '}',
-            '/** @return mixed|void */',
-            'public function action(Component $livewire)',
-            '{',
-            '// The treatment that will be executed on click on the the head action button.',
             '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
             '}',
             '}',
