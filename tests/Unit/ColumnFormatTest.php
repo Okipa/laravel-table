@@ -8,10 +8,10 @@ use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\Formatters\Boolean;
-use Okipa\LaravelTable\Formatters\Datetime;
+use Okipa\LaravelTable\Formatters\BooleanFormatter;
+use Okipa\LaravelTable\Formatters\DateFormatter;
 use Okipa\LaravelTable\Formatters\Display;
-use Okipa\LaravelTable\Formatters\StrLimit;
+use Okipa\LaravelTable\Formatters\StrLimitFormatter;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
@@ -66,9 +66,9 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->format(new StrLimit(5)),
-                    Column::make('Active')->format(new Boolean()),
-                    Column::make('Created At')->format(new Datetime('d/m:Y H:i:s', 'Europe/Paris')),
+                    Column::make('Name')->format(new StrLimitFormatter(5)),
+                    Column::make('Active')->format(new BooleanFormatter()),
+                    Column::make('Created At')->format(new DateFormatter('d/m:Y H:i:s', 'Europe/Paris')),
                 ];
             }
         };

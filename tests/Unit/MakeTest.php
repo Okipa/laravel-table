@@ -206,14 +206,14 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_column_formatter(): void
     {
-        $this->artisan(MakeFormatter::class, ['name' => 'Boolean']);
-        self::assertFileExists(base_path('app/Tables/Formatters/Boolean.php'));
-        $fileContent = File::get(base_path('app/Tables/Formatters/Boolean.php'));
+        $this->artisan(MakeFormatter::class, ['name' => 'BooleanFormatter']);
+        self::assertFileExists(base_path('app/Tables/Formatters/BooleanFormatter.php'));
+        $fileContent = File::get(base_path('app/Tables/Formatters/BooleanFormatter.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\Formatters;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Okipa\LaravelTable\Abstracts\AbstractFormatter;',
-            'class Boolean extends AbstractFormatter',
+            'class BooleanFormatter extends AbstractFormatter',
             '{',
             'public function format(Model $model, string $attribute): string',
             '{',
@@ -226,15 +226,15 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_column_action(): void
     {
-        $this->artisan(MakeColumnAction::class, ['name' => 'ToggleBoolean']);
-        self::assertFileExists(base_path('app/Tables/ColumnActions/ToggleBoolean.php'));
-        $fileContent = File::get(base_path('app/Tables/ColumnActions/ToggleBoolean.php'));
+        $this->artisan(MakeColumnAction::class, ['name' => 'ColumnToggleBoolean']);
+        self::assertFileExists(base_path('app/Tables/ColumnActions/ColumnToggleBoolean.php'));
+        $fileContent = File::get(base_path('app/Tables/ColumnActions/ColumnToggleBoolean.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\ColumnActions;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractColumnAction;',
-            'class ToggleBoolean extends AbstractColumnAction',
+            'class ColumnToggleBoolean extends AbstractColumnAction',
             '{',
             'protected function class(Model $model, string $attribute): string',
             '{',

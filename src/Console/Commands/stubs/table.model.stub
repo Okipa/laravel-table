@@ -4,9 +4,9 @@ namespace DummyNamespace;
 
 use DummyFullModelClass;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Formatters\Date;
-use Okipa\LaravelTable\RowActions\Edit;
-use Okipa\LaravelTable\RowActions\Destroy;
+use Okipa\LaravelTable\RowActions\RowEdit;
+use Okipa\LaravelTable\RowActions\RowDestroy;
+use Okipa\LaravelTable\Formatters\DateFormatter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class DummyClass extends AbstractTableConfiguration
@@ -15,8 +15,8 @@ class DummyClass extends AbstractTableConfiguration
     {
         return Table::make()->model(DummyModelClass::class)
             ->rowActions(fn(DummyModelClass $dummyModel) => [
-                new Edit(route('dummyRoute.edit', $dummyModel)),
-                new Destroy(),
+                new RowEdit(route('dummyRoute.edit', $dummyModel)),
+                new RowDestroy(),
             ]);
     }
 
@@ -24,8 +24,8 @@ class DummyClass extends AbstractTableConfiguration
     {
         return [
             Column::make('Id')->sortable();
-            Column::make('Created at')->format(new Datetime('d/m/Y H:i'))->sortable();
-            Column::make('Updated at')->format(new Datetime('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+            Column::make('Created at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
+            Column::make('Updated at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
         ];
     }
 }

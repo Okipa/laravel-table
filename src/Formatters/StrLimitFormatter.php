@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 
-class StrLimit extends AbstractFormatter
+class StrLimitFormatter extends AbstractFormatter
 {
     public function __construct(protected int $limit = 100, protected string $end = '...')
     {
