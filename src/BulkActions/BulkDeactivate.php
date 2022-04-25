@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
-class Deactivate extends AbstractBulkAction
+class BulkDeactivate extends AbstractBulkAction
 {
     public function __construct(public string $attribute)
     {

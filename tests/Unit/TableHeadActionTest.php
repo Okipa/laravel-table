@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\HeadActions\Create;
+use Okipa\LaravelTable\HeadActions\HeadCreate;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -22,7 +22,7 @@ class TableHeadActionTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)
-                    ->headAction(new Create(route('user.create')));
+                    ->headAction(new HeadCreate(route('user.create')));
             }
 
             protected function columns(): array

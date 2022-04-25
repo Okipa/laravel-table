@@ -4,42 +4,48 @@ namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
-class Destroy extends AbstractRowAction
+class RowShow extends AbstractRowAction
 {
+    public function __construct(public string $showUrl)
+    {
+        //
+    }
+
     protected function identifier(): string
     {
-        return 'destroy';
+        return 'show';
     }
 
     protected function class(Model $model): string
     {
-        return 'link-danger';
+        return 'link-info';
     }
 
     protected function icon(Model $model): string
     {
-        return config('laravel-table.icon.destroy');
+        return config('laravel-table.icon.show');
     }
 
     protected function title(Model $model): string
     {
-        return __('Destroy');
+        return __('Show');
     }
 
     protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        return __('Are you sure you want to destroy the line #:primary?', ['primary' => $model->getKey()]);
+        return null;
     }
 
     protected function defaultFeedbackMessage(Model $model): string|null
     {
-        return __('Line #:primary has been destroyed.', ['primary' => $model->getKey()]);
+        return null;
     }
 
-    public function action(Model $model, Component $livewire): void
+    public function action(Model $model, Component $livewire): Redirector
     {
-        $model->delete();
+        return redirect()->to($this->showUrl);
     }
 }

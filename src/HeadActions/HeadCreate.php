@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 
-class Create extends AbstractHeadAction
+class HeadCreate extends AbstractHeadAction
 {
     public function __construct(public string $createUrl)
     {

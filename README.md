@@ -340,7 +340,7 @@ Configure a table action that will be displayed as a button positioned at the ri
 If no head action is declared, the dedicated slot for it in the table head will remain empty.
 
 This package provides the following built-in head actions:
-* `Create`:
+* `HeadCreate`:
     * Requires a `string $createUrl` argument on instantiation
     * Redirects to the model create page from a click on a `Create` button
 
@@ -397,19 +397,19 @@ Configure table bulk actions that will be available in a dropdown positioned at 
 If no bulk action is declared on your table, the dedicated column will not be displayed.
 
 This package provides the built-in following bulk actions:
-* `VerifyEmail`:
+* `BulkVerifyEmail`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute with the current datetime for all selected lines
-* `CancelEmailVerification`:
+* `BulkCancelEmailVerification`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute to `null` for all selected lines
-* `Activate`:
+* `BulkActivate`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute to `true` for all selected lines
-* `Deactivate`:
+* `BulkDeactivate`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute to `false` for all selected lines
-* `Destroy`:
+* `BulkDestroy`:
     * Destroys all the selected lines
 
 To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
@@ -532,13 +532,13 @@ Configure row actions on your table that will be displayed at the end of each ro
 If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be displayed.
 
 This package provides the built-in following row actions:
-* `Show`:
+* `RowShow`:
   * Requires a `string $showUrl` argument on instantiation
   * Redirects to the model edit page on click
-* `Edit`:
+* `RowEdit`:
   * Requires a `string $editUrl` argument on instantiation
   * Redirects to the model edit page on click
-* `Destroy`:
+* `RowDestroy`:
   * Destroys the line after being asked to confirm
 
 To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
@@ -751,9 +751,9 @@ Configure column actions on your table that will be displayed on their own cells
 Column actions have a lot in common with row actions.
 
 This package provides the built-in following actions:
-* `ToggleEmailVerified`:
+* `ColumnToggleEmailVerified`:
   * Toggles the email verification status
-* `ToggleBoolean`:
+* `ColumnToggleBoolean`:
   * Toggles a boolean value
 
 To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.

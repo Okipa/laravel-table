@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\ColumnActions\ToggleBoolean;
-use Okipa\LaravelTable\ColumnActions\ToggleEmailVerified;
+use Okipa\LaravelTable\ColumnActions\ColumnToggleBoolean;
+use Okipa\LaravelTable\ColumnActions\ColumnToggleEmailVerified;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -39,8 +39,10 @@ class ColumnActionTest extends TestCase
             {
                 return [
                     Column::make('Name'),
-                    Column::make('Email Verified', 'email_verified_at')->action(fn() => new ToggleEmailVerified()),
-                    Column::make('Toggle', 'active')->action(fn() => new ToggleBoolean()),
+                    Column::make('Email Verified', 'email_verified_at')
+                        ->action(fn() => new ColumnToggleEmailVerified()),
+                    Column::make('Toggle', 'active')
+                        ->action(fn() => new ColumnToggleBoolean()),
                 ];
             }
         };
@@ -118,7 +120,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Toggle', 'active')
-                        ->action(fn(User $user) => (new ToggleBoolean())->when(Auth::user()->isNot($user))),
+                        ->action(fn(User $user) => (new ColumnToggleBoolean())->when(Auth::user()->isNot($user))),
                 ];
             }
         };
@@ -156,7 +158,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Email Verified', 'email_verified_at')
-                        ->action(fn() => (new ToggleEmailVerified())
+                        ->action(fn() => (new ColumnToggleEmailVerified())
                             ->confirmationQuestion(false)
                             ->feedbackMessage(false)),
                 ];

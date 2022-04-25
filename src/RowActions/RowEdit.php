@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
-class Edit extends AbstractRowAction
+class RowEdit extends AbstractRowAction
 {
     public function __construct(public string $editUrl)
     {

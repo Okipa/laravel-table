@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
-class CancelEmailVerification extends AbstractBulkAction
+class BulkCancelEmailVerification extends AbstractBulkAction
 {
     public function __construct(public string $attribute)
     {
