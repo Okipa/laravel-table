@@ -4,8 +4,8 @@ namespace DummyNamespace;
 
 use DummyFullModelClass;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\RowActions\RowEdit;
-use Okipa\LaravelTable\RowActions\RowDestroy;
+use Okipa\LaravelTable\RowActions\EditRowAction;
+use Okipa\LaravelTable\RowActions\DestroyRowAction;
 use Okipa\LaravelTable\Formatters\DateFormatter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
@@ -15,8 +15,8 @@ class DummyClass extends AbstractTableConfiguration
     {
         return Table::make()->model(DummyModelClass::class)
             ->rowActions(fn(DummyModelClass $dummyModel) => [
-                new RowEdit(route('dummyRoute.edit', $dummyModel)),
-                new RowDestroy(),
+                new EditRowAction(route('dummyRoute.edit', $dummyModel)),
+                new DestroyRowAction(),
             ]);
     }
 

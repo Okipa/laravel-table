@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
-class BulkDeactivate extends AbstractBulkAction
+class ActivateBulkAction extends AbstractBulkAction
 {
     public function __construct(public string $attribute)
     {
@@ -17,12 +17,12 @@ class BulkDeactivate extends AbstractBulkAction
 
     protected function identifier(): string
     {
-        return 'deactivate';
+        return 'activate';
     }
 
     protected function label(array $allowedModelKeys): string
     {
-        return __('Deactivate') . ' (' . count($allowedModelKeys) . ')';
+        return __('Activate') . ' (' . count($allowedModelKeys) . ')';
     }
 
     protected function defaultConfirmationQuestion(array $allowedModelKeys, array $disallowedModelKeys): string|null
@@ -30,11 +30,11 @@ class BulkDeactivate extends AbstractBulkAction
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => Str::lower(__('Deactivate')),
+                'action' => Str::lower(__('Activate')),
                 'count' => count($allowedModelKeys),
             ])
             : __('Are you sure you want to :action the selected line #:primary?', [
-                'action' => Str::lower(__('Deactivate')),
+                'action' => Str::lower(__('Activate')),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
@@ -42,11 +42,11 @@ class BulkDeactivate extends AbstractBulkAction
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and will not be affected by this action.', [
-                    'action' => __('deactivation'),
+                    'action' => __('activation'),
                     'count' => $disallowedLinesCount,
                 ])
                 : __('The line #:primary does not allow :action and will not be affected by this action.', [
-                    'action' => __('deactivation'),
+                    'action' => __('activation'),
                     'primary' => Arr::first($disallowedModelKeys),
                 ]);
         }
@@ -60,11 +60,11 @@ class BulkDeactivate extends AbstractBulkAction
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __(':count selected lines have been :action.', [
                 'count' => count($allowedModelKeys),
-                'action' => __('deactivated'),
+                'action' => __('activated'),
             ])
             : __('The selected line #:primary has been :action.', [
                 'primary' => Arr::first($allowedModelKeys),
-                'action' => __('deactivated'),
+                'action' => __('activated'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
@@ -72,11 +72,11 @@ class BulkDeactivate extends AbstractBulkAction
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and were not affected by this action.', [
                     'count' => $disallowedLinesCount,
-                    'action' => __('deactivation'),
+                    'action' => __('activation'),
                 ])
                 : __('The line #:primary does not allow :action and was not affected by this action.', [
                     'primary' => Arr::first($disallowedModelKeys),
-                    'action' => __('deactivation'),
+                    'action' => __('activation'),
                 ]);
         }
 
@@ -86,7 +86,7 @@ class BulkDeactivate extends AbstractBulkAction
     public function action(Collection $models, Component $livewire): void
     {
         foreach ($models as $model) {
-            $model->forceFill([$this->attribute => false])->save();
+            $model->forceFill([$this->attribute => true])->save();
         }
     }
 }

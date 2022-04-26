@@ -4,25 +4,25 @@ namespace Okipa\LaravelTable\BulkActions;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Date;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
-class BulkDestroy extends AbstractBulkAction
+class VerifyEmailBulkAction extends AbstractBulkAction
 {
-    public function action(Collection $models, Component $livewire): void
+    public function __construct(public string $attribute)
     {
-        $models->each->delete();
+        //
     }
 
     protected function identifier(): string
     {
-        return 'destroy';
+        return 'verify_email';
     }
 
     protected function label(array $allowedModelKeys): string
     {
-        return __('Destroy') . ' (' . count($allowedModelKeys) . ')';
+        return __('Verify Email') . ' (' . count($allowedModelKeys) . ')';
     }
 
     protected function defaultConfirmationQuestion(array $allowedModelKeys, array $disallowedModelKeys): string|null
@@ -30,24 +30,24 @@ class BulkDestroy extends AbstractBulkAction
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => Str::lower(__('Destroy')),
+                'action' => __('verify email of the'),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the selected line #:key?', [
-                'action' => Str::lower(__('Destroy')),
-                'key' => Arr::first($allowedModelKeys),
+            : __('Are you sure you want to :action the selected line #:primary?', [
+                'action' => __('verify email of the'),
+                'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and will not be affected by this action.', [
-                    'action' => __('destruction'),
+                    'action' => __('email verification'),
                     'count' => $disallowedLinesCount,
                 ])
-                : __('The line #:key does not allow :action and will not be affected by this action.', [
-                    'action' => __('destruction'),
-                    'key' => Arr::first($disallowedModelKeys),
+                : __('The line #:primary does not allow :action and will not be affected by this action.', [
+                    'action' => __('email verification'),
+                    'primary' => Arr::first($disallowedModelKeys),
                 ]);
         }
 
@@ -60,11 +60,11 @@ class BulkDestroy extends AbstractBulkAction
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __(':count selected lines have been :action.', [
                 'count' => count($allowedModelKeys),
-                'action' => __('destroyed'),
+                'action' => __('verified (email)'),
             ])
-            : __('The selected line #:key has been :action.', [
-                'key' => Arr::first($allowedModelKeys),
-                'action' => __('destroyed'),
+            : __('The selected line #:primary has been :action.', [
+                'primary' => Arr::first($allowedModelKeys),
+                'action' => __('verified (email)'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
@@ -72,14 +72,21 @@ class BulkDestroy extends AbstractBulkAction
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and were not affected by this action.', [
                     'count' => $disallowedLinesCount,
-                    'action' => __('destruction'),
+                    'action' => __('email verification'),
                 ])
-                : __('The line #:key does not allow :action and was not affected by this action.', [
-                    'key' => Arr::first($disallowedModelKeys),
-                    'action' => __('destruction'),
+                : __('The line #:primary does not allow :action and was not affected by this action.', [
+                    'primary' => Arr::first($disallowedModelKeys),
+                    'action' => __('email verification'),
                 ]);
         }
 
         return $allowedLinesSentence . ($disallowedLinesSentence ?? '');
+    }
+
+    public function action(Collection $models, Component $livewire): void
+    {
+        foreach ($models as $model) {
+            $model->forceFill([$this->attribute => Date::now()])->save();
+        }
     }
 }

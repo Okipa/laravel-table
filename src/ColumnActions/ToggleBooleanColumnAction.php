@@ -3,27 +3,26 @@
 namespace Okipa\LaravelTable\ColumnActions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Date;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 
-class ColumnToggleEmailVerified extends AbstractColumnAction
+class ToggleBooleanColumnAction extends AbstractColumnAction
 {
     protected function class(Model $model, string $attribute): string|null
     {
         return $model->{$attribute} ? 'link-success p-1' : 'link-danger p-1';
     }
 
+    protected function title(Model $model, string $attribute): string
+    {
+        return $model->{$attribute} ? __('Toggle off') : __('Toggle on');
+    }
+
     protected function icon(Model $model, string $attribute): string
     {
         return $model->{$attribute}
-            ? config('laravel-table.icon.email_verified')
-            : config('laravel-table.icon.email_unverified');
-    }
-
-    protected function title(Model $model, string $attribute): string
-    {
-        return $model->{$attribute} ? __('Unverify') : __('Verify');
+            ? config('laravel-table.icon.toggle_on')
+            : config('laravel-table.icon.toggle_off');
     }
 
     protected function label(Model $model, string $attribute): string|null
@@ -33,11 +32,7 @@ class ColumnToggleEmailVerified extends AbstractColumnAction
 
     protected function defaultConfirmationQuestion(Model $model, string $attribute): string|null
     {
-        return __('Are you sure you want to set the field :attribute as :action for the line #:primary?', [
-            'attribute' => __('validation.attributes.' . $attribute),
-            'action' => $model->{$attribute} ? __('unverified') : __('verified'),
-            'primary' => $model->getKey(),
-        ]);
+        return null;
     }
 
     protected function defaultFeedbackMessage(Model $model, string $attribute): string|null
@@ -45,13 +40,13 @@ class ColumnToggleEmailVerified extends AbstractColumnAction
         return __('The field :attribute from the line #:primary has been :action.', [
             'attribute' => __('validation.attributes.' . $attribute),
             'primary' => $model->getKey(),
-            'action' => $model->{$attribute} ? __('unverified') : __('verified'),
+            'action' => $model->{$attribute} ? __('toggled off') : __('toggled on'),
         ]);
     }
 
     public function action(Model $model, string $attribute, Component $livewire): void
     {
         // Update attribute event if it not in model `$fillable`.
-        $model->forceFill([$attribute => $model->{$attribute} ? null : Date::now()])->save();
+        $model->forceFill([$attribute => ! $model->{$attribute}])->save();
     }
 }

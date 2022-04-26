@@ -53,9 +53,9 @@ class MakeTest extends TestCase
             'namespace App\Tables;',
             'use App\Models\User;',
             'use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;',
-            'use Okipa\LaravelTable\Formatters\Date;',
-            'use Okipa\LaravelTable\RowActions\Destroy;',
-            'use Okipa\LaravelTable\RowActions\Edit;',
+            'use Okipa\LaravelTable\Formatters\DateFormatter;',
+            'use Okipa\LaravelTable\RowActions\DestroyRowAction;',
+            'use Okipa\LaravelTable\RowActions\EditRowAction;',
             'use Okipa\LaravelTable\Table;',
             'class UsersTable extends AbstractTableConfiguration',
             '{',
@@ -63,16 +63,16 @@ class MakeTest extends TestCase
             '{',
             'return Table::make()->model(User::class)',
             '->rowActions(fn(User $user) => [',
-            'new Edit(route(\'user.edit\', $user)),',
-            'new Destroy(),',
+            'new EditRowAction(route(\'user.edit\', $user)),',
+            'new DestroyRowAction(),',
             ']);',
             '}',
             'protected function columns(): array',
             '{',
             'return [',
             'Column::make(\'Id\')->sortable();',
-            'Column::make(\'Created at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable();',
-            'Column::make(\'Updated at\')->format(new Datetime(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
+            'Column::make(\'Created at\')->format(new DateFormatter(\'d/m/Y H:i\'))->sortable();',
+            'Column::make(\'Updated at\')->format(new DateFormatter(\'d/m/Y H:i\'))->sortable()->sortByDefault(\'desc\');',
             '];',
             '}',
             '}',
@@ -226,15 +226,15 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_column_action(): void
     {
-        $this->artisan(MakeColumnAction::class, ['name' => 'ColumnToggleBoolean']);
-        self::assertFileExists(base_path('app/Tables/ColumnActions/ColumnToggleBoolean.php'));
-        $fileContent = File::get(base_path('app/Tables/ColumnActions/ColumnToggleBoolean.php'));
+        $this->artisan(MakeColumnAction::class, ['name' => 'MyNewColumnAction']);
+        self::assertFileExists(base_path('app/Tables/ColumnActions/MyNewColumnAction.php'));
+        $fileContent = File::get(base_path('app/Tables/ColumnActions/MyNewColumnAction.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\ColumnActions;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractColumnAction;',
-            'class ColumnToggleBoolean extends AbstractColumnAction',
+            'class MyNewColumnAction extends AbstractColumnAction',
             '{',
             'protected function class(Model $model, string $attribute): string',
             '{',

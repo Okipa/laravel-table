@@ -4,11 +4,11 @@ namespace Okipa\LaravelTable\BulkActions;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
-class BulkVerifyEmail extends AbstractBulkAction
+class DeactivateBulkAction extends AbstractBulkAction
 {
     public function __construct(public string $attribute)
     {
@@ -17,12 +17,12 @@ class BulkVerifyEmail extends AbstractBulkAction
 
     protected function identifier(): string
     {
-        return 'verify_email';
+        return 'deactivate';
     }
 
     protected function label(array $allowedModelKeys): string
     {
-        return __('Verify Email') . ' (' . count($allowedModelKeys) . ')';
+        return __('Deactivate') . ' (' . count($allowedModelKeys) . ')';
     }
 
     protected function defaultConfirmationQuestion(array $allowedModelKeys, array $disallowedModelKeys): string|null
@@ -30,11 +30,11 @@ class BulkVerifyEmail extends AbstractBulkAction
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => __('verify email of the'),
+                'action' => Str::lower(__('Deactivate')),
                 'count' => count($allowedModelKeys),
             ])
             : __('Are you sure you want to :action the selected line #:primary?', [
-                'action' => __('verify email of the'),
+                'action' => Str::lower(__('Deactivate')),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
@@ -42,11 +42,11 @@ class BulkVerifyEmail extends AbstractBulkAction
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and will not be affected by this action.', [
-                    'action' => __('email verification'),
+                    'action' => __('deactivation'),
                     'count' => $disallowedLinesCount,
                 ])
                 : __('The line #:primary does not allow :action and will not be affected by this action.', [
-                    'action' => __('email verification'),
+                    'action' => __('deactivation'),
                     'primary' => Arr::first($disallowedModelKeys),
                 ]);
         }
@@ -60,11 +60,11 @@ class BulkVerifyEmail extends AbstractBulkAction
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __(':count selected lines have been :action.', [
                 'count' => count($allowedModelKeys),
-                'action' => __('verified (email)'),
+                'action' => __('deactivated'),
             ])
             : __('The selected line #:primary has been :action.', [
                 'primary' => Arr::first($allowedModelKeys),
-                'action' => __('verified (email)'),
+                'action' => __('deactivated'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
@@ -72,11 +72,11 @@ class BulkVerifyEmail extends AbstractBulkAction
             $disallowedLinesSentence .= $disallowedLinesCount > 1
                 ? __(':count selected lines do not allow :action and were not affected by this action.', [
                     'count' => $disallowedLinesCount,
-                    'action' => __('email verification'),
+                    'action' => __('deactivation'),
                 ])
                 : __('The line #:primary does not allow :action and was not affected by this action.', [
                     'primary' => Arr::first($disallowedModelKeys),
-                    'action' => __('email verification'),
+                    'action' => __('deactivation'),
                 ]);
         }
 
@@ -86,7 +86,7 @@ class BulkVerifyEmail extends AbstractBulkAction
     public function action(Collection $models, Component $livewire): void
     {
         foreach ($models as $model) {
-            $model->forceFill([$this->attribute => Date::now()])->save();
+            $model->forceFill([$this->attribute => false])->save();
         }
     }
 }

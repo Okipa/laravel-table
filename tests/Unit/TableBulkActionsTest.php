@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-use Okipa\LaravelTable\BulkActions\BulkActivate;
-use Okipa\LaravelTable\BulkActions\BulkCancelEmailVerification;
-use Okipa\LaravelTable\BulkActions\BulkDeactivate;
-use Okipa\LaravelTable\BulkActions\BulkDestroy;
-use Okipa\LaravelTable\BulkActions\BulkVerifyEmail;
+use Okipa\LaravelTable\BulkActions\ActivateBulkAction;
+use Okipa\LaravelTable\BulkActions\CancelEmailVerificationBulkAction;
+use Okipa\LaravelTable\BulkActions\DeactivateBulkAction;
+use Okipa\LaravelTable\BulkActions\DestroyBulkAction;
+use Okipa\LaravelTable\BulkActions\VerifyEmailBulkAction;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
@@ -60,11 +60,11 @@ class TableBulkActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
-                    new BulkVerifyEmail('email_verified_at'),
-                    new BulkCancelEmailVerification('email_verified_at'),
-                    new BulkActivate('active'),
-                    new BulkDeactivate('active'),
-                    new BulkDestroy(),
+                    new VerifyEmailBulkAction('email_verified_at'),
+                    new CancelEmailVerificationBulkAction('email_verified_at'),
+                    new ActivateBulkAction('active'),
+                    new DeactivateBulkAction('active'),
+                    new DestroyBulkAction(),
                 ]);
             }
 
@@ -272,7 +272,7 @@ class TableBulkActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
-                    (new BulkDestroy())->when(Auth::user()->isNot($user)),
+                    (new DestroyBulkAction())->when(Auth::user()->isNot($user)),
                 ]);
             }
 
@@ -361,7 +361,7 @@ class TableBulkActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
-                    (new BulkDestroy())
+                    (new DestroyBulkAction())
                         ->confirmationQuestion(false)
                         ->feedbackMessage(false),
                 ]);
@@ -398,7 +398,7 @@ class TableBulkActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
-                    new BulkDestroy(),
+                    new DestroyBulkAction(),
                 ]);
             }
 
@@ -434,7 +434,7 @@ class TableBulkActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->bulkActions(fn(User $user) => [
-                    new BulkDestroy(),
+                    new DestroyBulkAction(),
                 ]);
             }
 

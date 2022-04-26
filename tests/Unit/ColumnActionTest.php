@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\ColumnActions\ColumnToggleBoolean;
-use Okipa\LaravelTable\ColumnActions\ColumnToggleEmailVerified;
+use Okipa\LaravelTable\ColumnActions\ToggleBooleanColumnAction;
+use Okipa\LaravelTable\ColumnActions\ToggleEmailVerifiedColumnAction;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -40,9 +40,9 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Email Verified', 'email_verified_at')
-                        ->action(fn() => new ColumnToggleEmailVerified()),
+                        ->action(fn() => new ToggleEmailVerifiedColumnAction()),
                     Column::make('Toggle', 'active')
-                        ->action(fn() => new ColumnToggleBoolean()),
+                        ->action(fn() => new ToggleBooleanColumnAction()),
                 ];
             }
         };
@@ -120,7 +120,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Toggle', 'active')
-                        ->action(fn(User $user) => (new ColumnToggleBoolean())->when(Auth::user()->isNot($user))),
+                        ->action(fn(User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
                 ];
             }
         };
@@ -158,7 +158,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Email Verified', 'email_verified_at')
-                        ->action(fn() => (new ColumnToggleEmailVerified())
+                        ->action(fn() => (new ToggleEmailVerifiedColumnAction())
                             ->confirmationQuestion(false)
                             ->feedbackMessage(false)),
                 ];

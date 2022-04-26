@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\RowActions\RowDestroy;
-use Okipa\LaravelTable\RowActions\RowEdit;
-use Okipa\LaravelTable\RowActions\RowShow;
+use Okipa\LaravelTable\RowActions\DestroyRowAction;
+use Okipa\LaravelTable\RowActions\EditRowAction;
+use Okipa\LaravelTable\RowActions\ShowRowAction;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
 use Tests\TestCase;
@@ -29,9 +29,9 @@ class TableRowActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
-                    new RowShow(route('user.show', $user)),
-                    new RowEdit(route('user.edit', $user)),
-                    new RowDestroy(),
+                    new ShowRowAction(route('user.show', $user)),
+                    new EditRowAction(route('user.edit', $user)),
+                    new DestroyRowAction(),
                 ]);
             }
 
@@ -114,7 +114,7 @@ class TableRowActionsTest extends TestCase
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->rowActions(fn(User $user) => [
-                    (new RowDestroy())->when(Auth::user()->isNot($user)),
+                    (new DestroyRowAction())->when(Auth::user()->isNot($user)),
                 ]);
             }
 
@@ -152,7 +152,7 @@ class TableRowActionsTest extends TestCase
             {
                 return Table::make()->model(User::class)
                     ->rowActions(fn(User $user) => [
-                        (new RowDestroy())->confirmationQuestion(false)->feedbackMessage(false),
+                        (new DestroyRowAction())->confirmationQuestion(false)->feedbackMessage(false),
                     ]);
             }
 

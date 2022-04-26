@@ -7,31 +7,31 @@ use Livewire\Component;
 use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
-class RowEdit extends AbstractRowAction
+class ShowRowAction extends AbstractRowAction
 {
-    public function __construct(public string $editUrl)
+    public function __construct(public string $showUrl)
     {
         //
     }
 
     protected function identifier(): string
     {
-        return 'edit';
+        return 'show';
     }
 
     protected function class(Model $model): string
     {
-        return 'link-primary';
+        return 'link-info';
     }
 
     protected function icon(Model $model): string
     {
-        return config('laravel-table.icon.edit');
+        return config('laravel-table.icon.show');
     }
 
     protected function title(Model $model): string
     {
-        return __('Edit');
+        return __('Show');
     }
 
     protected function defaultConfirmationQuestion(Model $model): string|null
@@ -46,6 +46,6 @@ class RowEdit extends AbstractRowAction
 
     public function action(Model $model, Component $livewire): Redirector
     {
-        return redirect()->to($this->editUrl);
+        return redirect()->to($this->showUrl);
     }
 }

@@ -340,7 +340,7 @@ Configure a table action that will be displayed as a button positioned at the ri
 If no head action is declared, the dedicated slot for it in the table head will remain empty.
 
 This package provides the following built-in head actions:
-* `HeadCreate`:
+* `CreateHeadAction`:
     * Requires a `string $createUrl` argument on instantiation
     * Redirects to the model create page from a click on a `Create` button
 
@@ -351,7 +351,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\HeadActions\HeadCreate;
+use Okipa\LaravelTable\HeadActions\CreateHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -360,12 +360,12 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->headAction(new HeadCreate(route('user.create')));
+            ->headAction(new CreateHeadAction(route('user.create')));
     }
 }
 ```
 
-You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action HeadNewAction`.
+You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action MyNewHeadAction`.
 
 You'll find your generated table head action in the `app/Tables/HeadActions` directory.
 
@@ -376,7 +376,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\HeadActions\HeadNewAction;
+use App\Tables\HeadActions\MyNewHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -385,7 +385,7 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->headAction(new HeadNewAction());
+            ->headAction(new MyNewHeadAction());
     }
 }
 ```
@@ -397,19 +397,19 @@ Configure table bulk actions that will be available in a dropdown positioned at 
 If no bulk action is declared on your table, the dedicated column will not be displayed.
 
 This package provides the built-in following bulk actions:
-* `BulkVerifyEmail`:
+* `VerifyEmailBulkAction`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute with the current datetime for all selected lines
-* `BulkCancelEmailVerification`:
+* `CancelEmailVerificationBulkAction`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute to `null` for all selected lines
-* `BulkActivate`:
+* `ActivateBulkAction`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute to `true` for all selected lines
-* `BulkDeactivate`:
+* `DeactivateBulkAction`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute to `false` for all selected lines
-* `BulkDestroy`:
+* `DestroyBulkAction`:
     * Destroys all the selected lines
 
 To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
@@ -427,11 +427,11 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\BulkActions\BulkDestroy;
-use Okipa\LaravelTable\BulkActions\BulkActivate;
-use Okipa\LaravelTable\BulkActions\BulkDeactivate;
-use Okipa\LaravelTable\BulkActions\BulkVerifyEmail;
-use Okipa\LaravelTable\BulkActions\BulkCancelEmailVerification;
+use Okipa\LaravelTable\BulkActions\DestroyBulkAction;
+use Okipa\LaravelTable\BulkActions\ActivateBulkAction;
+use Okipa\LaravelTable\BulkActions\DeactivateBulkAction;
+use Okipa\LaravelTable\BulkActions\VerifyEmailBulkAction;
+use Okipa\LaravelTable\BulkActions\CancelEmailVerificationBulkAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -441,11 +441,11 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->bulkActions(fn(User $user) => [
-                new BulkVerifyEmail('email_verified_at'),
-                new BulkCancelEmailVerification('email_verified_at'),
-                new BulkActivate('active'),
-                new BulkDeactivate('active'),
-                (new BulkDestroy())
+                new VerifyEmailBulkAction('email_verified_at'),
+                new CancelEmailVerificationBulkAction('email_verified_at'),
+                new ActivateBulkAction('active'),
+                new DeactivateBulkAction('active'),
+                (new DestroyBulkAction())
                     // Destroy action will not be available for authenticated user
                     ->when(Auth::user()->isNot($user))
                     // Override the action default confirmation question
@@ -459,7 +459,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own bulk actions. To do so, execute the following command: `php artisan make:table:bulk:action BulkNewAction`.
+You may need to create your own bulk actions. To do so, execute the following command: `php artisan make:table:bulk:action MyNewBulkAction`.
 
 You'll find your generated table bulk actions in the `app/Tables/BulkActions` directory.
 
@@ -470,7 +470,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\BulkActions\BulkNewAction;
+use App\Tables\BulkActions\MyNewBulkAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -480,7 +480,7 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->bulkActions(fn(User $user) => [
-                new BulkNewAction(),
+                new MyNewBulkAction(),
             ]);
     }
 }
@@ -532,13 +532,13 @@ Configure row actions on your table that will be displayed at the end of each ro
 If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be displayed.
 
 This package provides the built-in following row actions:
-* `RowShow`:
+* `ShowRowAction`:
   * Requires a `string $showUrl` argument on instantiation
   * Redirects to the model edit page on click
-* `RowEdit`:
+* `EditRowAction`:
   * Requires a `string $editUrl` argument on instantiation
   * Redirects to the model edit page on click
-* `RowDestroy`:
+* `DestroyRowAction`:
   * Destroys the line after being asked to confirm
 
 To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
@@ -550,9 +550,9 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\RowActions\RowEdit;
-use Okipa\LaravelTable\RowActions\RowShow;
-use Okipa\LaravelTable\RowActions\RowDestroy;
+use Okipa\LaravelTable\RowActions\EditRowAction;
+use Okipa\LaravelTable\RowActions\ShowRowAction;
+use Okipa\LaravelTable\RowActions\DestroyRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -562,9 +562,9 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->rowActions(fn(User $user) => [
-                new RowShow(route('user.show', $user)),
-                new RowEdit(route('user.edit', $user)),
-                (new RowDestroy())
+                new ShowRowAction(route('user.show', $user)),
+                new EditRowAction(route('user.edit', $user)),
+                (new DestroyRowAction())
                     // Destroy action will not be available for authenticated user
                     ->when(Auth::user()->isNot($user))
                     // Override the action default confirmation question
@@ -578,7 +578,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action RowNewAction`.
+You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action MyNewRowAction`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
@@ -589,7 +589,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\RowActions\RowNewAction;
+use App\Tables\RowActions\MyNewRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -599,7 +599,7 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->rowActions(fn(User $user) => [
-                new RowNewAction(),
+                new MyNewRowAction(),
             ]);
     }
 }
@@ -732,9 +732,9 @@ Configure column actions on your table that will be displayed on their own cells
 Column actions have a lot in common with row actions.
 
 This package provides the built-in following actions:
-* `ColumnToggleEmailVerified`:
+* `ToggleBooleanColumnAction`:
   * Toggles the email verification status
-* `ColumnToggleBoolean`:
+* `ToggleBooleanColumnAction`:
   * Toggles a boolean value
 
 To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
@@ -746,9 +746,9 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\ColumnActions\ColumnToggleBoolean;
+use Okipa\LaravelTable\ColumnActions\ToggleBooleanColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-use Okipa\LaravelTable\ColumnActions\ColumnToggleEmailVerified;
+use Okipa\LaravelTable\ColumnActions\ToggleBooleanColumnAction;
 
 class UsersTable extends AbstractTableConfiguration
 {
@@ -762,17 +762,17 @@ class UsersTable extends AbstractTableConfiguration
         return [
             Column::make('Id'),
             Column::make('Email verified', 'email_verified_at')
-                // ColumnToggleEmailVerified action will not trigger any feedback message
-                ->action(fn(User $user) => (new ColumnToggleEmailVerified()->feedbackMessage(false))
+                // ToggleBooleanColumnAction action will not trigger any feedback message
+                ->action(fn(User $user) => (new ToggleBooleanColumnAction()->feedbackMessage(false))
             Column::make('Toggle', 'active')
-                // ColumnToggleBoolean action will not be available for authenticated user
-                ->action(fn(User $user) => (new ColumnToggleBoolean())->when(Auth::user()->isNot($user))),
+                // ToggleBooleanColumnAction action will not be available for authenticated user
+                ->action(fn(User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
         ];
     }
 }
 ```
 
-You may need to create your own column actions. To do so, execute the following command: `php artisan make:table:column:action ColumnNewAction`.
+You may need to create your own column actions. To do so, execute the following command: `php artisan make:table:column:action MyNewColumnAction`.
 
 You'll find your generated table column actions in the `app/Tables/ColumnActions` directory.
 
@@ -783,7 +783,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use App\Tables\ColumnActions\ManageReviews;
+use App\Tables\ColumnActions\MyNewColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -797,7 +797,7 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             Column::make('Id'),
-            Column::make('New Column Action')->action(fn() => new ColumnNewAction()),
+            Column::make('My New Column Action')->action(fn() => new MyNewColumnAction()),
         ];
     }
 }
