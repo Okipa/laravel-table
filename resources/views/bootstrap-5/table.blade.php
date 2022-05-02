@@ -4,7 +4,6 @@
             <table class="table table-borderless">
                 {{-- Table header--}}
                 <thead>
-                    {{-- Table actions --}}
                     <tr class="bg-white border-bottom">
                         <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-column flex-xl-row">
@@ -159,14 +158,12 @@
                             @endforeach
                             {{-- Row actions --}}
                             @if($tableRowActionsArray)
-                                <td class="align-middle text-end">
-                                    <div class="d-flex align-items-center">
-                                        @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
-                                            @foreach($rowActionsArray as $rowActionArray)
-                                                {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render($model) }}
-                                            @endforeach
-                                        @endif
-                                    </div>
+                                <td class="d-flex align-items-center justify-content-end">
+                                    @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
+                                        @foreach($rowActionsArray as $rowActionArray)
+                                            {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render($model) }}
+                                        @endforeach
+                                    @endif
                                 </td>
                             @endif
                         </tr>
