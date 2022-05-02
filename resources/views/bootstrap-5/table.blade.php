@@ -107,6 +107,7 @@
                                 @if($column->isSortable())
                                     @if($sortBy === $column->getKey())
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
+                                           class="d-flex align-items-center"
                                            href=""
                                            title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}"
                                            data-bs-toggle="tooltip">
@@ -117,6 +118,7 @@
                                         </a>
                                     @else
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
+                                           class="d-flex align-items-center"
                                            href=""
                                            title="{{ __('Sort ascending') }}"
                                            data-bs-toggle="tooltip">
@@ -158,11 +160,13 @@
                             {{-- Row actions --}}
                             @if($tableRowActionsArray)
                                 <td class="align-middle text-end">
-                                    @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
-                                        @foreach($rowActionsArray as $rowActionArray)
-                                            {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render($model) }}
-                                        @endforeach
-                                    @endif
+                                    <div class="d-flex align-items-center">
+                                        @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
+                                            @foreach($rowActionsArray as $rowActionArray)
+                                                {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render($model) }}
+                                            @endforeach
+                                        @endif
+                                    </div>
                                 </td>
                             @endif
                         </tr>
