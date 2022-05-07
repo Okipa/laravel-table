@@ -9,6 +9,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
+use Okipa\LaravelTable\Abstracts\AbstractFilter;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -43,6 +44,8 @@ class Table extends Component
     public string|null $sortBy;
 
     public string|null $sortDir;
+
+    public array $filtersArray;
 
     public array|null $headActionArray;
 
@@ -120,15 +123,20 @@ class Table extends Component
             $this->sortDir,
             $this->numberOfRowsPerPage,
         );
-        // Actions
+        // Filters
+        $this->filtersArray = $table->generateFiltersArray();
+        // Head action
         $this->headActionArray = $table->getHeadActionArray();
+        // Bulk actions
         if (in_array($this->selectedModelKeys, [['selectAll'], ['unselectAll']], true)) {
             $this->selectedModelKeys = $this->selectedModelKeys === ['selectAll']
                 ? $table->getRows()->pluck('id')->map(fn(int $id) => (string) $id)->toArray()
                 : [];
         }
         $this->tableBulkActionsArray = $table->generateBulkActionsArray($this->selectedModelKeys);
+        // Row actions
         $this->tableRowActionsArray = $table->generateRowActionsArray();
+        // Column actions
         $this->tableColumnActionsArray = $table->generateColumnActionsArray();
 
         return [
@@ -142,6 +150,12 @@ class Table extends Component
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
             'navigationStatus' => $table->getNavigationStatus(),
         ];
+    }
+
+    public function filter(string $identifier, mixed $value): void
+    {
+        $filter = AbstractFilter::retrieve($this->filtersArray, $identifier);
+        dd($identifier, $value, $filter);
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void

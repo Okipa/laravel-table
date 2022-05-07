@@ -4,7 +4,16 @@
             <table class="table table-borderless">
                 {{-- Table header--}}
                 <thead>
-                    <tr class="bg-white border-bottom">
+                    {{-- Filters --}}
+                    <tr>
+                        <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                            @foreach($filtersArray as $filterArray)
+                                {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}}
+                            @endforeach
+                        </td>
+                    </tr>
+                    {{-- Search/Number of rows per page/Head action --}}
+                    <tr>
                         <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-column flex-xl-row">
                                 {{-- Search --}}
@@ -44,7 +53,7 @@
                                     @endif
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    {{-- Rows number per page --}}
+                                    {{-- Number of rows per page --}}
                                     @if($numberOfRowsPerPageChoiceEnabled)
                                         <div class="px-xl-3 py-1">
                                             <div class="input-group">
@@ -76,7 +85,7 @@
                         </td>
                     </tr>
                     {{-- Column headings --}}
-                    <tr class="bg-light border-bottom">
+                    <tr class="bg-light border-top border-bottom">
                         {{-- Bulk actions --}}
                         @if($tableBulkActionsArray)
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
@@ -100,7 +109,7 @@
                                 </div>
                             </th>
                         @endif
-                        {{-- Sorting --}}
+                        {{-- Sorting/Column titles --}}
                         @foreach($columns as $column)
                             <th wire:key="column-{{ Str::slug($column->getKey()) }}" class="align-middle" scope="col">
                                 @if($column->isSortable())

@@ -150,10 +150,9 @@ class TableRowActionsTest extends TestCase
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
-                return Table::make()->model(User::class)
-                    ->rowActions(fn(User $user) => [
-                        (new DestroyRowAction())->confirmationQuestion(false)->feedbackMessage(false),
-                    ]);
+                return Table::make()->model(User::class)->rowActions(fn(User $user) => [
+                    (new DestroyRowAction())->confirmationQuestion(false)->feedbackMessage(false),
+                ]);
             }
 
             protected function columns(): array

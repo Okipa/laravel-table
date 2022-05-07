@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Okipa\LaravelTable\Abstracts\AbstractFilter;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Exceptions\NoColumnsDeclared;
@@ -20,6 +21,8 @@ class Table
     protected bool $numberOfRowsPerPageChoiceEnabled;
 
     protected array $numberOfRowsPerPageOptions;
+
+    protected array $filters = [];
 
     protected AbstractHeadAction|null $headAction = null;
 
@@ -66,13 +69,6 @@ class Table
         return $this->numberOfRowsPerPageChoiceEnabled;
     }
 
-    public function headAction(AbstractHeadAction $headAction): self
-    {
-        $this->headAction = $headAction;
-
-        return $this;
-    }
-
     public function numberOfRowsPerPageOptions(array $numberOfRowsPerPageOptions): self
     {
         $this->numberOfRowsPerPageOptions = $numberOfRowsPerPageOptions;
@@ -83,6 +79,20 @@ class Table
     public function getNumberOfRowsPerPageOptions(): array
     {
         return $this->numberOfRowsPerPageOptions;
+    }
+
+    public function filters(array $filters): self
+    {
+        $this->filters = $filters;
+
+        return $this;
+    }
+
+    public function headAction(AbstractHeadAction $headAction): self
+    {
+        $this->headAction = $headAction;
+
+        return $this;
     }
 
     public function rowActions(Closure $rowActionsClosure): self
@@ -168,10 +178,10 @@ class Table
                 $searchableClosure
                     ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
-                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                        $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
-                    );
+                    DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
+                    $this->getCaseInsensitiveSearchingLikeOperator(),
+                    '%' . mb_strtolower($searchBy) . '%'
+                );
             });
         }
         // Sort
@@ -196,6 +206,18 @@ class Table
         $driver = config('database.connections.' . $connection . '.driver');
 
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
+    }
+
+    public function generateFiltersArray(): array
+    {
+        return collect($this->filters)->map(function(AbstractFilter $filter) {
+            $filter->setup();
+
+            return json_decode(json_encode(
+                $filter,
+                JSON_THROW_ON_ERROR
+            ), true, 512, JSON_THROW_ON_ERROR);
+        })->toArray();
     }
 
     public function getHeadActionArray(): array|null
