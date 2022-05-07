@@ -30,11 +30,12 @@ abstract class AbstractFilter
 
     abstract protected function multiple(): bool;
 
-    abstract protected function filter(Builder $query, mixed $value): void;
+    abstract public function filter(Builder $query, mixed $value): void;
 
     public function setup(): void
     {
         $this->filterClass = $this::class;
+        $this->identifier = $this->identifier();
     }
 
     public static function retrieve(array $filtersArray, string $identifier): array
@@ -47,7 +48,7 @@ abstract class AbstractFilter
         /** @var \Okipa\LaravelTable\Abstracts\AbstractFilter $filterInstance */
         $filterInstance = app($filterArray['filterClass'], $filterArray);
         $filterInstance->filterClass = $filterArray['filterClass'];
-        $filterInstance->identifier = $filterInstance->identifier();
+        $filterInstance->identifier = $filterArray['identifier'];
         $filterInstance->class = $filterInstance->class();
         $filterInstance->label = $filterInstance->label();
         $filterInstance->options = $filterInstance->options();

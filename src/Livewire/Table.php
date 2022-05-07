@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -46,6 +47,8 @@ class Table extends Component
     public string|null $sortDir;
 
     public array $filtersArray;
+
+    public array $filterClosures = [];
 
     public array|null $headActionArray;
 
@@ -118,6 +121,7 @@ class Table extends Component
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
         // Rows generation
         $table->generateRows(
+            $this->filterClosures,
             $this->searchBy,
             $sortableClosure ?: $this->sortBy,
             $this->sortDir,
@@ -154,8 +158,11 @@ class Table extends Component
 
     public function filter(string $identifier, mixed $value): void
     {
-        $filter = AbstractFilter::retrieve($this->filtersArray, $identifier);
-        dd($identifier, $value, $filter);
+        $filterArray = AbstractFilter::retrieve($this->filtersArray, $identifier);
+        $filterInstance = AbstractFilter::make($filterArray);
+        $this->filterClosures[$identifier] = is_null($value)
+            ? null
+            : static fn(Builder $query) => $filterInstance->filter($query, $value);
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void

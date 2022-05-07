@@ -5,7 +5,7 @@ namespace Okipa\LaravelTable\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
 
-class ActiveFilter extends AbstractFilter
+class EmailVerifiedFilter extends AbstractFilter
 {
     public function __construct(public string $attribute)
     {
@@ -14,7 +14,7 @@ class ActiveFilter extends AbstractFilter
 
     protected function identifier(): string
     {
-        return 'active';
+        return 'email_verified';
     }
 
     protected function class(): string|null
@@ -24,7 +24,7 @@ class ActiveFilter extends AbstractFilter
 
     protected function label(): string
     {
-        return __('Active');
+        return __('Email Verified');
     }
 
     protected function multiple(): bool
@@ -42,6 +42,6 @@ class ActiveFilter extends AbstractFilter
 
     public function filter(Builder $query, mixed $value): void
     {
-        $query->where($this->attribute, $value);
+        $value ? $query->whereNotNull($this->attribute) : $query->whereNull($this->attribute);
     }
 }

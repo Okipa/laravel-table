@@ -161,6 +161,7 @@ class Table
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function generateRows(
+        array $filterClosures,
         string|null $searchBy,
         string|Closure|null $sortBy,
         string|null $sortDir,
@@ -170,6 +171,13 @@ class Table
         // Query
         if ($this->queryClosure) {
             ($this->queryClosure)($query);
+        }
+        // Filters
+        $filterClosures = array_filter($filterClosures);
+        if ($filterClosures) {
+            foreach ($filterClosures as $filterClosure) {
+                $filterClosure($query);
+            }
         }
         // Search
         if ($searchBy) {
@@ -210,7 +218,7 @@ class Table
 
     public function generateFiltersArray(): array
     {
-        return collect($this->filters)->map(function(AbstractFilter $filter) {
+        return collect($this->filters)->map(function (AbstractFilter $filter) {
             $filter->setup();
 
             return json_decode(json_encode(
