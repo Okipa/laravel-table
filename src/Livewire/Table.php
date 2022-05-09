@@ -160,9 +160,10 @@ class Table extends Component
     {
         $filterArray = AbstractFilter::retrieve($this->filtersArray, $identifier);
         $filterInstance = AbstractFilter::make($filterArray);
-        $this->filterClosures[$identifier] = is_null($value)
-            ? null
-            : static fn(Builder $query) => $filterInstance->filter($query, $value);
+        if (is_null($value)) {
+            Arr::forget($this->filterClosures, $identifier);
+        }
+        $this->filterClosures[$identifier] = static fn(Builder $query) => $filterInstance->filter($query, $value);
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void
