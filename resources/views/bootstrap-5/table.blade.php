@@ -8,7 +8,7 @@
                     <tr>
                         <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             @foreach($filtersArray as $filterArray)
-                                {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}}
+                                {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                             @endforeach
                         </td>
                     </tr>
