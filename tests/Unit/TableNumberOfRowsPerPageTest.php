@@ -126,11 +126,11 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 '<thead>',
                 'rows-number-icon',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
-                '<option value="1" selected>',
-                '<option value="2">',
-                '<option value="3">',
-                '<option value="4">',
-                '<option value="5">',
+                '<option wire:key="rows-number-per-page-option-1" value="1" selected>',
+                '<option wire:key="rows-number-per-page-option-2" value="2">',
+                '<option wire:key="rows-number-per-page-option-3" value="3">',
+                '<option wire:key="rows-number-per-page-option-4" value="4">',
+                '<option wire:key="rows-number-per-page-option-5" value="5">',
                 '</thead>',
             ]);
     }
@@ -161,11 +161,11 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 '<thead>',
                 'rows-number-icon',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
-                '<option value="1" selected>',
-                '<option value="2">',
-                '<option value="3">',
-                '<option value="4">',
-                '<option value="5">',
+                '<option wire:key="rows-number-per-page-option-1" value="1" selected>',
+                '<option wire:key="rows-number-per-page-option-2" value="2">',
+                '<option wire:key="rows-number-per-page-option-3" value="3">',
+                '<option wire:key="rows-number-per-page-option-4" value="4">',
+                '<option wire:key="rows-number-per-page-option-5" value="5">',
                 '</thead>',
             ]);
     }
@@ -194,9 +194,9 @@ class TableNumberOfRowsPerPageTest extends TestCase
         $notDisplayedHtml = [];
         foreach ($users as $user) {
             if ($user->id === $users->first()->id) {
-                $displayedHtml[] = '<th class="align-middle" scope="row">' . $user->id . '</th>';
+                $displayedHtml[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">' . $user->id . '</th>';
             } else {
-                $notDisplayedHtml[] = '<th class="align-middle" scope="row">' . $user->id . '</th>';
+                $notDisplayedHtml[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">' . $user->id . '</th>';
             }
         }
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -206,11 +206,11 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 '<thead>',
                 'rows-number-icon',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
-                '<option value="1" selected>',
-                '<option value="2">',
-                '<option value="3">',
-                '<option value="4">',
-                '<option value="5">',
+                '<option wire:key="rows-number-per-page-option-1" value="1" selected>',
+                '<option wire:key="rows-number-per-page-option-2" value="2">',
+                '<option wire:key="rows-number-per-page-option-3" value="3">',
+                '<option wire:key="rows-number-per-page-option-4" value="4">',
+                '<option wire:key="rows-number-per-page-option-5" value="5">',
                 '</thead>',
                 '<tbody',
                 ...$displayedHtml,
@@ -241,7 +241,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
         };
         $values = [];
         foreach ($users as $user) {
-            $values[] = '<th class="align-middle" scope="row">' . $user->id . '</th>';
+            $values[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">' . $user->id . '</th>';
         }
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
@@ -251,11 +251,11 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 '<thead>',
                 'rows-number-icon',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
-                '<option value="1">',
-                '<option value="2">',
-                '<option value="3">',
-                '<option value="4">',
-                '<option value="5" selected>',
+                '<option wire:key="rows-number-per-page-option-1" value="1">',
+                '<option wire:key="rows-number-per-page-option-2" value="2">',
+                '<option wire:key="rows-number-per-page-option-3" value="3">',
+                '<option wire:key="rows-number-per-page-option-4" value="4">',
+                '<option wire:key="rows-number-per-page-option-5" value="5" selected>',
                 '</thead>',
                 '<tbody',
                 ...$values,

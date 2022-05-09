@@ -66,7 +66,7 @@
                                                         aria-label="{{ __('Number of rows per page') }}"
                                                         aria-describedby="rows-number-per-page-icon">
                                                     @foreach($numberOfRowsPerPageOptions as $numberOfRowsPerPageOption)
-                                                        <option value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
+                                                        <option wire:key="rows-number-per-page-option-{{ $numberOfRowsPerPageOption }}" value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
                                                             {{ $numberOfRowsPerPageOption }}
                                                         </option>
                                                     @endforeach
@@ -160,9 +160,9 @@
                             {{-- Row columns values --}}
                             @foreach($columns as $column)
                                 @if($loop->first)
-                                    <th class="align-middle" scope="row">{{ $column->getValue($model, $tableColumnActionsArray) }}</th>
+                                    <th wire:key="cell-{{ $column->getKey() }}-{{ $model->getKey() }}" class="align-middle" scope="row">{{ $column->getValue($model, $tableColumnActionsArray) }}</th>
                                 @else
-                                    <td class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
+                                    <td wire:key="cell-{{ $column->getKey() }}-{{ $model->getKey() }}" class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
                                 @endif
                             @endforeach
                             {{-- Row actions --}}
