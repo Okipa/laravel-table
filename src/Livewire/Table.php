@@ -3,14 +3,12 @@
 namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
-use Okipa\LaravelTable\Abstracts\AbstractFilter;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -47,10 +45,6 @@ class Table extends Component
     public string|null $sortDir;
 
     public array $selectedFilters = [];
-
-    public array $filtersArray;
-
-    public array $filterClosures = [];
 
     public array|null $headActionArray;
 
@@ -121,16 +115,17 @@ class Table extends Component
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
         $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
+        // Filters
+        $filtersArray = $table->generateFiltersArray();
+        $filterClosures = $table->getFilterClosures($filtersArray, $this->selectedFilters);
         // Rows generation
         $table->generateRows(
-            $this->filterClosures,
+            $filterClosures,
             $this->searchBy,
             $sortableClosure ?: $this->sortBy,
             $this->sortDir,
             $this->numberOfRowsPerPage,
         );
-        // Filters
-        $this->filtersArray = $table->generateFiltersArray();
         // Head action
         $this->headActionArray = $table->getHeadActionArray();
         // Bulk actions
@@ -151,24 +146,12 @@ class Table extends Component
                 + $columns->count()
                 + ($this->tableRowActionsArray ? 1 : 0),
             'rows' => $table->getRows(),
-            'tableRowClass' => $table->getRowClass(),
+            'filtersArray' => $filtersArray,
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
+            'tableRowClass' => $table->getRowClass(),
             'navigationStatus' => $table->getNavigationStatus(),
         ];
-    }
-
-    public function updatedSelectedFilters(): void
-    {
-        $this->filterClosures = [];
-        foreach ($this->selectedFilters as $identifier => $value) {
-            if (is_null($value)) {
-                continue;
-            }
-            $filterArray = AbstractFilter::retrieve($this->filtersArray, $identifier);
-            $filterInstance = AbstractFilter::make($filterArray);
-            $this->filterClosures[$identifier] = static fn(Builder $query) => $filterInstance->filter($query, $value);
-        }
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void

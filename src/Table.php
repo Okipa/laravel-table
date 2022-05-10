@@ -228,6 +228,21 @@ class Table
         })->toArray();
     }
 
+    public function getFilterClosures(array $filtersArray, array $selectedFilters): array
+    {
+        $filterClosures = [];
+        foreach ($selectedFilters as $identifier => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+            $filterArray = AbstractFilter::retrieve($filtersArray, $identifier);
+            $filterInstance = AbstractFilter::make($filterArray);
+            $filterClosures[$identifier] = static fn(Builder $query) => $filterInstance->filter($query, $value);
+        }
+
+        return $filterClosures;
+    }
+
     public function getHeadActionArray(): array|null
     {
         if (! $this->headAction) {
