@@ -46,6 +46,8 @@ class Table extends Component
 
     public string|null $sortDir;
 
+    public array $selectedFilters = [];
+
     public array $filtersArray;
 
     public array $filterClosures = [];
@@ -156,14 +158,17 @@ class Table extends Component
         ];
     }
 
-    public function filter(string $identifier, mixed $value): void
+    public function updatedSelectedFilters(): void
     {
-        $filterArray = AbstractFilter::retrieve($this->filtersArray, $identifier);
-        $filterInstance = AbstractFilter::make($filterArray);
-        if (is_null($value)) {
-            Arr::forget($this->filterClosures, $identifier);
+        $this->filterClosures = [];
+        foreach ($this->selectedFilters as $identifier => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+            $filterArray = AbstractFilter::retrieve($this->filtersArray, $identifier);
+            $filterInstance = AbstractFilter::make($filterArray);
+            $this->filterClosures[$identifier] = static fn(Builder $query) => $filterInstance->filter($query, $value);
         }
-        $this->filterClosures[$identifier] = static fn(Builder $query) => $filterInstance->filter($query, $value);
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void

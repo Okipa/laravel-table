@@ -45,25 +45,32 @@ class TableFiltersTest extends TestCase
                 '<thead>',
                 '<tr>',
                 '<td class="px-0" colspan="2">',
-                '<select wire:change="filter(\'email_verified\', $event.target.value)"',
+                '<div wire:key="filter-email-verified">',
+//                '<select wire:change="filter(\'email_verified\', $event.target.value)"',
                 'class="form-select"',
                 'aria-label="Email Verified">',
-                '<option selected>Email Verified</option>',
-                '<option value="1">Yes</option>',
-                '<option value="0">No</option>',
+                '<option wire:key="filter-option-email-verified-placeholder" selected>Email Verified</option>',
+                '<option wire:key="filter-option-email-verified-1" value="1">Yes</option>',
+                '<option wire:key="filter-option-email-verified-0" value="0">No</option>',
                 '</select>',
-                '<select wire:change="filter(\'active\', $event.target.value)"',
+                '</div>',
+                '<div wire:key="filter-active">',
+//                '<select wire:change="filter(\'active\', $event.target.value)"',
                 'class="form-select"',
                 'aria-label="Active">',
-                '<option selected>Active</option>',
-                '<option value="1">Yes</option>',
-                '<option value="0">No</option>',
+                '<option wire:key="filter-option-active-placeholder" selected>Active</option>',
+                '<option wire:key="filter-option-active-1" value="1">Yes</option>',
+                '<option wire:key="filter-option-active-0" value="0">No</option>',
                 '</select>',
+                '</div>',
                 '</td>',
                 '</tr>',
                 '</thead>',
             ])
-            ->call('filter', 'email_verified', false)
+            ->set('selectedFilters', [
+                'email_verified' => false,
+                'active' => null,
+            ])
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 $users->last()->name,
@@ -72,20 +79,26 @@ class TableFiltersTest extends TestCase
             ->assertDontSeeHtml([
                 $users->first()->name,
             ])
-            ->call('filter', 'active', true)
+            ->set('selectedFilters', [
+                'email_verified' => false,
+                'active' => true,
+            ])
             ->assertDontSeeHtml([
                 $users->first()->name,
                 $users->last()->name,
             ])
-            ->call('filter', 'email_verified', null)
+            ->set('selectedFilters', [
+                'email_verified' => null,
+                'active' => true,
+            ])
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 $users->first()->name,
                 '</tbody>',
             ])
-//            ->assertDontSeeHtml([
-//                $users->last()->name,
-//            ])
+            ->assertDontSeeHtml([
+                $users->last()->name,
+            ])
         ;
     }
 }
