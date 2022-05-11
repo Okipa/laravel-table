@@ -7,7 +7,7 @@
                     {{-- Filters --}}
                     <tr>
                         <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                            <div class="d-flex">
+                            <div class="d-flex justify-content-end">
                                 @foreach($filtersArray as $filterArray)
                                     {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                                 @endforeach
