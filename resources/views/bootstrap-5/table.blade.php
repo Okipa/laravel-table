@@ -5,26 +5,28 @@
                 {{-- Table header--}}
                 <thead>
                     {{-- Filters --}}
-                    <tr>
-                        <td class="p-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                            <div class="d-flex align-items-center justify-content-end">
-                                <div class="text-secondary">
-                                    {!! config('laravel-table.icon.filter') !!}
+                    @if($filtersArray)
+                        <tr>
+                            <td class="p-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="text-secondary">
+                                        {!! config('laravel-table.icon.filter') !!}
+                                    </div>
+                                    @foreach($filtersArray as $filterArray)
+                                        {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
+                                    @endforeach
+                                    @if($selectedFilters)
+                                        <a wire:click.prevent="$set('selectedFilters', [])"
+                                           class="btn btn-outline-secondary ms-3"
+                                           title="{{ __('Reset filters') }}"
+                                           data-bs-toggle="tooltip">
+                                            {!! config('laravel-table.icon.reset') !!}
+                                        </a>
+                                    @endif
                                 </div>
-                                @foreach($filtersArray as $filterArray)
-                                    {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
-                                @endforeach
-                                @if($selectedFilters)
-                                    <a wire:click.prevent="$set('selectedFilters', [])"
-                                       class="btn btn-outline-secondary ms-3"
-                                       title="{{ __('Reset filters') }}"
-                                       data-bs-toggle="tooltip">
-                                        {!! config('laravel-table.icon.reset') !!}
-                                    </a>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    @endif
                     {{-- Search/Number of rows per page/Head action --}}
                     <tr>
                         <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
