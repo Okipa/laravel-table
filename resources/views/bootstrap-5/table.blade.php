@@ -10,9 +10,11 @@
                             @foreach($filtersArray as $filterArray)
                                 {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                             @endforeach
-                            <a wire:click.prevent="resetFilters" class="btn btn-secondary" title="{{ __('Reset filters') }}">
-                                {!! config('laravel-table.icon.reset') !!}
-                            </a>
+                            @if($selectedFilters)
+                                <a wire:click.prevent="resetFilters" class="btn btn-secondary ms-3" title="{{ __('Reset filters') }}">
+                                    {!! config('laravel-table.icon.reset') !!}
+                                </a>
+                            @endif
                         </td>
                     </tr>
                     {{-- Search/Number of rows per page/Head action --}}
