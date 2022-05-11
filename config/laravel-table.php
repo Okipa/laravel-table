@@ -13,7 +13,7 @@ return [
 
     /** Set all the displayed action icons. */
     'icon' => [
-        'filter' => '<i class="fa-solid fa-filter fa-fw"></i>',
+        'filter' => '<i class="fa-solid fa-filter fa-2x"></i>',
         'rows_number' => '<i class="fa-solid fa-list-ol"></i>',
         'sort' => '<i class="fa-solid fa-sort fa-fw"></i>',
         'sort_asc' => '<i class="fa-solid fa-sort-up fa-fw"></i>',

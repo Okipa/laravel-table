@@ -7,8 +7,10 @@
                     {{-- Filters --}}
                     <tr>
                         <td class="p-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                            <div class="d-flex justify-content-end">
-                                {!! config('laravel-table.icon.filter') !!}
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="text-secondary">
+                                    {!! config('laravel-table.icon.filter') !!}
+                                </div>
                                 @foreach($filtersArray as $filterArray)
                                     {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                                 @endforeach
