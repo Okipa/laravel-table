@@ -578,7 +578,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action MyNewRowAction`.
+You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:bulk:action MyNewRowAction`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
