@@ -49,7 +49,7 @@ class TableFiltersTest extends TestCase
                 '<select wire:model="selectedFilters.email_verified"',
                 'class="form-select"',
                 'aria-label="Email Verified">',
-                '<option wire:key="filter-option-email-verified-placeholder" value="null" selected>Email Verified</option>',
+                '<option wire:key="filter-option-email-verified-placeholder" value="" selected>Email Verified</option>',
                 '<option wire:key="filter-option-email-verified-1" value="1">Yes</option>',
                 '<option wire:key="filter-option-email-verified-0" value="0">No</option>',
                 '</select>',
@@ -58,7 +58,7 @@ class TableFiltersTest extends TestCase
                 '<select wire:model="selectedFilters.active"',
                 'class="form-select"',
                 'aria-label="Active">',
-                '<option wire:key="filter-option-active-placeholder" value="null" selected>Active</option>',
+                '<option wire:key="filter-option-active-placeholder" value="" selected>Active</option>',
                 '<option wire:key="filter-option-active-1" value="1">Yes</option>',
                 '<option wire:key="filter-option-active-0" value="0">No</option>',
                 '</select>',
@@ -69,7 +69,7 @@ class TableFiltersTest extends TestCase
             ])
             ->set('selectedFilters', [
                 'email_verified' => false,
-                'active' => null,
+                'active' => '',
             ])
             ->assertSeeHtmlInOrder([
                 '<tbody>',
@@ -88,7 +88,7 @@ class TableFiltersTest extends TestCase
                 $users->last()->name,
             ])
             ->set('selectedFilters', [
-                'email_verified' => null,
+                'email_verified' => '',
                 'active' => true,
             ])
             ->assertSeeHtmlInOrder([

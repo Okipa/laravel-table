@@ -173,7 +173,6 @@ class Table
             ($this->queryClosure)($query);
         }
         // Filters
-        $filterClosures = array_filter($filterClosures);
         if ($filterClosures) {
             foreach ($filterClosures as $filterClosure) {
                 $filterClosure($query);
@@ -232,7 +231,7 @@ class Table
     {
         $filterClosures = [];
         foreach ($selectedFilters as $identifier => $value) {
-            if (is_null($value)) {
+            if ($value === '') {
                 continue;
             }
             $filterArray = AbstractFilter::retrieve($filtersArray, $identifier);
