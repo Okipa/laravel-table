@@ -1,6 +1,6 @@
 <div wire:init="init">
     @if($initialized)
-        <div class="table-responsive">o
+        <div class="table-responsive">
             <table class="table table-borderless">
                 {{-- Table header--}}
                 <thead>
