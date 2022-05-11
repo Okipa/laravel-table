@@ -7,14 +7,16 @@
                     {{-- Filters --}}
                     <tr>
                         <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                            @foreach($filtersArray as $filterArray)
-                                {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
-                            @endforeach
-                            @if($selectedFilters)
-                                <a wire:click.prevent="resetFilters" class="btn btn-secondary ms-3" title="{{ __('Reset filters') }}">
-                                    {!! config('laravel-table.icon.reset') !!}
-                                </a>
-                            @endif
+                            <div class="d-flex">
+                                @foreach($filtersArray as $filterArray)
+                                    {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
+                                @endforeach
+                                @if($selectedFilters)
+                                    <a wire:click.prevent="resetFilters" class="btn btn-outline-secondary ms-3" title="{{ __('Reset filters') }}">
+                                        {!! config('laravel-table.icon.reset') !!}
+                                    </a>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     {{-- Search/Number of rows per page/Head action --}}
