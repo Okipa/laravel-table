@@ -1,4 +1,4 @@
-<div wire:key="filter-{{ Str::slug($filter->identifier) }}">
+<div wire:key="filter-{{ Str::slug($filter->identifier) }}" class="ms-3">
     <select wire:model="selectedFilters.{{ $filter->identifier }}"
             @class(['form-select', $filter->class => $filter->class])
             {!! $filter->multiple ? 'multiple' : null !!}

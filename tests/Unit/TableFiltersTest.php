@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -44,8 +45,9 @@ class TableFiltersTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<tr>',
-                '<td class="px-0" colspan="2">',
-                '<div wire:key="filter-email-verified">',
+                '<td class="p-0" colspan="2">',
+                '<div class="d-flex justify-content-end">',
+                '<div wire:key="filter-email-verified" class="ms-3">',
                 '<select wire:model="selectedFilters.email_verified"',
                 'class="form-select"',
                 'aria-label="Email Verified">',
@@ -54,7 +56,7 @@ class TableFiltersTest extends TestCase
                 '<option wire:key="filter-option-email-verified-0" value="0">No</option>',
                 '</select>',
                 '</div>',
-                '<div wire:key="filter-active">',
+                '<div wire:key="filter-active" class="ms-3">',
                 '<select wire:model="selectedFilters.active"',
                 'class="form-select"',
                 'aria-label="Active">',
@@ -62,6 +64,7 @@ class TableFiltersTest extends TestCase
                 '<option wire:key="filter-option-active-1" value="1">Yes</option>',
                 '<option wire:key="filter-option-active-0" value="0">No</option>',
                 '</select>',
+                '</div>',
                 '</div>',
                 '</td>',
                 '</tr>',
@@ -98,7 +101,39 @@ class TableFiltersTest extends TestCase
             ])
             ->assertDontSeeHtml([
                 $users->last()->name,
-            ])
-        ;
+            ]);
+    }
+
+    /** @test */
+    public function it_can_reset_filters(): void
+    {
+        Config::set('laravel-table.icon.reset', 'reset-icon');
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)->filters([
+                    new ActiveFilter('active'),
+                ]);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters"')
+            ->set('selectedFilters', ['active' => true])
+            ->assertSeeHtmlInOrder([
+                '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
+                'class="btn btn-outline-secondary ms-3"',
+                'title="Reset filters"',
+                'data-bs-toggle="tooltip">',
+                'reset-icon',
+                '</a>',
+            ]);
     }
 }

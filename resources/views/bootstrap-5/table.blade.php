@@ -1,18 +1,22 @@
 <div wire:init="init">
     @if($initialized)
-        <div class="table-responsive">
+        <div class="table-responsive">o
             <table class="table table-borderless">
                 {{-- Table header--}}
                 <thead>
                     {{-- Filters --}}
                     <tr>
-                        <td class="px-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                        <td class="p-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex justify-content-end">
+                                {!! config('laravel-table.icon.filter') !!}
                                 @foreach($filtersArray as $filterArray)
                                     {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                                 @endforeach
                                 @if($selectedFilters)
-                                    <a wire:click.prevent="resetFilters" class="btn btn-outline-secondary ms-3" title="{{ __('Reset filters') }}">
+                                    <a wire:click.prevent="$set('selectedFilters', [])"
+                                       class="btn btn-outline-secondary ms-3"
+                                       title="{{ __('Reset filters') }}"
+                                       data-bs-toggle="tooltip">
                                         {!! config('laravel-table.icon.reset') !!}
                                     </a>
                                 @endif
