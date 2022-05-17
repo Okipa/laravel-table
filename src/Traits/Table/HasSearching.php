@@ -39,11 +39,6 @@ trait HasSearching
         return $this->searchField;
     }
 
-    public function getSearchValue(): ?string
-    {
-        return $this->searchValue;
-    }
-
     protected function searchOnColumns(Builder $query, string $searchedValue): void
     {
         $this->getSearchableColumns()->each(function (Column $column, int $columnKey) use ($query, $searchedValue) {
