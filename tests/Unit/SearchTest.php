@@ -98,6 +98,28 @@ class SearchTest extends LaravelTableTestCase
         );
     }
 
+    public function testSearchWithNoRowsDefined(): void
+    {
+        $users = $this->createMultipleUsers(5);
+        $searchedValue = $users->sortBy('name')->values()->first()->name;
+        $customRequest = (new Request())->merge([
+            (new Table())->getRowsNumberField() => null,
+            (new Table())->getSearchField() => $searchedValue,
+        ]);
+        $this->routes(['users'], ['index']);
+        $table = (new Table())->model(User::class)
+            ->routes(['index' => ['name' => 'users.index']])
+            ->rowsNumber(null)
+            ->request($customRequest);
+        $table->column('name')->searchable();
+        $table->column('email');
+        $table->configure();
+        self::assertEquals(
+            $users->sortBy('name')->where('name', $searchedValue)->values()->toArray(),
+            $table->getPaginator()->toArray()['data']
+        );
+    }
+
     public function testGetSearchableTitlesSingle(): void
     {
         $this->routes(['users'], ['index']);
