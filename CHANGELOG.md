@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.0.7](https://github.com/Okipa/laravel-table/compare/4.0.6...4.0.7)
+
+2022-05-17
+
+* 
+
 ## [4.0.6](https://github.com/Okipa/laravel-table/compare/4.0.5...4.0.6)
 
 2022-03-10
