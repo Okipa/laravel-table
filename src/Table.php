@@ -109,7 +109,7 @@ class Table implements Htmlable
         if ($validator->fails()) {
             $this->getRequest()->merge([
                 $this->getRowsNumberField() => $this->getRowsNumberValue(),
-                $this->getSearchField() => $this->getSearchValue(),
+                $this->getSearchField() => $this->getRequest()->get($this->getSearchField()),
                 $this->getSortByField() => $this->getSortByValue(),
                 $this->getSortDirField() => $this->getSortDirValue(),
             ]);
