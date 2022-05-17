@@ -39,7 +39,7 @@ trait HasSearching
         return $this->searchField;
     }
 
-    public function getSearchValue(): string|null
+    public function getSearchValue(): ?string
     {
         return $this->searchValue;
     }

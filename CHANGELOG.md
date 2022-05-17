@@ -4,7 +4,7 @@
 
 2022-05-17
 
-* Fixed search wrong behaviour when rows number is defined to `null` 
+* Fixed search wrong behaviour when rows number is defined to `null`
 
 ## [4.0.6](https://github.com/Okipa/laravel-table/compare/4.0.5...4.0.6)
 

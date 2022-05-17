@@ -104,7 +104,7 @@ class SearchTest extends LaravelTableTestCase
         $searchedValue = $users->sortBy('name')->values()->first()->name;
         $customRequest = (new Request())->merge([
             (new Table())->getRowsNumberField() => null,
-            'search' => $searchedValue,
+            (new Table())->getSearchField() => $searchedValue,
         ]);
         $this->routes(['users'], ['index']);
         $table = (new Table())->model(User::class)
