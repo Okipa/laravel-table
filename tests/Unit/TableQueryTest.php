@@ -17,22 +17,18 @@ class TableQueryTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration {
-            public function __construct(protected int|null $userIdToExclude = null)
-            {
-                //
-            }
+            public int $userIdToExclude;
 
             protected function table(): Table
             {
-                return Table::make()->model(User::class)
+                return Table::make()
+                    ->model(User::class)
                     ->query(fn(Builder $query) => $query->where('id', '!=', $this->userIdToExclude));
             }
 
             protected function columns(): array
             {
-                return [
-                    Column::make('Id'),
-                ];
+                return [Column::make('Id')];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [

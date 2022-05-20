@@ -91,8 +91,12 @@ class Table extends Component
         if (! app($this->config) instanceof AbstractTableConfiguration) {
             throw new InvalidTableConfiguration($this->config);
         }
+        $config = app($this->config);
+        foreach ($this->configParams as $key => $value) {
+            $config->{$key} = $value;
+        }
 
-        return app($this->config, $this->configParams);
+        return $config;
     }
 
     /**

@@ -19,7 +19,7 @@
 
 ![Generate tables from Eloquent models](docs/screenshot.png)
 
-Save time and easily render tables in your views from models, objects, collections or arrays.
+Save time and easily render tables in your views from Eloquent models.
 
 Tables can be generated under the following UI frameworks:
 * Bootstrap 5
@@ -31,7 +31,6 @@ DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.
 **V5 roadmap:**
 * Table config `results` => set table result lines
 * Table `reorderable` => allow rows reordering with drag & drop
-* Table `filters` => set actionable filters
 
 Found this package helpful? Please consider supporting my work!
 
@@ -115,6 +114,7 @@ And display it in a view:
 * [How to](#how-to)
   * [Create table configuration](#create-table-configurations)
   * [Display tables in views](#display-tables-in-views)
+  * [Pass external data to your tables](#pass-external-data-to-your-tables)
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
@@ -199,12 +199,32 @@ Just call this Livewire component in your view with your configuration class nam
 <x:livewire.table :config="App\Tables\UsersTable::class"/>
 ```
 
+### Pass external data to your tables
+
 In case you have specific attributes to transmit to your table configuration, you should pass them to the `configParams` parameter.
 
 This could be useful when you have to transmit external information to your table.
 
 ```blade
-<x:livewire.table :config="App\Tables\UsersTable::class" :configParams="['onlyDisplayUsersFromCategoryId' => 1]"/>
+<x:livewire.table :config="App\Tables\UsersTable::class" :configParams="['categoryId' => 1]"/>
+```
+
+You should then declare the passed attributes as `public` attributes your table configuration.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    // You will now be able to use the provided `$this->categoryId` category ID in your table configuration.
+    public int $categoryId;
+
+    // ...
+}
 ```
 
 ### Generate tables from Eloquent models
@@ -249,7 +269,7 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->query(fn(Builder $query) => $query->where('active', true));
+            ->query(fn(Builder $query) => $query->where('category_id', 1));
     }   
 }
 ```
