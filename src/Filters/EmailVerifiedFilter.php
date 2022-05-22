@@ -40,8 +40,8 @@ class EmailVerifiedFilter extends AbstractFilter
         ];
     }
 
-    public function filter(Builder $query, mixed $value): void
+    public function filter(Builder $query, mixed $selected): void
     {
-        $value ? $query->whereNotNull($this->attribute) : $query->whereNull($this->attribute);
+        $selected ? $query->whereNotNull($this->attribute) : $query->whereNull($this->attribute);
     }
 }

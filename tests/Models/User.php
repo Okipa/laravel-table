@@ -3,6 +3,7 @@
 namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tests\Database\Factories\UserFactory;
@@ -22,6 +23,11 @@ class User extends Authenticatable
     protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(UserCategory::class);
     }
 
     public function companies(): HasMany

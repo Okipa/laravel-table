@@ -4,7 +4,6 @@ namespace Okipa\LaravelTable\Abstracts;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 abstract class AbstractFilter
 {
@@ -30,7 +29,7 @@ abstract class AbstractFilter
 
     abstract protected function multiple(): bool;
 
-    abstract public function filter(Builder $query, mixed $value): void;
+    abstract public function filter(Builder $query, mixed $selected): void;
 
     public function setup(): void
     {

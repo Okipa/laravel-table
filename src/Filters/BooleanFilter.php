@@ -5,16 +5,16 @@ namespace Okipa\LaravelTable\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
 
-class ActiveFilter extends AbstractFilter
+class BooleanFilter extends AbstractFilter
 {
-    public function __construct(public string $attribute)
+    public function __construct(public string $label, public string $attribute)
     {
         //
     }
 
     protected function identifier(): string
     {
-        return 'active';
+        return 'boolean_' . $this->attribute;
     }
 
     protected function class(): string|null
@@ -24,7 +24,7 @@ class ActiveFilter extends AbstractFilter
 
     protected function label(): string
     {
-        return __('Active');
+        return $this->label;
     }
 
     protected function multiple(): bool
@@ -40,8 +40,8 @@ class ActiveFilter extends AbstractFilter
         ];
     }
 
-    public function filter(Builder $query, mixed $value): void
+    public function filter(Builder $query, mixed $selected): void
     {
-        $query->where($this->attribute, $value);
+        $query->where($this->attribute, $selected);
     }
 }

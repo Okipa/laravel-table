@@ -231,7 +231,7 @@ class Table
     {
         $filterClosures = [];
         foreach ($selectedFilters as $identifier => $value) {
-            if ($value === '') {
+            if ($value === '' || $value === []) {
                 continue;
             }
             $filterArray = AbstractFilter::retrieve($filtersArray, $identifier);
