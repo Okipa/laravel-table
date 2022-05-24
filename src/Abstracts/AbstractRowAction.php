@@ -9,13 +9,13 @@ use Livewire\Component;
 
 abstract class AbstractRowAction
 {
-    public string $identifier;
-
     public string $rowActionClass;
 
     public string $modelClass;
 
     public string $modelKey;
+
+    public string $identifier;
 
     protected string|null $class;
 
@@ -46,10 +46,10 @@ abstract class AbstractRowAction
 
     public function setup(Model $model): void
     {
-        $this->identifier = $this->identifier();
         $this->rowActionClass = $this::class;
         $this->modelClass = $model::class;
         $this->modelKey = $model->getKey();
+        $this->identifier = $this->identifier();
     }
 
     public static function retrieve(array $rowActions, string $modelKey): array
@@ -73,9 +73,8 @@ abstract class AbstractRowAction
     public function render(Model $model): View
     {
         return view('laravel-table::' . config('laravel-table.ui') . '.row-action', [
-            'modelKey' => $this->modelKey,
+            'rowAction' => $this,
             'class' => $this->class($model),
-            'identifier' => $this->identifier,
             'title' => $this->title($model),
             'icon' => $this->icon($model),
             'shouldBeConfirmed' => (bool) $this->getConfirmationQuestion($model),

@@ -1,0 +1,40 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractFilter;
+
+class DummyClass extends AbstractFilter
+{
+    protected function identifier(): string
+    {
+        // The unique identifier that is required to retrieve the filter.
+    }
+
+    protected function class(): string|null
+    {
+        // The CSS class that will be applies to the filter select.
+    }
+
+    protected function label(): string
+    {
+        // The label that will appear in the filter select.
+    }
+
+    protected function multiple(): bool
+    {
+        // Whether the filter select should allow multiple option to be selected.
+    }
+
+    protected function options(): array
+    {
+        // The options that will be available in the filter select.
+    }
+
+    public function filter(Builder $query, mixed $selected): void
+    {
+        // The filtering treatment that will be executed on option selection.
+        // The $selected attribute will provide an array in multiple mode and a value in single mode.
+    }
+}

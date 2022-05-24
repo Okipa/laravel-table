@@ -5,16 +5,16 @@ namespace Okipa\LaravelTable\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
 
-class EmailVerifiedFilter extends AbstractFilter
+class NullFilter extends AbstractFilter
 {
-    public function __construct(public string $attribute)
+    public function __construct(public string $label, public string $attribute)
     {
         //
     }
 
     protected function identifier(): string
     {
-        return 'email_verified';
+        return 'null_' . $this->attribute;
     }
 
     protected function class(): string|null
@@ -24,7 +24,7 @@ class EmailVerifiedFilter extends AbstractFilter
 
     protected function label(): string
     {
-        return __('Email Verified');
+        return $this->label;
     }
 
     protected function multiple(): bool

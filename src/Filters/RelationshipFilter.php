@@ -11,8 +11,8 @@ class RelationshipFilter extends AbstractFilter
     public function __construct(
         public string $label,
         public string $relationship,
-        public array $selectOptions,
-        public bool $multipleChoice = true
+        public array $options,
+        public bool $multiple = true
     ) {
         //
     }
@@ -34,12 +34,12 @@ class RelationshipFilter extends AbstractFilter
 
     protected function multiple(): bool
     {
-        return $this->multipleChoice;
+        return $this->multiple;
     }
 
     protected function options(): array
     {
-        return $this->selectOptions;
+        return $this->options;
     }
 
     public function filter(Builder $query, mixed $selected): void

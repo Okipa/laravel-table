@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
-use Okipa\LaravelTable\Filters\EmailVerifiedFilter;
+use Okipa\LaravelTable\Filters\NullFilter;
 use Okipa\LaravelTable\Filters\RelationshipFilter;
 use Okipa\LaravelTable\Filters\BooleanFilter;
 use Okipa\LaravelTable\Table;
@@ -30,12 +30,11 @@ class TableFiltersTest extends TestCase
         $company1 = Company::factory()->withOwner($user1)->create();
         $company2 = Company::factory()->withOwner($user2)->create();
         $company3 = Company::factory()->withOwner($user3)->create();
-
         $config = new class extends AbstractTableConfiguration {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->filters([
-                    new EmailVerifiedFilter('email_verified_at'),
+                    new NullFilter('Email Verified', 'email_verified_at'),
                     // HasMany Relationship with single selection
                     new RelationshipFilter('Companies', 'companies', Company::pluck('name', 'id')->toArray(), false),
                     // BelongsToMany Relationship with multiple selection
@@ -60,13 +59,13 @@ class TableFiltersTest extends TestCase
                 '<td class="px-0 pb-0" colspan="2">',
                 '<div class="d-flex align-items-center justify-content-end">',
                 // Email Verified
-                '<div wire:key="filter-email-verified" class="ms-3">',
-                '<select wire:model="selectedFilters.email_verified"',
+                '<div wire:key="filter-null-email-verified-at" class="ms-3">',
+                '<select wire:model="selectedFilters.null_email_verified_at"',
                 'class="form-select"',
                 'aria-label="Email Verified">',
-                '<option wire:key="filter-option-email-verified-placeholder" value="" selected>Email Verified</option>',
-                '<option wire:key="filter-option-email-verified-1" value="1">Yes</option>',
-                '<option wire:key="filter-option-email-verified-0" value="0">No</option>',
+                '<option wire:key="filter-option-null-email-verified-at-placeholder" value="" selected>Email Verified</option>',
+                '<option wire:key="filter-option-null-email-verified-at-1" value="1">Yes</option>',
+                '<option wire:key="filter-option-null-email-verified-at-0" value="0">No</option>',
                 '</select>',
                 '</div>',
                 // Companies
@@ -107,7 +106,6 @@ class TableFiltersTest extends TestCase
                 '<option wire:key="filter-option-boolean-active-0" value="0">No</option>',
                 '</select>',
                 '</div>',
-
                 '</div>',
                 '</td>',
                 '</tr>',
@@ -115,7 +113,7 @@ class TableFiltersTest extends TestCase
             ])
             // Single filter : Email verified
             ->set('selectedFilters', [
-                'email_verified' => false,
+                'null_email_verified_at' => false,
                 'relationship_companies' => '',
                 'relationship_categories' => [],
                 'boolean_active' => '',
@@ -131,6 +129,7 @@ class TableFiltersTest extends TestCase
             ])
             // Single filter : Companies
             ->set('selectedFilters', [
+                'null_email_verified_at' => '',
                 'relationship_companies' => $company1->id,
                 'relationship_categories' => [],
                 'boolean_active' => '',
@@ -146,6 +145,7 @@ class TableFiltersTest extends TestCase
             ])
             // Single filter : Categories
             ->set('selectedFilters', [
+                'null_email_verified_at' => '',
                 'relationship_companies' => '',
                 'relationship_categories' => [$category2->id],
                 'boolean_active' => '',
@@ -161,6 +161,7 @@ class TableFiltersTest extends TestCase
             ])
             // Single filter : Active
             ->set('selectedFilters', [
+                'null_email_verified_at' => '',
                 'relationship_companies' => '',
                 'relationship_categories' => [],
                 'boolean_active' => true,
@@ -176,7 +177,7 @@ class TableFiltersTest extends TestCase
             ])
             // Multiple filters : Email Verified + Active
             ->set('selectedFilters', [
-                'email_verified' => true,
+                'null_email_verified_at' => true,
                 'relationship_companies' => '',
                 'relationship_categories' => [],
                 'boolean_active' => false,

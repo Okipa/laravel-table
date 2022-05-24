@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Illuminate\Support\Facades\File;
 use Okipa\LaravelTable\Console\Commands\MakeBulkAction;
 use Okipa\LaravelTable\Console\Commands\MakeColumnAction;
+use Okipa\LaravelTable\Console\Commands\MakeFilter;
 use Okipa\LaravelTable\Console\Commands\MakeFormatter;
 use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
 use Okipa\LaravelTable\Console\Commands\MakeRowAction;
@@ -80,16 +81,57 @@ class MakeTest extends TestCase
     }
 
     /** @test */
+    public function it_can_make_filter(): void
+    {
+        $this->artisan(MakeFilter::class, ['name' => 'MyNewFilter']);
+        self::assertFileExists(base_path('app/Tables/Filters/MyNewFilter.php'));
+        $fileContent = File::get(base_path('app/Tables/Filters/MyNewFilter.php'));
+        $this->assertSeeHtmlInOrder($fileContent, [
+            'namespace App\Tables\Filters;',
+            'use Illuminate\Database\Eloquent\Builder;',
+            'use Okipa\LaravelTable\Abstracts\AbstractFilter;',
+            'class MyNewFilter extends AbstractFilter',
+            '{',
+            'protected function identifier(): string',
+            '{',
+            '// The unique identifier that is required to retrieve the filter.',
+            '}',
+            'protected function class(): string|null',
+            '{',
+            '// The CSS class that will be applies to the filter select.',
+            '}',
+            'protected function label(): string',
+            '{',
+            '// The label that will appear in the filter select.',
+            '}',
+            'protected function multiple(): bool',
+            '{',
+            '// Whether the filter select should allow multiple option to be selected.',
+            '}',
+            'protected function options(): array',
+            '{',
+            '// The options that will be available in the filter select.',
+            '}',
+            'public function filter(Builder $query, mixed $selected): void',
+            '{',
+            '// The filtering treatment that will be executed on option selection.',
+            '// The $selected attribute will provide an array in multiple mode and a value in single mode.',
+            '}',
+            '}',
+        ]);
+    }
+
+    /** @test */
     public function it_can_make_head_action(): void
     {
-        $this->artisan(MakeHeadAction::class, ['name' => 'Configure']);
-        self::assertFileExists(base_path('app/Tables/HeadActions/Configure.php'));
-        $fileContent = File::get(base_path('app/Tables/HeadActions/Configure.php'));
+        $this->artisan(MakeHeadAction::class, ['name' => 'MyNewHeadAction']);
+        self::assertFileExists(base_path('app/Tables/HeadActions/MyNewHeadAction.php'));
+        $fileContent = File::get(base_path('app/Tables/HeadActions/MyNewHeadAction.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\HeadActions;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractHeadAction;',
-            'class Configure extends AbstractHeadAction',
+            'class MyNewHeadAction extends AbstractHeadAction',
             '{',
             'protected function class(): string',
             '{',
@@ -116,15 +158,15 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_bulk_action(): void
     {
-        $this->artisan(MakeBulkAction::class, ['name' => 'Activate']);
-        self::assertFileExists(base_path('app/Tables/BulkActions/Activate.php'));
-        $fileContent = File::get(base_path('app/Tables/BulkActions/Activate.php'));
+        $this->artisan(MakeBulkAction::class, ['name' => 'MyNewBulkAction']);
+        self::assertFileExists(base_path('app/Tables/BulkActions/MyNewBulkAction.php'));
+        $fileContent = File::get(base_path('app/Tables/BulkActions/MyNewBulkAction.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\BulkActions;',
             'use Illuminate\Support\Collection;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractBulkAction;',
-            'class Activate extends AbstractBulkAction',
+            'class MyNewBulkAction extends AbstractBulkAction',
             '{',
             'protected function identifier(): string',
             '{',
@@ -157,15 +199,15 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_row_action(): void
     {
-        $this->artisan(MakeRowAction::class, ['name' => 'ToggleActivation']);
-        self::assertFileExists(base_path('app/Tables/RowActions/ToggleActivation.php'));
-        $fileContent = File::get(base_path('app/Tables/RowActions/ToggleActivation.php'));
+        $this->artisan(MakeRowAction::class, ['name' => 'MyNewRowAction']);
+        self::assertFileExists(base_path('app/Tables/RowActions/MyNewRowAction.php'));
+        $fileContent = File::get(base_path('app/Tables/RowActions/MyNewRowAction.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\RowActions;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Livewire\Component;',
             'use Okipa\LaravelTable\Abstracts\AbstractRowAction;',
-            'class ToggleActivation extends AbstractRowAction',
+            'class MyNewRowAction extends AbstractRowAction',
             '{',
             'protected function identifier(): string',
             '{',
@@ -206,14 +248,14 @@ class MakeTest extends TestCase
     /** @test */
     public function it_can_make_column_formatter(): void
     {
-        $this->artisan(MakeFormatter::class, ['name' => 'BooleanFormatter']);
-        self::assertFileExists(base_path('app/Tables/Formatters/BooleanFormatter.php'));
-        $fileContent = File::get(base_path('app/Tables/Formatters/BooleanFormatter.php'));
+        $this->artisan(MakeFormatter::class, ['name' => 'MyNewFormatter']);
+        self::assertFileExists(base_path('app/Tables/Formatters/MyNewFormatter.php'));
+        $fileContent = File::get(base_path('app/Tables/Formatters/MyNewFormatter.php'));
         $this->assertSeeHtmlInOrder($fileContent, [
             'namespace App\Tables\Formatters;',
             'use Illuminate\Database\Eloquent\Model;',
             'use Okipa\LaravelTable\Abstracts\AbstractFormatter;',
-            'class BooleanFormatter extends AbstractFormatter',
+            'class MyNewFormatter extends AbstractFormatter',
             '{',
             'public function format(Model $model, string $attribute): string',
             '{',

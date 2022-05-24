@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class AbstractFilter
 {
-    public string $identifier;
-
     public string $filterClass;
 
-    public string|null $class;
+    public string $identifier;
 
-    public string $label;
+    protected string|null $class;
 
-    public array $options;
+    protected string $label;
 
-    public bool $multiple;
+    protected array $options;
+
+    protected bool $multiple;
 
     abstract protected function identifier(): string;
 
@@ -48,16 +48,18 @@ abstract class AbstractFilter
         $filterInstance = app($filterArray['filterClass'], $filterArray);
         $filterInstance->filterClass = $filterArray['filterClass'];
         $filterInstance->identifier = $filterArray['identifier'];
-        $filterInstance->class = $filterInstance->class();
-        $filterInstance->label = $filterInstance->label();
-        $filterInstance->options = $filterInstance->options();
-        $filterInstance->multiple = $filterInstance->multiple();
 
         return $filterInstance;
     }
 
     public function render(): View
     {
-        return view('laravel-table::' . config('laravel-table.ui') . '.filter', ['filter' => $this]);
+        return view('laravel-table::' . config('laravel-table.ui') . '.filter', [
+            'filter' => $this,
+            'class' => $this->class(),
+            'label' => $this->label(),
+            'options' => $this->options(),
+            'multiple' => $this->multiple(),
+        ]);
     }
 }

@@ -119,6 +119,7 @@ And display it in a view:
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Set conditional row class](#set-conditional-row-class)
+  * [Setup table filters](#setup-table-filters)
   * [Define table head action](#define-table-head-action)
   * [Define table bulk actions](#define-table-bulk-actions)
   * [Define table row actions](#define-table-row-actions)
@@ -348,6 +349,78 @@ class UsersTable extends AbstractTableConfiguration
             ->model(User::class)
             ->rowClass(fn(User $user) => [
                 'table-danger' => ! $user->active,
+            ]);
+    }
+}
+```
+
+### Setup table filters
+
+Configuring table filters will make them appear as `select` HTML components on a dedicated bar above the table.
+
+This filters bar will not appear if no filter is declared.
+
+This package provides the following built-in filters:
+* `RelationshipFilter`:
+  * Requires `string $label`, `string $relationship`, `array $options` and `bool $multiple = true` arguments on instantiation
+  * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given relationship
+* `BooleanFilter`
+  * Requires `string $label` and `string $attribute` arguments on instantiation
+  * Filters the table based on whether the value of the given attribute is `true` or `false`
+* `NullFilter`
+  * Requires a `string $attribute` argument on instantiation
+  * Filters the table based on whether the value of the given attribute is `null` or not
+
+To use them, you'll have to pass an array to the `filters` method, containing the filter instances to declare.
+
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Filters\NullFilter;
+use Okipa\LaravelTable\Filters\BooleanFilter;
+use Okipa\LaravelTable\Filters\RelationshipFilter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->filters([
+                new NullFilter('Email Verified', 'email_verified_at'),
+                new RelationshipFilter('Categories', 'categories', UserCategory::pluck('name', 'id')->toArray()),
+                new BooleanFilter('Active', 'active'),
+            ]);
+    }
+}
+```
+
+You may need to create your own filters. To do so, execute the following command: `php artisan make:table:filter MyNewFilter`.
+
+You'll find your generated table filter in the `app/Tables/Filters` directory.
+
+You will now be able to use your new filter in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\Filters\MyNewFilter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->filters([
+                new MyNewFilter(),
             ]);
     }
 }

@@ -10,11 +10,11 @@ use Livewire\Component;
 
 abstract class AbstractBulkAction
 {
-    public string $identifier;
-
     public string $bulkActionClass;
 
     public string $modelClass;
+
+    public string $identifier;
 
     public array $allowedModelKeys;
 
@@ -45,9 +45,9 @@ abstract class AbstractBulkAction
 
     public function setup(Model $model): void
     {
-        $this->identifier = $this->identifier();
         $this->bulkActionClass = $this::class;
         $this->modelClass = $model::class;
+        $this->identifier = $this->identifier();
     }
 
     public static function retrieve(array $bulkActions, string $identifier): array
@@ -72,9 +72,8 @@ abstract class AbstractBulkAction
     public function render(): View
     {
         return view('laravel-table::' . config('laravel-table.ui') . '.bulk-action', [
-            'identifier' => $this->identifier,
+            'bulkAction' => $this,
             'label' => $this->label($this->allowedModelKeys),
-            'shouldBeConfirmed' => (bool) $this->getConfirmationQuestion(),
         ]);
     }
 

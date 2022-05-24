@@ -9,13 +9,13 @@ use Livewire\Component;
 
 abstract class AbstractColumnAction
 {
-    public string $attribute;
-
     public string $columnActionClass;
 
     public string $modelClass;
 
     public string $modelKey;
+
+    public string $attribute;
 
     protected string|null $class;
 
@@ -76,8 +76,7 @@ abstract class AbstractColumnAction
     public function render(Model $model, string $attribute): View
     {
         return view('laravel-table::' . config('laravel-table.ui') . '.column-action', [
-            'modelKey' => $this->modelKey,
-            'attribute' => $this->attribute,
+            'columnAction' => $this,
             'class' => $this->class($model, $attribute),
             'title' => $this->title($model, $attribute),
             'label' => $this->label($model, $attribute),

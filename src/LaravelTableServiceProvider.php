@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Console\Commands\MakeBulkAction;
 use Okipa\LaravelTable\Console\Commands\MakeColumnAction;
+use Okipa\LaravelTable\Console\Commands\MakeFilter;
 use Okipa\LaravelTable\Console\Commands\MakeFormatter;
 use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
 use Okipa\LaravelTable\Console\Commands\MakeRowAction;
@@ -35,6 +36,7 @@ class LaravelTableServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-table.php', 'laravel-table');
         $this->commands([
             MakeTable::class,
+            MakeFilter::class,
             MakeHeadAction::class,
             MakeBulkAction::class,
             MakeRowAction::class,
