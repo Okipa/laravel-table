@@ -5,7 +5,7 @@
                 {{-- Table header--}}
                 <thead>
                     {{-- Filters --}}
-                    @if($filtersArray)
+                    @if(array_filter($filtersArray))
                         <tr>
                             <td class="px-0 pb-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                                 <div class="d-flex align-items-center justify-content-end">

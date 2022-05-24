@@ -223,6 +223,8 @@ class TableFiltersTest extends TestCase
                 'data-bs-toggle="tooltip">',
                 'reset-icon',
                 '</a>',
-            ]);
+            ])
+            ->set('selectedFilters', ['boolean_active' => ''])
+            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters"');
     }
 }
