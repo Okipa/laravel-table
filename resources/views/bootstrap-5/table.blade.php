@@ -5,7 +5,7 @@
                 {{-- Table header--}}
                 <thead>
                     {{-- Filters --}}
-                    @if(array_filter($filtersArray))
+                    @if($filtersArray)
                         <tr>
                             <td class="px-0 pb-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                                 <div class="d-flex align-items-center justify-content-end">
@@ -15,7 +15,7 @@
                                     @foreach($filtersArray as $filterArray)
                                         {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                                     @endforeach
-                                    @if($selectedFilters)
+                                    @if(array_filter($selectedFilters))
                                         <a wire:click.prevent="$set('selectedFilters', [])"
                                            class="btn btn-outline-secondary ms-3"
                                            title="{{ __('Reset filters') }}"

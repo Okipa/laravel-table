@@ -214,7 +214,7 @@ class TableFiltersTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters"')
+            ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"')
             ->set('selectedFilters', ['boolean_active' => true])
             ->assertSeeHtmlInOrder([
                 '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
@@ -225,6 +225,6 @@ class TableFiltersTest extends TestCase
                 '</a>',
             ])
             ->set('selectedFilters', ['boolean_active' => ''])
-            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters"');
+            ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"');
     }
 }
