@@ -26,11 +26,12 @@ Tables can be generated under the following UI frameworks:
 * Bootstrap 4
 * TailwindCSS 2 (upcoming feature)
 
-DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.
+**DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.**
 
-**V5 roadmap:**
+**V5 remaining backlog:**
 * Table config `results` => set table result lines
 * Table `reorderable` => allow rows reordering with drag & drop
+* Upgrade guide
 
 Found this package helpful? Please consider supporting my work!
 
