@@ -36,6 +36,8 @@ class Table
 
     protected Collection $columns;
 
+    protected Collection $results;
+
     protected LengthAwarePaginator $rows;
 
     public function __construct()
@@ -43,6 +45,7 @@ class Table
         $this->numberOfRowsPerPageChoiceEnabled = config('laravel-table.enable_number_of_rows_per_page_choice');
         $this->numberOfRowsPerPageOptions = config('laravel-table.number_of_rows_per_page_options');
         $this->columns = collect();
+        $this->results = collect();
     }
 
     public static function make(): self
@@ -121,6 +124,11 @@ class Table
         $this->columns = collect($columns);
     }
 
+    public function results(array $results): void
+    {
+        $this->results = collect($results);
+    }
+
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumnSortedByDefault(): Column|null
     {
@@ -160,13 +168,12 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function generateRows(
+    public function prepareQuery(
         array $filterClosures,
         string|null $searchBy,
         string|Closure|null $sortBy,
-        string|null $sortDir,
-        int $numberOfRowsPerPage,
-    ): void {
+        string|null $sortDir
+    ): Builder {
         $query = $this->model->query();
         // Query
         if ($this->queryClosure) {
@@ -197,8 +204,8 @@ class Table
                 ? $sortBy($query, $sortDir)
                 : $query->orderBy($sortBy, $sortDir);
         }
-        // Paginate
-        $this->rows = $query->paginate($numberOfRowsPerPage);
+
+        return $query;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -213,6 +220,19 @@ class Table
         $driver = config('database.connections.' . $connection . '.driver');
 
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
+    }
+
+    public function paginateRows(Builder $query, int $numberOfRowsPerPage): void
+    {
+        $this->rows = $query->paginate($numberOfRowsPerPage);
+    }
+
+    public function computeResults(Collection $displayedRows): void
+    {
+        $this->results = $this->results->map(fn(Result $result) => $result->compute(
+            $this->model->query()->toBase(),
+            $displayedRows,
+        ));
     }
 
     public function generateFiltersArray(): array
@@ -363,6 +383,11 @@ class Table
     public function getRows(): LengthAwarePaginator
     {
         return $this->rows;
+    }
+
+    public function getResults(): Collection
+    {
+        return $this->results;
     }
 
     public function getNavigationStatus(): string

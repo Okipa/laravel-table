@@ -122,14 +122,17 @@ class Table extends Component
         // Filters
         $filtersArray = $table->generateFiltersArray();
         $filterClosures = $table->getFilterClosures($filtersArray, $this->selectedFilters);
-        // Rows generation
-        $table->generateRows(
+        // Query preparation
+        $query = $table->prepareQuery(
             $filterClosures,
             $this->searchBy,
             $sortableClosure ?: $this->sortBy,
             $this->sortDir,
-            $this->numberOfRowsPerPage,
         );
+        // Rows generation
+        $table->paginateRows($query, $this->numberOfRowsPerPage);
+        // Results computing
+        $table->computeResults($table->getRows()->getCollection());
         // Head action
         $this->headActionArray = $table->getHeadActionArray();
         // Bulk actions
@@ -154,6 +157,7 @@ class Table extends Component
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
             'tableRowClass' => $table->getRowClass(),
+            'results' => $table->getResults(),
             'navigationStatus' => $table->getNavigationStatus(),
         ];
     }

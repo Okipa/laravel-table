@@ -29,7 +29,6 @@ Tables can be generated under the following UI frameworks:
 **DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.**
 
 **V5 remaining backlog:**
-* Table config `results` => set table result lines
 * Table `reorderable` => allow rows reordering with drag & drop
 * Upgrade guide
 
@@ -129,6 +128,7 @@ And display it in a view:
   * [Define column actions](#define-column-actions)
   * [Configure columns searching](#configure-columns-searching)
   * [Configure columns sorting](#configure-columns-sorting)
+  * [Declare results on tables](#declare-results-on-tables)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -705,14 +705,14 @@ You'll have to configure them in the same way you did for [bulk actions](#define
 
 ### Declare columns on tables
 
-Declare columns on tables with the `columns` method available in your generated table configuration.
+Declare columns on tables with the `columns` method available in your generated table configuration, from which you'll have to return an array of column instances.
 
-You'll have to pass a `string $title` param to the `column` method, that will be used to:
+To declare columns, just use the static `make` method that will await a `string $title` argument. This title will be used to:
 * Display the column title on the table
 * Define a default column key guessed from a snake_case formatting of the column title
 * Define a default cell value from the column key
 
-Optionally, you can pass a second `string $key` argument to set a specific column key.
+Optionally, you may pass a second `string $key` argument to set a specific column key.
 
 ```php
 namespace App\Tables;
@@ -733,7 +733,7 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column title set to `Id`, column key set to `id` and value set from `$user->id`
-            Column::make(__(Id')),
+            Column::make('Id'),
             // Column title set to `Username`, column key set to `name` and value set from `$user->name`
             Column::make('Username', 'name'),
         ];
@@ -1037,6 +1037,60 @@ class UsersTable extends AbstractTableConfiguration
                 ->sortable(fn(Builder $query, string $sortDir) => $query
                     ->withCount('companies')
                     ->orderBy('companies_count', $sortDir)),
+        ];
+    }
+}
+```
+
+### Declare results on tables
+
+To display results, you'll have to return an array of result instances from the `results` method available in your generated table configuration.
+
+If no result is declared, their dedicated space will remain empty.
+
+Results should be declared this way:
+1. Create a `Result` instance with the static `make` method, that will await a `string $title` param
+2. Chain the `value` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Result;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            Column::make('Id'),
+        ];
+    }
+    
+    protected function results(): array
+    {
+        return [
+            // This result uses the first $totalRowsQuery closure param to compute its value.
+            // In this example, all users contained in database with unverified email will be count.
+            Result::make('Total of users with unverified email')
+                        ->value(static fn(Builder $totalRowsQuery) => $totalRowsQuery
+                            ->whereNull('email_verified_at')
+                            ->count()),
+            // This result uses the second $displayedRowsCollection closure param to compute its value.
+            // In this example, all displayed inactive users will be count.
+            Result::make('Displayed inactive users')
+                ->value(static fn(
+                    Builder $totalRowsQuery,
+                    Collection $displayedRowsCollection
+                ) => $displayedRowsCollection->where('active', false)->count()),
         ];
     }
 }

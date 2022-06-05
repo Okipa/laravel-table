@@ -12,10 +12,6 @@ use Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection;
 
 class Column
 {
-    protected string $key;
-
-    protected string $title;
-
     protected bool $sortable = false;
 
     protected Closure|null $sortableClosure = null;
@@ -34,7 +30,7 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(string $title, string $key = null)
+    public function __construct(protected string $title, protected string|null $key = null)
     {
         $this->key = $key ?: Str::snake($title);
         $this->title = __($title);

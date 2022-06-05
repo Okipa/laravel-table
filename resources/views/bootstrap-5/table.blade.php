@@ -164,6 +164,7 @@
                 </thead>
                 {{-- Table body--}}
                 <tbody>
+                    {{-- Rows --}}
                     @forelse($rows as $model)
                         <tr wire:key="row-{{ Str::slug($model->getKey()) }}" @class(array_merge(Arr::get($tableRowClass, $model->getKey(), []), ['border-bottom']))>
                             {{-- Row bulk action selector --}}
@@ -201,12 +202,23 @@
                             </th>
                         </tr>
                     @endforelse
+                    {{-- Results --}}
+                    @foreach($results as $result)
+                        <tr wire:key="result-{{ Str::slug($result->getTitle()) }}" class="border-bottom">
+                            <th class="align-middle" scope="row"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div>{{ $result->getTitle() }}</div>
+                                    <div class="ms-3">{{ $result->getValue() }}</div>
+                                </div>
+                            </th>
+                        </tr>
+                    @endforeach
                 </tbody>
                 {{-- Table footer--}}
                 <tfoot>
                     <tr>
                         <td class="bg-light align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                            <div class="d-flex justify-content-between flex-wrap">
+                            <div class="d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center px-3 py-1">
                                     <div>{!! $navigationStatus !!}</div>
                                 </div>

@@ -9,13 +9,21 @@ class DummyClass extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        // The table declaration.
+        // The table configuration.
     }
 
     protected function columns(): array
     {
         return [
-            // The table columns declaration.
+            // The table columns configuration.
+        ];
+    }
+
+    protected function results(): array
+    {
+        return [
+            // The table results configuration.
+            // As results are optional one tables, you may delete this method if you do not use it.
         ];
     }
 }

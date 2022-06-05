@@ -28,4 +28,12 @@ class DummyClass extends AbstractTableConfiguration
             Column::make('Updated at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
         ];
     }
+
+    protected function results(): array
+    {
+        return [
+            // The table results configuration.
+            // As results are optional one tables, you may delete this method if you do not use it.
+        ];
+    }
 }

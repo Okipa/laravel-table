@@ -10,6 +10,7 @@ abstract class AbstractTableConfiguration
     {
         $table = $this->table();
         $table->columns($this->columns());
+        $table->results($this->results());
 
         return $table;
     }
@@ -17,4 +18,9 @@ abstract class AbstractTableConfiguration
     abstract protected function table(): Table;
 
     abstract protected function columns(): array;
+
+    protected function results(): array
+    {
+        return [];
+    }
 }
