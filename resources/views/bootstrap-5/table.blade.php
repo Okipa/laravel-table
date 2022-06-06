@@ -137,7 +137,7 @@
                                             {!! $sortDir === 'asc'
                                                 ? config('laravel-table.icon.sort_desc')
                                                 : config('laravel-table.icon.sort_asc') !!}
-                                            {{ $column->getTitle() }}
+                                            <span class="ms-2">{{ $column->getTitle() }}</span>
                                         </a>
                                     @else
                                         <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
@@ -146,7 +146,7 @@
                                            title="{{ __('Sort ascending') }}"
                                            data-bs-toggle="tooltip">
                                             {!! config('laravel-table.icon.sort') !!}
-                                            {{ $column->getTitle() }}
+                                            <span class="ms-2">{{ $column->getTitle() }}</span>
                                         </a>
                                     @endif
                                 @else
