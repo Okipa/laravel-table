@@ -184,7 +184,7 @@
                             {{-- Row actions --}}
                             @if($tableRowActionsArray)
                                 <td class="align-middle text-end">
-                                    <div class="d-flex align-items-center-justify-content-end">
+                                    <div class="d-flex align-items-center justify-content-end">
                                         @if($rowActionsArray = Okipa\LaravelTable\Abstracts\AbstractRowAction::retrieve($tableRowActionsArray, $model->getKey()))
                                             @foreach($rowActionsArray as $rowActionArray)
                                                 {{ Okipa\LaravelTable\Abstracts\AbstractRowAction::make($rowActionArray)->render($model) }}
