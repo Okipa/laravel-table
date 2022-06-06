@@ -220,7 +220,7 @@
                         <td class="align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center px-2 py-1">
-                                    {!! $navigationStatus !!}
+                                    <div>{!! $navigationStatus !!}</div>
                                 </div>
                                 <div class="d-flex align-items-center mb-n3 px-2 py-1">
                                     {!! $rows->links() !!}
