@@ -218,11 +218,11 @@
                     @endforeach
                     <tr>
                         <td class="align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <div class="d-flex align-items-center px-3 py-1">
+                            <div class="d-flex flex-wrap justify-content-between mx-n3">
+                                <div class="d-flex align-items-center mx-3">
                                     <div>{!! $navigationStatus !!}</div>
                                 </div>
-                                <div class="d-flex align-items-center mb-n3 px-3 py-1">
+                                <div class="d-flex align-items-center mb-n3 mx-3">
                                     {!! $rows->links() !!}
                                 </div>
                             </div>
