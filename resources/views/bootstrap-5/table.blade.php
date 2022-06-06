@@ -208,16 +208,16 @@
                     {{-- Results --}}
                     @foreach($results as $result)
                         <tr wire:key="result-{{ Str::slug($result->getTitle()) }}" class="border-bottom">
-                            <th class="align-middle" scope="row"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                            <td class="align-middle fw-bold"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div>{{ $result->getTitle() }}</div>
                                     <div class="ms-3">{{ $result->getValue() }}</div>
                                 </div>
-                            </th>
+                            </td>
                         </tr>
                     @endforeach
                     <tr>
-                        <th class="align-middle" scope="row"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                        <td class="align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center px-3 py-1">
                                     <div>{!! $navigationStatus !!}</div>
@@ -226,7 +226,7 @@
                                     {!! $rows->links() !!}
                                 </div>
                             </div>
-                        </th>
+                        </td>
                     </tr>
                 </tfoot>
             </table>
