@@ -32,7 +32,7 @@ class TableNavigationStatusTest extends TestCase
             ->call('init')
             ->assertSet('paginationTheme', 'bootstrap')
             ->assertSeeHtmlInOrder([
-                '<tfoot>',
+                '<tfoot class="table-light">',
                 __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
                     'start' => 0,
                     'stop' => 0,
@@ -64,7 +64,7 @@ class TableNavigationStatusTest extends TestCase
             ->call('init')
             ->assertSet('paginationTheme', 'bootstrap')
             ->assertSeeHtmlInOrder([
-                '<tfoot>',
+                '<tfoot class="table-light">',
                 __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
                     'start' => 1,
                     'stop' => 10,
@@ -97,7 +97,7 @@ class TableNavigationStatusTest extends TestCase
             ->call('init')
             ->assertSet('paginationTheme', 'bootstrap')
             ->assertSeeHtmlInOrder([
-                '<tfoot>',
+                '<tfoot class="table-light">',
                 __('Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>', [
                     'start' => 11,
                     'stop' => 15,

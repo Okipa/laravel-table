@@ -100,7 +100,7 @@
                         </td>
                     </tr>
                     {{-- Column headings --}}
-                    <tr class="bg-light border-top border-bottom">
+                    <tr class="table-light border-top border-bottom">
                         {{-- Bulk actions --}}
                         @if($tableBulkActionsArray)
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
@@ -202,6 +202,9 @@
                             </th>
                         </tr>
                     @endforelse
+                </tbody>
+                {{-- Table footer--}}
+                <tfoot class="table-light">
                     {{-- Results --}}
                     @foreach($results as $result)
                         <tr wire:key="result-{{ Str::slug($result->getTitle()) }}" class="border-bottom">
@@ -213,11 +216,8 @@
                             </th>
                         </tr>
                     @endforeach
-                </tbody>
-                {{-- Table footer--}}
-                <tfoot>
                     <tr>
-                        <td class="bg-light align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
+                        <th class="align-middle" scope="row"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center px-3 py-1">
                                     <div>{!! $navigationStatus !!}</div>
@@ -226,7 +226,7 @@
                                     {!! $rows->links() !!}
                                 </div>
                             </div>
-                        </td>
+                        </th>
                     </tr>
                 </tfoot>
             </table>

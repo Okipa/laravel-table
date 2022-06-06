@@ -54,7 +54,7 @@ class TableResultsTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
-                '<tbody>',
+                '<tfoot class="table-light">',
                 '<tr wire:key="result-total-of-users-with-unverified-email" class="border-bottom">',
                 '<th class="align-middle" scope="row">',
                 '<div class="d-flex flex-wrap justify-content-between">',
@@ -71,7 +71,7 @@ class TableResultsTest extends TestCase
                 '</div>',
                 '</th>',
                 '</tr>',
-                '</tbody>',
+                '</tfoot>',
             ]);
     }
 }

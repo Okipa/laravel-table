@@ -58,7 +58,7 @@ class TablePaginationTest extends TestCase
             ->call('init')
             ->assertSet('paginationTheme', 'bootstrap')
             ->assertSeeHtmlInOrder([
-                '<tfoot>',
+                '<tfoot class="table-light">',
                 '<ul class="pagination">',
                 '</tfoot>',
             ]);

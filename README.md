@@ -1059,6 +1059,8 @@ use App\Models\User;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Result;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
