@@ -8,7 +8,7 @@
                     @if($filtersArray)
                         <tr>
                             <td class="px-0 pb-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                                <div class="d-flex align-items-center justify-content-end">
+                                <div class="d-flex flex-wrap align-items-center justify-content-end">
                                     <div class="text-secondary">
                                         {!! config('laravel-table.icon.filter') !!}
                                     </div>

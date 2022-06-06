@@ -57,7 +57,7 @@ class TableFiltersTest extends TestCase
                 '<thead>',
                 '<tr>',
                 '<td class="px-0 pb-0" colspan="2">',
-                '<div class="d-flex align-items-center justify-content-end">',
+                '<div class="d-flex flex-wrap align-items-center justify-content-end">',
                 // Email Verified
                 '<div wire:key="filter-null-email-verified-at" class="ms-3">',
                 '<select wire:model="selectedFilters.null_email_verified_at"',
