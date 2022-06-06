@@ -209,9 +209,9 @@
                     @foreach($results as $result)
                         <tr wire:key="result-{{ Str::slug($result->getTitle()) }}" class="border-bottom">
                             <td class="align-middle fw-bold"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                                <div class="d-flex flex-wrap justify-content-between px-3 py-1">
-                                    <div>{{ $result->getTitle() }}</div>
-                                    <div class="ms-3">{{ $result->getValue() }}</div>
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <div class="px-2 py-1">{{ $result->getTitle() }}</div>
+                                    <div class="px-2 py-1">{{ $result->getValue() }}</div>
                                 </div>
                             </td>
                         </tr>
@@ -219,10 +219,10 @@
                     <tr>
                         <td class="align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-wrap justify-content-between">
-                                <div class="d-flex align-items-center px-3 py-1">
-                                    <div>{!! $navigationStatus !!}</div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    {!! $navigationStatus !!}
                                 </div>
-                                <div class="d-flex align-items-center mb-n3 px-3 py-1">
+                                <div class="d-flex align-items-center mb-n3 px-2 py-1">
                                     {!! $rows->links() !!}
                                 </div>
                             </div>
