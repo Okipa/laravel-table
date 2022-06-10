@@ -6,8 +6,10 @@
 * Dropped support for Laravel 7
 * Added support for PHP 8.1
 * Dropped support for PHP 8.0 and earlier versions
-* Removed `okipa/laravel-html-helper` dependency
 * Added `livewire/livewire` dependency
+* Removed `okipa/laravel-html-helper` dependency
+
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v4-to-v5.md)
 
 ## [4.0.6](https://github.com/Okipa/laravel-table/compare/4.0.5...4.0.6)
 
