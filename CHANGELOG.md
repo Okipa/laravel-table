@@ -2,6 +2,10 @@
 
 ## [5.0.0](https://github.com/Okipa/laravel-table/compare/4.0.4...5.0.0)
 
+* Added support for Laravel 9
+* Dropped support for Laravel 7
+* Added support for PHP 8.1
+* Dropped support for PHP 8.0 and earlier versions
 * Removed `okipa/laravel-html-helper` dependency
 * Added `livewire/livewire` dependency
 

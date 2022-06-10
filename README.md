@@ -41,7 +41,7 @@ Found this package helpful? Please consider supporting my work!
 
 | Laravel version | Livewire version | PHP version | Package version |
 |---|---|---|---|
-| ^8.0 &#124; ^9.0 | ^2.0 | ^8.0 &#124; ^8.1 | ^5.0 |
+| ^8.0 &#124; ^9.0 | ^2.0 | ^8.1 | ^5.0 |
 | ^7.0 &#124; ^8.0 | X | ^7.4 &#124; ^8.0 | ^4.0 |
 | ^7.0 &#124; ^8.0 | X | ^7.4 &#124; ^8.0 | ^3.0 |
 | ^6.0 &#124; ^7.0 | X | ^7.4 &#124; ^8.0 | ^2.0 |
