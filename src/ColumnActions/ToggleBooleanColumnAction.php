@@ -8,9 +8,12 @@ use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 
 class ToggleBooleanColumnAction extends AbstractColumnAction
 {
-    protected function class(Model $model, string $attribute): string|null
+    protected function class(Model $model, string $attribute): array
     {
-        return $model->{$attribute} ? 'link-success p-1' : 'link-danger p-1';
+        return [
+            'link-success' => $model->{$attribute},
+            'link-danger' => ! $model->{$attribute},
+        ];
     }
 
     protected function title(Model $model, string $attribute): string

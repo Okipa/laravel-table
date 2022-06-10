@@ -7,9 +7,10 @@ use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 
 class DummyClass extends AbstractHeadAction
 {
-    protected function class(): string
+    protected function class(): array
     {
-        // The CSS class that will be applied to the head action button.
+        // The CSS class that will be added to the head action button.
+        // Note: you can use conditional class merging as specified here: https://laravel.com/docs/blade#conditionally-merge-classes
     }
 
     protected function icon(): string

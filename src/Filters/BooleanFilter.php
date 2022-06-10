@@ -17,11 +17,6 @@ class BooleanFilter extends AbstractFilter
         return 'boolean_' . $this->attribute;
     }
 
-    protected function class(): string|null
-    {
-        return null;
-    }
-
     protected function label(): string
     {
         return $this->label;

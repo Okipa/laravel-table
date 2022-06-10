@@ -301,7 +301,7 @@ class UsersTable extends AbstractTableConfiguration
 ```
 
 Following the same logic, you'll be able to define the number of rows per page options that will be available for selection:
-* Set options globally from the `laravel-table.number_of_rows_per_page_options` config array value
+* Set options globally from the `laravel-table.number_of_rows_per_page_default_options` config array value
 * Override global options by executing the `numberOfRowsPerPageOptions()` method on your table
 
 The first available option will be automatically selected and applied on table initialization.
@@ -359,7 +359,13 @@ class UsersTable extends AbstractTableConfiguration
 
 Configuring table filters will make them appear as `select` HTML components on a dedicated bar above the table.
 
-This filters bar will not appear if no filter is declared.
+The filters bar will not appear if no filter is declared.
+
+Native browser HTML `select` components are implemented by default. You may want to cutomize your `select` rendering, especially to handle their behaviour and design when they are configured in multiple mode.
+
+You have 2 ways to add HTML specific attributes to your filter select components in order to achieve that:
+* Globally set default HTML attributes from a `laravel-table.filter_select_default_attributes` config array value
+* Override or merge yours with global default HTML attributes by setting HTML attributes with the `attributes()` method on your filters
 
 This package provides the following built-in filters:
 * `RelationshipFilter`:

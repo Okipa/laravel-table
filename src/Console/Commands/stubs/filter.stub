@@ -12,9 +12,23 @@ class DummyClass extends AbstractFilter
         // The unique identifier that is required to retrieve the filter.
     }
 
-    protected function class(): string|null
+    protected function class(): array
     {
-        // The CSS class that will be applies to the filter select.
+        return [
+            // The CSS class that will be merged to the existent ones on the filter select.
+            // As class are optional on filters, you may delete this method if you don't declare any specific class.
+            // Note: you can use conditional class merging as specified here: https://laravel.com/docs/blade#conditionally-merge-classes
+            ...parent::class(),
+        ];
+    }
+
+    protected function attributes(): array
+    {
+        return [
+            // The HTML attributes that will be merged to the existent ones on the filter select.
+            // As attributes are optional on filters, you may delete this method if you do declare any specific attributes.
+            ...parent::attributes(),
+        ];
     }
 
     protected function label(): string

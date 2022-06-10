@@ -33,7 +33,7 @@ class DummyClass extends AbstractTableConfiguration
     {
         return [
             // The table results configuration.
-            // As results are optional one tables, you may delete this method if you do not use it.
+            // As results are optional on tables, you may delete this method if you do not use it.
         ];
     }
 }

@@ -13,9 +13,9 @@ class DestroyRowAction extends AbstractRowAction
         return 'destroy';
     }
 
-    protected function class(Model $model): string
+    protected function class(Model $model): array
     {
-        return 'link-danger';
+        return ['link-danger'];
     }
 
     protected function icon(Model $model): string

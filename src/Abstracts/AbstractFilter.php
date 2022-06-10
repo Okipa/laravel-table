@@ -4,6 +4,7 @@ namespace Okipa\LaravelTable\Abstracts;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\View\ComponentAttributeBag;
 
 abstract class AbstractFilter
 {
@@ -13,6 +14,8 @@ abstract class AbstractFilter
 
     protected string|null $class;
 
+    protected array $attributes;
+
     protected string $label;
 
     protected array $options;
@@ -21,7 +24,21 @@ abstract class AbstractFilter
 
     abstract protected function identifier(): string;
 
-    abstract protected function class(): string|null;
+    protected function class(): array
+    {
+        return [];
+    }
+
+    protected function attributes(): array
+    {
+        return [
+            ...[
+                'multiple' => $this->multiple(),
+                'aria-label' => $this->label()
+            ],
+            ...config('laravel-table.filter_select_default_attributes'),
+        ];
+    }
 
     abstract protected function label(): string;
 
@@ -57,6 +74,7 @@ abstract class AbstractFilter
         return view('laravel-table::' . config('laravel-table.ui') . '.filter', [
             'filter' => $this,
             'class' => $this->class(),
+            'attributes' => (new ComponentAttributeBag($this->attributes())),
             'label' => $this->label(),
             'options' => $this->options(),
             'multiple' => $this->multiple(),

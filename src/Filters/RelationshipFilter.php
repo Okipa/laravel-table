@@ -22,11 +22,6 @@ class RelationshipFilter extends AbstractFilter
         return 'relationship_' . $this->relationship;
     }
 
-    protected function class(): string|null
-    {
-        return null;
-    }
-
     protected function label(): string
     {
         return $this->label;

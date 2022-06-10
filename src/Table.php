@@ -43,7 +43,7 @@ class Table
     public function __construct()
     {
         $this->numberOfRowsPerPageChoiceEnabled = config('laravel-table.enable_number_of_rows_per_page_choice');
-        $this->numberOfRowsPerPageOptions = config('laravel-table.number_of_rows_per_page_options');
+        $this->numberOfRowsPerPageOptions = config('laravel-table.number_of_rows_per_page_default_options');
         $this->columns = collect();
         $this->results = collect();
     }

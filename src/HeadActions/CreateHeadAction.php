@@ -13,9 +13,9 @@ class CreateHeadAction extends AbstractHeadAction
         //
     }
 
-    protected function class(): string
+    protected function class(): array
     {
-        return 'btn btn-success';
+        return ['btn', 'btn-success'];
     }
 
     protected function title(): string

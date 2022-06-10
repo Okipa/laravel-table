@@ -19,9 +19,9 @@ class EditRowAction extends AbstractRowAction
         return 'edit';
     }
 
-    protected function class(Model $model): string
+    protected function class(Model $model): array
     {
-        return 'link-primary';
+        return ['link-primary'];
     }
 
     protected function icon(Model $model): string

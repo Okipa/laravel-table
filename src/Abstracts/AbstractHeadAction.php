@@ -9,13 +9,7 @@ abstract class AbstractHeadAction
 {
     public string $rowActionClass;
 
-    protected string|null $class;
-
-    protected string $icon;
-
-    protected string $title;
-
-    abstract protected function class(): string|null;
+    abstract protected function class(): array;
 
     abstract protected function icon(): string;
 

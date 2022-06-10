@@ -19,9 +19,9 @@ class ShowRowAction extends AbstractRowAction
         return 'show';
     }
 
-    protected function class(Model $model): string
+    protected function class(Model $model): array
     {
-        return 'link-info';
+        return ['link-info'];
     }
 
     protected function icon(Model $model): string

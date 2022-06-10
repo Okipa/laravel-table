@@ -17,19 +17,13 @@ abstract class AbstractColumnAction
 
     public string $attribute;
 
-    protected string|null $class;
-
-    protected string $title;
-
-    protected string $icon;
-
     public bool $isAllowed = true;
 
     public string|false|null $confirmationQuestion = null;
 
     public string|false|null $feedbackMessage = null;
 
-    abstract protected function class(Model $model, string $attribute): string|null;
+    abstract protected function class(Model $model, string $attribute): array;
 
     abstract protected function title(Model $model, string $attribute): string;
 

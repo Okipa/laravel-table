@@ -31,7 +31,7 @@ abstract class AbstractRowAction
 
     abstract protected function identifier(): string;
 
-    abstract protected function class(Model $model): string|null;
+    abstract protected function class(Model $model): array;
 
     abstract protected function icon(Model $model): string;
 

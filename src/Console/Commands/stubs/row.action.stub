@@ -4,6 +4,7 @@ namespace DummyNamespace;
 
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class DummyClass extends AbstractRowAction
@@ -13,17 +14,18 @@ class DummyClass extends AbstractRowAction
         // The unique identifier that is required to retrieve the row action.
     }
 
-    protected function class(): string
+    protected function class(Model $model): array
     {
-        // The CSS class that will be applies to the row action link.
+        // The CSS class that will be added to the row action link.
+        // Note: you can use conditional class merging as specified here: https://laravel.com/docs/blade#conditionally-merge-classes
     }
 
-    protected function title(): string
+    protected function title(Model $model): string
     {
         // The title that will be set to the row action link.
     }
 
-    protected function icon(): string
+    protected function icon(Model $model): string
     {
         // The icon that will appear in the row action link.
     }

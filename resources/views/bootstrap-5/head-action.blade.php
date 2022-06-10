@@ -1,5 +1,5 @@
 <a wire:click.prevent="headAction()"
-   @class([$class])
+   @class($class)
    href=""
    title="{{ $title }}">
     {!! $icon !!} {{ $title }}
