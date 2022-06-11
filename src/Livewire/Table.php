@@ -107,7 +107,7 @@ class Table extends Component
     {
         $table = $config->setup();
         $columns = $table->getColumns();
-        // Events triggering in load
+        // Events triggering on load
         $table->triggerEventsEmissionOnLoad($this);
         // Search
         $this->searchableLabels = $table->getSearchableLabels();
