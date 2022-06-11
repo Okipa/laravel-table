@@ -18,6 +18,8 @@ class Table
 {
     protected Model $model;
 
+    protected array $eventsToEmitOnLoad = [];
+
     protected bool $numberOfRowsPerPageChoiceEnabled;
 
     protected array $numberOfRowsPerPageOptions;
@@ -58,6 +60,22 @@ class Table
         $this->model = app($modelClass);
 
         return $this;
+    }
+
+    public function emitEventsOnLoad(array $eventsToEmitOnLoad): self
+    {
+        $this->eventsToEmitOnLoad = $eventsToEmitOnLoad;
+
+        return $this;
+    }
+
+    public function triggerEventsEmissionOnLoad(Livewire\Table $table): void
+    {
+        foreach ($this->eventsToEmitOnLoad as $event => $params){
+            $eventName = is_string($event) ? $event : $params;
+            $eventParams = is_array($params) ? $params : [];
+            $table->emit($eventName, $eventParams);
+        }
     }
 
     public function enableNumberOfRowsPerPageChoice(bool $numberOfRowsPerPageChoiceEnabled): self
