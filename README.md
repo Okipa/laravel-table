@@ -392,7 +392,9 @@ The filters bar will not appear if no filter is declared.
 
 Native browser HTML `select` components are implemented by default. You may want to cutomize your `select` rendering, especially to handle their behaviour and design when they are configured in multiple mode.
 
-You have 2 ways to add HTML specific attributes to your filter select components in order to achieve that:
+We recommend this package to handle this: https://github.com/orchidjs/tom-select.
+
+You have 2 ways to add HTML specific attributes to your filter select components (which is known as the best practice to add extra features to a HTML component) in order to achieve that:
 * Globally set default HTML attributes from a `laravel-table.filter_select_default_attributes` config array value
 * Override or merge yours with global default HTML attributes by setting HTML attributes with the `attributes()` method on your filters
 
@@ -408,7 +410,6 @@ This package provides the following built-in filters:
   * Filters the table based on whether the value of the given attribute is `null` or not
 
 To use them, you'll have to pass an array to the `filters` method, containing the filter instances to declare.
-
 
 ```php
 namespace App\Tables;
