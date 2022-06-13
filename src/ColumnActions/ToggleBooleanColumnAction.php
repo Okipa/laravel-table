@@ -18,7 +18,7 @@ class ToggleBooleanColumnAction extends AbstractColumnAction
 
     protected function title(Model $model, string $attribute): string
     {
-        return $model->{$attribute} ? __('Toggle off') : __('Toggle on');
+        return $model->{$attribute} ? __('Toggle Off') : __('Toggle On');
     }
 
     protected function icon(Model $model, string $attribute): string
@@ -40,10 +40,10 @@ class ToggleBooleanColumnAction extends AbstractColumnAction
 
     protected function defaultFeedbackMessage(Model $model, string $attribute): string|null
     {
-        return __('The field :attribute from the line #:primary has been :action.', [
+        return __('The action :action has been executed on the field :attribute from the line #:primary.', [
+            'action' => $model->{$attribute} ? __('Toggle Off') : __('Toggle On'),
             'attribute' => __('validation.attributes.' . $attribute),
             'primary' => $model->getKey(),
-            'action' => $model->{$attribute} ? __('toggled off') : __('toggled on'),
         ]);
     }
 

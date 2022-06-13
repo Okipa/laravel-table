@@ -30,16 +30,16 @@ class DestroyRowAction extends AbstractRowAction
 
     protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        return __('Are you sure you want to :action the line #:primary?', [
-            'action' => __('destroy'),
+        return __('Are you sure you want to execute the action :action on the line #:primary?', [
+            'action' => __('Destroy'),
             'primary' => $model->getKey()
         ]);
     }
 
     protected function defaultFeedbackMessage(Model $model): string|null
     {
-        return __('Line #:primary has been :action.', [
-            'action' => __('destroyed'),
+        return __('The action :action has been executed on the line #:primary.', [
+            'action' => __('Destroy'),
             'primary' => $model->getKey(),
         ]);
     }

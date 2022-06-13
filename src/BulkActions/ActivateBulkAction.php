@@ -29,25 +29,25 @@ class ActivateBulkAction extends AbstractBulkAction
     {
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
-            ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => Str::lower(__('Activate')),
+            ? __('Are you sure you want to execute the action :action on the :count selected lines?', [
+                'action' => __('Activate'),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the line #:primary?', [
-                'action' => Str::lower(__('Activate')),
+            : __('Are you sure you want to execute the action :action on the line #:primary?', [
+                'action' => __('Activate'),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
-                ? __(':count selected lines do not allow :action and will not be affected by this action.', [
-                    'action' => __('activation'),
+                ? __(':count selected lines do not allow the action :action and will not be affected.', [
                     'count' => $disallowedLinesCount,
+                    'action' => __('Activate'),
                 ])
-                : __('The line #:primary does not allow :action and will not be affected by this action.', [
-                    'action' => __('activation'),
+                : __('The line #:primary does not allow the action :action and will not be affected.', [
                     'primary' => Arr::first($disallowedModelKeys),
+                    'action' => __('Activate'),
                 ]);
         }
 
@@ -58,25 +58,25 @@ class ActivateBulkAction extends AbstractBulkAction
     {
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
-            ? __(':count selected lines have been :action.', [
+            ? __('The action :action has been executed on the :count selected lines.', [
+                'action' => __('Activate'),
                 'count' => count($allowedModelKeys),
-                'action' => __('activated'),
             ])
-            : __('The line #:primary has been :action.', [
+            : __('The action :action has been executed on the line #:primary.', [
+                'action' => __('Activate'),
                 'primary' => Arr::first($allowedModelKeys),
-                'action' => __('activated'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
-                ? __(':count selected lines do not allow :action and were not affected by this action.', [
+                ? __(':count selected lines do not allow the action :action and were not affected.', [
                     'count' => $disallowedLinesCount,
-                    'action' => __('activation'),
+                    'action' => __('Activate'),
                 ])
-                : __('The line #:primary does not allow :action and was not affected by this action.', [
+                : __('The line #:primary does not allow the action :action and was not affected.', [
                     'primary' => Arr::first($disallowedModelKeys),
-                    'action' => __('activation'),
+                    'action' => __('Activate'),
                 ]);
         }
 

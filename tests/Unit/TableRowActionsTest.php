@@ -118,10 +118,13 @@ class TableRowActionsTest extends TestCase
                 'rowAction',
                 'destroy',
                 (string) $users->first()->id,
-                'Are you sure you want to destroy the line #' . $users->first()->id . '?'
+                'Are you sure you want to execute the action Destroy on the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
-            ->assertEmitted('table:action:feedback', 'Line #' . $users->first()->id . ' has been destroyed.');
+            ->assertEmitted(
+                'table:action:feedback',
+                'The action Destroy has been executed on the line #' . $users->first()->id . '.'
+            );
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
     }
 

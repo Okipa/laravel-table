@@ -204,6 +204,7 @@ class Table extends Component
             return null;
         }
         if ($requiresConfirmation) {
+//            dd($bulkActionInstance->getConfirmationQuestion());
             return $this->emit(
                 'table:action:confirm',
                 'bulkAction',

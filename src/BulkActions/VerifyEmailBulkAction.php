@@ -29,25 +29,25 @@ class VerifyEmailBulkAction extends AbstractBulkAction
     {
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
-            ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => __('verify email of'),
+            ? __('Are you sure you want to execute the action :action on the :count selected lines?', [
+                'action' => __('Verify Email'),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the line #:primary?', [
-                'action' => __('verify email of'),
+            : __('Are you sure you want to execute the action :action on the line #:primary?', [
+                'action' => __('Verify Email'),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
-                ? __(':count selected lines do not allow :action and will not be affected by this action.', [
-                    'action' => __('email verification'),
+                ? __(':count selected lines do not allow the action :action and will not be affected.', [
                     'count' => $disallowedLinesCount,
+                    'action' => __('Verify Email'),
                 ])
-                : __('The line #:primary does not allow :action and will not be affected by this action.', [
-                    'action' => __('email verification'),
+                : __('The line #:primary does not allow the action :action and will not be affected.', [
                     'primary' => Arr::first($disallowedModelKeys),
+                    'action' => __('Verify Email'),
                 ]);
         }
 
@@ -58,25 +58,25 @@ class VerifyEmailBulkAction extends AbstractBulkAction
     {
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
-            ? __(':count selected lines have been :action.', [
+            ? __('The action :action has been executed on the :count selected lines.', [
+                'action' => __('Verify Email'),
                 'count' => count($allowedModelKeys),
-                'action' => __('verified (email)'),
             ])
-            : __('The line #:primary has been :action.', [
+            : __('The action :action has been executed on the line #:primary.', [
+                'action' => __('Verify Email'),
                 'primary' => Arr::first($allowedModelKeys),
-                'action' => __('verified (email)'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
             $disallowedLinesSentence = ' ';
             $disallowedLinesSentence .= $disallowedLinesCount > 1
-                ? __(':count selected lines do not allow :action and were not affected by this action.', [
+                ? __(':count selected lines do not allow the action :action and were not affected.', [
                     'count' => $disallowedLinesCount,
-                    'action' => __('email verification'),
+                    'action' => __('Verify Email'),
                 ])
-                : __('The line #:primary does not allow :action and was not affected by this action.', [
+                : __('The line #:primary does not allow the action :action and was not affected.', [
                     'primary' => Arr::first($disallowedModelKeys),
-                    'action' => __('email verification'),
+                    'action' => __('Verify Email'),
                 ]);
         }
 

@@ -53,24 +53,24 @@ class ColumnActionTest extends TestCase
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="columnAction(\'email_verified_at\', \'' . $users->first()->id . '\', 1)"',
                 'class="link-success p-1"',
-                'title="Unverify"',
+                'title="Unverify Email"',
                 'data-bs-toggle="tooltip">',
                 'email-verified-icon',
                 '<a wire:click.prevent="columnAction(\'active\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-success p-1"',
-                'title="Toggle off"',
+                'title="Toggle Off"',
                 'data-bs-toggle="tooltip">',
                 'toggle-on-icon',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
                 '<a wire:click.prevent="columnAction(\'email_verified_at\', \'' . $users->last()->id . '\', 1)"',
                 'class="link-danger p-1"',
-                'title="Verify"',
+                'title="Verify Email"',
                 'data-bs-toggle="tooltip">',
                 'email-unverified-icon',
                 '<a wire:click.prevent="columnAction(\'active\', \'' . $users->last()->id . '\', 0)"',
                 'class="link-danger p-1"',
-                'title="Toggle on"',
+                'title="Toggle On"',
                 'data-bs-toggle="tooltip">',
                 'toggle-off-icon',
                 '</tr>',
@@ -79,8 +79,8 @@ class ColumnActionTest extends TestCase
             ->call('columnAction', 'active', $users->first()->id, false)
             ->assertEmitted(
                 'table:action:feedback',
-                'The field validation.attributes.active from the line #' . $users->first()->id
-                . ' has been toggled off.'
+                'The action Toggle Off has been executed on the field validation.attributes.active '
+                . 'from the line #' . $users->first()->id . '.',
             )
             ->call('columnAction', 'email_verified_at', $users->last()->id, true)
             ->assertEmitted(
@@ -88,14 +88,14 @@ class ColumnActionTest extends TestCase
                 'columnAction',
                 'email_verified_at',
                 (string) $users->last()->id,
-                'Are you sure you want to set the field validation.attributes.email_verified_at as verified for the line #'
+                'Are you sure you want to execute the action Verify Email on the field validation.attributes.email_verified_at from the line #'
                 . $users->last()->id . '?'
             )
             ->emit('table:action:confirmed', 'columnAction', 'email_verified_at', $users->last()->id)
             ->assertEmitted(
                 'table:action:feedback',
-                'The field validation.attributes.email_verified_at from the line #' . $users->last()->id
-                . ' has been verified.'
+                'The action Verify Email has been executed on the field '
+                . 'validation.attributes.email_verified_at from the line #' . $users->last()->id . '.'
             );
         $this->assertFalse($users->first()->fresh()->active);
         $this->assertTrue(Date::now()->eq($users->last()->fresh()->email_verified_at));
@@ -171,7 +171,7 @@ class ColumnActionTest extends TestCase
                 '<tr wire:key="row-' . $user->id . '" class="border-bottom">',
                 '<a wire:click.prevent="columnAction(\'email_verified_at\', \'' . $user->id . '\', 0)"',
                 'class="link-success p-1"',
-                'title="Unverify"',
+                'title="Unverify Email"',
                 'data-bs-toggle="tooltip">',
                 'email-verified-icon',
                 '</tr>',

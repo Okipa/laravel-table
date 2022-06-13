@@ -181,6 +181,7 @@ Status
 * `No`
 * `Search by:`
 * `Reset research`
+* `Number of rows per page`
 * `Sort ascending`
 * `Sort descending`
 * `Actions`
@@ -190,40 +191,21 @@ Status
 * `Edit`
 * `Destroy`
 * `Activate`
-* `activation`
-* `activated`
 * `Deactivate`
-* `deactivation`
-* `deactivated`
 * `Verify Email`
-* `verify email of`
-* `email verification`
-* `verified (email)`
-* `cancel email verification of`
-* `email verification cancellation`
-* `unverified (email)`
-* `Destroy`
-* `destruction`
-* `destroyed`
-* `Toggle on`
-* `Toggle off`
-* `toggled on`
-* `toggled off`
-* `Verify`
-* `Unverify`
-* `verified`
-* `unverified`
-* `Are you sure you want to :action the line #:primary?`
-* `Are you sure you want to :action the :count selected lines?`
-* `:count selected lines do not allow :action and will not be affected by this action.`
-* `The line #:primary does not allow :action and will not be affected by this action.`
-* `The line #:primary has been :action.`
-* `:count selected lines have been :action.`
-* `The line #:primary does not allow :action and was not affected by this action.`
-* `:count selected lines do not allow :action and were not affected by this action.`
-* `The field :attribute from the line #:primary has been :action.`
-* `Are you sure you want to set the field :attribute as :action for the line #:primary?`
-* `Number of rows per page`
+* `Unverify Email`
+* `Toggle On`
+* `Toggle Off`
+* `Are you sure you want to execute the action :action on the line #:primary?`
+* `Are you sure you want to execute the action :action on the field :attribute from the line #:primary?`
+* `Are you sure you want to execute the action :action on the :count selected lines?`
+* `:count selected lines do not allow the action :action and will not be affected.`
+* `The line #:primary does not allow the action :action and will not be affected.`
+* `The action :action has been executed on the line #:primary.`
+* `The action :action has been executed on the field :attribute from the line #:primary.`
+* `The action :action has been executed on the :count selected lines.`
+* `The line #:primary does not allow the action :action and was not affected.`
+* `:count selected lines do not allow the action :action and were not affected.`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
 ## How to

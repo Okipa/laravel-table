@@ -109,9 +109,9 @@ class TableBulkActionsTest extends TestCase
                 '<li wire:key="bulk-action-cancel-email-verification">',
                 '<button wire:click.prevent="bulkAction(\'cancel_email_verification\', 1)"',
                 'class="dropdown-item"',
-                'title="Cancel Email Verification (1)"',
+                'title="Unverify Email (1)"',
                 'type="button">',
-                'Cancel Email Verification (1)',
+                'Unverify Email (1)',
                 '</button>',
                 '</li>',
                 '<li wire:key="bulk-action-activate">',
@@ -160,12 +160,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'verify_email',
                 null,
-                'Are you sure you want to verify email of the line #' . $users->first()->id . '?'
+                'Are you sure you want to execute the action Verify Email on the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'verify_email', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The line #' . $users->first()->id . ' has been verified (email).'
+                'The action Verify Email has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -175,7 +175,7 @@ class TableBulkActionsTest extends TestCase
             'id' => $users->last()->id,
             'email_verified_at' => null,
         ]);
-        // Cancel Email Verification
+        // Unverify Email
         User::query()->update(['email_verified_at' => Date::now()]);
         $component->call('bulkAction', 'cancel_email_verification', true)
             ->assertEmitted(
@@ -183,13 +183,13 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'cancel_email_verification',
                 null,
-                'Are you sure you want to cancel email verification of the line #' . $users->first()->id
-                . '?'
+                'Are you sure you want to execute the action Unverify Email on the line #'
+                . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The line #' . $users->first()->id . ' has been unverified (email).'
+                'The action Unverify Email has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -206,12 +206,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'activate',
                 null,
-                'Are you sure you want to activate the line #' . $users->first()->id . '?'
+                'Are you sure you want to execute the action Activate on the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'activate', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The line #' . $users->first()->id . ' has been activated.'
+                'The action Activate has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -229,12 +229,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'deactivate',
                 null,
-                'Are you sure you want to deactivate the line #' . $users->first()->id . '?'
+                'Are you sure you want to execute the action Deactivate on the line #' . $users->first()->id . '?',
             )
             ->emit('table:action:confirmed', 'bulkAction', 'deactivate', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The line #' . $users->first()->id . ' has been deactivated.'
+                'The action Deactivate has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -251,12 +251,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'destroy',
                 null,
-                'Are you sure you want to destroy the line #' . $users->first()->id . '?'
+                'Are you sure you want to execute the action Destroy on the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'destroy', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The line #' . $users->first()->id . ' has been destroyed.'
+                'The action Destroy has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseMissing(app(User::class)->getTable(), ['id' => $users->first()->id]);
         $this->assertDatabaseHas(app(User::class)->getTable(), ['id' => $users->last()->id]);
@@ -339,14 +339,14 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'destroy',
                 null,
-                'Are you sure you want to destroy the 2 selected lines? The line #' . $user1->id
-                . ' does not allow destruction and will not be affected by this action.'
+                'Are you sure you want to execute the action Destroy on the 2 selected lines? The line #' . $user1->id
+                . ' does not allow the action Destroy and will not be affected.'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'destroy', null)
             ->assertEmitted(
                 'table:action:feedback',
-                '2 selected lines have been destroyed. The line #' . $user1->id
-                . ' does not allow destruction and was not affected by this action.'
+                'The action Destroy has been executed on the 2 selected lines. The line #' . $user1->id
+                . ' does not allow the action Destroy and was not affected.',
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), ['id' => $user1->id]);
         $this->assertDatabaseMissing(app(User::class)->getTable(), ['id' => $user2->id]);
