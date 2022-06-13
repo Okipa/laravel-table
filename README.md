@@ -199,8 +199,8 @@ Status
 * `Are you sure you want to execute the action :action on the line #:primary?`
 * `Are you sure you want to execute the action :action on the field :attribute from the line #:primary?`
 * `Are you sure you want to execute the action :action on the :count selected lines?`
-* `:count selected lines do not allow the action :action and will not be affected.`
 * `The line #:primary does not allow the action :action and will not be affected.`
+* `:count selected lines do not allow the action :action and will not be affected.`
 * `The action :action has been executed on the line #:primary.`
 * `The action :action has been executed on the field :attribute from the line #:primary.`
 * `The action :action has been executed on the :count selected lines.`
