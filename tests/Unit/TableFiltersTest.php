@@ -62,6 +62,7 @@ class TableFiltersTest extends TestCase
                 '<div wire:key="filter-null-email-verified-at" class="ms-3">',
                 '<select wire:model="selectedFilters.null_email_verified_at"',
                 'class="form-select"',
+                'placeholder="Email Verified"',
                 'aria-label="Email Verified">',
                 '<option wire:key="filter-option-null-email-verified-at-placeholder" value="" selected>Email Verified</option>',
                 '<option wire:key="filter-option-null-email-verified-at-1" value="1">Yes</option>',
@@ -72,6 +73,7 @@ class TableFiltersTest extends TestCase
                 '<div wire:key="filter-relationship-companies" class="ms-3">',
                 '<select wire:model="selectedFilters.relationship_companies"',
                 'class="form-select"',
+                'placeholder="Companies"',
                 'aria-label="Companies">',
                 '<option wire:key="filter-option-relationship-companies-placeholder" value="" selected>Companies</option>',
                 '<option wire:key="filter-option-relationship-companies-' . $company1->id . '" value="'
@@ -86,8 +88,9 @@ class TableFiltersTest extends TestCase
                 '<div wire:key="filter-relationship-categories" class="ms-3">',
                 '<select wire:model="selectedFilters.relationship_categories"',
                 'class="form-select"',
+                'placeholder="Categories"',
                 'aria-label="Categories">',
-                '<option wire:key="filter-option-relationship-categories-placeholder" value="" selected hidden>Categories</option>',
+                '<option wire:key="filter-option-relationship-categories-placeholder" value="" selected disabled>Categories</option>',
                 '<option wire:key="filter-option-relationship-categories-' . $category1->id . '" value="'
                 . $category1->id . '">' . $category1->name . '</option>',
                 '<option wire:key="filter-option-relationship-categories-' . $category2->id . '" value="'
@@ -100,6 +103,7 @@ class TableFiltersTest extends TestCase
                 '<div wire:key="filter-boolean-active" class="ms-3">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
+                'placeholder="Active"',
                 'aria-label="Active">',
                 '<option wire:key="filter-option-boolean-active-placeholder" value="" selected>Active</option>',
                 '<option wire:key="filter-option-boolean-active-1" value="1">Yes</option>',
@@ -224,7 +228,59 @@ class TableFiltersTest extends TestCase
                 'reset-icon',
                 '</a>',
             ])
+            ->set('selectedFilters', ['boolean_active' => false])
+            ->assertSeeHtmlInOrder([
+                '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
+                'class="btn btn-outline-secondary ms-3"',
+                'title="Reset filters"',
+                'data-bs-toggle="tooltip">',
+                'reset-icon',
+                '</a>',
+            ])
             ->set('selectedFilters', ['boolean_active' => ''])
+            ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"')
+            ->set('selectedFilters', ['boolean_active' => null])
             ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"');
+    }
+
+    /** @test */
+    public function it_can_set_data_attribute_on_filters(): void
+    {
+        Config::set('laravel-table.html_select_components_attributes', ['data-selector' => true]);
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)->filters([
+                    new BooleanFilter('Active', 'active'),
+                ]);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr>',
+                '<td class="px-0 pb-0">',
+                '<div class="d-flex flex-wrap align-items-center justify-content-end">',
+                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<select wire:model="selectedFilters.boolean_active"',
+                'class="form-select"',
+                'placeholder="Active"',
+                'aria-label="Active"',
+                'data-selector="data-selector">',
+                '</select>',
+                '</div>',
+                '</div>',
+                '</td>',
+                '</tr>',
+                '</thead>',
+            ]);
     }
 }

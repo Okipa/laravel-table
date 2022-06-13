@@ -71,7 +71,7 @@ class Table
 
     public function triggerEventsEmissionOnLoad(Livewire\Table $table): void
     {
-        foreach ($this->eventsToEmitOnLoad as $event => $params){
+        foreach ($this->eventsToEmitOnLoad as $event => $params) {
             $eventName = is_string($event) ? $event : $params;
             $eventParams = is_array($params) ? $params : [];
             $table->emit($eventName, $eventParams);

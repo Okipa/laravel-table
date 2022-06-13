@@ -124,13 +124,22 @@ class TableNumberOfRowsPerPageTest extends TestCase
             ->assertSet('numberOfRowsPerPage', 1)
             ->assertSeeHtmlInOrder([
                 '<thead>',
+                '<span id="rows-number-per-page-icon"',
+                'class="input-group-text text-secondary">',
                 'rows-number-icon',
+                '</span>',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                'class="form-select"',
+                'placeholder="Number of rows per page"',
+                'aria-label="Number of rows per page"',
+                'aria-describedby="rows-number-per-page-icon">',
+                '<option wire:key="rows-number-per-page-option-placeholder" value="" disabled>Number of rows per page</option>',
                 '<option wire:key="rows-number-per-page-option-1" value="1" selected>',
                 '<option wire:key="rows-number-per-page-option-2" value="2">',
                 '<option wire:key="rows-number-per-page-option-3" value="3">',
                 '<option wire:key="rows-number-per-page-option-4" value="4">',
                 '<option wire:key="rows-number-per-page-option-5" value="5">',
+                '</select>',
                 '</thead>',
             ]);
     }
@@ -159,13 +168,22 @@ class TableNumberOfRowsPerPageTest extends TestCase
             ->assertSet('numberOfRowsPerPage', 1)
             ->assertSeeHtmlInOrder([
                 '<thead>',
+                '<span id="rows-number-per-page-icon"',
+                'class="input-group-text text-secondary">',
                 'rows-number-icon',
+                '</span>',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                'class="form-select"',
+                'placeholder="Number of rows per page"',
+                'aria-label="Number of rows per page"',
+                'aria-describedby="rows-number-per-page-icon">',
+                '<option wire:key="rows-number-per-page-option-placeholder" value="" disabled>Number of rows per page</option>',
                 '<option wire:key="rows-number-per-page-option-1" value="1" selected>',
                 '<option wire:key="rows-number-per-page-option-2" value="2">',
                 '<option wire:key="rows-number-per-page-option-3" value="3">',
                 '<option wire:key="rows-number-per-page-option-4" value="4">',
                 '<option wire:key="rows-number-per-page-option-5" value="5">',
+                '</select>',
                 '</thead>',
             ]);
     }
@@ -204,13 +222,22 @@ class TableNumberOfRowsPerPageTest extends TestCase
             ->assertSet('numberOfRowsPerPage', 1)
             ->assertSeeHtmlInOrder([
                 '<thead>',
+                '<span id="rows-number-per-page-icon"',
+                'class="input-group-text text-secondary">',
                 'rows-number-icon',
+                '</span>',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                'class="form-select"',
+                'placeholder="Number of rows per page"',
+                'aria-label="Number of rows per page"',
+                'aria-describedby="rows-number-per-page-icon">',
+                '<option wire:key="rows-number-per-page-option-placeholder" value="" disabled>Number of rows per page</option>',
                 '<option wire:key="rows-number-per-page-option-1" value="1" selected>',
                 '<option wire:key="rows-number-per-page-option-2" value="2">',
                 '<option wire:key="rows-number-per-page-option-3" value="3">',
                 '<option wire:key="rows-number-per-page-option-4" value="4">',
                 '<option wire:key="rows-number-per-page-option-5" value="5">',
+                '</select>',
                 '</thead>',
                 '<tbody',
                 ...$displayedHtml,
@@ -249,17 +276,65 @@ class TableNumberOfRowsPerPageTest extends TestCase
             ->assertSet('numberOfRowsPerPage', 5)
             ->assertSeeHtmlInOrder([
                 '<thead>',
+                '<span id="rows-number-per-page-icon"',
+                'class="input-group-text text-secondary">',
                 'rows-number-icon',
+                '</span>',
                 '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                'class="form-select"',
+                'placeholder="Number of rows per page"',
+                'aria-label="Number of rows per page"',
+                'aria-describedby="rows-number-per-page-icon">',
+                '<option wire:key="rows-number-per-page-option-placeholder" value="" disabled>Number of rows per page</option>',
                 '<option wire:key="rows-number-per-page-option-1" value="1">',
                 '<option wire:key="rows-number-per-page-option-2" value="2">',
                 '<option wire:key="rows-number-per-page-option-3" value="3">',
                 '<option wire:key="rows-number-per-page-option-4" value="4">',
                 '<option wire:key="rows-number-per-page-option-5" value="5" selected>',
+                '</select>',
                 '</thead>',
                 '<tbody',
                 ...$values,
                 '</tbody',
+            ]);
+    }
+
+    /** @test */
+    public function it_can_set_data_attribute_on_number_of_rows_per_page_selector(): void
+    {
+        Config::set('laravel-table.html_select_components_attributes', ['data-selector' => true]);
+        Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
+        User::factory()->create();
+        $config = new class extends AbstractTableConfiguration {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<span id="rows-number-per-page-icon"',
+                'class="input-group-text text-secondary">',
+                'rows-number-icon',
+                '</span>',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                'class="form-select"',
+                'placeholder="Number of rows per page"',
+                'aria-label="Number of rows per page"',
+                'aria-describedby="rows-number-per-page-icon"',
+                'data-selector="data-selector">',
+                '<option wire:key="rows-number-per-page-option-placeholder" value="" disabled>Number of rows per page</option>',
+                '</select>',
+                '</thead>',
             ]);
     }
 }

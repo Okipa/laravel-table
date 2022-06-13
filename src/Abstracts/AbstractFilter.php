@@ -32,11 +32,10 @@ abstract class AbstractFilter
     protected function attributes(): array
     {
         return [
-            ...[
-                'multiple' => $this->multiple(),
-                'aria-label' => $this->label()
-            ],
-            ...config('laravel-table.filter_select_default_attributes'),
+            'multiple' => $this->multiple(),
+            'placeholder' => $this->label(),
+            'aria-label' => $this->label(),
+            ...config('laravel-table.html_select_components_attributes'),
         ];
     }
 

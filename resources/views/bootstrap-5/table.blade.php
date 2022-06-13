@@ -15,7 +15,7 @@
                                     @foreach($filtersArray as $filterArray)
                                         {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                                     @endforeach
-                                    @if(array_filter($selectedFilters))
+                                    @if(array_filter($selectedFilters, static fn($filter) => is_bool($filter) || $filter))
                                         <a wire:click.prevent="$set('selectedFilters', [])"
                                            class="btn btn-outline-secondary ms-3"
                                            title="{{ __('Reset filters') }}"
@@ -76,10 +76,13 @@
                                                       class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
-                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)"
-                                                        class="form-select"
-                                                        aria-label="{{ __('Number of rows per page') }}"
-                                                        aria-describedby="rows-number-per-page-icon">
+                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
+                                                    'placeholder' => __('Number of rows per page'),
+                                                    'aria-label' => __('Number of rows per page'),
+                                                    'aria-describedby' => 'rows-number-per-page-icon',
+                                                    ...config('laravel-table.html_select_components_attributes'),
+                                                ])->toHtml() !!}>
+                                                    <option wire:key="rows-number-per-page-option-placeholder" value="" disabled>{{ __('Number of rows per page') }}</option>
                                                     @foreach($numberOfRowsPerPageOptions as $numberOfRowsPerPageOption)
                                                         <option wire:key="rows-number-per-page-option-{{ $numberOfRowsPerPageOption }}" value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
                                                             {{ $numberOfRowsPerPageOption }}

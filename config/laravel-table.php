@@ -34,8 +34,8 @@ return [
         'toggle_off' => '<i class="fa-solid fa-toggle-off fa-fw"></i>',
     ],
 
-    /** The default filter select HTML component attributes. */
-    'filter_select_default_attributes' => [],
+    /** The default table select HTML components attributes. */
+    'html_select_components_attributes' => [],
 
     /** Whether the select allowing to choose the number of rows per page should be displayed by default. */
     'enable_number_of_rows_per_page_choice' => true,

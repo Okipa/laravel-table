@@ -116,6 +116,7 @@ And display it in a view:
   * [Display tables in views](#display-tables-in-views)
   * [Pass external data to your tables](#pass-external-data-to-your-tables)
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
+  * [Override native selects behaviour on your tables](#override-native-selects-behaviour-on-your-tables)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
   * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
@@ -248,6 +249,17 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()->model(User::class);
     }
 }
+```
+
+### Override native selects behaviour on your tables
+
+You may want to override native HTML select components behaviour on your tables.
+
+You will be able to add a data attribute (which is known as the best practice to add extra features to a HTML component) to all the HTML select components displayed on your tables by defining an array of HTML attribute as value for the `laravel-table.html_select_components_attributes` config key.
+
+```php
+/** The default table select HTML components attributes. */
+'html_select_components_attributes' => ['data-selector' => true], // `data-selector` HTML attribute will be appended to all tables HTML select components.
 ```
 
 ### Add query instructions on tables
@@ -389,14 +401,6 @@ class UsersTable extends AbstractTableConfiguration
 Configuring table filters will make them appear as `select` HTML components on a dedicated bar above the table.
 
 The filters bar will not appear if no filter is declared.
-
-Native browser HTML `select` components are implemented by default. You may want to cutomize your `select` rendering, especially to handle their behaviour and design when they are configured in multiple mode.
-
-We recommend this package to handle this: https://github.com/orchidjs/tom-select.
-
-You have 2 ways to add HTML specific attributes to your filter select components (which is known as the best practice to add extra features to a HTML component) in order to achieve that:
-* Globally set default HTML attributes from a `laravel-table.filter_select_default_attributes` config array value
-* Override or merge yours with global default HTML attributes by setting HTML attributes with the `attributes()` method on your filters
 
 This package provides the following built-in filters:
 * `RelationshipFilter`:
