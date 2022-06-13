@@ -196,10 +196,10 @@ Status
 * `deactivation`
 * `deactivated`
 * `Verify Email`
-* `verify email of the`
+* `verify email of`
 * `email verification`
 * `verified (email)`
-* `cancel email verification of the`
+* `cancel email verification of`
 * `email verification cancellation`
 * `unverified (email)`
 * `Destroy`

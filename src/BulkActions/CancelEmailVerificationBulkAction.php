@@ -31,11 +31,11 @@ class CancelEmailVerificationBulkAction extends AbstractBulkAction
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => __('cancel email verification of the'),
+                'action' => __('cancel email verification of'),
                 'count' => count($allowedModelKeys),
             ])
             : __('Are you sure you want to :action the line #:primary?', [
-                'action' => __('cancel email verification of the'),
+                'action' => __('cancel email verification of'),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);

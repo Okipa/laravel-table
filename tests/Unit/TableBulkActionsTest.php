@@ -160,12 +160,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'verify_email',
                 null,
-                'Are you sure you want to verify email of the the selected line #' . $users->first()->id . '?'
+                'Are you sure you want to verify email of the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'verify_email', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The selected line #' . $users->first()->id . ' has been verified (email).'
+                'The line #' . $users->first()->id . ' has been verified (email).'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -183,13 +183,13 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'cancel_email_verification',
                 null,
-                'Are you sure you want to cancel email verification of the the selected line #' . $users->first()->id
+                'Are you sure you want to cancel email verification of the line #' . $users->first()->id
                 . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The selected line #' . $users->first()->id . ' has been unverified (email).'
+                'The line #' . $users->first()->id . ' has been unverified (email).'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -206,12 +206,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'activate',
                 null,
-                'Are you sure you want to activate the selected line #' . $users->first()->id . '?'
+                'Are you sure you want to activate the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'activate', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The selected line #' . $users->first()->id . ' has been activated.'
+                'The line #' . $users->first()->id . ' has been activated.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -229,12 +229,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'deactivate',
                 null,
-                'Are you sure you want to deactivate the selected line #' . $users->first()->id . '?'
+                'Are you sure you want to deactivate the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'deactivate', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The selected line #' . $users->first()->id . ' has been deactivated.'
+                'The line #' . $users->first()->id . ' has been deactivated.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
             'id' => $users->first()->id,
@@ -251,12 +251,12 @@ class TableBulkActionsTest extends TestCase
                 'bulkAction',
                 'destroy',
                 null,
-                'Are you sure you want to destroy the selected line #' . $users->first()->id . '?'
+                'Are you sure you want to destroy the line #' . $users->first()->id . '?'
             )
             ->emit('table:action:confirmed', 'bulkAction', 'destroy', null)
             ->assertEmitted(
                 'table:action:feedback',
-                'The selected line #' . $users->first()->id . ' has been destroyed.'
+                'The line #' . $users->first()->id . ' has been destroyed.'
             );
         $this->assertDatabaseMissing(app(User::class)->getTable(), ['id' => $users->first()->id]);
         $this->assertDatabaseHas(app(User::class)->getTable(), ['id' => $users->last()->id]);

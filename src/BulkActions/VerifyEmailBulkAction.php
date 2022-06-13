@@ -30,11 +30,11 @@ class VerifyEmailBulkAction extends AbstractBulkAction
         $allowedLinesCount = count($allowedModelKeys);
         $allowedLinesSentence = $allowedLinesCount > 1
             ? __('Are you sure you want to :action the :count selected lines?', [
-                'action' => __('verify email of the'),
+                'action' => __('verify email of'),
                 'count' => count($allowedModelKeys),
             ])
             : __('Are you sure you want to :action the line #:primary?', [
-                'action' => __('verify email of the'),
+                'action' => __('verify email of'),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);

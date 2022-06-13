@@ -172,7 +172,7 @@ class MakeTest extends TestCase
             '/** @return mixed|void */',
             'public function action(Component $livewire)',
             '{',
-            '// The treatment that will be executed on click on the the head action button.',
+            '// The treatment that will be executed on click on the head action button.',
             '// Use the `$livewire` param to interact with the Livewire table component and emit events for example.',
             '}',
             '}',

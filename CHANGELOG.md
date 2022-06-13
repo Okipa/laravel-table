@@ -343,7 +343,7 @@ route('user.edit', ['id' => $user->id, 'foo' => 'bar']);
 
 2019-02-15
 
-* Fixed searching queries process on regular table columns fields when aliased tables are declared in the the `->query()` table method
+* Fixed searching queries process on regular table columns fields when aliased tables are declared in the `->query()` table method
 
 ## [1.0.1](https://github.com/Okipa/laravel-table/releases/tag/1.0.1)
 
