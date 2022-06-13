@@ -237,6 +237,15 @@ class TableFiltersTest extends TestCase
                 'reset-icon',
                 '</a>',
             ])
+            ->set('selectedFilters', ['boolean_active' => 0])
+            ->assertSeeHtmlInOrder([
+                '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
+                'class="btn btn-outline-secondary ms-3"',
+                'title="Reset filters"',
+                'data-bs-toggle="tooltip">',
+                'reset-icon',
+                '</a>',
+            ])
             ->set('selectedFilters', ['boolean_active' => ''])
             ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"')
             ->set('selectedFilters', ['boolean_active' => null])

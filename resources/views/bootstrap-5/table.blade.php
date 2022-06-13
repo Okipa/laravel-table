@@ -15,7 +15,7 @@
                                     @foreach($filtersArray as $filterArray)
                                         {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
                                     @endforeach
-                                    @if(array_filter($selectedFilters, static fn($filter) => is_bool($filter) || $filter))
+                                    @if(array_filter($selectedFilters, static fn($filter) => $filter !== '' && isset($filter)))
                                         <a wire:click.prevent="$set('selectedFilters', [])"
                                            class="btn btn-outline-secondary ms-3"
                                            title="{{ __('Reset filters') }}"
