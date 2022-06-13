@@ -173,16 +173,57 @@ See how to translate them on the Laravel official documentation: https://laravel
 
 Here is the list of the words and sentences available for translation:
 
+Status
 * `Loading in progress...`
-* `Number of rows per page`
+* `No results were found.`
+* `Reset filters`
+* `Yes`
+* `No`
 * `Search by:`
 * `Reset research`
-* `No results were found.`
+* `Sort ascending`
+* `Sort descending`
 * `Actions`
+* `Bulk Actions`
 * `Create`
 * `Show`
 * `Edit`
 * `Destroy`
+* `Activate`
+* `activation`
+* `activated`
+* `Deactivate`
+* `deactivation`
+* `deactivated`
+* `Verify Email`
+* `verify email of the`
+* `email verification`
+* `verified (email)`
+* `cancel email verification of the`
+* `email verification cancellation`
+* `unverified (email)`
+* `Destroy`
+* `destruction`
+* `destroyed`
+* `Toggle on`
+* `Toggle off`
+* `toggled on`
+* `toggled off`
+* `Verify`
+* `Unverify`
+* `verified`
+* `unverified`
+* `Are you sure you want to :action the line #:primary?`
+* `Are you sure you want to :action the :count selected lines?`
+* `:count selected lines do not allow :action and will not be affected by this action.`
+* `The line #:primary does not allow :action and will not be affected by this action.`
+* `The line #:primary has been :action.`
+* `:count selected lines have been :action.`
+* `The line #:primary does not allow :action and was not affected by this action.`
+* `:count selected lines do not allow :action and were not affected by this action.`
+* `The field :attribute from the line #:primary has been :action.`
+* `Are you sure you want to set the field :attribute as :action for the line #:primary?`
+* `Number of rows per page`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
 ## How to

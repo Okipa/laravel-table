@@ -33,9 +33,9 @@ class DestroyBulkAction extends AbstractBulkAction
                 'action' => Str::lower(__('Destroy')),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the selected line #:key?', [
+            : __('Are you sure you want to :action the line #:primary?', [
                 'action' => Str::lower(__('Destroy')),
-                'key' => Arr::first($allowedModelKeys),
+                'primary' => Arr::first($allowedModelKeys),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
         if ($disallowedLinesCount) {
@@ -45,9 +45,9 @@ class DestroyBulkAction extends AbstractBulkAction
                     'action' => __('destruction'),
                     'count' => $disallowedLinesCount,
                 ])
-                : __('The line #:key does not allow :action and will not be affected by this action.', [
+                : __('The line #:primary does not allow :action and will not be affected by this action.', [
                     'action' => __('destruction'),
-                    'key' => Arr::first($disallowedModelKeys),
+                    'primary' => Arr::first($disallowedModelKeys),
                 ]);
         }
 
@@ -62,8 +62,8 @@ class DestroyBulkAction extends AbstractBulkAction
                 'count' => count($allowedModelKeys),
                 'action' => __('destroyed'),
             ])
-            : __('The selected line #:key has been :action.', [
-                'key' => Arr::first($allowedModelKeys),
+            : __('The line #:primary has been :action.', [
+                'primary' => Arr::first($allowedModelKeys),
                 'action' => __('destroyed'),
             ]);
         $disallowedLinesCount = count($disallowedModelKeys);
@@ -74,8 +74,8 @@ class DestroyBulkAction extends AbstractBulkAction
                     'count' => $disallowedLinesCount,
                     'action' => __('destruction'),
                 ])
-                : __('The line #:key does not allow :action and was not affected by this action.', [
-                    'key' => Arr::first($disallowedModelKeys),
+                : __('The line #:primary does not allow :action and was not affected by this action.', [
+                    'primary' => Arr::first($disallowedModelKeys),
                     'action' => __('destruction'),
                 ]);
         }

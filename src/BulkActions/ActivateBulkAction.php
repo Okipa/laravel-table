@@ -33,7 +33,7 @@ class ActivateBulkAction extends AbstractBulkAction
                 'action' => Str::lower(__('Activate')),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the selected line #:primary?', [
+            : __('Are you sure you want to :action the line #:primary?', [
                 'action' => Str::lower(__('Activate')),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
@@ -62,7 +62,7 @@ class ActivateBulkAction extends AbstractBulkAction
                 'count' => count($allowedModelKeys),
                 'action' => __('activated'),
             ])
-            : __('The selected line #:primary has been :action.', [
+            : __('The line #:primary has been :action.', [
                 'primary' => Arr::first($allowedModelKeys),
                 'action' => __('activated'),
             ]);

@@ -34,7 +34,7 @@ class CancelEmailVerificationBulkAction extends AbstractBulkAction
                 'action' => __('cancel email verification of the'),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the selected line #:primary?', [
+            : __('Are you sure you want to :action the line #:primary?', [
                 'action' => __('cancel email verification of the'),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
@@ -63,7 +63,7 @@ class CancelEmailVerificationBulkAction extends AbstractBulkAction
                 'count' => count($allowedModelKeys),
                 'action' => __('unverified (email)'),
             ])
-            : __('The selected line #:primary has been :action.', [
+            : __('The line #:primary has been :action.', [
                 'primary' => Arr::first($allowedModelKeys),
                 'action' => __('unverified (email)'),
             ]);

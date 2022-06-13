@@ -33,7 +33,7 @@ class VerifyEmailBulkAction extends AbstractBulkAction
                 'action' => __('verify email of the'),
                 'count' => count($allowedModelKeys),
             ])
-            : __('Are you sure you want to :action the selected line #:primary?', [
+            : __('Are you sure you want to :action the line #:primary?', [
                 'action' => __('verify email of the'),
                 'primary' => Arr::first($allowedModelKeys),
             ]);
@@ -62,7 +62,7 @@ class VerifyEmailBulkAction extends AbstractBulkAction
                 'count' => count($allowedModelKeys),
                 'action' => __('verified (email)'),
             ])
-            : __('The selected line #:primary has been :action.', [
+            : __('The line #:primary has been :action.', [
                 'primary' => Arr::first($allowedModelKeys),
                 'action' => __('verified (email)'),
             ]);

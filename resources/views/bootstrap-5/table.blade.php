@@ -157,7 +157,7 @@
                                 @endif
                             </th>
                         @endforeach
-                        {{-- Actions --}}
+                        {{-- Row actions --}}
                         @if($tableRowActionsArray)
                             <th wire:key="row-actions" class="align-middle text-end" scope="col">
                                 {{ __('Actions') }}
