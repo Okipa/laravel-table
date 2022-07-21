@@ -61,7 +61,7 @@ jobs:
         run: |
           vendor/bin/phpcs
           vendor/bin/phpmd config,src,tests text phpmd.xml
-          #vendor/bin/phpstan analyse
+          #vendor/bin/phpstan analyse #ToDo: uncoment once it has been debugged
 
       - name: PHPUnit + Code coverage
         if: matrix.php == '8.1' && matrix.laravel == '9.*'
@@ -76,5 +76,4 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
           composer require php-coveralls/php-coveralls --with-all-dependencies
-          ls -la build/logs/
-          #vendor/bin/php-coveralls -v --coverage_clover=build/logs/clover.xml
+          vendor/bin/php-coveralls -v --coverage_clover=build/logs/clover.xml
