@@ -9,6 +9,12 @@ use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 
 class ToggleEmailVerifiedColumnAction extends AbstractColumnAction
 {
+    public function action(Model $model, string $attribute, Component $livewire): void
+    {
+        // Update attribute event if it not in model `$fillable`.
+        $model->forceFill([$attribute => $model->{$attribute} ? null : Date::now()])->save();
+    }
+
     protected function class(Model $model, string $attribute): array
     {
         return [
@@ -36,7 +42,8 @@ class ToggleEmailVerifiedColumnAction extends AbstractColumnAction
 
     protected function defaultConfirmationQuestion(Model $model, string $attribute): string|null
     {
-        return __('Are you sure you want to execute the action :action on the field :attribute from the line #:primary?', [
+        return __('Are you sure you want to execute the action :action on the field '
+            . ':attribute from the line #:primary?', [
             'action' => $model->{$attribute} ? __('Unverify Email') : __('Verify Email'),
             'attribute' => __('validation.attributes.' . $attribute),
             'primary' => $model->getKey(),
@@ -50,11 +57,5 @@ class ToggleEmailVerifiedColumnAction extends AbstractColumnAction
             'attribute' => __('validation.attributes.' . $attribute),
             'primary' => $model->getKey(),
         ]);
-    }
-
-    public function action(Model $model, string $attribute, Component $livewire): void
-    {
-        // Update attribute event if it not in model `$fillable`.
-        $model->forceFill([$attribute => $model->{$attribute} ? null : Date::now()])->save();
     }
 }
