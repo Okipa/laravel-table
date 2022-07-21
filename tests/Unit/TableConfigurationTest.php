@@ -46,7 +46,7 @@ class TableConfigurationTest extends TestCase
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
-            ->assertEmitted('simple:test:event',)
+            ->assertEmitted('simple:test:event')
             ->assertEmitted('test:event:with:params', ['my', 'test', 'event', 'params']);
     }
 }
