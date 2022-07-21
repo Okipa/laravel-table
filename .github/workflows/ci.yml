@@ -61,7 +61,7 @@ jobs:
         run: |
           vendor/bin/phpcs
           vendor/bin/phpmd config,src,tests text phpmd.xml
-          #vendor/bin/phpstan analyse #ToDo: uncoment once it has been debugged
+          vendor/bin/phpstan analyse #ToDo: uncoment once it has been debugged
 
       - name: PHPUnit + Code coverage
         if: matrix.php == '8.1' && matrix.laravel == '9.*'
