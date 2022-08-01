@@ -25,10 +25,11 @@ class TableRowActionsTest extends TestCase
         Config::set('laravel-table.icon.edit', 'edit-icon');
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
-                return Table::make()->model(User::class)->rowActions(fn(User $user) => [
+                return Table::make()->model(User::class)->rowActions(fn (User $user) => [
                     new ShowRowAction(route('user.show', $user)),
                     new EditRowAction(route('user.edit', $user)),
                     new DestroyRowAction(),
@@ -56,21 +57,21 @@ class TableRowActionsTest extends TestCase
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
-                '<a wire:key="row-action-show-' .  $users->first()->id . '"',
+                '<a wire:key="row-action-show-' . $users->first()->id . '"',
                 'wire:click.prevent="rowAction(\'show\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-info p-1"',
                 'title="Show"',
                 'data-bs-toggle="tooltip">',
                 'show-icon',
                 '</a>',
-                '<a wire:key="row-action-edit-' .  $users->first()->id . '"',
+                '<a wire:key="row-action-edit-' . $users->first()->id . '"',
                 'wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-primary p-1"',
                 'title="Edit"',
                 'data-bs-toggle="tooltip">',
                 'edit-icon',
                 '</a>',
-                '<a wire:key="row-action-destroy-' .  $users->first()->id . '"',
+                '<a wire:key="row-action-destroy-' . $users->first()->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
                 'class="link-danger p-1"',
                 'title="Destroy"',
@@ -83,19 +84,19 @@ class TableRowActionsTest extends TestCase
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
-                '<a wire:key="row-action-show-' .  $users->last()->id . '"',
+                '<a wire:key="row-action-show-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'show\', \'' . $users->last()->id . '\', 0)"',
                 'title="Show"',
                 'data-bs-toggle="tooltip">',
                 'show-icon',
                 '</a>',
-                '<a wire:key="row-action-edit-' .  $users->last()->id . '"',
+                '<a wire:key="row-action-edit-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
                 'title="Edit"',
                 'data-bs-toggle="tooltip">',
                 'edit-icon',
                 '</a>',
-                '<a wire:key="row-action-destroy-' .  $users->last()->id . '"',
+                '<a wire:key="row-action-destroy-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
                 'title="Destroy"',
                 'data-bs-toggle="tooltip">',
@@ -133,10 +134,11 @@ class TableRowActionsTest extends TestCase
     {
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
-                return Table::make()->model(User::class)->rowActions(fn(User $user) => [
+                return Table::make()->model(User::class)->rowActions(fn (User $user) => [
                     (new DestroyRowAction())->when(Auth::user()->isNot($user)),
                 ]);
             }
@@ -156,7 +158,7 @@ class TableRowActionsTest extends TestCase
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
-                '<a wire:key="row-action-destroy-' .  $users->last()->id . '"',
+                '<a wire:key="row-action-destroy-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
                 'title="Destroy"',
                 'data-bs-toggle="tooltip">',
@@ -176,10 +178,11 @@ class TableRowActionsTest extends TestCase
     {
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $user = User::factory()->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
-                return Table::make()->model(User::class)->rowActions(fn(User $user) => [
+                return Table::make()->model(User::class)->rowActions(fn (User $user) => [
                     (new DestroyRowAction())->confirmationQuestion(false)->feedbackMessage(false),
                 ]);
             }
@@ -198,7 +201,7 @@ class TableRowActionsTest extends TestCase
                 '<tr wire:key="row-' . $user->id . '" class="border-bottom">',
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
-                '<a wire:key="row-action-destroy-' .  $user->id . '"',
+                '<a wire:key="row-action-destroy-' . $user->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $user->id . '\', 0)"',
                 'title="Destroy"',
                 'data-bs-toggle="tooltip">',

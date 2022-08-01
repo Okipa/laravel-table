@@ -48,7 +48,7 @@ abstract class AbstractColumnAction
 
     public static function retrieve(array $columnActions, string $modelKey, string $attribute): array|null
     {
-        return Arr::first($columnActions, static fn(array $columnAction) => $columnAction['modelKey'] === $modelKey
+        return Arr::first($columnActions, static fn (array $columnAction) => $columnAction['modelKey'] === $modelKey
             && $columnAction['attribute'] === $attribute);
     }
 
@@ -65,7 +65,6 @@ abstract class AbstractColumnAction
 
         return $columnActionInstance;
     }
-
 
     public function render(Model $model, string $attribute): View
     {

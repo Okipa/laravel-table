@@ -32,7 +32,7 @@ class DestroyRowAction extends AbstractRowAction
     {
         return __('Are you sure you want to execute the action :action on the line #:primary?', [
             'action' => __('Destroy'),
-            'primary' => $model->getKey()
+            'primary' => $model->getKey(),
         ]);
     }
 

@@ -52,7 +52,7 @@ abstract class AbstractBulkAction
 
     public static function retrieve(array $bulkActions, string $identifier): array
     {
-        return Arr::first($bulkActions, static fn(array $bulkAction) => $bulkAction['identifier'] === $identifier);
+        return Arr::first($bulkActions, static fn (array $bulkAction) => $bulkAction['identifier'] === $identifier);
     }
 
     public static function make(array $bulkActionArray): self

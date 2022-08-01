@@ -21,6 +21,6 @@ class CompanyFactory extends Factory
 
     public function withOwner(User $user): self
     {
-        return $this->afterCreating(fn(Company $company) => $company->update(['owner_id' => $user->id]));
+        return $this->afterCreating(fn (Company $company) => $company->update(['owner_id' => $user->id]));
     }
 }

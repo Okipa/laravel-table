@@ -150,11 +150,11 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumnSortedByDefault(): Column|null
     {
-        $sortableColumns = $this->getColumns()->filter(fn(Column $column) => $column->isSortable());
+        $sortableColumns = $this->getColumns()->filter(fn (Column $column) => $column->isSortable());
         if ($sortableColumns->isEmpty()) {
             return null;
         }
-        $columnSortedByDefault = $sortableColumns->filter(fn(Column $column) => $column->isSortedByDefault())->first();
+        $columnSortedByDefault = $sortableColumns->filter(fn (Column $column) => $column->isSortedByDefault())->first();
         if (! $columnSortedByDefault) {
             return $sortableColumns->first();
         }
@@ -175,7 +175,7 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumn(string $key): Column
     {
-        return $this->getColumns()->filter(fn(Column $column) => $column->getKey() === $key)->first();
+        return $this->getColumns()->filter(fn (Column $column) => $column->getKey() === $key)->first();
     }
 
     public function query(Closure $queryClosure): self
@@ -208,7 +208,7 @@ class Table
             $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
                 $searchableClosure = $searchableColumn->getSearchableClosure();
                 $searchableClosure
-                    ? $query->orWhere(fn(Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
+                    ? $query->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
                     : $query->orWhere(
                         DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
                         $this->getCaseInsensitiveSearchingLikeOperator(),
@@ -229,7 +229,7 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     protected function getSearchableColumns(): Collection
     {
-        return $this->getColumns()->filter(fn(Column $column) => $column->isSearchable());
+        return $this->getColumns()->filter(fn (Column $column) => $column->isSearchable());
     }
 
     protected function getCaseInsensitiveSearchingLikeOperator(): string
@@ -247,7 +247,7 @@ class Table
 
     public function computeResults(Collection $displayedRows): void
     {
-        $this->results = $this->results->map(fn(Result $result) => $result->compute(
+        $this->results = $this->results->map(fn (Result $result) => $result->compute(
             $this->model->query()->toBase(),
             $displayedRows,
         ));
@@ -274,7 +274,7 @@ class Table
             }
             $filterArray = AbstractFilter::retrieve($filtersArray, $identifier);
             $filterInstance = AbstractFilter::make($filterArray);
-            $filterClosures[$identifier] = static fn(Builder $query) => $filterInstance->filter($query, $value);
+            $filterClosures[$identifier] = static fn (Builder $query) => $filterInstance->filter($query, $value);
         }
 
         return $filterClosures;
@@ -348,7 +348,7 @@ class Table
         }
         foreach ($this->rows->getCollection() as $model) {
             $rowActions = collect(($this->rowActionsClosure)($model))
-                ->filter(fn(AbstractRowAction $rowAction) => $rowAction->isAllowed());
+                ->filter(fn (AbstractRowAction $rowAction) => $rowAction->isAllowed());
             $rowActionsArray = $rowActions->map(static function (AbstractRowAction $rowAction) use ($model) {
                 $rowAction->setup($model);
 
@@ -372,7 +372,7 @@ class Table
         $tableColumnActionsArray = [];
         foreach ($this->rows->getCollection() as $model) {
             $columnActions = $this->getColumns()
-                ->mapWithKeys(fn(Column $column) => [
+                ->mapWithKeys(fn (Column $column) => [
                     $column->getKey() => $column->getAction()
                         ? $column->getAction()($model)
                         : null,
@@ -394,7 +394,7 @@ class Table
     public function getSearchableLabels(): string
     {
         return $this->getSearchableColumns()
-            ->map(fn(Column $searchableColumn) => ['title' => $searchableColumn->getTitle()])
+            ->map(fn (Column $searchableColumn) => ['title' => $searchableColumn->getTitle()])
             ->implode('title', ', ');
     }
 

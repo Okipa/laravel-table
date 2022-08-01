@@ -23,7 +23,8 @@ class TableResultsTest extends TestCase
             ['email_verified_at' => Date::now(), 'active' => true],
             ['email_verified_at' => null, 'active' => false]
         ))->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->numberOfRowsPerPageOptions([2]);
@@ -40,11 +41,11 @@ class TableResultsTest extends TestCase
             {
                 return [
                     Result::make('Total of users with unverified email')
-                        ->value(static fn(Builder $totalRowsQuery) => $totalRowsQuery
+                        ->value(static fn (Builder $totalRowsQuery) => $totalRowsQuery
                             ->whereNull('email_verified_at')
                             ->count()),
                     Result::make('Displayed inactive users')
-                        ->value(static fn(
+                        ->value(static fn (
                             Builder $totalRowsQuery,
                             Collection $displayedRowsCollection
                         ) => $displayedRowsCollection->where('active', false)->count()),

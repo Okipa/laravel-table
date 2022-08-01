@@ -29,7 +29,8 @@ class ColumnActionTest extends TestCase
             ['email_verified_at' => Date::now(), 'active' => true],
             ['email_verified_at' => null, 'active' => false]
         ))->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -40,9 +41,9 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Email Verified', 'email_verified_at')
-                        ->action(fn() => new ToggleEmailVerifiedColumnAction()),
+                        ->action(fn () => new ToggleEmailVerifiedColumnAction()),
                     Column::make('Toggle', 'active')
-                        ->action(fn() => new ToggleBooleanColumnAction()),
+                        ->action(fn () => new ToggleBooleanColumnAction()),
                 ];
             }
         };
@@ -109,7 +110,8 @@ class ColumnActionTest extends TestCase
             ['active' => true],
             ['active' => false],
         ))->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -120,7 +122,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Toggle', 'active')
-                        ->action(fn(User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
+                        ->action(fn (User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
                 ];
             }
         };
@@ -147,7 +149,8 @@ class ColumnActionTest extends TestCase
     {
         Config::set('laravel-table.icon.email_verified', 'email-verified-icon');
         $user = User::factory()->create(['email_verified_at' => Date::now()]);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -158,7 +161,7 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('Name'),
                     Column::make('Email Verified', 'email_verified_at')
-                        ->action(fn() => (new ToggleEmailVerifiedColumnAction())
+                        ->action(fn () => (new ToggleEmailVerifiedColumnAction())
                             ->confirmationQuestion(false)
                             ->feedbackMessage(false)),
                 ];

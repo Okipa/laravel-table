@@ -54,7 +54,7 @@ abstract class AbstractRowAction
 
     public static function retrieve(array $rowActions, string $modelKey): array
     {
-        return Arr::where($rowActions, static fn(array $rowAction) => $rowAction['modelKey'] === $modelKey);
+        return Arr::where($rowActions, static fn (array $rowAction) => $rowAction['modelKey'] === $modelKey);
     }
 
     public static function make(array $rowActionArray): self

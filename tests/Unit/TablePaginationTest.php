@@ -17,7 +17,8 @@ class TablePaginationTest extends TestCase
     {
         Config::set('laravel-table.number_of_rows_per_page', 10);
         User::factory()->count(10)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -41,7 +42,8 @@ class TablePaginationTest extends TestCase
     {
         Config::set('laravel-table.number_of_rows_per_page', 10);
         User::factory()->count(15)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);

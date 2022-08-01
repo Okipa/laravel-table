@@ -18,7 +18,8 @@ class ColumnSearchableTest extends TestCase
     /** @test */
     public function it_cant_display_search_form_when_no_column_is_searchable(): void
     {
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -42,7 +43,8 @@ class ColumnSearchableTest extends TestCase
         Config::set('laravel-table.icon.search', 'icon-search');
         Config::set('laravel-table.icon.reset', 'icon-reset');
         Config::set('laravel-table.icon.validate', 'icon-validate');
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -78,7 +80,8 @@ class ColumnSearchableTest extends TestCase
     public function it_can_search_from_model_data(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -126,7 +129,8 @@ class ColumnSearchableTest extends TestCase
         $users = User::factory()->count(2)->create();
         $user1Companies = Company::factory()->withOwner($users->first())->count(3)->create();
         $user2Companies = Company::factory()->withOwner($users->last())->count(3)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -137,7 +141,7 @@ class ColumnSearchableTest extends TestCase
                 return [
                     Column::make('Name')->searchable(),
                     Column::make('Owned companies')
-                        ->searchable(fn(Builder $query, string $searchBy) => $query->whereRelation(
+                        ->searchable(fn (Builder $query, string $searchBy) => $query->whereRelation(
                             'companies',
                             'name',
                             'LIKE',
@@ -177,7 +181,8 @@ class ColumnSearchableTest extends TestCase
     public function it_can_reset_search(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -218,7 +223,8 @@ class ColumnSearchableTest extends TestCase
         $this->expectException(PDOException::class);
         $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: '
             . 'select count(*) as aggregate from "users" where LOWER(name) ILIKE %test%)');
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);

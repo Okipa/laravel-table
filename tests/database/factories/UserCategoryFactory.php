@@ -22,6 +22,6 @@ class UserCategoryFactory extends Factory
     {
         $userIds = $users->pluck('id')->toArray();
 
-        return $this->afterCreating(fn(UserCategory $category) => $category->users()->sync($userIds));
+        return $this->afterCreating(fn (UserCategory $category) => $category->users()->sync($userIds));
     }
 }

@@ -44,10 +44,10 @@ class ToggleEmailVerifiedColumnAction extends AbstractColumnAction
     {
         return __('Are you sure you want to execute the action :action on the field '
             . ':attribute from the line #:primary?', [
-            'action' => $model->{$attribute} ? __('Unverify Email') : __('Verify Email'),
-            'attribute' => __('validation.attributes.' . $attribute),
-            'primary' => $model->getKey(),
-        ]);
+                'action' => $model->{$attribute} ? __('Unverify Email') : __('Verify Email'),
+                'attribute' => __('validation.attributes.' . $attribute),
+                'primary' => $model->getKey(),
+            ]);
     }
 
     protected function defaultFeedbackMessage(Model $model, string $attribute): string|null

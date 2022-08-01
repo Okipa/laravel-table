@@ -16,12 +16,13 @@ class TableRowClassTest extends TestCase
     {
         $userActive = User::factory()->create(['active' => true]);
         $userInactive = User::factory()->create(['active' => false]);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()
                     ->model(User::class)
-                    ->rowClass(fn(User $user) => [
+                    ->rowClass(fn (User $user) => [
                         'inactive' => ! $user->active,
                         'active' => (bool) $user->active,
                         'always',

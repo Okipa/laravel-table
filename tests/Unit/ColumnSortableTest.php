@@ -18,7 +18,8 @@ class ColumnSortableTest extends TestCase
     public function it_cant_sort_any_column_when_no_column_is_sortable(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -66,7 +67,8 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -118,7 +120,8 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -171,7 +174,8 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort_asc', 'icon-sort-asc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -225,7 +229,8 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -312,7 +317,8 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -370,7 +376,8 @@ class ColumnSortableTest extends TestCase
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -381,8 +388,8 @@ class ColumnSortableTest extends TestCase
                 return [
                     Column::make('Name')->sortable(),
                     Column::make('Companies count')
-                        ->format(fn(User $user) => $user->companies->count())
-                        ->sortable(fn(Builder $query, string $sortDir) => $query
+                        ->format(fn (User $user) => $user->companies->count())
+                        ->sortable(fn (Builder $query, string $sortDir) => $query
                             ->withCount('companies')
                             ->orderBy('companies_count', $sortDir))
                         ->sortByDefault(),

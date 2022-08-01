@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Filters\BooleanFilter;
 use Okipa\LaravelTable\Filters\NullFilter;
 use Okipa\LaravelTable\Filters\RelationshipFilter;
-use Okipa\LaravelTable\Filters\BooleanFilter;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
@@ -30,7 +30,8 @@ class TableFiltersTest extends TestCase
         $company1 = Company::factory()->withOwner($user1)->create();
         $company2 = Company::factory()->withOwner($user2)->create();
         $company3 = Company::factory()->withOwner($user3)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->filters([
@@ -201,7 +202,8 @@ class TableFiltersTest extends TestCase
     public function it_can_reset_filters(): void
     {
         Config::set('laravel-table.icon.reset', 'reset-icon');
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->filters([
@@ -256,7 +258,8 @@ class TableFiltersTest extends TestCase
     public function it_can_set_data_attribute_on_filters(): void
     {
         Config::set('laravel-table.html_select_components_attributes', ['data-selector' => true]);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->filters([

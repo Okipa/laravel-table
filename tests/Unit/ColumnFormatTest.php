@@ -10,7 +10,6 @@ use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Formatters\BooleanFormatter;
 use Okipa\LaravelTable\Formatters\DateFormatter;
-use Okipa\LaravelTable\Formatters\Display;
 use Okipa\LaravelTable\Formatters\StrLimitFormatter;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
@@ -24,7 +23,8 @@ class ColumnFormatTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -34,7 +34,7 @@ class ColumnFormatTest extends TestCase
             {
                 return [
                     Column::make('Owned companies')
-                        ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
+                        ->format(fn (User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
                 ];
             }
         };
@@ -57,7 +57,8 @@ class ColumnFormatTest extends TestCase
         $user1 = User::factory()->create(['active' => true]);
         Date::setTestNow(Date::now()->addMinute());
         $user2 = User::factory()->create(['active' => false]);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -91,7 +92,8 @@ class ColumnFormatTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -101,7 +103,7 @@ class ColumnFormatTest extends TestCase
             {
                 return [
                     Column::make('Owned companies')
-                        ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>', true),
+                        ->format(fn (User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>', true),
                 ];
             }
         };

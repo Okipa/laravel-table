@@ -4,10 +4,8 @@ namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tests\Database\Factories\UserCategoryFactory;
-use Tests\Database\Factories\UserFactory;
 
 class UserCategory extends Authenticatable
 {

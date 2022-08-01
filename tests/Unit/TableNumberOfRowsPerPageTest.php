@@ -16,7 +16,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
     public function it_cant_set_number_of_rows_per_page_options_when_feature_is_globally_disabled(): void
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', false);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -38,7 +39,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
     public function it_cant_set_number_of_rows_per_page_options_when_feature_is_disabled_from_table(): void
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(false);
@@ -60,7 +62,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
     public function it_can_set_number_of_rows_per_page_options_when_feature_is_globally_enabled(): void
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -82,7 +85,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
     public function it_can_set_number_of_rows_per_page_options_when_feature_is_enabled_from_table(): void
     {
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', false);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->enableNumberOfRowsPerPageChoice(true);
@@ -106,7 +110,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_default_options', [1, 2, 3, 4, 5]);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -150,7 +155,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.enable_number_of_rows_per_page_choice', true);
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_default_options', [10, 25, 50, 75, 100]);
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->numberOfRowsPerPageOptions([1, 2, 3, 4, 5]);
@@ -195,7 +201,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_default_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -253,7 +260,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         Config::set('laravel-table.number_of_rows_per_page_default_options', [1, 2, 3, 4, 5]);
         $users = User::factory()->count(5)->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);
@@ -305,7 +313,8 @@ class TableNumberOfRowsPerPageTest extends TestCase
         Config::set('laravel-table.html_select_components_attributes', ['data-selector' => true]);
         Config::set('laravel-table.icon.rows_number', 'rows-number-icon');
         User::factory()->create();
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()->model(User::class);

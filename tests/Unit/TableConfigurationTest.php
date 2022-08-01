@@ -15,7 +15,8 @@ class TableConfigurationTest extends TestCase
     /** @test */
     public function it_cant_generate_table_with_wrong_configuration(): void
     {
-        $config = new class {
+        $config = new class
+        {
             //
         };
         $this->expectException(ErrorException::class);
@@ -27,7 +28,8 @@ class TableConfigurationTest extends TestCase
     /** @test */
     public function it_can_trigger_event_on_initialization(): void
     {
-        $config = new class extends AbstractTableConfiguration {
+        $config = new class extends AbstractTableConfiguration
+        {
             protected function table(): Table
             {
                 return Table::make()
