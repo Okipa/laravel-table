@@ -55,7 +55,7 @@
         "phpmd": "vendor/bin/phpmd config,src,tests text phpmd.xml",
         "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
         "phpunit" : "vendor/bin/testbench package:test --parallel --no-coverage",
-        "test": ["@pint", "@phpcs", "@phpmd", "@phpunit"]
+        "test": ["@pint", "@phpmd", "@phpstan", "@phpunit"]
     },
     "extra": {
         "laravel": {
