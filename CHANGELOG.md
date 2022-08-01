@@ -10,6 +10,7 @@
 * Dropped support for PHP 8.0 and earlier versions
 * Added `livewire/livewire` dependency
 * Removed `okipa/laravel-html-helper` dependency
+* Replaced `phpcs/phpcbf` by `laravel/pint`
 
 :point_right: [See the upgrade guide](/docs/upgrade-guides/from-v4-to-v5.md)
 
