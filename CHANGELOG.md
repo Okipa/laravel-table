@@ -14,6 +14,12 @@
 
 :point_right: [See the upgrade guide](/docs/upgrade-guides/from-v4-to-v5.md)
 
+## [4.0.7](https://github.com/Okipa/laravel-table/compare/4.0.6...4.0.7)
+
+2022-05-17
+
+* Fixed search wrong behaviour when rows number is defined to `null`
+
 ## [4.0.6](https://github.com/Okipa/laravel-table/compare/4.0.5...4.0.6)
 
 2022-03-10
