@@ -46,6 +46,8 @@ class Table extends Component
 
     public array $selectedFilters = [];
 
+    public bool $resetFilters = false;
+
     public array|null $headActionArray;
 
     public bool $selectAll = false;
@@ -58,7 +60,10 @@ class Table extends Component
 
     public array $tableColumnActionsArray;
 
-    protected $listeners = ['table:action:confirmed' => 'actionConfirmed'];
+    protected $listeners = [
+        'table:filters:wire:ignore:cancel' => 'cancelWireIgnoreOnFilters',
+        'table:action:confirmed' => 'actionConfirmed',
+    ];
 
     public function init(): void
     {
@@ -187,6 +192,18 @@ class Table extends Component
         $this->selectedModelKeys = $this->selectAll ? ['selectAll'] : ['unselectAll'];
     }
 
+    public function resetFilters(): void
+    {
+        $this->selectedFilters = [];
+        $this->resetFilters = true;
+        $this->emitSelf('table:filters:wire:ignore:cancel');
+    }
+
+    public function cancelWireIgnoreOnFilters(): void
+    {
+        $this->resetFilters = false;
+    }
+
     public function actionConfirmed(string $actionType, string $identifier, string|null $modelKey): mixed
     {
         return match ($actionType) {
@@ -204,7 +221,7 @@ class Table extends Component
             return null;
         }
         if ($requiresConfirmation) {
-//            dd($bulkActionInstance->getConfirmationQuestion());
+            //            dd($bulkActionInstance->getConfirmationQuestion());
             return $this->emit(
                 'table:action:confirm',
                 'bulkAction',

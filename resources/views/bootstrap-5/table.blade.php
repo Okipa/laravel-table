@@ -13,10 +13,16 @@
                                         {!! config('laravel-table.icon.filter') !!}
                                     </div>
                                     @foreach($filtersArray as $filterArray)
-                                        {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
+                                        @unless($resetFilters)
+                                            <div wire:ignore>
+                                        @endif
+                                            {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
+                                        @unless($resetFilters)
+                                            </div>
+                                        @endif
                                     @endforeach
                                     @if(array_filter($selectedFilters, static fn($filter) => $filter !== '' && isset($filter)))
-                                        <a wire:click.prevent="$set('selectedFilters', [])"
+                                        <a wire:click.prevent="resetFilters()"
                                            class="btn btn-outline-secondary ms-3"
                                            title="{{ __('Reset filters') }}"
                                            data-bs-toggle="tooltip">

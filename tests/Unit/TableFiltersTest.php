@@ -60,6 +60,7 @@ class TableFiltersTest extends TestCase
                 '<td class="px-0 pb-0" colspan="2">',
                 '<div class="d-flex flex-wrap align-items-center justify-content-end">',
                 // Email Verified
+                '<div wire:ignore>',
                 '<div wire:key="filter-null-email-verified-at" class="ms-3">',
                 '<select wire:model="selectedFilters.null_email_verified_at"',
                 'class="form-select"',
@@ -70,7 +71,9 @@ class TableFiltersTest extends TestCase
                 '<option wire:key="filter-option-null-email-verified-at-0" value="0">No</option>',
                 '</select>',
                 '</div>',
+                '</div>',
                 // Companies
+                '<div wire:ignore>',
                 '<div wire:key="filter-relationship-companies" class="ms-3">',
                 '<select wire:model="selectedFilters.relationship_companies"',
                 'class="form-select"',
@@ -85,7 +88,9 @@ class TableFiltersTest extends TestCase
                 . $company3->id . '">' . $company3->name . '</option>',
                 '</select>',
                 '</div>',
+                '</div>',
                 // Categories
+                '<div wire:ignore>',
                 '<div wire:key="filter-relationship-categories" class="ms-3">',
                 '<select wire:model="selectedFilters.relationship_categories"',
                 'class="form-select"',
@@ -100,7 +105,9 @@ class TableFiltersTest extends TestCase
                 . $category3->id . '">' . $category3->name . '</option>',
                 '</select>',
                 '</div>',
+                '</div>',
                 // Active
+                '<div wire:ignore>',
                 '<div wire:key="filter-boolean-active" class="ms-3">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
@@ -110,6 +117,7 @@ class TableFiltersTest extends TestCase
                 '<option wire:key="filter-option-boolean-active-1" value="1">Yes</option>',
                 '<option wire:key="filter-option-boolean-active-0" value="0">No</option>',
                 '</select>',
+                '</div>',
                 '</div>',
                 '</div>',
                 '</td>',
@@ -220,10 +228,14 @@ class TableFiltersTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"')
+            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
+            ->set('selectedFilters', ['boolean_active' => null])
+            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
             ->set('selectedFilters', ['boolean_active' => true])
             ->assertSeeHtmlInOrder([
-                '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
+                '<div wire:ignore>',
+                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<a wire:click.prevent="resetFilters()"',
                 'class="btn btn-outline-secondary ms-3"',
                 'title="Reset filters"',
                 'data-bs-toggle="tooltip">',
@@ -232,7 +244,9 @@ class TableFiltersTest extends TestCase
             ])
             ->set('selectedFilters', ['boolean_active' => false])
             ->assertSeeHtmlInOrder([
-                '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
+                '<div wire:ignore>',
+                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<a wire:click.prevent="resetFilters()"',
                 'class="btn btn-outline-secondary ms-3"',
                 'title="Reset filters"',
                 'data-bs-toggle="tooltip">',
@@ -241,17 +255,30 @@ class TableFiltersTest extends TestCase
             ])
             ->set('selectedFilters', ['boolean_active' => 0])
             ->assertSeeHtmlInOrder([
-                '<a wire:click.prevent="$set(\'selectedFilters\', [])"',
+                '<div wire:ignore>',
+                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<a wire:click.prevent="resetFilters()"',
                 'class="btn btn-outline-secondary ms-3"',
                 'title="Reset filters"',
                 'data-bs-toggle="tooltip">',
                 'reset-icon',
                 '</a>',
             ])
-            ->set('selectedFilters', ['boolean_active' => ''])
-            ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"')
-            ->set('selectedFilters', ['boolean_active' => null])
-            ->assertDontSeeHtml('<a wire:click.prevent="$set(\'selectedFilters\', [])"');
+            ->call('resetFilters')
+            ->assertSet('selectedFilters', [])
+            ->assertSet('resetFilters', true)
+            ->assertEmitted('table:filters:wire:ignore:cancel')
+            ->assertDontSeeHtml([
+                '<div wire:ignore>',
+                '<a wire:click.prevent="resetFilters()"',
+            ])
+            ->emit('table:filters:wire:ignore:cancel')
+            ->assertSet('resetFilters', false)
+            ->assertSeeHtmlInOrder([
+                '<div wire:ignore>',
+                '<div wire:key="filter-boolean-active" class="ms-3">',
+            ])
+            ->assertDontSeeHtml(['<a wire:click.prevent="resetFilters()"']);
     }
 
     /** @test */
@@ -281,6 +308,7 @@ class TableFiltersTest extends TestCase
                 '<tr>',
                 '<td class="px-0 pb-0">',
                 '<div class="d-flex flex-wrap align-items-center justify-content-end">',
+                '<div wire:ignore>',
                 '<div wire:key="filter-boolean-active" class="ms-3">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
@@ -288,6 +316,7 @@ class TableFiltersTest extends TestCase
                 'aria-label="Active"',
                 'data-selector="data-selector">',
                 '</select>',
+                '</div>',
                 '</div>',
                 '</div>',
                 '</td>',
