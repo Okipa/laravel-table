@@ -208,6 +208,7 @@ Status
 * `The action :action has been executed on the :count selected lines.`
 * `The line #:primary does not allow the action :action and was not affected.`
 * `:count selected lines do not allow the action :action and were not affected.`
+* `Table has been reordered.`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
 ## How to
