@@ -15,15 +15,15 @@ class Company extends Model
     protected $table = 'companies';
 
     /** @var array */
-    protected $fillable = ['owner_id', 'name'];
-
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'owner_id');
-    }
+    protected $fillable = ['owner_id', 'name', 'position'];
 
     protected static function newFactory(): CompanyFactory
     {
         return CompanyFactory::new();
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 }
