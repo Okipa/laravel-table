@@ -15,6 +15,7 @@ class UserCategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->catchphrase(),
+            'position' => $this->faker->unique()->numberBetween(1, 100),
         ];
     }
 

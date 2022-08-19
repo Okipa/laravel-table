@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
@@ -18,6 +19,8 @@ use Tests\TestCase;
 
 class ColumnFormatTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_format_column_from_closure(): void
     {

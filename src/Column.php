@@ -30,15 +30,15 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string $title, protected string|null $key = null)
+    public function __construct(protected string $title, protected string|null $attribute = null)
     {
-        $this->key = $key ?: Str::snake($title);
+        $this->attribute = $attribute ?: Str::snake($title);
         $this->title = __($title);
     }
 
-    public static function make(string $title, string $key = null): self
+    public static function make(string $title, string $attribute = null): self
     {
-        return new static($title, $key);
+        return new static($title, $attribute);
     }
 
     public function getTitle(): string
@@ -66,9 +66,18 @@ class Column
         return $this;
     }
 
-    public function isSortable(): bool
+    public function isSortable(Column|null $orderColumn): bool
     {
+        if ($orderColumn) {
+            return $this->getAttribute() === $orderColumn?->getAttribute();
+        }
+
         return $this->sortable;
+    }
+
+    public function getAttribute(): string
+    {
+        return $this->attribute;
     }
 
     public function getSortableClosure(): Closure|null
@@ -129,28 +138,23 @@ class Column
         $columnActionArray = AbstractColumnAction::retrieve(
             $tableColumnActionsArray,
             $model->getKey(),
-            $this->getKey()
+            $this->getAttribute()
         );
         if ($columnActionArray) {
             $columnActionInstance = AbstractColumnAction::make($columnActionArray);
 
             return $columnActionInstance->isAllowed()
-                ? new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->key))
+                ? new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->attribute))
                 : null;
         }
         if ($this->formatter instanceof Closure) {
             return $this->manageHtmlEscaping(($this->formatter)($model));
         }
         if ($this->formatter instanceof AbstractFormatter) {
-            return $this->manageHtmlEscaping($this->formatter->format($model, $this->key));
+            return $this->manageHtmlEscaping($this->formatter->format($model, $this->attribute));
         }
 
-        return $this->manageHtmlEscaping($model->{$this->key});
-    }
-
-    public function getKey(): string
-    {
-        return $this->key;
+        return $this->manageHtmlEscaping($model->{$this->attribute});
     }
 
     protected function manageHtmlEscaping(mixed $value): HtmlString|string

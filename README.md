@@ -24,7 +24,7 @@ Save time and easily render tables in your views from Eloquent models.
 Tables can be generated under the following UI frameworks:
 * Bootstrap 5
 * Bootstrap 4
-* TailwindCSS 2 (upcoming feature)
+* TailwindCSS 3 (upcoming feature)
 
 **DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.**
 
@@ -130,7 +130,9 @@ And display it in a view:
   * [Define column actions](#define-column-actions)
   * [Configure columns searching](#configure-columns-searching)
   * [Configure columns sorting](#configure-columns-sorting)
+  * [Allow columns to be reordered from drag and drop action](#allow-columns-to-be-reordered-from-drag-and-drop-action)
   * [Declare results on tables](#declare-results-on-tables)
+  * [Set up a few lines of JavaScript](#set-up-a-few-lines-of-javascript)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -553,6 +555,8 @@ Configure table bulk actions that will be available in a dropdown positioned at 
 
 If no bulk action is declared on your table, the dedicated column will not be displayed.
 
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow bulk actions confirmation requests and feedback to be working properly.
+
 This package provides the built-in following bulk actions:
 * `VerifyEmailBulkAction`:
     * Requires a `string $attribute` argument on instantiation
@@ -643,50 +647,13 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-When an action has a confirmation question configured, it will not be directly executed but a `table:action:confirm` Livewire event will be emitted instead with the following parameters:
-1. The action type
-2. The action identifier
-3. The model primary key related to your action
-4. The `$confirmationQuestion` attribute from your action
-
-As you will see below, the 4th param of this event is the only one you'll have to use for in order to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is confirmed by the user. Just ignore them in your treatment.
-
-You will have to intercept this event from your own JS script and display the action confirmation request from your favorite modal/alert/toast library (a basic example is provided below).
-
-When action is confirmed by the user, you'll have to emit a new `table:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
-1. The action type
-2. The action identifier
-3. The model primary key related to your action
-
-Here is an JS snippet to show you how to proceed:
-
-```javascript
-// Listen to the action confirmation request
-Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
-    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
-    if (window.confirm(confirmationQuestion)) {
-        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
-        Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
-    }
-});
-```
-
-Once the action executed, a last `table:action:executed` Livewire event will be triggered if the action has a configured feedback message.
-
-Following the same logic, you'll have to intercept it from a JS script like this one to provide an immediate feedback to the user:
-
-```javascript
-Livewire.on('table:action:feedback', (feedbackMessage) => {
-    // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
-    window.alert(feedbackMessage);
-});
-```
-
 ### Define table row actions
 
 Configure row actions on your table that will be displayed at the end of each row.
 
 If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be displayed.
+
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow row actions confirmation requests and feedback to be working properly.
 
 This package provides the built-in following row actions:
 * `ShowRowAction`:
@@ -700,7 +667,7 @@ This package provides the built-in following row actions:
 
 To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
 
-You'll be able to chain the same methods as for a row action => [See bulk actions configuration](#define-table-bulk-actions).
+You'll be able to chain the same methods as for a bulk action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
 namespace App\Tables;
@@ -730,7 +697,7 @@ class UsersTable extends AbstractTableConfiguration
                     // Override the action default feedback message
                     // Or set `false` if you do not want to trigger any feedback message for this action
                     ->feedbackMessage('User ' . $user->name . ' has been deleted.'),
-            ]).
+            ]);
     }
 }
 ```
@@ -775,7 +742,7 @@ To declare columns, just use the static `make` method that will await a `string 
 * Define a default column key guessed from a snake_case formatting of the column title
 * Define a default cell value from the column key
 
-Optionally, you may pass a second `string $key` argument to set a specific column key.
+Optionally, you may pass a second `string $attribute` argument to set a specific column key.
 
 ```php
 namespace App\Tables;
@@ -888,6 +855,8 @@ Configure column actions on your table that will be displayed on their own cells
 
 Column actions have a lot in common with row actions.
 
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow column actions confirmation requests and feedback to be working properly.
+
 This package provides the built-in following actions:
 * `ToggleBooleanColumnAction`:
   * Toggles the email verification status
@@ -896,7 +865,7 @@ This package provides the built-in following actions:
 
 To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
 
-You'll be able to chain the same methods as for a row action => [See bulk actions configuration](#define-table-bulk-actions).
+You'll be able to chain the same methods as for a bulk action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
 namespace App\Tables;
@@ -1105,6 +1074,42 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
+### Allow columns to be reordered from drag and drop action
+
+Allow columns to be reordered from drag and drop action by calling the `reorderable` method on your table.
+
+This method will await a first `string $title` argument and an optional second `string $attribute` argument, just as you would [declare a new column](#declare-columns-on-tables).
+
+**Important notes:**
+* [You'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow reorder action feedback to be working properly.
+* You'll have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable), that will handle the drag and drop utility for us
+
+Activating this feature will:
+* Prepend a column that will display the drag-and-drop icon defined in the `laravel-table.icon.drag_drop` config value, followed by the defined model order attribute value
+* Sort the rows from the defined model order attribute
+* Disable all other columns sorting as it is not compatible with drag-and-drop reordering
+* And of course, enable the drag-and-drop columns reordering by adding all the Livewire Sortable Plugin necessary markup
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            // A new `Position` column will display the drag-and-drop icon, followed by the `position` attribute value
+            // Rows will be sorted from the `position` model attribute and all other columns sorting will be disable
+            ->reorderable('Position');
+    }
+}
+```
+
 ### Declare results on tables
 
 To display results, you'll have to return an array of result instances from the `results` method available in your generated table configuration.
@@ -1159,6 +1164,49 @@ class UsersTable extends AbstractTableConfiguration
         ];
     }
 }
+```
+
+### Set up a few lines of JavaScript
+
+You'll have to add few Javascript lines to your project once this package is installed, in order to allow confirmation requests and actions feedback to be working properly. 
+
+When an action is requesting the user confirmation, it will not be directly executed. A `table:action:confirm` Livewire event will be emitted instead with the following parameters:
+1. The action type
+2. The action identifier
+3. The model primary key related to your action
+4. The `$confirmationQuestion` attribute from your action
+
+As you will see on the provided snippet below, the 4th param of this event is the only one you'll have to use in order to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is confirmed by the user. Just ignore them in your treatment.
+
+You will have to intercept this event from your own JS script and prompt a confirmation request.
+
+When the action is confirmed by the user, you'll have to emit a new `table:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
+1. The action type
+2. The action identifier
+3. The model primary key related to your action
+
+Here is an JS snippet to show you how to proceed:
+
+```javascript
+// Listen to the action confirmation request
+Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
+    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
+    if (window.confirm(confirmationQuestion)) {
+        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
+        Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
+    }
+});
+```
+
+Once an action is executed, a `table:action:feedback` Livewire event is triggered (it sometimes depends on the configuration of a feedback message).
+
+Following the same logic, you'll have to intercept it from a JS script as shown on the snippet below to provide an immediate feedback to the user:
+
+```javascript
+Livewire.on('table:action:feedback', (feedbackMessage) => {
+    // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
+    window.alert(feedbackMessage);
+});
 ```
 
 ## Testing

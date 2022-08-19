@@ -3,6 +3,7 @@
 namespace Okipa\LaravelTable\Livewire;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -43,6 +44,8 @@ class Table extends Component
     public string|null $sortBy;
 
     public string|null $sortDir;
+
+    public array $reorderConfig = [];
 
     public array $selectedFilters = [];
 
@@ -111,16 +114,18 @@ class Table extends Component
     protected function buildTable(AbstractTableConfiguration $config): array
     {
         $table = $config->setup();
-        $columns = $table->getColumns();
         // Events triggering on load
         $table->triggerEventsEmissionOnLoad($this);
+        // Prepend reorder column
+        $table->prependReorderColumn();
         // Search
         $this->searchableLabels = $table->getSearchableLabels();
         // Sort
         $columnSortedByDefault = $table->getColumnSortedByDefault();
-        $this->sortBy = $this->sortBy ?? $columnSortedByDefault?->getKey();
+        $this->sortBy =
+            $table->getOrderColumn()?->getAttribute() ?: ($this->sortBy ?? $columnSortedByDefault?->getAttribute());
         $this->sortDir = $this->sortDir ?? $columnSortedByDefault?->getSortDirByDefault();
-        $sortableClosure = $this->sortBy
+        $sortableClosure = $this->sortBy && ! $table->getOrderColumn()
             ? $table->getColumn($this->sortBy)->getSortableClosure()
             : null;
         // Paginate
@@ -145,7 +150,7 @@ class Table extends Component
         // Bulk actions
         if (in_array($this->selectedModelKeys, [['selectAll'], ['unselectAll']], true)) {
             $this->selectedModelKeys = $this->selectedModelKeys === ['selectAll']
-                ? $table->getRows()->pluck('id')->map(fn (int $id) => (string) $id)->toArray()
+                ? $table->getRows()->map(fn (Model $model) => $model->getKey())->toArray()
                 : [];
         }
         $this->tableBulkActionsArray = $table->generateBulkActionsArray($this->selectedModelKeys);
@@ -153,13 +158,16 @@ class Table extends Component
         $this->tableRowActionsArray = $table->generateRowActionsArray();
         // Column actions
         $this->tableColumnActionsArray = $table->generateColumnActionsArray();
+        // Reorder config
+        $this->reorderConfig = $table->getReorderConfig($this->sortBy, $this->sortDir);
 
         return [
-            'columns' => $columns,
+            'columns' => $table->getColumns(),
             'columnsCount' => ($this->tableBulkActionsArray ? 1 : 0)
-                + $columns->count()
+                + $table->getColumns()->count()
                 + ($this->tableRowActionsArray ? 1 : 0),
             'rows' => $table->getRows(),
+            'orderColumn' => $table->getOrderColumn(),
             'filtersArray' => $filtersArray,
             'numberOfRowsPerPageChoiceEnabled' => $table->isNumberOfRowsPerPageChoiceEnabled(),
             'numberOfRowsPerPageOptions' => $numberOfRowsPerPageOptions,
@@ -167,6 +175,40 @@ class Table extends Component
             'results' => $table->getResults(),
             'navigationStatus' => $table->getNavigationStatus(),
         ];
+    }
+
+    public function reorder(array $list): void
+    {
+        [
+            'modelClass' => $modelClass,
+            'modelPrimaryAttribute' => $modelPrimaryAttribute,
+            'reorderAttribute' => $reorderAttribute,
+            'beforeReorderAllModelKeys' => $beforeReorderAllModelKeys,
+        ] = $this->reorderConfig;
+        $afterReorderDisplayedModelKeys = collect($list)->sortBy('order')
+            ->pluck('value')
+            ->mapWithKeys(fn (int|string $modelKey) => [
+                array_search($modelKey, $beforeReorderAllModelKeys, true) => $modelKey,
+            ]);
+        $beforeReorderDisplayedModelKeys = $afterReorderDisplayedModelKeys->sortKeys()->values();
+        $afterReorderDisplayedModelKeys = $afterReorderDisplayedModelKeys->values();
+        $afterReorderAllModelKeys = collect($beforeReorderAllModelKeys);
+        foreach ($beforeReorderDisplayedModelKeys as $beforeReorderIndex => $beforeReorderDisplayedModelKey) {
+            $afterReorderIndex = $afterReorderDisplayedModelKeys->search($beforeReorderDisplayedModelKey);
+            if ($beforeReorderIndex !== $afterReorderIndex) {
+                $modelKeyNewIndex = array_search(
+                    $beforeReorderDisplayedModelKeys->get($afterReorderIndex),
+                    $beforeReorderAllModelKeys,
+                    true
+                );
+                $afterReorderAllModelKeys->put($modelKeyNewIndex, $beforeReorderDisplayedModelKey);
+            }
+        }
+        $startPosition = 1;
+        foreach ($afterReorderAllModelKeys as $modelKey) {
+            app($modelClass)->where($modelPrimaryAttribute, $modelKey)->update([$reorderAttribute => $startPosition++]);
+        }
+        $this->emit('table:action:feedback', __('Table has been reordered.'));
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void
@@ -221,7 +263,6 @@ class Table extends Component
             return null;
         }
         if ($requiresConfirmation) {
-            //            dd($bulkActionInstance->getConfirmationQuestion());
             return $this->emit(
                 'table:action:confirm',
                 'bulkAction',

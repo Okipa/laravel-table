@@ -1,6 +1,6 @@
 <div wire:init="init">
     @if($initialized)
-        <div class="table-responsive">
+        <div{!! $orderColumn ? ' wire:sortable="reorder"' : null !!} class="table-responsive">
             <table class="table table-borderless">
                 {{-- Table header--}}
                 <thead>
@@ -135,10 +135,10 @@
                         @endif
                         {{-- Sorting/Column titles --}}
                         @foreach($columns as $column)
-                            <th wire:key="column-{{ Str::slug($column->getKey()) }}" class="align-middle" scope="col">
-                                @if($column->isSortable())
-                                    @if($sortBy === $column->getKey())
-                                        <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
+                            <th wire:key="column-{{ Str::slug($column->getAttribute()) }}" class="align-middle" scope="col">
+                                @if($column->isSortable($orderColumn))
+                                    @if($sortBy === $column->getAttribute())
+                                        <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
                                            class="d-flex align-items-center"
                                            href=""
                                            title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}"
@@ -149,7 +149,7 @@
                                             <span class="ms-2">{{ $column->getTitle() }}</span>
                                         </a>
                                     @else
-                                        <a wire:click.prevent="sortBy('{{ $column->getKey() }}')"
+                                        <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
                                            class="d-flex align-items-center"
                                            href=""
                                            title="{{ __('Sort ascending') }}"
@@ -175,7 +175,7 @@
                 <tbody>
                     {{-- Rows --}}
                     @forelse($rows as $model)
-                        <tr wire:key="row-{{ Str::slug($model->getKey()) }}" @class(array_merge(Arr::get($tableRowClass, $model->getKey(), []), ['border-bottom']))>
+                        <tr wire:key="row-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.item="' . $model->getKey() . '"' : null !!} @class(array_merge(Arr::get($tableRowClass, $model->getKey(), []), ['border-bottom']))>
                             {{-- Row bulk action selector --}}
                             @if($tableBulkActionsArray)
                                 <td class="align-middle">
@@ -185,9 +185,9 @@
                             {{-- Row columns values --}}
                             @foreach($columns as $column)
                                 @if($loop->first)
-                                    <th wire:key="cell-{{ $column->getKey() }}-{{ $model->getKey() }}" class="align-middle" scope="row">{{ $column->getValue($model, $tableColumnActionsArray) }}</th>
+                                    <th wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.handle' : null !!} class="align-middle" scope="row">{{ $orderColumn ? config('laravel-table.icon.drag_drop') : null }}{{ $column->getValue($model, $tableColumnActionsArray) }}</th>
                                 @else
-                                    <td wire:key="cell-{{ $column->getKey() }}-{{ $model->getKey() }}" class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
+                                    <td wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}" class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
                                 @endif
                             @endforeach
                             {{-- Row actions --}}

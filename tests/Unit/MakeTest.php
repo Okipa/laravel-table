@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Okipa\LaravelTable\Console\Commands\MakeBulkAction;
 use Okipa\LaravelTable\Console\Commands\MakeColumnAction;
@@ -14,6 +15,8 @@ use Tests\TestCase;
 
 class MakeTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();

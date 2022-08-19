@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use ErrorException;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 
 class TableConfigurationTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_cant_generate_table_with_wrong_configuration(): void
     {

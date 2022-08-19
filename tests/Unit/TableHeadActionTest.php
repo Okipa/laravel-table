@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -13,6 +14,8 @@ use Tests\TestCase;
 
 class TableHeadActionTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_table_head_action(): void
     {

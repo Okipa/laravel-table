@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -15,6 +16,8 @@ use Tests\TestCase;
 
 class ColumnSearchableTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_cant_display_search_form_when_no_column_is_searchable(): void
     {
