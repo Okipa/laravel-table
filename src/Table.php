@@ -276,9 +276,9 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function getColumn(string $key): Column
+    public function getColumn(string $attribute): Column
     {
-        return $this->getColumns()->filter(fn (Column $column) => $column->getAttribute() === $key)->first();
+        return $this->getColumns()->filter(fn (Column $column) => $column->getAttribute() === $attribute)->first();
     }
 
     public function query(Closure $queryClosure): self
