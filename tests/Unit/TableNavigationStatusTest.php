@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 
 class TableNavigationStatusTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_display_navigation_status_with_no_result(): void
     {

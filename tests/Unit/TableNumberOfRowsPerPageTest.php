@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 
 class TableNumberOfRowsPerPageTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_cant_set_number_of_rows_per_page_options_when_feature_is_globally_disabled(): void
     {
@@ -219,9 +222,13 @@ class TableNumberOfRowsPerPageTest extends TestCase
         $notDisplayedHtml = [];
         foreach ($users as $user) {
             if ($user->id === $users->first()->id) {
-                $displayedHtml[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">' . $user->id . '</th>';
+                $displayedHtml[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">'
+                    . $user->id
+                    . '</th>';
             } else {
-                $notDisplayedHtml[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">' . $user->id . '</th>';
+                $notDisplayedHtml[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">'
+                    . $user->id
+                    . '</th>';
             }
         }
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
@@ -276,7 +283,9 @@ class TableNumberOfRowsPerPageTest extends TestCase
         };
         $values = [];
         foreach ($users as $user) {
-            $values[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">' . $user->id . '</th>';
+            $values[] = '<th wire:key="cell-id-' . $user->id . '" class="align-middle" scope="row">'
+                . $user->id
+                . '</th>';
         }
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')

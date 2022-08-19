@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
@@ -18,6 +19,8 @@ use Tests\TestCase;
 
 class TableBulkActionsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_display_bulk_actions_dropdown_and_column_when_none_is_defined(): void
     {

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 
 class TablePaginationTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_cant_paginate_table_when_number_of_rows_does_not_exceed_the_limit(): void
     {

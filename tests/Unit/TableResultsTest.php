@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
@@ -16,6 +17,8 @@ use Tests\TestCase;
 
 class TableResultsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_column_titles(): void
     {

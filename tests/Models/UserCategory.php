@@ -3,11 +3,11 @@
 namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tests\Database\Factories\UserCategoryFactory;
 
-class UserCategory extends Authenticatable
+class UserCategory extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class UserCategory extends Authenticatable
     protected $table = 'user_categories';
 
     /** @var array */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'position'];
 
     protected static function newFactory(): UserCategoryFactory
     {

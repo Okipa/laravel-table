@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('user_categories', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('position');
             $table->timestamps();
         });
     }

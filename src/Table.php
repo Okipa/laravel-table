@@ -20,6 +20,8 @@ class Table
 
     protected array $eventsToEmitOnLoad = [];
 
+    protected Column|null $orderColumn = null;
+
     protected bool $numberOfRowsPerPageChoiceEnabled;
 
     protected array $numberOfRowsPerPageOptions;
@@ -67,6 +69,116 @@ class Table
         $this->eventsToEmitOnLoad = $eventsToEmitOnLoad;
 
         return $this;
+    }
+
+    public function reorderable(string $orderColumnTitle, string $orderColumnAttribute = null): self
+    {
+        $orderColumn = Column::make($orderColumnTitle, $orderColumnAttribute)->sortable();
+        $this->orderColumn = $orderColumn;
+
+        return $this;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function prependReorderColumn(): void
+    {
+        $orderColumn = $this->getOrderColumn();
+        if ($orderColumn) {
+            $this->getColumns()->prepend($orderColumn);
+        }
+    }
+
+    public function getOrderColumn(): Column|null
+    {
+        return $this->orderColumn;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function getColumns(): Collection
+    {
+        if ($this->columns->isEmpty()) {
+            throw new NoColumnsDeclared($this->model);
+        }
+
+        return $this->columns;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function getReorderConfig(string|null $sortBy, string|null $sortDir): array
+    {
+        if (! $this->getOrderColumn()) {
+            return [];
+        }
+
+        return [
+            'modelClass' => $this->model::class,
+            'modelPrimaryAttribute' => $this->model->getKeyName(),
+            'reorderAttribute' => $this->getOrderColumn()->getAttribute(),
+            'beforeReorderAllModelKeys' => $this->prepareQuery([], '', $sortBy, $sortDir)
+                ->get()
+                ->map(fn (Model $model) => $model->getKey())
+                ->toArray(),
+        ];
+    }
+
+    public function getRows(): LengthAwarePaginator
+    {
+        return $this->rows;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    public function prepareQuery(
+        array $filterClosures,
+        string|null $searchBy,
+        string|Closure|null $sortBy,
+        string|null $sortDir
+    ): Builder {
+        $query = $this->model->query();
+        // Query
+        if ($this->queryClosure) {
+            ($this->queryClosure)($query);
+        }
+        // Filters
+        if ($filterClosures) {
+            foreach ($filterClosures as $filterClosure) {
+                $filterClosure($query);
+            }
+        }
+        // Search
+        if ($searchBy) {
+            $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
+                $searchableClosure = $searchableColumn->getSearchableClosure();
+                $searchableClosure
+                    ? $query->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
+                    : $query->orWhere(
+                        DB::raw('LOWER(' . $searchableColumn->getAttribute() . ')'),
+                        $this->getCaseInsensitiveSearchingLikeOperator(),
+                        '%' . mb_strtolower($searchBy) . '%'
+                    );
+            });
+        }
+        // Sort
+        if ($sortBy && $sortDir) {
+            $sortBy instanceof Closure
+                ? $sortBy($query, $sortDir)
+                : $query->orderBy($sortBy, $sortDir);
+        }
+
+        return $query;
+    }
+
+    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
+    protected function getSearchableColumns(): Collection
+    {
+        return $this->getColumns()->filter(fn (Column $column) => $column->isSearchable());
+    }
+
+    protected function getCaseInsensitiveSearchingLikeOperator(): string
+    {
+        $connection = config('database.default');
+        $driver = config('database.connections.' . $connection . '.driver');
+
+        return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
     public function triggerEventsEmissionOnLoad(Livewire\Table $table): void
@@ -150,7 +262,8 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumnSortedByDefault(): Column|null
     {
-        $sortableColumns = $this->getColumns()->filter(fn (Column $column) => $column->isSortable());
+        $sortableColumns =
+            $this->getColumns()->filter(fn (Column $column) => $column->isSortable($this->getOrderColumn()));
         if ($sortableColumns->isEmpty()) {
             return null;
         }
@@ -163,19 +276,9 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function getColumns(): Collection
+    public function getColumn(string $attribute): Column
     {
-        if ($this->columns->isEmpty()) {
-            throw new NoColumnsDeclared($this->model);
-        }
-
-        return $this->columns;
-    }
-
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function getColumn(string $key): Column
-    {
-        return $this->getColumns()->filter(fn (Column $column) => $column->getKey() === $key)->first();
+        return $this->getColumns()->filter(fn (Column $column) => $column->getAttribute() === $attribute)->first();
     }
 
     public function query(Closure $queryClosure): self
@@ -183,61 +286,6 @@ class Table
         $this->queryClosure = $queryClosure;
 
         return $this;
-    }
-
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function prepareQuery(
-        array $filterClosures,
-        string|null $searchBy,
-        string|Closure|null $sortBy,
-        string|null $sortDir
-    ): Builder {
-        $query = $this->model->query();
-        // Query
-        if ($this->queryClosure) {
-            ($this->queryClosure)($query);
-        }
-        // Filters
-        if ($filterClosures) {
-            foreach ($filterClosures as $filterClosure) {
-                $filterClosure($query);
-            }
-        }
-        // Search
-        if ($searchBy) {
-            $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
-                $searchableClosure = $searchableColumn->getSearchableClosure();
-                $searchableClosure
-                    ? $query->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
-                    : $query->orWhere(
-                        DB::raw('LOWER(' . $searchableColumn->getKey() . ')'),
-                        $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
-                    );
-            });
-        }
-        // Sort
-        if ($sortBy && $sortDir) {
-            $sortBy instanceof Closure
-                ? $sortBy($query, $sortDir)
-                : $query->orderBy($sortBy, $sortDir);
-        }
-
-        return $query;
-    }
-
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    protected function getSearchableColumns(): Collection
-    {
-        return $this->getColumns()->filter(fn (Column $column) => $column->isSearchable());
-    }
-
-    protected function getCaseInsensitiveSearchingLikeOperator(): string
-    {
-        $connection = config('database.default');
-        $driver = config('database.connections.' . $connection . '.driver');
-
-        return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
     public function paginateRows(Builder $query, int $numberOfRowsPerPage): void
@@ -296,8 +344,8 @@ class Table
         if (! $this->rowClassesClosure) {
             return $tableRowClass;
         }
-        foreach ($this->rows->getCollection() as $row) {
-            $tableRowClass[$row->getKey()] = ($this->rowClassesClosure)($row);
+        foreach ($this->rows->getCollection() as $model) {
+            $tableRowClass[$model->getKey()] = ($this->rowClassesClosure)($model);
         }
 
         return $tableRowClass;
@@ -373,7 +421,7 @@ class Table
         foreach ($this->rows->getCollection() as $model) {
             $columnActions = $this->getColumns()
                 ->mapWithKeys(fn (Column $column) => [
-                    $column->getKey() => $column->getAction()
+                    $column->getAttribute() => $column->getAction()
                         ? $column->getAction()($model)
                         : null,
                 ])
@@ -396,11 +444,6 @@ class Table
         return $this->getSearchableColumns()
             ->map(fn (Column $searchableColumn) => ['title' => $searchableColumn->getTitle()])
             ->implode('title', ', ');
-    }
-
-    public function getRows(): LengthAwarePaginator
-    {
-        return $this->rows;
     }
 
     public function getResults(): Collection

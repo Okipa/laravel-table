@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
@@ -16,6 +17,8 @@ use Tests\TestCase;
 
 class TableRowActionsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_row_actions(): void
     {

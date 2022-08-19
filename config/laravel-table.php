@@ -6,8 +6,8 @@ return [
      * The UI framework that should be used to generate the components.
      * Can be set to:
      * - bootstrap-5
-     * - bootstrap-4
-     * - tailwind-2 (upcoming feature)
+     * - bootstrap-4 (upcoming feature)
+     * - tailwind-3 (upcoming feature)
      */
     'ui' => 'bootstrap-5',
 
@@ -22,6 +22,7 @@ return [
         'validate' => '<i class="fa-solid fa-check"></i>',
         'info' => '<i class="fa-solid fa-circle-info"></i>',
         'reset' => '<i class="fa-solid fa-rotate-left"></i>',
+        'drag_drop' => '<i class="fa-solid fa-grip-vert fa-fw"></i>',
         'create' => '<i class="fa-solid fa-circle-plus fa-fw"></i>',
         'show' => '<i class="fa-solid fa-eye fa-fw"></i>',
         'edit' => '<i class="fa-solid fa-pencil fa-fw"></i>',

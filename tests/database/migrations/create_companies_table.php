@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('owner_id')->constrained('users')->nullOnDelete();
             $table->string('name');
+            $table->unsignedBigInteger('position');
             $table->timestamps();
         });
     }

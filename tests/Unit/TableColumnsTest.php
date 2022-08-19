@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\ViewException;
 use Livewire\Livewire;
@@ -13,6 +14,8 @@ use Tests\TestCase;
 
 class TableColumnsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_cant_generate_table_without_columns(): void
     {

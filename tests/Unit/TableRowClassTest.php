@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
@@ -11,6 +12,8 @@ use Tests\TestCase;
 
 class TableRowClassTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_row_classes(): void
     {

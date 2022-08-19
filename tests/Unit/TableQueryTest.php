@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
@@ -12,6 +13,8 @@ use Tests\TestCase;
 
 class TableQueryTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_query(): void
     {

@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
@@ -17,6 +18,8 @@ use Tests\TestCase;
 
 class ColumnActionTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_column_actions(): void
     {
