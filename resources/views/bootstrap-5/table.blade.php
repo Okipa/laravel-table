@@ -1,6 +1,6 @@
-<div wire:init="init">
+<div wire:init="init"{!! $orderColumn ? ' wire:sortable="reorder"' : null !!}>
     @if($initialized)
-        <div{!! $orderColumn ? ' wire:sortable="reorder"' : null !!} class="table-responsive">
+        <div class="table-responsive">
             <table class="table table-borderless">
                 {{-- Table header--}}
                 <thead>

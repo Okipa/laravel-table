@@ -116,7 +116,7 @@ class Table
             'reorderAttribute' => $this->getOrderColumn()->getAttribute(),
             'beforeReorderAllModelKeys' => $this->prepareQuery([], '', $sortBy, $sortDir)
                 ->get()
-                ->map(fn (Model $model) => $model->getKey())
+                ->map(fn (Model $model) => (string) $model->getKey())
                 ->toArray(),
         ];
     }

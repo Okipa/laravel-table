@@ -187,7 +187,7 @@ class Table extends Component
         ] = $this->reorderConfig;
         $afterReorderDisplayedModelKeys = collect($list)->sortBy('order')
             ->pluck('value')
-            ->mapWithKeys(fn (int|string $modelKey) => [
+            ->mapWithKeys(fn (string $modelKey) => [
                 array_search($modelKey, $beforeReorderAllModelKeys, true) => $modelKey,
             ]);
         $beforeReorderDisplayedModelKeys = $afterReorderDisplayedModelKeys->sortKeys()->values();
