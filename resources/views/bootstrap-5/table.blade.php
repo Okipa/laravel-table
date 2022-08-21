@@ -1,4 +1,4 @@
-<div wire:init="init"{!! $orderColumn ? ' wire:sortable="reorder"' : null !!}>
+<div wire:init="init">
     @if($initialized)
         <div class="table-responsive">
             <table class="table table-borderless">
@@ -172,7 +172,7 @@
                     </tr>
                 </thead>
                 {{-- Table body--}}
-                <tbody>
+                <tbody{!! $orderColumn ? ' wire:sortable="reorder"' : null !!}>
                     {{-- Rows --}}
                     @forelse($rows as $model)
                         <tr wire:key="row-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.item="' . $model->getKey() . '"' : null !!} @class(array_merge(Arr::get($tableRowClass, $model->getKey(), []), ['border-bottom']))>
