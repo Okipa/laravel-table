@@ -186,7 +186,7 @@
                             @foreach($columns as $column)
                                 @if($loop->first)
                                     <th wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.handle' : null !!} class="align-middle" scope="row">
-                                        <span class="d-flex align-items-center">{!! $orderColumn ? '<span class="me-2">' . config('laravel-table.icon.drag_drop') . '</span>' : null !!}{{ $column->getValue($model, $tableColumnActionsArray) }}</span>
+                                        {!! $orderColumn ? '<span class="me-2">' . config('laravel-table.icon.drag_drop') . '</span>' : null !!}{{ $column->getValue($model, $tableColumnActionsArray) }}
                                     </th>
                                 @else
                                     <td wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}" class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
