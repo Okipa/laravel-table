@@ -166,7 +166,7 @@ class TableReorderableTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->call('reorder', $reorderedList)
-            ->assertEmitted('table:action:feedback', 'Table has been reordered.');
+            ->assertEmitted('table:action:feedback', 'The table has been reordered.');
         $reorderedCategories = UserCategory::orderBy('position')->get();
         $page1SearchedCategoryIds = $reorderedCategories->pluck('id')->take(3)->toArray();
         // Searched categories from page 1 have been reordered
@@ -220,7 +220,7 @@ class TableReorderableTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->call('reorder', $reorderedList)
-            ->assertEmitted('table:action:feedback', 'Table has been reordered.');
+            ->assertEmitted('table:action:feedback', 'The table has been reordered.');
         $reorderedCategories = UserCategory::orderBy('position')->get();
         $page1SearchedCategoryIds = $reorderedCategories->where('name', 'Name test 2')->pluck('id')->take(3)->toArray();
         // Searched categories from page 1 have been reordered
@@ -270,7 +270,7 @@ class TableReorderableTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->call('reorder', $reorderedList)
-            ->assertEmitted('table:action:feedback', 'Table has been reordered.');
+            ->assertEmitted('table:action:feedback', 'The table has been reordered.');
         $reorderedCompanies = Company::orderBy('position')->get();
         $page2Filtered3CompanyIds =
             $reorderedCompanies->where('owner_id', $user2->id)->pluck('id')->slice(3)->take(3)->values()->toArray();
