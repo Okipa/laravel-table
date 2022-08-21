@@ -23,14 +23,10 @@ Save time and easily render tables in your views from Eloquent models.
 
 Tables can be generated under the following UI frameworks:
 * Bootstrap 5
-* Bootstrap 4
+* Bootstrap 4 (upcoming feature)
 * TailwindCSS 3 (upcoming feature)
 
 **DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.**
-
-**V5 remaining backlog:**
-* Table `reorderable` => allow rows reordering with drag & drop
-* Upgrade guide
 
 Found this package helpful? Please consider supporting my work!
 
