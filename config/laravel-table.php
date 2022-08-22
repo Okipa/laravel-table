@@ -22,7 +22,7 @@ return [
         'validate' => '<i class="fa-solid fa-check"></i>',
         'info' => '<i class="fa-solid fa-circle-info"></i>',
         'reset' => '<i class="fa-solid fa-rotate-left"></i>',
-        'drag_drop' => '<i class="fa-solid fa-bars"></i>',
+        'drag_drop' => '<i class="fa-solid fa-grip-vertical"></i>',
         'create' => '<i class="fa-solid fa-circle-plus fa-fw"></i>',
         'show' => '<i class="fa-solid fa-eye fa-fw"></i>',
         'edit' => '<i class="fa-solid fa-pencil fa-fw"></i>',

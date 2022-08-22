@@ -113,7 +113,7 @@ class TableReorderableTest extends TestCase
                 '<tr wire:key="row-' . $categories->first()->id . '" wire:sortable.item="' . $categories->first()->id
                 . '" class="border-bottom">',
                 '<th wire:key="cell-position-' . $categories->first()->id
-                . '" wire:sortable.handle class="align-middle" scope="row">',
+                . '" wire:sortable.handle style="cursor: move;" class="align-middle" scope="row">',
                 '<span class="me-2">icon-drag-drop</span>' . $categories->first()->position,
                 '</th>',
                 '<td wire:key="cell-id-' . $categories->first()->id . '" class="align-middle">',
@@ -126,7 +126,7 @@ class TableReorderableTest extends TestCase
                 '<tr wire:key="row-' . $categories->last()->id . '" wire:sortable.item="' . $categories->last()->id
                 . '" class="border-bottom">',
                 '<th wire:key="cell-position-' . $categories->last()->id
-                . '" wire:sortable.handle class="align-middle" scope="row">',
+                . '" wire:sortable.handle style="cursor: move;" class="align-middle" scope="row">',
                 '<span class="me-2">icon-drag-drop</span>' . $categories->last()->position,
                 '</th>',
                 '<td wire:key="cell-id-' . $categories->last()->id . '" class="align-middle">',
