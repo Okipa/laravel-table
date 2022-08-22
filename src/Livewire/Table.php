@@ -212,7 +212,7 @@ class Table extends Component
         foreach ($afterReorderAllModelKeys->sortKeys(descending: $sortDir === 'desc')->values() as $modelKey) {
             app($modelClass)->where($modelPrimaryAttribute, $modelKey)->update([$reorderAttribute => $startPosition++]);
         }
-        $this->emit('table:action:feedback', __('The table has been reordered.'));
+        $this->emit('table:action:feedback', __('The list has been reordered.'));
     }
 
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void

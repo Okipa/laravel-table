@@ -1,5 +1,10 @@
 <div wire:init="init">
     @if($initialized)
+        @if($orderColumn)
+            <div class="alert alert-info">
+                {{ __('You can rearrange the order of the items in this list using a drag and drop action.') }}
+            </div>
+        @endif
         <div class="table-responsive">
             <table class="table table-borderless">
                 {{-- Table header--}}
