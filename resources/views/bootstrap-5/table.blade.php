@@ -189,7 +189,9 @@
                                         {!! $orderColumn ? '<span class="me-2">' . config('laravel-table.icon.drag_drop') . '</span>' : null !!}{{ $column->getValue($model, $tableColumnActionsArray) }}
                                     </th>
                                 @else
-                                    <td wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}" class="align-middle">{{ $column->getValue($model, $tableColumnActionsArray) }}</td>
+                                    <td wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}" class="align-middle">
+                                        {{ $column->getValue($model, $tableColumnActionsArray) }}
+                                    </td>
                                 @endif
                             @endforeach
                             {{-- Row actions --}}

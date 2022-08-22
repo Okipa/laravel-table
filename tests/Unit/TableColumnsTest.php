@@ -93,18 +93,18 @@ class TableColumnsTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<th wire:key="cell-id-' . $users->first()->id . '" class="align-middle" scope="row">'
-                . $users->first()->id
-                . '</th>',
-                '<td wire:key="cell-name-' . $users->first()->id . '" class="align-middle">'
-                . $users->first()->name
-                . '</td>',
-                '<th wire:key="cell-id-' . $users->last()->id . '" class="align-middle" scope="row">'
-                . $users->last()->id
-                . '</th>',
-                '<td wire:key="cell-name-' . $users->last()->id . '" class="align-middle">'
-                . $users->last()->name
-                . '</td>',
+                '<th wire:key="cell-id-' . $users->first()->id . '" class="align-middle" scope="row">',
+                $users->first()->id,
+                '</th>',
+                '<td wire:key="cell-name-' . $users->first()->id . '" class="align-middle">',
+                $users->first()->name,
+                '</td>',
+                '<th wire:key="cell-id-' . $users->last()->id . '" class="align-middle" scope="row">',
+                $users->last()->id,
+                '</th>',
+                '<td wire:key="cell-name-' . $users->last()->id . '" class="align-middle">',
+                $users->last()->name,
+                '</td>',
                 '</tbody>',
             ]);
     }

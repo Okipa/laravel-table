@@ -159,7 +159,7 @@ class Table extends Component
         // Column actions
         $this->tableColumnActionsArray = $table->generateColumnActionsArray();
         // Reorder config
-        $this->reorderConfig = $table->getReorderConfig($this->sortBy, $this->sortDir);
+        $this->reorderConfig = $table->getReorderConfig($this->sortDir);
 
         return [
             'columns' => $table->getColumns(),
@@ -183,8 +183,12 @@ class Table extends Component
             'modelClass' => $modelClass,
             'modelPrimaryAttribute' => $modelPrimaryAttribute,
             'reorderAttribute' => $reorderAttribute,
+            'sortDir' => $sortDir,
             'beforeReorderAllModelKeys' => $beforeReorderAllModelKeys,
         ] = $this->reorderConfig;
+        $beforeReorderAllModelKeys = collect($beforeReorderAllModelKeys)->sortKeys(descending: $sortDir === 'desc')
+            ->values()
+            ->toArray();
         $afterReorderDisplayedModelKeys = collect($list)->sortBy('order')
             ->pluck('value')
             ->mapWithKeys(fn (string $modelKey) => [
@@ -205,7 +209,7 @@ class Table extends Component
             }
         }
         $startPosition = 1;
-        foreach ($afterReorderAllModelKeys as $modelKey) {
+        foreach ($afterReorderAllModelKeys->sortKeys(descending: $sortDir === 'desc')->values() as $modelKey) {
             app($modelClass)->where($modelPrimaryAttribute, $modelKey)->update([$reorderAttribute => $startPosition++]);
         }
         $this->emit('table:action:feedback', __('The table has been reordered.'));

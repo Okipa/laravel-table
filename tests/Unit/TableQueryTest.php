@@ -40,11 +40,13 @@ class TableQueryTest extends TestCase
             'configParams' => ['userIdToExclude' => $users->first()->id],
         ])
             ->call('init')
-            ->assertSeeHtml('<th wire:key="cell-id-' . $users->last()->id . '" class="align-middle" scope="row">'
-                . $users->last()->id
-                . '</th>')
-            ->assertDontSeeHtml('<th wire:key="cell-id-' . $users->first()->id . '" class="align-middle" scope="row">'
-                . $users->first()->id
-                . '</th>');
+            ->assertSeeHtml([
+                '<th wire:key="cell-id-' . $users->last()->id . '" class="align-middle" scope="row">',
+                $users->last()->id,
+                '</th>',
+            ])
+            ->assertDontSeeHtml([
+                '<th wire:key="cell-id-' . $users->first()->id . '" class="align-middle" scope="row">',
+            ]);
     }
 }

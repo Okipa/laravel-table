@@ -52,8 +52,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ])
             ->assertDontSeeHtml([
@@ -111,8 +111,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
     }
@@ -165,8 +165,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
     }
@@ -219,8 +219,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
     }
@@ -277,8 +277,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
         $users = $users->sortByDesc('name');
@@ -307,8 +307,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
     }
@@ -365,8 +365,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->name . '</td>',
-                $users->last()->name . '</td>',
+                $users->first()->name,
+                $users->last()->name,
                 '</tbody>',
             ]);
     }
@@ -426,8 +426,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->companies->count() . '</td>',
-                $users->last()->companies->count() . '</td>',
+                $users->first()->companies->count(),
+                $users->last()->companies->count(),
                 '</tbody>',
             ]);
         $users = $users->sortByDesc('companies_count');
@@ -456,8 +456,8 @@ class ColumnSortableTest extends TestCase
                 '</tr>',
                 '</thead>',
                 '<tbody>',
-                $users->first()->companies->count() . '</td>',
-                $users->last()->companies->count() . '</td>',
+                $users->first()->companies->count(),
+                $users->last()->companies->count(),
                 '</tbody>',
             ]);
     }

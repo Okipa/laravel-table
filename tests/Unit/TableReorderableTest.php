@@ -52,9 +52,9 @@ class TableReorderableTest extends TestCase
                 '</th>',
                 '</tr>',
                 '</thead>',
-                '<tbody>',
-                $categories->first()->name . '</td>',
-                $categories->last()->name . '</td>',
+                '<tbody wire:sortable="reorder">',
+                $categories->first()->name,
+                $categories->last()->name,
                 '</tbody>',
             ])
             ->assertDontSeeHtml([
@@ -87,7 +87,7 @@ class TableReorderableTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
-                '<div wire:sortable="reorder" class="table-responsive">',
+                '<div class="table-responsive">',
                 '<thead>',
                 '<tr',
                 '<th wire:key="column-position" class="align-middle" scope="col">',
@@ -106,30 +106,32 @@ class TableReorderableTest extends TestCase
                 '</th>',
                 '</tr>',
                 '</thead>',
-                '<tbody>',
-                '<tr wire:key="row-' . $categories->first()->id . '" wire:sortable.item="' . $categories->first()->id . '" class="border-bottom">',
-                '<th wire:key="cell-position-' . $categories->first()->id . '" wire:sortable.handle class="align-middle" scope="row">'
-                . 'icon-drag-drop'
-                . $categories->first()->position
-                . '</th>',
-                '<td wire:key="cell-id-' . $categories->first()->id . '" class="align-middle">'
-                . $categories->first()->id
-                . '</td>',
-                '<td wire:key="cell-name-' . $categories->first()->id . '" class="align-middle">'
-                . $categories->first()->name
-                . '</td>',
+                '<tbody wire:sortable="reorder">',
+                '<tr wire:key="row-' . $categories->first()->id . '" wire:sortable.item="' . $categories->first()->id
+                . '" class="border-bottom">',
+                '<th wire:key="cell-position-' . $categories->first()->id
+                . '" wire:sortable.handle class="align-middle" scope="row">',
+                '<span class="me-2">icon-drag-drop</span>' . $categories->first()->position,
+                '</th>',
+                '<td wire:key="cell-id-' . $categories->first()->id . '" class="align-middle">',
+                $categories->first()->id,
+                '</td>',
+                '<td wire:key="cell-name-' . $categories->first()->id . '" class="align-middle">',
+                $categories->first()->name,
+                '</td>',
                 '</tr>',
-                '<tr wire:key="row-' . $categories->last()->id . '" wire:sortable.item="' . $categories->last()->id . '" class="border-bottom">',
-                '<th wire:key="cell-position-' . $categories->last()->id . '" wire:sortable.handle class="align-middle" scope="row">'
-                . 'icon-drag-drop'
-                . $categories->last()->position
-                . '</th>',
-                '<td wire:key="cell-id-' . $categories->last()->id . '" class="align-middle">'
-                . $categories->last()->id
-                . '</td>',
-                '<td wire:key="cell-name-' . $categories->last()->id . '" class="align-middle">'
-                . $categories->last()->name
-                . '</td>',
+                '<tr wire:key="row-' . $categories->last()->id . '" wire:sortable.item="' . $categories->last()->id
+                . '" class="border-bottom">',
+                '<th wire:key="cell-position-' . $categories->last()->id
+                . '" wire:sortable.handle class="align-middle" scope="row">',
+                '<span class="me-2">icon-drag-drop</span>' . $categories->last()->position,
+                '</th>',
+                '<td wire:key="cell-id-' . $categories->last()->id . '" class="align-middle">',
+                $categories->last()->id,
+                '</td>',
+                '<td wire:key="cell-name-' . $categories->last()->id . '" class="align-middle">',
+                $categories->last()->name,
+                '</td>',
                 '</tr>',
                 '</tbody>',
             ]);
@@ -174,6 +176,51 @@ class TableReorderableTest extends TestCase
         // All other occurrences have not been reordered
         foreach ($reorderedCategories as $index => $reorderedCategory) {
             if (in_array($reorderedCategory->id, $page1SearchedCategoryIds, true)) {
+                continue;
+            }
+            $this->assertEquals($categories->get($index)->id, $reorderedCategory->id);
+        }
+    }
+
+    /** @test */
+    public function it_can_reorder_table_sorted_descending(): void
+    {
+        $categories = UserCategory::factory()->count(9)->create()->sortByDesc('position')->values();
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(UserCategory::class)->reorderable('Position', sortDirByDefault: 'desc');
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('Name'),
+                ];
+            }
+        };
+        // Simulate pagination of 3 items on page 2
+        $paginatedCategories = $categories->slice(3)->take(3);
+        // Move last category from page 2 at first position
+        $lastCategory = $paginatedCategories->pop();
+        $paginatedCategories->prepend($lastCategory);
+        // Simulate array returned by Livewire sortable
+        $reorderedList = $paginatedCategories->values()->map(fn (UserCategory $category, int $index) => [
+            'order' => $index + 1,
+            'value' => $category->id,
+        ])->toArray();
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->call('reorder', $reorderedList)
+            ->assertEmitted('table:action:feedback', 'The table has been reordered.');
+        $reorderedCategories = UserCategory::orderBy('position', 'desc')->get();
+        $page2SearchedCategoryIds = $reorderedCategories->pluck('id')->slice(3)->take(3)->values()->toArray();
+        // Searched categories from page 2 have been reordered
+        $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page2SearchedCategoryIds);
+        // All other occurrences have not been reordered
+        foreach ($reorderedCategories as $index => $reorderedCategory) {
+            if (in_array($reorderedCategory->id, $page2SearchedCategoryIds, true)) {
                 continue;
             }
             $this->assertEquals($categories->get($index)->id, $reorderedCategory->id);

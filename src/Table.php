@@ -71,9 +71,10 @@ class Table
         return $this;
     }
 
-    public function reorderable(string $orderColumnTitle, string $orderColumnAttribute = null): self
+    /** @throws \Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection */
+    public function reorderable(string $title, string $attribute = null, string $sortDirByDefault = 'asc'): self
     {
-        $orderColumn = Column::make($orderColumnTitle, $orderColumnAttribute)->sortable();
+        $orderColumn = Column::make($title, $attribute)->sortable()->sortByDefault($sortDirByDefault);
         $this->orderColumn = $orderColumn;
 
         return $this;
@@ -103,8 +104,7 @@ class Table
         return $this->columns;
     }
 
-    /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function getReorderConfig(string|null $sortBy, string|null $sortDir): array
+    public function getReorderConfig(string|null $sortDir): array
     {
         if (! $this->getOrderColumn()) {
             return [];
@@ -114,16 +114,15 @@ class Table
             'modelClass' => $this->model::class,
             'modelPrimaryAttribute' => $this->model->getKeyName(),
             'reorderAttribute' => $this->getOrderColumn()->getAttribute(),
-            'beforeReorderAllModelKeys' => $this->prepareQuery([], '', $sortBy, $sortDir)
+            'sortDir' => $sortDir,
+            'beforeReorderAllModelKeys' => $this->model
+                ->query()
                 ->get()
-                ->map(fn (Model $model) => (string) $model->getKey())
+                ->mapWithKeys(fn (Model $model) => [
+                    $model->{$this->getOrderColumn()->getAttribute()} => (string) $model->getKey(),
+                ])
                 ->toArray(),
         ];
-    }
-
-    public function getRows(): LengthAwarePaginator
-    {
-        return $this->rows;
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -179,6 +178,11 @@ class Table
         $driver = config('database.connections.' . $connection . '.driver');
 
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
+    }
+
+    public function getRows(): LengthAwarePaginator
+    {
+        return $this->rows;
     }
 
     public function triggerEventsEmissionOnLoad(Livewire\Table $table): void
