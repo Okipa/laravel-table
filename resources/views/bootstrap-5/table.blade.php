@@ -87,7 +87,7 @@
                                                       class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
-                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
+                                                <select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
                                                     'placeholder' => __('Number of rows per page'),
                                                     'aria-label' => __('Number of rows per page'),
                                                     'aria-describedby' => 'rows-number-per-page-icon',
