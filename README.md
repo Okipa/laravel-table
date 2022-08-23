@@ -1114,8 +1114,9 @@ To display results, you'll have to return an array of result instances from the 
 If no result is declared, their dedicated space will remain empty.
 
 Results should be declared this way:
-1. Create a `Result` instance with the static `make` method, that will await a `string $title` param
-2. Chain the `value` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
+1. Create a `Result` instance with the static `make` method
+2. Chain the `title` method that will await a `string $title` argument
+3. Chain the `value` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
 
 ```php
 namespace App\Tables;

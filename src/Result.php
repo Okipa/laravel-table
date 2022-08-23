@@ -8,18 +8,27 @@ use Illuminate\Support\Collection;
 
 class Result
 {
+    protected string $title;
+
     protected Closure $valueClosure;
 
     protected string $value;
 
-    public function __construct(protected string $title)
+    public function __construct()
     {
-        $this->title = __($title);
+        //
     }
 
-    public static function make(string $title): self
+    public static function make(): self
     {
-        return new static($title);
+        return new static();
+    }
+
+    public function title(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function value(Closure $valueClosure): self
