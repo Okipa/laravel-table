@@ -150,7 +150,7 @@ class Table extends Component
         // Bulk actions
         if (in_array($this->selectedModelKeys, [['selectAll'], ['unselectAll']], true)) {
             $this->selectedModelKeys = $this->selectedModelKeys === ['selectAll']
-                ? $table->getRows()->map(fn (Model $model) => $model->getKey())->toArray()
+                ? $table->getRows()->map(fn (Model $model) => (string) $model->getKey())->toArray()
                 : [];
         }
         $this->tableBulkActionsArray = $table->generateBulkActionsArray($this->selectedModelKeys);
