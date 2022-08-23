@@ -122,8 +122,8 @@ class Table extends Component
         $this->searchableLabels = $table->getSearchableLabels();
         // Sort
         $columnSortedByDefault = $table->getColumnSortedByDefault();
-        $this->sortBy =
-            $table->getOrderColumn()?->getAttribute() ?: ($this->sortBy ?? $columnSortedByDefault?->getAttribute());
+        $this->sortBy = $table->getOrderColumn()?->getAttribute()
+            ?: ($this->sortBy ?? $columnSortedByDefault?->getAttribute());
         $this->sortDir = $this->sortDir ?? $columnSortedByDefault?->getSortDirByDefault();
         $sortableClosure = $this->sortBy && ! $table->getOrderColumn()
             ? $table->getColumn($this->sortBy)->getSortableClosure()

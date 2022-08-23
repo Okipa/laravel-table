@@ -31,7 +31,7 @@ class ColumnSearchableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
         };
@@ -56,9 +56,9 @@ class ColumnSearchableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name')->searchable(),
-                    Column::make('Email')->searchable(),
+                    Column::make('id'),
+                    Column::make('name')->searchable(),
+                    Column::make('email')->searchable(),
                 ];
             }
         };
@@ -69,11 +69,11 @@ class ColumnSearchableTest extends TestCase
                 '<form wire:submit.prevent="$refresh">',
                 '<span id="search-for-rows"',
                 'icon-search',
-                'placeholder="Search by: Name, Email"',
-                'aria-label="Search by: Name, Email"',
+                'placeholder="Search by: validation.attributes.name, validation.attributes.email"',
+                'aria-label="Search by: validation.attributes.name, validation.attributes.email"',
                 'aria-describedby="search-for-rows"',
                 '<button',
-                'title="Search by: Name, Email"',
+                'title="Search by: validation.attributes.name, validation.attributes.email"',
                 'icon-validate',
                 '</thead>',
             ]);
@@ -93,9 +93,9 @@ class ColumnSearchableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name')->searchable(),
-                    Column::make('Email')->searchable(),
+                    Column::make('id'),
+                    Column::make('name')->searchable(),
+                    Column::make('email')->searchable(),
                 ];
             }
         };
@@ -142,8 +142,8 @@ class ColumnSearchableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->searchable(),
-                    Column::make('Owned companies')
+                    Column::make('name')->searchable(),
+                    Column::make('companies')
                         ->searchable(fn (Builder $query, string $searchBy) => $query->whereRelation(
                             'companies',
                             'name',
@@ -194,9 +194,9 @@ class ColumnSearchableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name')->searchable(),
-                    Column::make('Email')->searchable(),
+                    Column::make('id'),
+                    Column::make('name')->searchable(),
+                    Column::make('email')->searchable(),
                 ];
             }
         };
@@ -236,7 +236,7 @@ class ColumnSearchableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->searchable(),
+                    Column::make('name')->searchable(),
                 ];
             }
         };

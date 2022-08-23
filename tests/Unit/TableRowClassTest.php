@@ -35,7 +35,7 @@ class TableRowClassTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
+                    Column::make('name'),
                 ];
             }
         };

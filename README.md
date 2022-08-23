@@ -80,13 +80,13 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('Id')->sortable(),
-            Column::make('Name')->searchable()->sortable(),
-            Column::make('Email')->searchable()->sortable(),
-            Column::make('Created at')
+            Column::make('id')->sortable(),
+            Column::make('name')->searchable()->sortable(),
+            Column::make('email')->searchable()->sortable(),
+            Column::make('created_at')
                 ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
                 ->sortable(),
-            Column::make('Updated at')
+            Column::make('updated_at')
                 ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
                 ->sortable()
                 ->sortByDefault('desc'),
@@ -281,8 +281,8 @@ You may want to override native HTML select components behaviour on your tables.
 You will be able to add a data attribute (which is known as the best practice to add extra features to a HTML component) to all the HTML select components displayed on your tables by defining an array of HTML attribute as value for the `laravel-table.html_select_components_attributes` config key.
 
 ```php
-/** The default table select HTML components attributes. */
-'html_select_components_attributes' => ['data-selector' => true], // `data-selector` HTML attribute will be appended to all tables HTML select components.
+// `data-selector` HTML attribute will be appended to all tables HTML select components.
+'html_select_components_attributes' => ['data-selector' => true],
 ```
 
 ### Add query instructions on tables
@@ -334,7 +334,7 @@ class UsersTable extends AbstractTableConfiguration
             ->model(User::class)
             // This event will be loaded each time your table will be rendered
             // in order to keep your UI third party libraries rendering,
-            // even when its HTML is refreshed 
+            // even when its HTML is refreshed.
             ->emitEventsOnLoad(['js:selector:init' => ['some', 'params']]);
     }   
 }
@@ -613,7 +613,7 @@ class UsersTable extends AbstractTableConfiguration
                     // Override the action default feedback message
                     // Or set `false` if you do not want to trigger any feedback message for this action
                     ->feedbackMessage('Selected users have been deleted.'),
-            ]).
+            ]);
     }
 }
 ```
@@ -735,12 +735,11 @@ You'll have to configure them in the same way you did for [bulk actions](#define
 
 Declare columns on tables with the `columns` method available in your generated table configuration, from which you'll have to return an array of column instances.
 
-To declare columns, just use the static `make` method that will await a `string $title` argument. This title will be used to:
-* Display the column title on the table
-* Define a default column key guessed from a snake_case formatting of the column title
-* Define a default cell value from the column key
+To declare columns, just use the static `make` method that will await a `string $attribute` argument. This attribute will be used to get the default cell value.
 
-Optionally, you may pass a second `string $attribute` argument to set a specific column key.
+By default, the column title will be defined to `__('validation.attributes.<attribute>')` in order to reuse attributes translations.
+
+If you need to, you may use the `title` method that will await a `string $title` argument to set a specific column title that will override the default one.
 
 ```php
 namespace App\Tables;
@@ -760,10 +759,10 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            // Column title set to `Id`, column key set to `id` and value set from `$user->id`
-            Column::make('Id'),
-            // Column title set to `Username`, column key set to `name` and value set from `$user->name`
-            Column::make('Username', 'name'),
+            // Column attribute set to `id`, column value set from `$user->id` and colum title set to `__('validation.attributes.id')`
+            Column::make('id'),
+            // Column attribute set to `name`, value set from `$user->name` and column title set to `Username`
+            Column::make('name')->title('Username'),
         ];
     }
 }
@@ -796,9 +795,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Value set from `$user->id`
-            Column::make('Id'),
+            Column::make('id'),
             // Value set from closure
-            Column::make('Username')
+            Column::make('username')
                 ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
         ];
     }
@@ -830,8 +829,8 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('Id'),
-            Column::make('Name')->format(new NewFormatter()),
+            Column::make('id'),
+            Column::make('name')->format(new NewFormatter()),
         ];
     }
 }
@@ -884,11 +883,11 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('Id'),
-            Column::make('Email verified', 'email_verified_at')
+            Column::make('id'),
+            Column::make('email_verified_at')
                 // ToggleBooleanColumnAction action will not trigger any feedback message
                 ->action(fn(User $user) => (new ToggleBooleanColumnAction()->feedbackMessage(false))
-            Column::make('Toggle', 'active')
+            Column::make('active')
                 // ToggleBooleanColumnAction action will not be available for authenticated user
                 ->action(fn(User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
         ];
@@ -920,8 +919,8 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('Id'),
-            Column::make('My New Column Action')->action(fn() => new MyNewColumnAction()),
+            Column::make('id'),
+            Column::make('action')->action(fn() => new MyNewColumnAction()),
         ];
     }
 }
@@ -953,9 +952,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be searchable
-            Column::make('Id'),
+            Column::make('id'),
             // Table will be searchable from `$user->name`
-            Column::make('Name')->searchable(),
+            Column::make('name')->searchable(),
         ];
     }
 }
@@ -977,9 +976,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be searchable
-            Column::make('Id'),
+            Column::make('id'),
             // Column will be searchable using this closure
-            Column::make('Owned companies')
+            Column::make('owned_companies')
                 // ... Your custom formatting here
                 ->searchable(fn(Builder $query, string $searchBy) => $query->whereRelation(
                     'companies',
@@ -1012,9 +1011,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be sortable
-            Column::make('Id'),
+            Column::make('id'),
             // Column will be sortable from `$user->name`
-            Column::make('Name')->sortable(),
+            Column::make('name')->sortable(),
         ];
     }
 }
@@ -1036,9 +1035,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be sortable
-            Column::make('Id'),
+            Column::make('id'),
             // Column will be sorted descending by default on `$user->name`
-            Column::make('Name')->sortByDefault('desc'),
+            Column::make('name')->sortByDefault('desc'),
         ];
     }
 }
@@ -1060,9 +1059,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return [
             // Column will not be sortable
-            Column::make('Id'),
+            Column::make('id'),
             // Column will be sortable from this closure
-            Column::make('Companies count') 
+            Column::make('companies_count') 
                 // Custom formatting...
                 ->sortable(fn(Builder $query, string $sortDir) => $query
                     ->withCount('companies')
@@ -1076,17 +1075,17 @@ class UsersTable extends AbstractTableConfiguration
 
 Allow columns to be reordered from drag and drop action by calling the `reorderable` method on your table.
 
-This method will await a first `string $title` argument and an optional second `string $attribute` argument, just as you would [declare a new column](#declare-columns-on-tables).
+This method will await a first `string $attribute` argument, an optional second `string $title` argument, and an optional third `string $sortDirByDefault` argument (accepting `asc` or `desc` values).
 
 **Important notes:**
-* [You'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow reorder action feedback to be working properly.
+* [You'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow reorder action feedback to be working properly
 * You'll have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable), that will handle the drag and drop utility for us
 
 Activating this feature will:
-* Prepend a column that will display the drag-and-drop icon defined in the `laravel-table.icon.drag_drop` config value, followed by the defined model order attribute value
-* Sort the rows from the defined model order attribute
+* Prepend a new column that will display the drag-and-drop icon defined in the `laravel-table.icon.drag_drop` config value, followed by the defined model order attribute value
+* Sort the rows from the defined model order attribute (`asc` by default)
 * Disable all other columns sorting as it is not compatible with drag-and-drop reordering
-* And of course, enable the drag-and-drop columns reordering by adding all the Livewire Sortable Plugin necessary markup
+* And of course, enable the drag-and-drop columns reordering by adding all the **Livewire Sortable Plugin** necessary markup
 
 ```php
 namespace App\Tables;
@@ -1101,9 +1100,9 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            // A new `Position` column will display the drag-and-drop icon, followed by the `position` attribute value
+            // A new column will display the drag-and-drop icon, followed by the `position` attribute value
             // Rows will be sorted from the `position` model attribute and all other columns sorting will be disable
-            ->reorderable('Position');
+            ->reorderable('position');
     }
 }
 ```
@@ -1139,7 +1138,7 @@ class UsersTable extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('Id'),
+            Column::make('id'),
         ];
     }
     

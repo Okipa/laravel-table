@@ -27,15 +27,15 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('Position');
+                return Table::make()->model(UserCategory::class)->reorderable('position');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Id')
+                    Column::make('id')
                         ->sortable(fn (Builder $query, string $sortDir) => $query->orderBy('id', $sortDir)),
-                    Column::make('Name')->sortable()->sortByDefault(),
+                    Column::make('name')->sortable()->sortByDefault(),
                 ];
             }
         };
@@ -45,10 +45,10 @@ class TableReorderableTest extends TestCase
                 '<thead>',
                 '<tr',
                 '<th wire:key="column-id" class="align-middle" scope="col">',
-                'Id',
+                'validation.attributes.id',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
-                'Name',
+                'validation.attributes.name',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -73,14 +73,14 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('Position');
+                return Table::make()->model(UserCategory::class)->reorderable('position');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name'),
+                    Column::make('id'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -99,13 +99,13 @@ class TableReorderableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">Position</span>',
+                '<span class="ms-2">validation.attributes.position</span>',
                 '</th>',
                 '<th wire:key="column-id" class="align-middle" scope="col">',
-                'Id',
+                'validation.attributes.id',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
-                'Name',
+                'validation.attributes.name',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -148,13 +148,13 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('Position');
+                return Table::make()->model(UserCategory::class)->reorderable('position');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -193,13 +193,13 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('Position', sortDirByDefault: 'desc');
+                return Table::make()->model(UserCategory::class)->reorderable('position', sortDirByDefault: 'desc');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -247,13 +247,13 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('Position');
+                return Table::make()->model(UserCategory::class)->reorderable('position');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->searchable(),
+                    Column::make('name')->searchable(),
                 ];
             }
         };
@@ -297,13 +297,13 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(Company::class)->reorderable('Position');
+                return Table::make()->model(Company::class)->reorderable('position');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->searchable(),
+                    Column::make('name')->searchable(),
                 ];
             }
         };

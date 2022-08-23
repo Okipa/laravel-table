@@ -49,8 +49,8 @@ class TableColumnsTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name'),
+                    Column::make('id'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -60,10 +60,10 @@ class TableColumnsTest extends TestCase
                 '<thead>',
                 '<tr',
                 '<th wire:key="column-id" class="align-middle" scope="col">',
-                'Id',
+                'validation.attributes.id',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
-                'Name',
+                'validation.attributes.name',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -84,8 +84,8 @@ class TableColumnsTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name'),
+                    Column::make('id'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -123,8 +123,8 @@ class TableColumnsTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name'),
+                    Column::make('id'),
+                    Column::make('name'),
                 ];
             }
         };

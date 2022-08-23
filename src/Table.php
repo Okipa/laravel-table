@@ -72,9 +72,12 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection */
-    public function reorderable(string $title, string $attribute = null, string $sortDirByDefault = 'asc'): self
+    public function reorderable(string $attribute, string $title = null, string $sortDirByDefault = 'asc'): self
     {
-        $orderColumn = Column::make($title, $attribute)->sortable()->sortByDefault($sortDirByDefault);
+        $orderColumn = Column::make($attribute)->sortable()->sortByDefault($sortDirByDefault);
+        if ($title) {
+            $orderColumn->title($title);
+        }
         $this->orderColumn = $orderColumn;
 
         return $this;

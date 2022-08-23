@@ -32,7 +32,7 @@ class TableQueryTest extends TestCase
 
             protected function columns(): array
             {
-                return [Column::make('Id')];
+                return [Column::make('id')];
             }
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [

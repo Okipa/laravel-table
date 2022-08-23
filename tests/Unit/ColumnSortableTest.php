@@ -31,8 +31,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name'),
+                    Column::make('id'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -44,10 +44,10 @@ class ColumnSortableTest extends TestCase
                 '<thead>',
                 '<tr',
                 '<th wire:key="column-id" class="align-middle" scope="col">',
-                'Id',
+                'validation.attributes.id',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
-                'Name',
+                'validation.attributes.name',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -80,8 +80,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id')->sortable(),
-                    Column::make('Name')->sortable(),
+                    Column::make('id')->sortable(),
+                    Column::make('name')->sortable(),
                 ];
             }
         };
@@ -98,7 +98,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">Id</span>',
+                '<span class="ms-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -106,7 +106,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -133,8 +133,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id')->sortable(),
-                    Column::make('Name')->sortable()->sortByDefault(),
+                    Column::make('id')->sortable(),
+                    Column::make('name')->sortable()->sortByDefault(),
                 ];
             }
         };
@@ -152,7 +152,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Id</span>',
+                '<span class="ms-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -160,7 +160,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -187,8 +187,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id')->sortable(),
-                    Column::make('Name')->sortable()->sortByDefault('desc'),
+                    Column::make('id')->sortable(),
+                    Column::make('name')->sortable()->sortByDefault('desc'),
                 ];
             }
         };
@@ -206,7 +206,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Id</span>',
+                '<span class="ms-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -214,7 +214,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort-asc',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -242,8 +242,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id')->sortable(),
-                    Column::make('Name')->sortable(),
+                    Column::make('id')->sortable(),
+                    Column::make('name')->sortable(),
                 ];
             }
         };
@@ -264,7 +264,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Id</span>',
+                '<span class="ms-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -272,7 +272,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -294,7 +294,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Id</span>',
+                '<span class="ms-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -302,7 +302,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort-asc',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -330,8 +330,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Custom Id', 'id')->sortable(),
-                    Column::make('Custom Name', 'name')->sortable(),
+                    Column::make('id')->title('Custom Id')->sortable(),
+                    Column::make('name')->title('Custom Name')->sortable(),
                 ];
             }
         };
@@ -389,8 +389,8 @@ class ColumnSortableTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->sortable(),
-                    Column::make('Companies count')
+                    Column::make('name')->sortable(),
+                    Column::make('companies_count')
                         ->format(fn (User $user) => $user->companies->count())
                         ->sortable(fn (Builder $query, string $sortDir) => $query
                             ->withCount('companies')
@@ -413,7 +413,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '<th wire:key="column-companies-count" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'companies_count\')"',
@@ -421,7 +421,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">Companies count</span>',
+                '<span class="ms-2">validation.attributes.companies_count</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -443,7 +443,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Name</span>',
+                '<span class="ms-2">validation.attributes.name</span>',
                 '</th>',
                 '<th wire:key="column-companies-count" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'companies_count\')"',
@@ -451,7 +451,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort-asc',
-                '<span class="ms-2">Companies count</span>',
+                '<span class="ms-2">validation.attributes.companies_count</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',

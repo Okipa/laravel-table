@@ -23,9 +23,9 @@ class DummyClass extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('Id')->sortable();
-            Column::make('Created at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
-            Column::make('Updated at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+            Column::make('id')->sortable();
+            Column::make('created_at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
+            Column::make('updated_at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
         ];
     }
 

@@ -42,10 +42,10 @@ class ColumnActionTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
-                    Column::make('Email Verified', 'email_verified_at')
+                    Column::make('name'),
+                    Column::make('email_verified_at')
                         ->action(fn () => new ToggleEmailVerifiedColumnAction()),
-                    Column::make('Toggle', 'active')
+                    Column::make('active')
                         ->action(fn () => new ToggleBooleanColumnAction()),
                 ];
             }
@@ -123,8 +123,8 @@ class ColumnActionTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
-                    Column::make('Toggle', 'active')
+                    Column::make('name'),
+                    Column::make('active')
                         ->action(fn (User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
                 ];
             }
@@ -162,8 +162,8 @@ class ColumnActionTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name'),
-                    Column::make('Email Verified', 'email_verified_at')
+                    Column::make('name'),
+                    Column::make('email_verified_at')
                         ->action(fn () => (new ToggleEmailVerifiedColumnAction())
                             ->confirmationQuestion(false)
                             ->feedbackMessage(false)),

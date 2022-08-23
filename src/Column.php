@@ -5,13 +5,14 @@ namespace Okipa\LaravelTable;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
 use Okipa\LaravelTable\Abstracts\AbstractFormatter;
 use Okipa\LaravelTable\Exceptions\InvalidColumnSortDirection;
 
 class Column
 {
+    protected string|null $title = null;
+
     protected bool $sortable = false;
 
     protected Closure|null $sortableClosure = null;
@@ -30,18 +31,24 @@ class Column
 
     protected bool $escapeHtml = false;
 
-    public function __construct(protected string $title, protected string|null $attribute = null)
+    public function __construct(protected string $attribute)
     {
-        $this->attribute = $attribute ?: Str::snake($title);
-        $this->title = __($title);
+        $this->title = __('validation.attributes.' . $this->attribute);
     }
 
-    public static function make(string $title, string $attribute = null): self
+    public static function make(string $attribute = null): self
     {
-        return new static($title, $attribute);
+        return new static($attribute);
     }
 
-    public function getTitle(): string
+    public function title(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getTitle(): string|null
     {
         return $this->title;
     }

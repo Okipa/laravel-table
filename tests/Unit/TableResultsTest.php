@@ -36,7 +36,7 @@ class TableResultsTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
 

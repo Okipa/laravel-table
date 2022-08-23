@@ -50,8 +50,8 @@ class TableFiltersTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
-                    Column::make('Name'),
+                    Column::make('id'),
+                    Column::make('name'),
                 ];
             }
         };
@@ -225,7 +225,7 @@ class TableFiltersTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
         };
@@ -300,7 +300,7 @@ class TableFiltersTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
         };

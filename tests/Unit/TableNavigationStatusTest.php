@@ -28,7 +28,7 @@ class TableNavigationStatusTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
         };
@@ -61,7 +61,7 @@ class TableNavigationStatusTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
         };
@@ -94,7 +94,7 @@ class TableNavigationStatusTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Id'),
+                    Column::make('id'),
                 ];
             }
         };

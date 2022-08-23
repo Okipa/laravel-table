@@ -36,7 +36,7 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Owned companies')
+                    Column::make('companies')
                         ->format(fn (User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
                 ];
             }
@@ -70,9 +70,9 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Name')->format(new StrLimitFormatter(5)),
-                    Column::make('Active')->format(new BooleanFormatter()),
-                    Column::make('Created At')->format(new DateFormatter('d/m:Y H:i:s', 'Europe/Paris')),
+                    Column::make('name')->format(new StrLimitFormatter(5)),
+                    Column::make('active')->format(new BooleanFormatter()),
+                    Column::make('created_at')->format(new DateFormatter('d/m:Y H:i:s', 'Europe/Paris')),
                 ];
             }
         };
@@ -80,10 +80,12 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<span title="' . $user1->name . '" data-bs-toggle="tooltip">' . Str::limit($user1->name, 5) . '</span>',
+                '<span title="' . $user1->name . '" data-bs-toggle="tooltip">' . Str::limit($user1->name, 5)
+                . '</span>',
                 '<span class="text-success">active-icon</span>',
                 $user1->created_at->timezone('Europe/Paris')->format('d/m:Y H:i:s'),
-                '<span title="' . $user2->name . '" data-bs-toggle="tooltip">' . Str::limit($user2->name, 5) . '</span>',
+                '<span title="' . $user2->name . '" data-bs-toggle="tooltip">' . Str::limit($user2->name, 5)
+                . '</span>',
                 '<span class="text-danger">inactive-icon</span>',
                 $user2->created_at->timezone('Europe/Paris')->format('d/m:Y H:i:s'),
                 '</tbody>',
@@ -105,7 +107,7 @@ class ColumnFormatTest extends TestCase
             protected function columns(): array
             {
                 return [
-                    Column::make('Owned companies')
+                    Column::make('companies')
                         ->format(fn (User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>', true),
                 ];
             }
