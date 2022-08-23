@@ -81,13 +81,13 @@
                                 <div class="d-flex justify-content-between">
                                     {{-- Number of rows per page --}}
                                     @if($numberOfRowsPerPageChoiceEnabled)
-                                        <div class="px-xl-3 py-1">
+                                        <div wire:ignore class="px-xl-3 py-1">
                                             <div class="input-group">
                                                 <span id="rows-number-per-page-icon"
                                                       class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
-                                                <select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
+                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
                                                     'placeholder' => __('Number of rows per page'),
                                                     'aria-label' => __('Number of rows per page'),
                                                     'aria-describedby' => 'rows-number-per-page-icon',

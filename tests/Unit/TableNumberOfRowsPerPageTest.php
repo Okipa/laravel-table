@@ -35,7 +35,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertDontSeeHtml('<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+            ->assertDontSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
     }
 
     /** @test */
@@ -58,7 +58,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertDontSeeHtml('<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+            ->assertDontSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
     }
 
     /** @test */
@@ -81,7 +81,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSeeHtml('<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+            ->assertSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
     }
 
     /** @test */
@@ -104,7 +104,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSeeHtml('<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"');
+            ->assertSeeHtml('<select wire:change="changeNumberOfRowsPerPage($event.target.value)"');
     }
 
     /** @test */
@@ -136,7 +136,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 'class="input-group-text text-secondary">',
                 'rows-number-icon',
                 '</span>',
-                '<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
                 'class="form-select"',
                 'placeholder="Number of rows per page"',
                 'aria-label="Number of rows per page"',
@@ -181,7 +181,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 'class="input-group-text text-secondary">',
                 'rows-number-icon',
                 '</span>',
-                '<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
                 'class="form-select"',
                 'placeholder="Number of rows per page"',
                 'aria-label="Number of rows per page"',
@@ -238,7 +238,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 'class="input-group-text text-secondary">',
                 'rows-number-icon',
                 '</span>',
-                '<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
                 'class="form-select"',
                 'placeholder="Number of rows per page"',
                 'aria-label="Number of rows per page"',
@@ -295,7 +295,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 'class="input-group-text text-secondary">',
                 'rows-number-icon',
                 '</span>',
-                '<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
                 'class="form-select"',
                 'placeholder="Number of rows per page"',
                 'aria-label="Number of rows per page"',
@@ -342,7 +342,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
                 'class="input-group-text text-secondary">',
                 'rows-number-icon',
                 '</span>',
-                '<select wire:ignore wire:change="changeNumberOfRowsPerPage($event.target.value)"',
+                '<select wire:change="changeNumberOfRowsPerPage($event.target.value)"',
                 'class="form-select"',
                 'placeholder="Number of rows per page"',
                 'aria-label="Number of rows per page"',
