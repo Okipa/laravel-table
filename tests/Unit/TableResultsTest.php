@@ -45,12 +45,12 @@ class TableResultsTest extends TestCase
                 return [
                     Result::make()
                         ->title('Total of users with unverified email')
-                        ->value(static fn (Builder $totalRowsQuery) => $totalRowsQuery
+                        ->format(static fn (Builder $totalRowsQuery) => $totalRowsQuery
                             ->whereNull('email_verified_at')
                             ->count()),
                     Result::make()
                         ->title('Displayed inactive users')
-                        ->value(static fn (
+                        ->format(static fn (
                             Builder $totalRowsQuery,
                             Collection $displayedRowsCollection
                         ) => $displayedRowsCollection->where('active', false)->count()),

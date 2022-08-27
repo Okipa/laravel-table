@@ -1116,7 +1116,7 @@ If no result is declared, their dedicated space will remain empty.
 Results should be declared this way:
 1. Create a `Result` instance with the static `make` method
 2. Chain the `title` method that will await a `string $title` argument
-3. Chain the `value` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
+3. Chain the `format` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
 
 ```php
 namespace App\Tables;
@@ -1148,14 +1148,16 @@ class UsersTable extends AbstractTableConfiguration
         return [
             // This result uses the first $totalRowsQuery closure param to compute its value.
             // In this example, all users contained in database with unverified email will be count.
-            Result::make('Total of users with unverified email')
-                        ->value(static fn(Builder $totalRowsQuery) => $totalRowsQuery
-                            ->whereNull('email_verified_at')
-                            ->count()),
+            Result::make()
+                ->title('Total of users with unverified email')
+                ->format(static fn(Builder $totalRowsQuery) => $totalRowsQuery
+                    ->whereNull('email_verified_at')
+                    ->count()),
             // This result uses the second $displayedRowsCollection closure param to compute its value.
             // In this example, all displayed inactive users will be count.
-            Result::make('Displayed inactive users')
-                ->value(static fn(
+            Result::make()
+                ->title('Displayed inactive users')
+                ->format(static fn(
                     Builder $totalRowsQuery,
                     Collection $displayedRowsCollection
                 ) => $displayedRowsCollection->where('active', false)->count()),

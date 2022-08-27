@@ -5,14 +5,17 @@ namespace Okipa\LaravelTable;
 use Closure;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HtmlString;
 
 class Result
 {
     protected string $title;
 
-    protected Closure $valueClosure;
+    protected Closure $formatClosure;
 
     protected string $value;
+
+    protected bool $escapeHtml = false;
 
     public function __construct()
     {
@@ -31,9 +34,10 @@ class Result
         return $this;
     }
 
-    public function value(Closure $valueClosure): self
+    public function format(Closure $formatClosure, bool $escapeHtml = false): self
     {
-        $this->valueClosure = $valueClosure;
+        $this->formatClosure = $formatClosure;
+        $this->escapeHtml = $escapeHtml;
 
         return $this;
     }
@@ -45,13 +49,18 @@ class Result
 
     public function compute(Builder $totalRowsQuery, Collection $displayedRows): self
     {
-        $this->value = ($this->valueClosure)($totalRowsQuery, $displayedRows);
+        $this->value = ($this->formatClosure)($totalRowsQuery, $displayedRows);
 
         return $this;
     }
 
     public function getValue(): string
     {
-        return $this->value;
+        return $this->manageHtmlEscaping($this->value);
+    }
+
+    protected function manageHtmlEscaping(mixed $value): HtmlString|string
+    {
+        return $this->escapeHtml ? $value : new HtmlString($value);
     }
 }
