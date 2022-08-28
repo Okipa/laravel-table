@@ -28,9 +28,10 @@
                                     @endforeach
                                     @if(array_filter($selectedFilters, static fn($filter) => $filter !== '' && isset($filter)))
                                         <a wire:click.prevent="resetFilters()"
-                                           class="btn btn-outline-secondary ms-3"
-                                           title="{{ __('Reset filters') }}"
-                                           data-bs-toggle="tooltip">
+                                            class="btn btn-outline-secondary ms-3"
+                                            title="{{ __('Reset filters') }}"
+                                            data-bs-toggle="tooltip"
+                                        >
                                             {!! config('laravel-table.icon.reset') !!}
                                         </a>
                                     @endif
@@ -67,8 +68,9 @@
                                                     @if($searchBy)
                                                         <span class="input-group-text">
                                                             <a wire:click.prevent="$set('searchBy', ''), $refresh"
-                                                               class="btn btn-sm btn-link link-danger p-0"
-                                                               title="{{ __('Reset research') }}">
+                                                                class="btn btn-sm btn-link link-danger p-0"
+                                                                title="{{ __('Reset research') }}"
+                                                            >
                                                                 {!! config('laravel-table.icon.reset') !!}
                                                             </a>
                                                         </span>
@@ -84,7 +86,7 @@
                                         <div wire:ignore class="px-xl-3 py-1">
                                             <div class="input-group">
                                                 <span id="rows-number-per-page-icon"
-                                                      class="input-group-text text-secondary">
+                                                    class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
                                                 <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
@@ -155,10 +157,11 @@
                                         </a>
                                     @else
                                         <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
-                                           class="d-flex align-items-center"
-                                           href=""
-                                           title="{{ __('Sort ascending') }}"
-                                           data-bs-toggle="tooltip">
+                                            class="d-flex align-items-center"
+                                            href=""
+                                            title="{{ __('Sort ascending') }}"
+                                            data-bs-toggle="tooltip"
+                                        >
                                             {!! config('laravel-table.icon.sort') !!}
                                             <span class="ms-2">{{ $column->getTitle() }}</span>
                                         </a>
