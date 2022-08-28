@@ -1,0 +1,194 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
+name: "Integrate"
+
+on:
+  push:
+    branches:
+      - "master"
+  pull_request: null
+  schedule:
+    - cron: "00 00 * * *"
+  # Add [skip ci] to commit message to skip CI.
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  byte_level:
+    name: "0️⃣ Byte-level"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Check file permissions"
+        run: |
+          test "$(find . -type f -not -path './.git/*' -executable)" = ""
+
+      - name: "Find non-printable ASCII characters"
+        run: |
+          #! LC_ALL=C.UTF-8 find . -type f -name '*.php' -print0 | xargs -0 -- grep -PHn '[^ -~]' | grep -v '// @ignore-non-ascii$'
+          ! LC_ALL=C.UTF-8 find . -type f -name '*.php' -print0 | xargs -0 -- grep -PHn '[^ -~]'
+
+  syntax_errors:
+    name: "1️⃣ Syntax errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.0"
+          coverage: "none"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Check source code for syntax errors"
+        run: "composer exec -- parallel-lint src/ tests/"
+        # @TODO Check template files for syntax errors
+
+  unit_tests:
+    name: "2️⃣ Unit and functional tests"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    strategy:
+      fail-fast: true
+      matrix:
+        php-version:
+          - "8.1"
+        dependencies:
+          - "lowest"
+          - "highest"
+        laravel-constraint:
+          - "^8.0"
+          - "^9.0"
+        include:
+          - laravel-constraint: "^8.0"
+            larastan-constraint: "^1.0"
+            testbench-constraint: "^6.0"
+          - laravel-constraint: "^9.0"
+            larastan-constraint: "^2.0"
+            testbench-constraint: "^7.0"
+            code-coverage: true
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "curl, json, mbstring, zip, sqlite, pdo_sqlite"
+          coverage: "pcov"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--with='laravel/framework:${{ matrix.laravel-constraint }}' --with='orchestra/testbench:${{ matrix.testbench-constraint }}'"
+
+      - name: "Execute unit tests"
+        if: "${{ ! matrix.code-coverage }}"
+        run: "composer run phpunit"
+
+      - name: "Execute unit tests with code coverage"
+        if: "${{ matrix.code-coverage }}"
+        run: |
+          mkdir -p build/logs
+          vendor/bin/testbench package:test --parallel --coverage-text --coverage-clover build/logs/clover.xml
+
+      - name: Send coverage to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        if: "${{ env.COVERALLS_REPO_TOKEN && matrix.code-coverage }}"
+        run: |
+          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
+          php ./php-coveralls.phar -v
+
+  static_analysis:
+    name: "3️⃣ Static Analysis"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.1"
+          extensions: "curl, json, mbstring, zip, sqlite, pdo_sqlite"
+          coverage: "none"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Validate Composer configuration"
+        run: "composer validate --strict"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Execute static analysis"
+        run: "composer run phpstan"
+
+      - name: "Run mess detector"
+        run: "composer run phpmd"
+
+  coding_standards:
+    name: "4️⃣ Coding Standards"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Set up PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.1"
+          coverage: "none"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Check EditorConfig configuration"
+        run: "test -f .editorconfig"
+
+      - name: "Check adherence to EditorConfig"
+        uses: "greut/eclint-action@v0"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Check coding style"
+        run: "composer run pint -- --test -vvv"
+
+  exported_files:
+    name: "5️⃣ Exported files"
+    needs:
+      - "byte_level"
+      - "syntax_errors"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v3"
+
+      - name: "Check exported files"
+        run: |
+          EXPECTED="LICENSE.md,README.md,composer.json"
+          CURRENT="$(git archive HEAD | tar --list --exclude="src" --exclude="src/*" --exclude="config" --exclude="config/*" --exclude="resources" --exclude="resources/*" | paste --serial --delimiters=",")"
+          echo "CURRENT =${CURRENT}"
+          echo "EXPECTED=${EXPECTED}"
+          test "${CURRENT}" = "${EXPECTED}"

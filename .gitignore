@@ -1,6 +1,6 @@
-build
+build/
 composer.lock
-vendor
-coverage
+vendor/
+coverage/
 .phpunit.result.cache
 .idea
