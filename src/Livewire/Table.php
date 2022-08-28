@@ -250,6 +250,7 @@ class Table extends Component
         $this->resetFilters = false;
     }
 
+    /** @param 'bulkAction'|'rowAction'|'columnAction' $actionType */
     public function actionConfirmed(string $actionType, string $identifier, string|null $modelKey): mixed
     {
         return match ($actionType) {
