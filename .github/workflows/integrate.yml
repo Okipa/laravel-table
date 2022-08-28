@@ -94,7 +94,7 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "${{ matrix.dependencies }}"
-          composer-options: "--with='laravel/framework:${{ matrix.laravel-constraint }}' --with='orchestra/testbench:${{ matrix.testbench-constraint }}'"
+          composer-options: "--with=laravel/framework:${{ matrix.laravel-constraint }} --with=orchestra/testbench:${{ matrix.testbench-constraint }}"
 
       - name: "Execute unit tests"
         if: "${{ ! matrix.code-coverage }}"
@@ -109,7 +109,7 @@ jobs:
       - name: Send coverage to Coveralls
         env:
           COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        if: "${{ env.COVERALLS_REPO_TOKEN && matrix.code-coverage }}"
+        if: "${{ env.COVERALLS_REPO_TOKEN && matrix.code-coverage && matrix.dependencies == 'highest' }}"
         run: |
           wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
           php ./php-coveralls.phar -v
