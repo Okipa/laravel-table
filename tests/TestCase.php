@@ -18,6 +18,13 @@ class TestCase extends Orchestra
         $this->setUiConfigDynamically();
     }
 
+    protected function overrideApplicationBindings($app)
+    {
+        return [
+            'livewire' => 'Livewire\LivewireManager',
+        ];
+    }
+
     protected function setUiConfigDynamically(): void
     {
         $testNamespace = $this::class;
