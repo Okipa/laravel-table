@@ -16,7 +16,7 @@ parameters:
         - '#Access to an undefined property Tests\\Models\\User::\$active#'
         - '#Call to an undefined method Faker\\Generator::catchphrase\(\)#'
 
-    excludePaths:
-        #- ./*/*/FileToBeExcluded.php
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php
 
-    checkMissingIterableValueType: false
+#    checkMissingIterableValueType: false
