@@ -105,8 +105,13 @@ jobs:
         run: |
           mkdir -p build/logs
           vendor/bin/testbench package:test --parallel --coverage-text --coverage-clover build/logs/clover.xml
+          test -f build/logs/clover.xml
 
-      - name: Send coverage to Coveralls
+      - name: "Tests have failed: display logs"
+        if: "${{ failure() }}"
+        run: "cat vendor/orchestra/testbench-core/laravel/storage/logs/*.log"
+
+      - name: "Send coverage to Coveralls"
         env:
           COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         if: "${{ env.COVERALLS_REPO_TOKEN && matrix.code-coverage && matrix.dependencies == 'highest' }}"

@@ -50,18 +50,21 @@
                                             <form wire:submit.prevent="$refresh">
                                                 <div class="input-group">
                                                     <span id="search-for-rows"
-                                                          class="input-group-text">
+                                                        class="input-group-text"
+                                                    >
                                                         {!! config('laravel-table.icon.search') !!}
                                                     </span>
                                                     <input wire:model.defer="searchBy"
-                                                           class="form-control"
-                                                           placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
-                                                           aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
-                                                           aria-describedby="search-for-rows">
+                                                        class="form-control"
+                                                        placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
+                                                        aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
+                                                        aria-describedby="search-for-rows"
+                                                    >
                                                     <span class="input-group-text">
                                                         <button class="btn btn-sm btn-link link-primary p-0"
-                                                                type="submit"
-                                                                title="{{ __('Search by:') }} {{ $searchableLabels }}">
+                                                            type="submit"
+                                                            title="{{ __('Search by:') }} {{ $searchableLabels }}"
+                                                        >
                                                             {!! config('laravel-table.icon.validate') !!}
                                                         </button>
                                                     </span>
@@ -126,10 +129,11 @@
                                     {{-- Bulk actions dropdown --}}
                                     <div class="dropdown" title="{{ __('Bulk Actions') }}" data-bs-toggle="tooltip">
                                         <a id="bulk-actions-dropdown"
-                                           class="dropdown-toggle"
-                                           type="button"
-                                           data-bs-toggle="dropdown"
-                                           aria-expanded="false">
+                                            class="dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">
                                             @foreach($tableBulkActionsArray as $bulkActionArray)
@@ -146,10 +150,11 @@
                                 @if($column->isSortable($orderColumn))
                                     @if($sortBy === $column->getAttribute())
                                         <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
-                                           class="d-flex align-items-center"
-                                           href=""
-                                           title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}"
-                                           data-bs-toggle="tooltip">
+                                            class="d-flex align-items-center"
+                                            href=""
+                                            title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}"
+                                            data-bs-toggle="tooltip"
+                                        >
                                             {!! $sortDir === 'asc'
                                                 ? config('laravel-table.icon.sort_desc')
                                                 : config('laravel-table.icon.sort_asc') !!}
