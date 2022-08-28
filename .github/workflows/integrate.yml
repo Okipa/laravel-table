@@ -97,11 +97,11 @@ jobs:
           composer-options: "--with=laravel/framework:${{ matrix.laravel-constraint }} --with=orchestra/testbench:${{ matrix.testbench-constraint }}"
 
       - name: "Execute unit tests"
-        if: "${{ ! matrix.code-coverage }}"
+        if: "${{ ! matrix.code-coverage || matrix.dependencies != 'highest' }}"
         run: "composer run phpunit"
 
       - name: "Execute unit tests with code coverage"
-        if: "${{ matrix.code-coverage }}"
+        if: "${{ matrix.code-coverage && matrix.dependencies == 'highest' }}"
         run: |
           mkdir -p build/logs
           vendor/bin/testbench package:test --parallel --coverage-text --coverage-clover build/logs/clover.xml
