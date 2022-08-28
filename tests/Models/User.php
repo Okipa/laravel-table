@@ -15,9 +15,10 @@ class User extends Authenticatable
     /** @var string */
     protected $table = 'users';
 
-    /** @var array */
+    /** @var array<int, string> */
     protected $fillable = ['name', 'email', 'password', 'active'];
 
+    /** @var array<string, string> */
     protected $casts = ['active' => 'boolean', 'email_verified_at' => 'datetime'];
 
     protected static function newFactory(): UserFactory

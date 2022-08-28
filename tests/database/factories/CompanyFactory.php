@@ -8,7 +8,7 @@ use Tests\Models\User;
 
 class CompanyFactory extends Factory
 {
-    /** @var string */
+    /** @var class-string<\Illuminate\Database\Eloquent\Model> */
     protected $model = Company::class;
 
     public function definition(): array
@@ -22,6 +22,6 @@ class CompanyFactory extends Factory
 
     public function withOwner(User $user): self
     {
-        return $this->afterCreating(fn (Company $company) => $company->update(['owner_id' => $user->id]));
+        return $this->afterCreating(fn (Company $company) => tap($company)->update(['owner_id' => $user->id]));
     }
 }

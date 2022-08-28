@@ -14,7 +14,7 @@ class Company extends Model
     /** @var string */
     protected $table = 'companies';
 
-    /** @var array */
+    /** @var array<int, string> */
     protected $fillable = ['owner_id', 'name', 'position'];
 
     protected static function newFactory(): CompanyFactory

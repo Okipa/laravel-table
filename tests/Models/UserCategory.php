@@ -14,7 +14,7 @@ class UserCategory extends Model
     /** @var string */
     protected $table = 'user_categories';
 
-    /** @var array */
+    /** @var array<int, string> */
     protected $fillable = ['name', 'position'];
 
     protected static function newFactory(): UserCategoryFactory

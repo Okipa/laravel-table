@@ -54,7 +54,7 @@ class Table
 
     public static function make(): self
     {
-        return new static();
+        return new self();
     }
 
     public function model(string $modelClass): self
@@ -269,8 +269,8 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function getColumnSortedByDefault(): Column|null
     {
-        $sortableColumns =
-            $this->getColumns()->filter(fn (Column $column) => $column->isSortable($this->getOrderColumn()));
+        $sortableColumns = $this->getColumns()
+            ->filter(fn (Column $column) => $column->isSortable($this->getOrderColumn()));
         if ($sortableColumns->isEmpty()) {
             return null;
         }

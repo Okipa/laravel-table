@@ -14,6 +14,7 @@ use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Exceptions\InvalidTableConfiguration;
+use Okipa\LaravelTable\Exceptions\UnrecognizedActionType;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -96,10 +97,11 @@ class Table extends Component
     /** @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration */
     protected function buildConfig(): AbstractTableConfiguration
     {
-        if (! app($this->config) instanceof AbstractTableConfiguration) {
+        /** @var mixed $config */
+        $config = app($this->config);
+        if (! $config instanceof AbstractTableConfiguration) {
             throw new InvalidTableConfiguration($this->config);
         }
-        $config = app($this->config);
         foreach ($this->configParams as $key => $value) {
             $config->{$key} = $value;
         }
@@ -250,12 +252,14 @@ class Table extends Component
         $this->resetFilters = false;
     }
 
+    /** @throws \Okipa\LaravelTable\Exceptions\UnrecognizedActionType */
     public function actionConfirmed(string $actionType, string $identifier, string|null $modelKey): mixed
     {
         return match ($actionType) {
             'bulkAction' => $this->bulkAction($identifier, false),
             'rowAction' => $this->rowAction($identifier, $modelKey, false),
             'columnAction' => $this->columnAction($identifier, $modelKey, false),
+            default => throw new UnrecognizedActionType($actionType),
         };
     }
 

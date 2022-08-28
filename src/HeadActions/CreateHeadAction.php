@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelTable\HeadActions;
 
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
@@ -28,7 +29,7 @@ class CreateHeadAction extends AbstractHeadAction
         return config('laravel-table.icon.create');
     }
 
-    public function action(Component $livewire): Redirector
+    public function action(Component $livewire): RedirectResponse|Redirector
     {
         return redirect()->to($this->createUrl);
     }

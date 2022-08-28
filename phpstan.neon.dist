@@ -12,9 +12,11 @@ parameters:
     level: 5
 
     ignoreErrors:
-        - '#PHPDoc tag @var#'
+        - '#Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Factories\\Factory<Illuminate\\Database\\Eloquent\\Model>::afterCreating\(\)#'
+        - '#Access to an undefined property Tests\\Models\\User::\$active#'
+        - '#Call to an undefined method Faker\\Generator::catchphrase\(\)#'
 
     excludePaths:
-        - ./*/*/FileToBeExcluded.php
+        #- ./*/*/FileToBeExcluded.php
 
     checkMissingIterableValueType: false

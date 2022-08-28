@@ -23,9 +23,9 @@ class TableConfigurationTest extends TestCase
             //
         };
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('The given ' . $this->config
+        $this->expectExceptionMessage('The given ' . $config::class
             . ' table config should extend ' . AbstractTableConfiguration::class . '.');
-        Livewire::test(Table::class, ['config' => $config::class])->call('init');
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])->call('init');
     }
 
     /** @test */

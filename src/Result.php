@@ -24,7 +24,7 @@ class Result
 
     public static function make(): self
     {
-        return new static();
+        return new self();
     }
 
     public function title(string $title): self

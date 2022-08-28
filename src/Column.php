@@ -38,7 +38,7 @@ class Column
 
     public static function make(string $attribute = null): self
     {
-        return new static($attribute);
+        return new self($attribute);
     }
 
     public function title(string $title): self
@@ -76,7 +76,7 @@ class Column
     public function isSortable(Column|null $orderColumn): bool
     {
         if ($orderColumn) {
-            return $this->getAttribute() === $orderColumn?->getAttribute();
+            return $this->getAttribute() === $orderColumn->getAttribute();
         }
 
         return $this->sortable;
@@ -151,7 +151,9 @@ class Column
             $columnActionInstance = AbstractColumnAction::make($columnActionArray);
 
             return $columnActionInstance->isAllowed()
-                ? new HtmlString(AbstractColumnAction::make($columnActionArray)->render($model, $this->attribute))
+                ? new HtmlString(AbstractColumnAction::make($columnActionArray)
+                    ->render($model, $this->attribute)
+                    ->render())
                 : null;
         }
         if ($this->formatter instanceof Closure) {

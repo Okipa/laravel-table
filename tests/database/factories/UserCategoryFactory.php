@@ -8,7 +8,7 @@ use Tests\Models\UserCategory;
 
 class UserCategoryFactory extends Factory
 {
-    /** @var string */
+    /** @var class-string<\Illuminate\Database\Eloquent\Model> */
     protected $model = UserCategory::class;
 
     public function definition(): array
