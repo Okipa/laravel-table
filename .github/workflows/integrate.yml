@@ -139,6 +139,11 @@ jobs:
         with:
           dependency-versions: "highest"
 
+      # @FIXME
+      - name: "Patch Larastan"
+        run: |
+          sed -i -e 's#.*protected \$enablesPackageDiscoveries.*#&\nprotected function overrideApplicationBindings($app){return["livewire"=>"Livewire\\\\LivewireManager"];}#' vendor/nunomaduro/larastan/src/ApplicationResolver.php
+
       - name: "Execute static analysis"
         run: "composer run phpstan"
 
