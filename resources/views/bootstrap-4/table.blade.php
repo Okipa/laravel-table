@@ -28,9 +28,9 @@
                                     @endforeach
                                     @if(array_filter($selectedFilters, static fn($filter) => $filter !== '' && isset($filter)))
                                         <a wire:click.prevent="resetFilters()"
-                                           class="btn btn-outline-secondary ms-3"
+                                           class="btn btn-outline-secondary ml-3"
                                            title="{{ __('Reset filters') }}"
-                                           data-bs-toggle="tooltip">
+                                           data-toggle="tooltip">
                                             {!! config('laravel-table.icon.reset') !!}
                                         </a>
                                     @endif
@@ -48,29 +48,35 @@
                                         <div class="flex-fill pr-xl-3 py-1">
                                             <form wire:submit.prevent="$refresh">
                                                 <div class="input-group">
-                                                    <span id="search-for-rows" class="input-group-text">
-                                                        {!! config('laravel-table.icon.search') !!}
-                                                    </span>
+                                                    <div class="input-group-prepend">
+                                                        <span id="search-for-rows" class="input-group-text">
+                                                            {!! config('laravel-table.icon.search') !!}
+                                                        </span>
+                                                    </div>
                                                     <input wire:model.defer="searchBy"
                                                            class="form-control"
                                                            placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-describedby="search-for-rows">
-                                                    <span class="input-group-text">
-                                                        <button class="btn btn-sm btn-link link-primary p-0"
-                                                                type="submit"
-                                                                title="{{ __('Search by:') }} {{ $searchableLabels }}">
-                                                            {!! config('laravel-table.icon.validate') !!}
-                                                        </button>
-                                                    </span>
-                                                    @if($searchBy)
+                                                    <div class="input-group-append">
                                                         <span class="input-group-text">
-                                                            <a wire:click.prevent="$set('searchBy', ''), $refresh"
-                                                               class="btn btn-sm btn-link link-danger p-0"
-                                                               title="{{ __('Reset research') }}">
-                                                                {!! config('laravel-table.icon.reset') !!}
-                                                            </a>
+                                                            <button class="btn btn-sm btn-link link-primary p-0"
+                                                                    type="submit"
+                                                                    title="{{ __('Search by:') }} {{ $searchableLabels }}">
+                                                                {!! config('laravel-table.icon.validate') !!}
+                                                            </button>
                                                         </span>
+                                                    </div>
+                                                    @if($searchBy)
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">
+                                                                <a wire:click.prevent="$set('searchBy', ''), $refresh"
+                                                                   class="btn btn-sm btn-link link-danger p-0"
+                                                                   title="{{ __('Reset research') }}">
+                                                                    {!! config('laravel-table.icon.reset') !!}
+                                                                </a>
+                                                            </span>
+                                                        </div>
                                                     @endif
                                                 </div>
                                             </form>
@@ -82,9 +88,11 @@
                                     @if($numberOfRowsPerPageChoiceEnabled)
                                         <div wire:ignore class="px-xl-3 py-1">
                                             <div class="input-group">
-                                                <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
-                                                    {!! config('laravel-table.icon.rows_number') !!}
-                                                </span>
+                                                <div class="input-group-prepend">
+                                                    <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
+                                                        {!! config('laravel-table.icon.rows_number') !!}
+                                                    </span>
+                                                </div>
                                                 <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
                                                     'placeholder' => __('Number of rows per page'),
                                                     'aria-label' => __('Number of rows per page'),
@@ -118,13 +126,13 @@
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
                                 <div class="d-flex align-items-center">
                                     {{-- Bulk actions select all --}}
-                                    <input wire:model="selectAll" class="me-1" type="checkbox" aria-label="Check all displayed lines">
+                                    <input wire:model="selectAll" class="mr-1" type="checkbox" aria-label="Check all displayed lines">
                                     {{-- Bulk actions dropdown --}}
-                                    <div class="dropdown" title="{{ __('Bulk Actions') }}" data-bs-toggle="tooltip">
+                                    <div class="dropdown" title="{{ __('Bulk Actions') }}" data-toggle="tooltip">
                                         <a id="bulk-actions-dropdown"
                                            class="dropdown-toggle"
                                            type="button"
-                                           data-bs-toggle="dropdown"
+                                           data-toggle="dropdown"
                                            aria-expanded="false">
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">
@@ -145,20 +153,20 @@
                                            class="d-flex align-items-center"
                                            href=""
                                            title="{{ $sortDir === 'asc' ? __('Sort descending') : __('Sort ascending') }}"
-                                           data-bs-toggle="tooltip">
+                                           data-toggle="tooltip">
                                             {!! $sortDir === 'asc'
                                                 ? config('laravel-table.icon.sort_desc')
                                                 : config('laravel-table.icon.sort_asc') !!}
-                                            <span class="ms-2">{{ $column->getTitle() }}</span>
+                                            <span class="ml-2">{{ $column->getTitle() }}</span>
                                         </a>
                                     @else
                                         <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
                                            class="d-flex align-items-center"
                                            href=""
                                            title="{{ __('Sort ascending') }}"
-                                           data-bs-toggle="tooltip">
+                                           data-toggle="tooltip">
                                             {!! config('laravel-table.icon.sort') !!}
-                                            <span class="ms-2">{{ $column->getTitle() }}</span>
+                                            <span class="ml-2">{{ $column->getTitle() }}</span>
                                         </a>
                                     @endif
                                 @else
@@ -189,7 +197,7 @@
                             @foreach($columns as $column)
                                 @if($loop->first)
                                     <th wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.handle style="cursor: move;"' : null !!} class="align-middle" scope="row">
-                                        {!! $orderColumn ? '<span class="me-2">' . config('laravel-table.icon.drag_drop') . '</span>' : null !!}{{ $column->getValue($model, $tableColumnActionsArray) }}
+                                        {!! $orderColumn ? '<span class="mr-2">' . config('laravel-table.icon.drag_drop') . '</span>' : null !!}{{ $column->getValue($model, $tableColumnActionsArray) }}
                                     </th>
                                 @else
                                     <td wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}" class="align-middle">
@@ -251,7 +259,7 @@
         </div>
     @else
         <div class="d-flex align-items-center py-3">
-            <div class="spinner-border text-dark me-3" role="status">
+            <div class="spinner-border text-dark mr-3" role="status">
                 <span class="visually-hidden">{{ __('Loading in progress...') }}</span>
             </div>
             {{ __('Loading in progress...') }}

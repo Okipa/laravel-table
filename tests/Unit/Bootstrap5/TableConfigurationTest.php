@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bootstrap5;
 
 use ErrorException;
 use Illuminate\Foundation\Auth\User;
