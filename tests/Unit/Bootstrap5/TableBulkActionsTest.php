@@ -47,8 +47,10 @@ class TableBulkActionsTest extends TestCase
                 '<input wire:model="selectAll" class="me-1" type="checkbox" aria-label="Check all displayed lines">',
                 '<a id="bulk-actions-dropdown"',
                 '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->first()->id . '" aria-label="Check line ' . $users->first()->id . '">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->last()->id . '" aria-label="Check line ' . $users->last()->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->first()->id
+                . '" aria-label="Check line ' . $users->first()->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->last()->id
+                . '" aria-label="Check line ' . $users->last()->id . '">',
             ]);
     }
 
@@ -151,10 +153,12 @@ class TableBulkActionsTest extends TestCase
                 '</thead>',
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->first()->id . '" aria-label="Check line ' . $users->first()->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->first()->id
+                . '" aria-label="Check line ' . $users->first()->id . '">',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->last()->id . '" aria-label="Check line ' . $users->last()->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $users->last()->id
+                . '" aria-label="Check line ' . $users->last()->id . '">',
                 '</tr>',
                 '</tbody>',
             ]);
@@ -329,13 +333,16 @@ class TableBulkActionsTest extends TestCase
                 '</thead>',
                 '<tbody>',
                 '<tr wire:key="row-' . $user1->id . '" class="border-bottom">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $user1->id . '" aria-label="Check line ' . $user1->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $user1->id
+                . '" aria-label="Check line ' . $user1->id . '">',
                 '</tr>',
                 '<tr wire:key="row-' . $user2->id . '" class="border-bottom">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $user2->id . '" aria-label="Check line ' . $user2->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $user2->id
+                . '" aria-label="Check line ' . $user2->id . '">',
                 '</tr>',
                 '<tr wire:key="row-' . $user3->id . '" class="border-bottom">',
-                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $user3->id . '" aria-label="Check line ' . $user3->id . '">',
+                '<input wire:model="selectedModelKeys" type="checkbox" value="' . $user3->id
+                . '" aria-label="Check line ' . $user3->id . '">',
                 '</tr>',
                 '</tbody>',
             ])
