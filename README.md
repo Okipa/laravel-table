@@ -23,7 +23,7 @@ Save time and easily render tables in your views from Eloquent models.
 
 Tables can be generated under the following UI frameworks:
 * Bootstrap 5
-* Bootstrap 4 (upcoming feature)
+* Bootstrap 4
 * TailwindCSS 3 (upcoming feature)
 
 **DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.**
