@@ -163,7 +163,7 @@ You should search for `$table =` or `->setup()` in your controller and remove al
 Then, replace all the `{{ $table }}` calls from your views by the Livewire dedicated component with you table configuration passed in parameter, [as explained here](../../README.md#display-tables-in-views):
 
 ```blade
-<x:livewire.table :config="App\Tables\UsersTable::class"/>
+<livewire:table :config="App\Tables\UsersTable::class"/>
 ```
 
 If you wish to pass data to your table configuration, [do it this way](../../README.md#pass-external-data-to-your-tables).

@@ -84,10 +84,10 @@ class UsersTable extends AbstractTableConfiguration
             Column::make('name')->searchable()->sortable(),
             Column::make('email')->searchable()->sortable(),
             Column::make('created_at')
-                ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
+                ->format(new DateFormatter('d/m/Y H:i', 'Europe/Paris'))
                 ->sortable(),
             Column::make('updated_at')
-                ->format(new Datetime('d/m/Y H:i', 'Europe/Paris'))
+                ->format(new DateFormatter('d/m/Y H:i', 'Europe/Paris'))
                 ->sortable()
                 ->sortByDefault('desc'),
         ];
@@ -223,7 +223,7 @@ You'll find all your generated table configurations in the `app/Tables` director
 Just call this Livewire component in your view with your configuration class name passed in the `config` parameter.
 
 ```blade
-<x:livewire.table :config="App\Tables\UsersTable::class"/>
+<livewire:table :config="App\Tables\UsersTable::class"/>
 ```
 
 ### Pass external data to your tables
@@ -233,7 +233,7 @@ In case you have specific attributes to transmit to your table configuration, yo
 This could be useful when you have to transmit external information to your table.
 
 ```blade
-<x:livewire.table :config="App\Tables\UsersTable::class" :configParams="['categoryId' => 1]"/>
+<livewire:table :config="App\Tables\UsersTable::class" :configParams="['categoryId' => 1]"/>
 ```
 
 You should then declare the passed attributes as `public` attributes your table configuration.
