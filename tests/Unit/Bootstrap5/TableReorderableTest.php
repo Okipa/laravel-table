@@ -87,7 +87,7 @@ class TableReorderableTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
-                '<div class="alert alert-info">',
+                '<div class="alert alert-info" role="alert">',
                 'You can rearrange the order of the items in this list using a drag and drop action.',
                 '</div>',
                 '<div class="table-responsive">',

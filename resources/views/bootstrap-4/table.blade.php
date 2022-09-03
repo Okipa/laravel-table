@@ -1,7 +1,7 @@
 <div wire:init="init">
     @if($initialized)
         @if($orderColumn)
-            <div class="alert alert-info">
+            <div class="alert alert-info" role="alert">
                 {{ __('You can rearrange the order of the items in this list using a drag and drop action.') }}
             </div>
         @endif

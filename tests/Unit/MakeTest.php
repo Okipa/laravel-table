@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Bootstrap5;
+namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
