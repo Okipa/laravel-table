@@ -4,7 +4,6 @@ namespace DummyNamespace;
 
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class DummyClass extends AbstractRowAction
