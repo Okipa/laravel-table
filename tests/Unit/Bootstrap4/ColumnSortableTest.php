@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bootstrap4;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -11,59 +10,9 @@ use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
-use Tests\TestCase;
 
-class ColumnSortableTest extends TestCase
+class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
 {
-    use RefreshDatabase;
-
-    /** @test */
-    public function it_cant_sort_any_column_when_no_column_is_sortable(): void
-    {
-        $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
-        {
-            protected function table(): Table
-            {
-                return Table::make()->model(User::class);
-            }
-
-            protected function columns(): array
-            {
-                return [
-                    Column::make('id'),
-                    Column::make('name'),
-                ];
-            }
-        };
-        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
-            ->call('init')
-            ->assertSet('sortBy', null)
-            ->assertSet('sortDir', null)
-            ->assertSeeHtmlInOrder([
-                '<thead>',
-                '<tr',
-                '<th wire:key="column-id" class="align-middle" scope="col">',
-                'validation.attributes.id',
-                '</th>',
-                '<th wire:key="column-name" class="align-middle" scope="col">',
-                'validation.attributes.name',
-                '</th>',
-                '</tr>',
-                '</thead>',
-                '<tbody>',
-                $users->first()->name,
-                $users->last()->name,
-                '</tbody>',
-            ])
-            ->assertDontSeeHtml([
-                '<a wire:click.prevent="sortBy(\'id\')"',
-                'title="Sort descending"',
-                '<a wire:click.prevent="sortBy(\'name\')"',
-                'title="Sort ascending"',
-            ]);
-    }
-
     /** @test */
     public function it_can_sort_first_sortable_column_when_no_column_is_sorted_by_default(): void
     {
@@ -98,7 +47,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">validation.attributes.id</span>',
+                '<span class="ml-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -106,7 +55,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -152,7 +101,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.id</span>',
+                '<span class="ml-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -160,7 +109,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -206,7 +155,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.id</span>',
+                '<span class="ml-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -214,7 +163,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort-asc',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -264,7 +213,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.id</span>',
+                '<span class="ml-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -272,7 +221,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -294,7 +243,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.id</span>',
+                '<span class="ml-2">validation.attributes.id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -302,7 +251,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort-asc',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -352,7 +301,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">Custom Id</span>',
+                '<span class="ml-2">Custom Id</span>',
                 '</th>',
                 '<th wire:key="column-name" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'name\')"',
@@ -360,7 +309,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">Custom Name</span>',
+                '<span class="ml-2">Custom Name</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -413,7 +362,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '<th wire:key="column-companies-count" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'companies_count\')"',
@@ -421,7 +370,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort descending"',
                 'icon-sort-desc',
-                '<span class="ms-2">validation.attributes.companies_count</span>',
+                '<span class="ml-2">validation.attributes.companies_count</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',
@@ -443,7 +392,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort',
-                '<span class="ms-2">validation.attributes.name</span>',
+                '<span class="ml-2">validation.attributes.name</span>',
                 '</th>',
                 '<th wire:key="column-companies-count" class="align-middle" scope="col">',
                 '<a wire:click.prevent="sortBy(\'companies_count\')"',
@@ -451,7 +400,7 @@ class ColumnSortableTest extends TestCase
                 'href=""',
                 'title="Sort ascending"',
                 'icon-sort-asc',
-                '<span class="ms-2">validation.attributes.companies_count</span>',
+                '<span class="ml-2">validation.attributes.companies_count</span>',
                 '</th>',
                 '</tr>',
                 '</thead>',

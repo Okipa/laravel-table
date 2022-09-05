@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bootstrap5;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,14 +67,22 @@ class ColumnSearchableTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<thead>',
                 '<form wire:submit.prevent="$refresh">',
-                '<span id="search-for-rows"',
+                '<div class="input-group">',
+                '<span id="search-for-rows" class="input-group-text">',
                 'icon-search',
+                '</span>',
+                '<input wire:model.defer="searchBy"',
+                'class="form-control"',
                 'placeholder="Search by: validation.attributes.name, validation.attributes.email"',
                 'aria-label="Search by: validation.attributes.name, validation.attributes.email"',
-                'aria-describedby="search-for-rows"',
-                '<button',
-                'title="Search by: validation.attributes.name, validation.attributes.email"',
+                'aria-describedby="search-for-rows">',
+                '<span class="input-group-text">',
+                '<button class="btn btn-sm btn-link link-primary p-0"',
+                'type="submit"',
+                'title="Search by: validation.attributes.name, validation.attributes.email">',
                 'icon-validate',
+                '</button>',
+                '</span>',
                 '</thead>',
             ]);
     }

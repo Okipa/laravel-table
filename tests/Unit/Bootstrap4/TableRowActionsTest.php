@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bootstrap4;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
@@ -13,12 +12,9 @@ use Okipa\LaravelTable\RowActions\EditRowAction;
 use Okipa\LaravelTable\RowActions\ShowRowAction;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
-use Tests\TestCase;
 
-class TableRowActionsTest extends TestCase
+class TableRowActionsTest extends \Tests\Unit\Bootstrap5\TableRowActionsTest
 {
-    use RefreshDatabase;
-
     /** @test */
     public function it_can_set_row_actions(): void
     {
@@ -64,21 +60,21 @@ class TableRowActionsTest extends TestCase
                 'wire:click.prevent="rowAction(\'show\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-info p-1"',
                 'title="Show"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'show-icon',
                 '</a>',
                 '<a wire:key="row-action-edit-' . $users->first()->id . '"',
                 'wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
                 'class="link-primary p-1"',
                 'title="Edit"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'edit-icon',
                 '</a>',
                 '<a wire:key="row-action-destroy-' . $users->first()->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
                 'class="link-danger p-1"',
                 'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -90,19 +86,19 @@ class TableRowActionsTest extends TestCase
                 '<a wire:key="row-action-show-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'show\', \'' . $users->last()->id . '\', 0)"',
                 'title="Show"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'show-icon',
                 '</a>',
                 '<a wire:key="row-action-edit-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
                 'title="Edit"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'edit-icon',
                 '</a>',
                 '<a wire:key="row-action-destroy-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
                 'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -164,7 +160,7 @@ class TableRowActionsTest extends TestCase
                 '<a wire:key="row-action-destroy-' . $users->last()->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
                 'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -207,7 +203,7 @@ class TableRowActionsTest extends TestCase
                 '<a wire:key="row-action-destroy-' . $user->id . '"',
                 'wire:click.prevent="rowAction(\'destroy\', \'' . $user->id . '\', 0)"',
                 'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',

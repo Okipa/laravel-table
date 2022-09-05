@@ -1,8 +1,7 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bootstrap4;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 use Livewire\Livewire;
@@ -15,12 +14,9 @@ use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
 use Tests\Models\UserCategory;
-use Tests\TestCase;
 
-class TableFiltersTest extends TestCase
+class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
 {
-    use RefreshDatabase;
-
     /** @test */
     public function it_can_set_filters(): void
     {
@@ -64,7 +60,7 @@ class TableFiltersTest extends TestCase
                 '<div class="d-flex flex-wrap align-items-center justify-content-end">',
                 // Email Verified
                 '<div wire:ignore>',
-                '<div wire:key="filter-null-email-verified-at" class="ms-3">',
+                '<div wire:key="filter-null-email-verified-at" class="ml-3">',
                 '<select wire:model="selectedFilters.null_email_verified_at"',
                 'class="form-select"',
                 'placeholder="Email Verified"',
@@ -77,41 +73,41 @@ class TableFiltersTest extends TestCase
                 '</div>',
                 // Companies
                 '<div wire:ignore>',
-                '<div wire:key="filter-relationship-companies" class="ms-3">',
+                '<div wire:key="filter-relationship-companies" class="ml-3">',
                 '<select wire:model="selectedFilters.relationship_companies"',
                 'class="form-select"',
                 'placeholder="Companies"',
                 'aria-label="Companies">',
                 '<option wire:key="filter-option-relationship-companies-placeholder" value="" selected>Companies</option>',
                 '<option wire:key="filter-option-relationship-companies-' . $company1->id . '" value="'
-                . $company1->id . '">' . $company1->name . '</option>',
+                . $company1->id . '">' . e($company1->name) . '</option>',
                 '<option wire:key="filter-option-relationship-companies-' . $company2->id . '" value="'
-                . $company2->id . '">' . $company2->name . '</option>',
+                . $company2->id . '">' . e($company2->name) . '</option>',
                 '<option wire:key="filter-option-relationship-companies-' . $company3->id . '" value="'
-                . $company3->id . '">' . $company3->name . '</option>',
+                . $company3->id . '">' . e($company3->name) . '</option>',
                 '</select>',
                 '</div>',
                 '</div>',
                 // Categories
                 '<div wire:ignore>',
-                '<div wire:key="filter-relationship-categories" class="ms-3">',
+                '<div wire:key="filter-relationship-categories" class="ml-3">',
                 '<select wire:model="selectedFilters.relationship_categories"',
                 'class="form-select"',
                 'placeholder="Categories"',
                 'aria-label="Categories">',
                 '<option wire:key="filter-option-relationship-categories-placeholder" value="" selected disabled>Categories</option>',
                 '<option wire:key="filter-option-relationship-categories-' . $category1->id . '" value="'
-                . $category1->id . '">' . $category1->name . '</option>',
+                . $category1->id . '">' . e($category1->name) . '</option>',
                 '<option wire:key="filter-option-relationship-categories-' . $category2->id . '" value="'
-                . $category2->id . '">' . $category2->name . '</option>',
+                . $category2->id . '">' . e($category2->name) . '</option>',
                 '<option wire:key="filter-option-relationship-categories-' . $category3->id . '" value="'
-                . $category3->id . '">' . $category3->name . '</option>',
+                . $category3->id . '">' . e($category3->name) . '</option>',
                 '</select>',
                 '</div>',
                 '</div>',
                 // Active
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ml-3">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
                 'placeholder="Active"',
@@ -237,33 +233,33 @@ class TableFiltersTest extends TestCase
             ->set('selectedFilters', ['boolean_active' => true])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ml-3">',
                 '<a wire:click.prevent="resetFilters()"',
-                'class="btn btn-outline-secondary ms-3"',
+                'class="btn btn-outline-secondary ml-3"',
                 'title="Reset filters"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'reset-icon',
                 '</a>',
             ])
             ->set('selectedFilters', ['boolean_active' => false])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ml-3">',
                 '<a wire:click.prevent="resetFilters()"',
-                'class="btn btn-outline-secondary ms-3"',
+                'class="btn btn-outline-secondary ml-3"',
                 'title="Reset filters"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'reset-icon',
                 '</a>',
             ])
             ->set('selectedFilters', ['boolean_active' => 0])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ml-3">',
                 '<a wire:click.prevent="resetFilters()"',
-                'class="btn btn-outline-secondary ms-3"',
+                'class="btn btn-outline-secondary ml-3"',
                 'title="Reset filters"',
-                'data-bs-toggle="tooltip">',
+                'data-toggle="tooltip">',
                 'reset-icon',
                 '</a>',
             ])
@@ -279,7 +275,7 @@ class TableFiltersTest extends TestCase
             ->assertSet('resetFilters', false)
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ml-3">',
             ])
             ->assertDontSeeHtml(['<a wire:click.prevent="resetFilters()"']);
     }
@@ -312,7 +308,7 @@ class TableFiltersTest extends TestCase
                 '<td class="px-0 pb-0">',
                 '<div class="d-flex flex-wrap align-items-center justify-content-end">',
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ml-3">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
                 'placeholder="Active"',
