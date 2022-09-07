@@ -77,76 +77,78 @@ class UsersTable extends AbstractTableConfiguration
 ```
 
 As so, the following changes must be reported in your table configurations:
-* Replace `extend AbstractTable` by `extend AbstractTableConfiguration`
-* Replace `return (new Table())` by `return Table::make()->` at the beginning of the `table()` function
-* Replace `protected function columns(Table $table): void` function signatures by `protected function columns(): array`
-* replace columns declaration previously done with `$table->column()` by [new column declaration](../../README.md#declare-columns-on-tables)
-* Replace `protected function results(Table $table): void` function signatures by `protected function results(): array`
-* replace results declaration previously done with `$table->results()` by [new result declaration](../../README.md#declare-results-on-tables)
+* Replace each declaration of `use Okipa\LaravelTable\Abstracts\AbstractTable` by `use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;`
+* Replace each declaration of `extends AbstractTable` by `extends AbstractTableConfiguration`
+* Replace each declaration of `return (new Table())->` by `return Table::make()->` at the beginning of the `table()` function
+* Replace each declaration of `protected function columns(Table $table): void` function signatures by `protected function columns(): array`
+  * An array must now be returned by this method, make sure that all column declarations are now encapsulated into an array
+* Replace each declaration of `$table->column(` by `Column::make(` at the beginning of the `columns()` function
+  * More details on the [new way to define columns](../../README.md#define-column-actions)
+* Replace each declaration of `protected function results(Table $table): void` function signatures by `protected function results(): array`
+* Replace each declaration of `$table->result(` by `Result::make()` at the beginning of the `results()` function
+  * More details on the [new way to define results](../../README.md#declare-results-on-tables)
 
 ## Table API changes
 
-* The method `identifier` has been removed as it is now useless
-* The method `request` has been removed as it is now useless
-  * If you need to pass external data to your table, [do it this way](../../README.md#pass-external-data-to-your-tables)
-* The method `routes` has been removed
-  * Index route is now useless as the whole table is handled with Livewire
+* Remove each `->identifier(` declaration, it is now useless
+* Remove each `->request(` declaration, it is now useless
+* The method `->routes(` has been removed
+  * Remove each `ìndex` route, it is now useless as the whole table is handled with Livewire
   * Create route has now to be configured as [head action](../../README.md#define-table-head-action)
+    * Remove create `create` route declarations from the `->routes()` method
+    * Declare a head action instead following this example: `->headAction(new CreateHeadAction(route('user.create')))`
   * Show/Edit/Delete routes have now to be configured as [row actions](../../README.md#define-table-row-actions)
-* The method `rowsNumber` has been renamed `numberOfRowsPerPageOptions` and [has changed its signature](../../README.md#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
-* The method `activateRowsNumberDefinition` has been renamed `enableNumberOfRowsPerPageChoice`
-* The method `appendData` has been removed as it is now useless
-* The method `containerClasses` has been removed
-* The method `tableClasses` has been removed
-* The method `trClasses` has been removed
-* The method `thClasses` has been removed
-* The method `tdClasses` has been removed
-* The method `rowsConditionalClasses` has been renamed to `rowClass` and [has changed its signature](../../README.md#set-conditional-row-class)
-* The method `destroyConfirmationHtmlAttributes` has been removed
+    * Declare row actions on your table following this example: `->rowActions(fn(User $user) => [])`
+    * Remove create `show` route declarations from the `->routes()` method
+    * Declare a `ShowRowAction` instead following this example: `new ShowRowAction(route('user.show', $user))`
+    * Do the same for the `edit` route by declaring a `EditRowAction` instead following this example: `new EditRowAction(route('user.edit', $user))`
+    * Do the same for the `destroy` route by declaring a `DestroyRowAction` instead following this example: `new DestroyRowAction()`
+    * As destroy action will now be handled by the package, `destroy` route declaration may now be useless, you may delete them
+* Replace each `->rowsNumber(` declaration by `->numberOfRowsPerPageOptions(` and [update the provided argument to match its new signature](../../README.md#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+* Replace each `->activateRowsNumberDefinition(` declaration by `->enableNumberOfRowsPerPageChoice(`
+* Remove each `->appendData(` declaration, it is now useless
+* Remove each `->containerClasses(` declaration
+* Remove each `->tableClasses(` declaration
+* Remove each `->trClasses(` declaration
+* Remove each `->thClasses(` declaration
+* Remove each `->tdClasses(` declaration
+* Replace each `->rowsConditionalClasses(` declaration by `rowClass` and [update the provided argument to match its new signature](../../README.md#set-conditional-row-class)
+* Remove each `->destroyConfirmationHtmlAttributes(` declaration
   * Actions confirmations and feedbacks have now to be handled with [a few lines of JavaScript that you'll have to add to your project](../../README.md#set-up-a-few-lines-of-javascript)
-* The method `disableRows` has been removed
+* Remove each `->disableRows(` declaration
   * You'll have to use the [rowClass](../../README.md#set-conditional-row-class) method to set custom styles to rows
   * You'll have the ability to independently enable/disable [bulk actions](../../README.md#define-table-bulk-actions), [row actions](../../README.md#define-table-row-actions) and [column actions](../../README.md#define-column-actions)
-* The method `tableTemplate` has been removed
-* The method `theadTemplate` has been removed
-* The method `rowsSearchingTemplate` has been removed
-* The method `rowsNumberDefinitionTemplate` has been removed
-* The method `createActionTemplate` has been removed
-* The method `columnTitlesTemplate` has been removed
-* The method `tbodyTemplate` has been removed
-* The method `showActionTemplate` has been removed
-* The method `editActionTemplate` has been removed
-* The method `destroyActionTemplate` has been removed
-* The method `resultsTemplate` has been removed
-* The method `tfootTemplate` has been removed
-* The method `navigationStatusTemplate` has been removed
-* The method `paginationTemplate` has been removed
-* The method `column` has been removed
-  * There is now a [new way to define columns](../../README.md#define-column-actions)
-* The method `result` has been removed
-  * There is now a [new way to define results](../../README.md#declare-results-on-tables)
+* Remove each `->tableTemplate(` declaration
+* Remove each `->theadTemplate(` declaration
+* Remove each `->rowsSearchingTemplate(` declaration
+* Remove each `->rowsNumberDefinitionTemplate(` declaration
+* Remove each `->createActionTemplate(` declaration
+* Remove each `->columnTitlesTemplate(` declaration
+* Remove each `->tbodyTemplate(` declaration
+* Remove each `->showActionTemplate(` declaration
+* Remove each `->editActionTemplate(` declaration
+* Remove each `->destroyActionTemplate(` declaration
+* Remove each `->resultsTemplate(` declaration
+* Remove each `->tfootTemplate(` declaration
+* Remove each `->navigationStatusTemplate(` declaration
+* Remove each `->paginationTemplate(` declaration
 
 ## Column API changes
 
-* The method `classes` has been removed
-* The method `sortable` [has changed its signature](../../README.md#configure-columns-sorting)
+* Remove each `->classes(` declaration
+* The method `->sortable(` [has changed its signature](../../README.md#configure-columns-sorting): make sure implementations are compatible with it
+  * To sort a column by default, you'll now have to add the following declaration to your column: `->sortByDefault('desc') // 'asc' by default`
 * The method `searchable` [has changed its signature](../../README.md#configure-columns-searching)
-* The method `dateTimeFormat` has been removed
-  * Column formatting is [now handled differently](../../README.md#format-column-values) and a built-in formater is available to replace it
-* The method `button` has been removed
-  * [New column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
-* The method `link` has been removed
-  * [New column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
-* The method `prependHtml` has been removed
-  * [New column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
-* The method `appendsHtml` has been removed
-  * [New column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
-* The method `stringLimit` has been removed
-  * Column formatting is [now handled differently](../../README.md#format-column-values) and a built-in formater is available to replace it
-* The method `value` has been removed
-  * [New column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
-* The method `html` has been removed
-  * [New column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
+* Remove each `dateTimeFormat` declaration
+  * Column formatting is [now handled differently](../../README.md#format-column-values) and a built-in formatter is available to replace it
+  * For example, replace each `->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')` declarations by `->format(new DateFormatter('d/m/Y H:i', 'Europe/Paris'))`
+* Each following declarations have to be removed, they'll can be replaced by the [new column formatting feature](../../README.md#format-column-values) can be used to format values the way you want
+  * `button`
+  * `link`
+  * `prependHtml`
+  * `appendsHtml`
+  * `value`
+  * `html`
 
 ## Result API changes
 
