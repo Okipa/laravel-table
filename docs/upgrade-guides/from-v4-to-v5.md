@@ -178,7 +178,7 @@ You'll also have to install the [Livewire Sortable Plugin](https://github.com/li
 
 ## See all changes
 
-See all change with the [comparison tool](https://github.com/Okipa/laravel-table/compare/3.0.0...4.0.0).
+See all change with the [comparison tool](https://github.com/Okipa/laravel-table/compare/4.0.7...5.0.0).
 
 ## Undocumented changes
 

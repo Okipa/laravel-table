@@ -44,7 +44,6 @@ class ColumnSearchableTest extends TestCase
     public function it_can_display_search_form_with_searchable_columns(): void
     {
         Config::set('laravel-table.icon.search', 'icon-search');
-        Config::set('laravel-table.icon.reset', 'icon-reset');
         Config::set('laravel-table.icon.validate', 'icon-validate');
         $config = new class extends AbstractTableConfiguration
         {
@@ -66,6 +65,11 @@ class ColumnSearchableTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<thead>',
+                '<tr>',
+                '<td class="px-0" colspan="3">',
+                '<div class="d-flex flex-column flex-xl-row">',
+                '<div class="flex-fill">',
+                '<div class="flex-fill pr-xl-3 py-1">',
                 '<form wire:submit.prevent="$refresh">',
                 '<div class="input-group">',
                 '<span id="search-for-rows" class="input-group-text">',
@@ -83,6 +87,13 @@ class ColumnSearchableTest extends TestCase
                 'icon-validate',
                 '</button>',
                 '</span>',
+                '</div>',
+                '</form>',
+                '</div>',
+                '</div>',
+                '</div',
+                '</td>',
+                '</tr>',
                 '</thead>',
             ]);
     }
@@ -191,6 +202,9 @@ class ColumnSearchableTest extends TestCase
     /** @test */
     public function it_can_reset_search(): void
     {
+        Config::set('laravel-table.icon.search', 'icon-search');
+        Config::set('laravel-table.icon.validate', 'icon-validate');
+        Config::set('laravel-table.icon.reset', 'icon-reset');
         $users = User::factory()->count(2)->create();
         $config = new class extends AbstractTableConfiguration
         {
@@ -211,6 +225,46 @@ class ColumnSearchableTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->set('searchBy', $users->first()->name)
+            ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr>',
+                '<td class="px-0" colspan="3">',
+                '<div class="d-flex flex-column flex-xl-row">',
+                '<div class="flex-fill">',
+                '<div class="flex-fill pr-xl-3 py-1">',
+                '<form wire:submit.prevent="$refresh">',
+                '<div class="input-group">',
+                '<span id="search-for-rows" class="input-group-text">',
+                'icon-search',
+                '</span>',
+                '<input wire:model.defer="searchBy"',
+                'class="form-control"',
+                'placeholder="Search by: validation.attributes.name, validation.attributes.email"',
+                'aria-label="Search by: validation.attributes.name, validation.attributes.email"',
+                'aria-describedby="search-for-rows">',
+                '<span class="input-group-text">',
+                '<button class="btn btn-sm btn-link link-primary p-0"',
+                'type="submit"',
+                'title="Search by: validation.attributes.name, validation.attributes.email">',
+                'icon-validate',
+                '</button>',
+                '</span>',
+                '<span class="input-group-text">',
+                '<a wire:click.prevent="$set(\'searchBy\', \'\'), $refresh"',
+                'class="btn btn-sm btn-link link-secondary p-0"',
+                'title="Reset research">',
+                'icon-reset',
+                '</a>',
+                '</span>',
+                '</div>',
+                '</form>',
+                '</div>',
+                '</div>',
+                '</div',
+                '</td>',
+                '</tr>',
+                '</thead>',
+            ])
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
                 '<tbody>',

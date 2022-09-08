@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Bootstrap5;
 
 use ErrorException;
 use Illuminate\Foundation\Auth\User;
@@ -53,5 +53,33 @@ class TableConfigurationTest extends TestCase
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->assertEmitted('simple:test:event')
             ->assertEmitted('test:event:with:params', ['my', 'test', 'event', 'params']);
+    }
+
+    /** @test */
+    public function it_can_display_loader_before_initialization(): void
+    {
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('id'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->assertSeeHtmlInOrder([
+                '<div class="d-flex align-items-center py-3">',
+                '<div class="spinner-border text-dark me-3" role="status">',
+                '<span class="visually-hidden">Loading in progress...</span>',
+                '</div>',
+                'Loading in progress...',
+                '</div>',
+            ]);
     }
 }

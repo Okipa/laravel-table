@@ -71,7 +71,7 @@
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
                                                                 <a wire:click.prevent="$set('searchBy', ''), $refresh"
-                                                                   class="btn btn-sm btn-link link-danger p-0"
+                                                                   class="btn btn-sm btn-link text-secondary p-0"
                                                                    title="{{ __('Reset research') }}">
                                                                     {!! config('laravel-table.icon.reset') !!}
                                                                 </a>
@@ -260,7 +260,7 @@
     @else
         <div class="d-flex align-items-center py-3">
             <div class="spinner-border text-dark mr-3" role="status">
-                <span class="visually-hidden">{{ __('Loading in progress...') }}</span>
+                <span class="sr-only">{{ __('Loading in progress...') }}</span>
             </div>
             {{ __('Loading in progress...') }}
         </div>
