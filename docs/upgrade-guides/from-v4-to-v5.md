@@ -114,7 +114,7 @@ As so, the following changes must be reported in your table configurations:
 * Remove each `->tdClasses(` declaration
 * Replace each `->rowsConditionalClasses(` declaration by `rowClass` and [update the provided argument to match its new signature](../../README.md#set-conditional-row-class)
 * Remove each `->destroyConfirmationHtmlAttributes(` declaration
-  * Actions confirmations and feedbacks have now to be handled with [a few lines of JavaScript that you'll have to add to your project](../../README.md#set-up-a-few-lines-of-javascript)
+  * Actions confirmations and feedbacks will now be handled by a [few lines of JavaScript](#javascript-addition)
 * Remove each `->disableRows(` declaration
   * You'll have to use the [rowClass](../../README.md#set-conditional-row-class) method to set custom styles to rows
   * You'll have the ability to independently enable/disable [bulk actions](../../README.md#define-table-bulk-actions), [row actions](../../README.md#define-table-row-actions) and [column actions](../../README.md#define-column-actions)
@@ -169,6 +169,12 @@ Then, replace all the `{{ $table }}` calls from your views by the Livewire dedic
 ```
 
 If you wish to pass data to your table configuration, [do it this way](../../README.md#pass-external-data-to-your-tables).
+
+## Javascript addition
+
+You'll have to add [a few lines of JavaScript to your project](../../README.md#set-up-a-few-lines-of-javascript) to handle table action confirmations and feedbacks.
+
+You'll also have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable) on your project to allow the [built-in columns drag-and-drop-reordering](../../README.md#allow-columns-to-be-reordered-from-drag-and-drop-action) to work properly.
 
 ## See all changes
 
