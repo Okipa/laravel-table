@@ -146,7 +146,7 @@
                         @endif
                         {{-- Sorting/Column titles --}}
                         @foreach($columns as $column)
-                            <th wire:key="column-{{ Str::slug($column->getAttribute()) }}" class="align-middle" scope="col">
+                            <th wire:key="column-{{ Str::of($column->getAttribute())->snake('-')->slug() }}" class="align-middle" scope="col">
                                 @if($column->isSortable($orderColumn))
                                     @if($sortBy === $column->getAttribute())
                                         <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
@@ -233,7 +233,7 @@
                 <tfoot class="table-light">
                     {{-- Results --}}
                     @foreach($results as $result)
-                        <tr wire:key="result-{{ Str::slug($result->getTitle()) }}" class="border-bottom">
+                        <tr wire:key="result-{{ Str::of($result->getTitle())->snake('-')->slug() }}" class="border-bottom">
                             <td class="align-middle fw-bold"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <div class="px-2 py-1">{{ $result->getTitle() }}</div>

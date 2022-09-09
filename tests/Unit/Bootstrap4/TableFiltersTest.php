@@ -4,12 +4,14 @@ namespace Tests\Unit\Bootstrap4;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\Filters\BooleanFilter;
 use Okipa\LaravelTable\Filters\NullFilter;
 use Okipa\LaravelTable\Filters\RelationshipFilter;
+use Okipa\LaravelTable\Filters\ValueFilter;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
@@ -34,6 +36,7 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
             protected function table(): Table
             {
                 return Table::make()->model(User::class)->filters([
+                    new ValueFilter('Email', 'email', User::orderBy('email')->pluck('email', 'email')->toArray()),
                     new NullFilter('Email Verified', 'email_verified_at'),
                     // HasMany Relationship with single selection
                     new RelationshipFilter('Companies', 'companies', Company::pluck('name', 'id')->toArray(), false),
@@ -51,6 +54,7 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
                 ];
             }
         };
+        $sortedUserEmails = User::orderBy('email')->pluck('email');
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
@@ -58,6 +62,26 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
                 '<tr>',
                 '<td class="px-0 pb-0" colspan="2">',
                 '<div class="d-flex flex-wrap align-items-center justify-content-end">',
+                // Email
+                '<div wire:ignore>',
+                '<div wire:key="filter-value-email" class="ml-3">',
+                '<select wire:model="selectedFilters.value_email"',
+                'class="form-select"',
+                'placeholder="Email"',
+                'aria-label="Email">',
+                '<option wire:key="filter-option-value-email-placeholder" value="" selected disabled>Email</option>',
+                '<option wire:key="filter-option-value-email-' . Str::of($sortedUserEmails->get(0))->snake('-')->slug() . '" value="' . $sortedUserEmails->get(0) . '">'
+                . $sortedUserEmails->get(0)
+                . '</option>',
+                '<option wire:key="filter-option-value-email-' . Str::of($sortedUserEmails->get(1))->snake('-')->slug() . '" value="' . $sortedUserEmails->get(1) . '">'
+                . $sortedUserEmails->get(1)
+                . '</option>',
+                '<option wire:key="filter-option-value-email-' . Str::of($sortedUserEmails->get(2))->snake('-')->slug() . '" value="' . $sortedUserEmails->get(2) . '">'
+                . $sortedUserEmails->get(2)
+                . '</option>',
+                '</select>',
+                '</div>',
+                '</div>',
                 // Email Verified
                 '<div wire:ignore>',
                 '<div wire:key="filter-null-email-verified-at" class="ml-3">',
@@ -129,8 +153,26 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
                 '</tr>',
                 '</thead>',
             ])
-            // Single filter : Email verified
+            // Single filter: Email
             ->set('selectedFilters', [
+                'value_email' => [$user1->email],
+                'null_email_verified_at' => '',
+                'relationship_companies' => '',
+                'relationship_categories' => [],
+                'boolean_active' => '',
+            ])
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $user1->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml([
+                $user2->name,
+                $user3->name,
+            ])
+            // Single filter: Email verified
+            ->set('selectedFilters', [
+                'value_email' => [],
                 'null_email_verified_at' => false,
                 'relationship_companies' => '',
                 'relationship_categories' => [],
@@ -145,8 +187,9 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
             ->assertDontSeeHtml([
                 $user2->name,
             ])
-            // Single filter : Companies
+            // Single filter: Companies
             ->set('selectedFilters', [
+                'value_email' => [],
                 'null_email_verified_at' => '',
                 'relationship_companies' => $company1->id,
                 'relationship_categories' => [],
@@ -161,8 +204,9 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
                 $user2->name,
                 $user3->name,
             ])
-            // Single filter : Categories
+            // Single filter: Categories
             ->set('selectedFilters', [
+                'value_email' => [],
                 'null_email_verified_at' => '',
                 'relationship_companies' => '',
                 'relationship_categories' => [$category2->id],
@@ -177,8 +221,9 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
                 $user1->name,
                 $user3->name,
             ])
-            // Single filter : Active
+            // Single filter: Active
             ->set('selectedFilters', [
+                'value_email' => [],
                 'null_email_verified_at' => '',
                 'relationship_companies' => '',
                 'relationship_categories' => [],
@@ -193,8 +238,9 @@ class TableFiltersTest extends \Tests\Unit\Bootstrap5\TableFiltersTest
                 $user1->name,
                 $user2->name,
             ])
-            // Multiple filters : Email Verified + Active
+            // Multiple filters: Email Verified + Active
             ->set('selectedFilters', [
+                'value_email' => [],
                 'null_email_verified_at' => true,
                 'relationship_companies' => '',
                 'relationship_categories' => [],
