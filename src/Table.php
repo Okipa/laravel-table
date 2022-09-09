@@ -158,7 +158,7 @@ class Table
                             ? $subSearchQuery->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)(
                                 $orWhereQuery,
                                 $searchBy
-                            ))q
+                            ))
                             : $subSearchQuery->orWhere(
                                 DB::raw('LOWER(' . $searchableColumn->getAttribute() . ')'),
                                 $this->getCaseInsensitiveSearchingLikeOperator(),

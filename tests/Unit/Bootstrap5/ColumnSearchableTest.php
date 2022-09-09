@@ -355,7 +355,8 @@ class ColumnSearchableTest extends TestCase
     {
         $this->expectException(PDOException::class);
         $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: '
-            . 'select count(*) as aggregate from "users" where LOWER(name) ILIKE %test%)');
+            . 'select count(*) as aggregate from "users" where (LOWER(name) ILIKE %test%))');
+        // SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: select count(*) as aggregate from "users" where (LOWER(name) ILIKE %test%))
         $config = new class extends AbstractTableConfiguration
         {
             protected function table(): Table
