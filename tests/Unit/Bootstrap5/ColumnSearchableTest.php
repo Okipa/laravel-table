@@ -134,7 +134,9 @@ class ColumnSearchableTest extends TestCase
                 $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->last()->name)
+            ->assertDontSeeHtml([
+                $users->last()->name,
+            ])
             ->set('searchBy', $users->last()->email)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
@@ -142,7 +144,9 @@ class ColumnSearchableTest extends TestCase
                 $users->last()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->first()->name);
+            ->assertDontSeeHtml([
+                $users->first()->name,
+            ]);
     }
 
     /** @test */
@@ -188,7 +192,9 @@ class ColumnSearchableTest extends TestCase
                 $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->last()->name)
+            ->assertDontSeeHtml([
+                $users->last()->name,
+            ])
             ->set('searchBy', $user2Companies->last()->name)
             ->call('$refresh')
             ->assertSeeHtmlInOrder([
@@ -196,7 +202,67 @@ class ColumnSearchableTest extends TestCase
                 $users->last()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->first()->name);
+            ->assertDontSeeHtml([
+                $users->first()->name,
+            ]);
+    }
+
+    /** @test */
+    public function it_can_search_with_a_query_defined(): void
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $company1 = Company::factory()->withOwner($user1)->create();
+        $company2 = Company::factory()->withOwner($user1)->create();
+        $company3 = Company::factory()->withOwner($user2)->create();
+        $company4 = Company::factory()->withOwner($user2)->create();
+        $config = new class extends AbstractTableConfiguration
+        {
+            public int $companyOwnerId;
+
+            protected function table(): Table
+            {
+                return Table::make()
+                    ->model(Company::class)
+                    ->query(fn (Builder $query) => $query->whereRelation('owner', 'id', $this->companyOwnerId));
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('id'),
+                    Column::make('name')->searchable(),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, [
+            'config' => $config::class,
+            'configParams' => ['companyOwnerId' => $user1->id],
+        ])
+            ->call('init')
+            ->assertSet('searchBy', '')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $company1->name,
+                $company2->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml([
+                $company3->name,
+                $company4->name,
+            ])
+            ->set('searchBy', $company1->name)
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $company1->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml([
+                $company2->name,
+                $company3->name,
+                $company4->name,
+            ]);
     }
 
     /** @test */
@@ -271,7 +337,9 @@ class ColumnSearchableTest extends TestCase
                 $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->last()->name)
+            ->assertDontSeeHtml([
+                $users->last()->name,
+            ])
             ->set('searchBy', '')
             ->call('$refresh')
             ->assertSeeHtmlInOrder([

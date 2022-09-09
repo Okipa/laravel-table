@@ -80,11 +80,13 @@ class ColumnFormatTest extends TestCase
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
-                '<span title="' . $user1->name . '" data-bs-toggle="tooltip">' . Str::limit($user1->name, 5)
+                '<span title="' . $user1->name . '" data-bs-toggle="tooltip">'
+                . Str::limit($user1->name, 5)
                 . '</span>',
                 '<span class="text-success">active-icon</span>',
                 $user1->created_at->timezone('Europe/Paris')->format('d/m:Y H:i:s'),
-                '<span title="' . $user2->name . '" data-bs-toggle="tooltip">' . Str::limit($user2->name, 5)
+                '<span title="' . $user2->name . '" data-bs-toggle="tooltip">'
+                . Str::limit($user2->name, 5)
                 . '</span>',
                 '<span class="text-danger">inactive-icon</span>',
                 $user2->created_at->timezone('Europe/Paris')->format('d/m:Y H:i:s'),

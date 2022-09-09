@@ -40,7 +40,7 @@ class TableQueryTest extends TestCase
             'configParams' => ['userIdToExclude' => $users->first()->id],
         ])
             ->call('init')
-            ->assertSeeHtml([
+            ->assertSeeHtmlInOrder([
                 '<th wire:key="cell-id-' . $users->last()->id . '" class="align-middle" scope="row">',
                 $users->last()->id,
                 '</th>',

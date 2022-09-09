@@ -148,7 +148,9 @@ class ColumnSearchableTest extends \Tests\Unit\Bootstrap5\ColumnSearchableTest
                 $users->first()->name,
                 '</tbody>',
             ])
-            ->assertDontSeeHtml($users->last()->name)
+            ->assertDontSeeHtml([
+                $users->last()->name,
+            ])
             ->set('searchBy', '')
             ->call('$refresh')
             ->assertSeeHtmlInOrder([

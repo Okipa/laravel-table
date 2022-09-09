@@ -138,25 +138,33 @@ class Table
         $query = $this->model->query();
         // Query
         if ($this->queryClosure) {
-            ($this->queryClosure)($query);
+            $query->where(fn($subQueryQuery) => ($this->queryClosure)($query));
         }
         // Filters
         if ($filterClosures) {
-            foreach ($filterClosures as $filterClosure) {
-                $filterClosure($query);
-            }
+            $query->where(function ($subFiltersQuery) use ($filterClosures) {
+                foreach ($filterClosures as $filterClosure) {
+                    $filterClosure($subFiltersQuery);
+                }
+            });
         }
         // Search
         if ($searchBy) {
-            $this->getSearchableColumns()->each(function (Column $searchableColumn) use ($query, $searchBy) {
-                $searchableClosure = $searchableColumn->getSearchableClosure();
-                $searchableClosure
-                    ? $query->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)($orWhereQuery, $searchBy))
-                    : $query->orWhere(
-                        DB::raw('LOWER(' . $searchableColumn->getAttribute() . ')'),
-                        $this->getCaseInsensitiveSearchingLikeOperator(),
-                        '%' . mb_strtolower($searchBy) . '%'
-                    );
+            $query->where(function ($subSearchQuery) use ($searchBy) {
+                $this->getSearchableColumns()
+                    ->each(function (Column $searchableColumn) use ($subSearchQuery, $searchBy) {
+                        $searchableClosure = $searchableColumn->getSearchableClosure();
+                        $searchableClosure
+                            ? $subSearchQuery->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)(
+                                $orWhereQuery,
+                                $searchBy
+                            ))q
+                            : $subSearchQuery->orWhere(
+                                DB::raw('LOWER(' . $searchableColumn->getAttribute() . ')'),
+                                $this->getCaseInsensitiveSearchingLikeOperator(),
+                                '%' . mb_strtolower($searchBy) . '%'
+                            );
+                    });
             });
         }
         // Sort

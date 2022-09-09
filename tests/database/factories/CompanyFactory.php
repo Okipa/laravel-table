@@ -15,7 +15,7 @@ class CompanyFactory extends Factory
     {
         return [
             'owner_id' => User::inRandomOrder()->first()->id,
-            'name' => $this->faker->company,
+            'name' => $this->faker->company(),
             'position' => $this->faker->unique()->numberBetween(1, 100),
         ];
     }

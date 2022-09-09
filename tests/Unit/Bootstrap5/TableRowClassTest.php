@@ -41,7 +41,7 @@ class TableRowClassTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-            ->assertSeeHtml([
+            ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $userActive->id . '" class="active always border-bottom">',
                 $userActive->name,
