@@ -136,6 +136,19 @@ class Table extends Component
         // Filters
         $filtersArray = $table->generateFiltersArray();
         $filterClosures = $table->getFilterClosures($filtersArray, $this->selectedFilters);
+
+//        $this->selectedFilters = ['boolean_active' => null]; // NO
+//        $this->selectedFilters = []; // NO
+//        $this->selectedFilters = ''; // NO
+//        $this->selectedFilters = ['boolean_active' => true]; // YES
+//        $this->selectedFilters = ['boolean_active' => false]; // YES
+//        $this->selectedFilters = ['boolean_active' => 0]; // YES
+//        dd(
+//            $this->selectedFilters,
+//            array_filter($this->selectedFilters, static fn($filter) => ! empty($filter)),
+//            collect($this->selectedFilters)->filter(fn(mixed $filter) => isset($filter) ?? false)->isNotEmpty()
+//        );
+
         // Query preparation
         $query = $table->prepareQuery(
             $filterClosures,

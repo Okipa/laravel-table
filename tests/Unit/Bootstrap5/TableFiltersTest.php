@@ -237,6 +237,7 @@ class TableFiltersTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
+            ->assertSet('selectedFilters', [])
             ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
             ->set('selectedFilters', ['boolean_active' => null])
             ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
