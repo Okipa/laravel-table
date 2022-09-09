@@ -319,7 +319,7 @@ class Table
     public function generateFiltersArray(): array
     {
         return collect($this->filters)->map(function (AbstractFilter $filter) {
-            $filter->setup();
+            $filter->setup($this->model->getKeyName());
 
             return json_decode(json_encode(
                 $filter,

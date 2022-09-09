@@ -11,7 +11,7 @@ class ToggleEmailVerifiedColumnAction extends AbstractColumnAction
 {
     public function action(Model $model, string $attribute, Component $livewire): void
     {
-        // Update attribute event if it not in model `$fillable`.
+        // Update attribute even if it not in model `$fillable`
         $model->forceFill([$attribute => $model->{$attribute} ? null : Date::now()])->save();
     }
 

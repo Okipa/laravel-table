@@ -39,6 +39,9 @@ class RelationshipFilter extends AbstractFilter
 
     public function filter(Builder $query, mixed $selected): void
     {
-        $query->whereHas($this->relationship, fn (Builder $category) => $category->whereIn('id', Arr::wrap($selected)));
+        $query->whereHas(
+            $this->relationship,
+            fn (Builder $category) => $category->whereIn($this->modelKeyName, Arr::wrap($selected))
+        );
     }
 }

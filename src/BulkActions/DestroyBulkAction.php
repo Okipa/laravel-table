@@ -9,11 +9,6 @@ use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
 
 class DestroyBulkAction extends AbstractBulkAction
 {
-    public function action(Collection $models, Component $livewire): void
-    {
-        $models->each->delete();
-    }
-
     protected function identifier(): string
     {
         return 'destroy';
@@ -80,5 +75,10 @@ class DestroyBulkAction extends AbstractBulkAction
         }
 
         return $allowedLinesSentence . ($disallowedLinesSentence ?? '');
+    }
+
+    public function action(Collection $models, Component $livewire): void
+    {
+        $models->each->delete();
     }
 }

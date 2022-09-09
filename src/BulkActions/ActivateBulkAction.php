@@ -85,6 +85,7 @@ class ActivateBulkAction extends AbstractBulkAction
     public function action(Collection $models, Component $livewire): void
     {
         foreach ($models as $model) {
+            // Update attribute even if it not in model `$fillable`
             $model->forceFill([$this->attribute => true])->save();
         }
     }
