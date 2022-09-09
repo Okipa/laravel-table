@@ -26,7 +26,7 @@
                                             </div>
                                         @endif
                                     @endforeach
-                                    @if(collect($this->selectedFilters)->filter(fn(mixed $filter) => isset($filter) ?? false)->isNotEmpty())
+                                    @if(collect($this->selectedFilters)->filter(fn(mixed $filter) => isset($filter) && $filter !== '' && $filter !== [])->isNotEmpty())
                                         <a wire:click.prevent="resetFilters()"
                                            class="btn btn-outline-secondary ml-3"
                                            title="{{ __('Reset filters') }}"

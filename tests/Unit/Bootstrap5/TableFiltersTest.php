@@ -241,6 +241,10 @@ class TableFiltersTest extends TestCase
             ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
             ->set('selectedFilters', ['boolean_active' => null])
             ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
+            ->set('selectedFilters', ['boolean_active' => ''])
+            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
+            ->set('selectedFilters', ['boolean_active' => []])
+            ->assertDontSeeHtml('<a wire:click.prevent="resetFilters()"')
             ->set('selectedFilters', ['boolean_active' => true])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
