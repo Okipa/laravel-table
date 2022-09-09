@@ -138,7 +138,7 @@ class Table
         $query = $this->model->query();
         // Query
         if ($this->queryClosure) {
-            $query->where(fn($subQueryQuery) => ($this->queryClosure)($query));
+            $query->where(fn ($subQueryQuery) => ($this->queryClosure)($query));
         }
         // Filters
         if ($filterClosures) {
