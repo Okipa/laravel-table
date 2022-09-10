@@ -426,6 +426,9 @@ Configuring table filters will make them appear as `select` HTML components on a
 The filters bar will not appear if no filter is declared.
 
 This package provides the following built-in filters:
+* `ValueFilter`:
+  * Requires `string $label`, `string $attribute`, `array $options` and `bool $multiple = true` arguments on instantiation
+  * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given attribute
 * `RelationshipFilter`:
   * Requires `string $label`, `string $relationship`, `array $options` and `bool $multiple = true` arguments on instantiation
   * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given relationship

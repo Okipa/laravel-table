@@ -1,8 +1,8 @@
-<div wire:key="filter-{{ Str::slug($filter->identifier) }}" class="ms-3">
+<div wire:key="filter-{{ Str::of($filter->identifier)->snake('-')->slug() }}" class="ms-3">
     <select wire:model="selectedFilters.{{ $filter->identifier }}" {{ $attributes->class(['form-select', ...$class]) }}>
-        <option wire:key="filter-option-{{ Str::slug($filter->identifier) }}-placeholder" value="" selected{!! $multiple ? ' disabled' : null !!}>{{ $label }}</option>
+        <option wire:key="filter-option-{{ Str::of($filter->identifier)->snake('-')->slug() }}-placeholder" value="" selected{!! $multiple ? ' disabled' : null !!}>{{ $label }}</option>
         @foreach($options as $optionValue => $optionLabel)
-            <option wire:key="filter-option-{{ Str::slug($filter->identifier) }}-{{ Str::slug($optionValue) }}" value="{{ $optionValue }}">{{ $optionLabel }}</option>
+            <option wire:key="filter-option-{{ Str::of($filter->identifier)->snake('-')->slug() }}-{{ Str::of($optionValue)->snake('-')->slug() }}" value="{{ $optionValue }}">{{ $optionLabel }}</option>
         @endforeach
     </select>
 </div>
