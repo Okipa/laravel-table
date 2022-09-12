@@ -1183,7 +1183,7 @@ As you will see on the provided snippet below, the 4th param of this event is th
 
 You will have to intercept this event from your own JS script and prompt a confirmation request.
 
-When the action is confirmed by the user, you'll have to emit a new `table:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
+When the action is confirmed by the user, you'll have to emit a new `laraveltable:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
 1. The action type
 2. The action identifier
 3. The model primary key related to your action
@@ -1192,11 +1192,11 @@ Here is an JS snippet to show you how to proceed:
 
 ```javascript
 // Listen to the action confirmation request
-Livewire.on('table:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
+Livewire.on('laraveltable:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
     // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
     if (window.confirm(confirmationQuestion)) {
         // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
-        Livewire.emit('table:action:confirmed', actionType, actionIdentifier, modelPrimary);
+        Livewire.emit('laraveltable:action:confirmed', actionType, actionIdentifier, modelPrimary);
     }
 });
 ```
@@ -1206,7 +1206,7 @@ Once an action is executed, a `table:action:feedback` Livewire event is triggere
 Following the same logic, you'll have to intercept it from a JS script as shown on the snippet below to provide an immediate feedback to the user:
 
 ```javascript
-Livewire.on('table:action:feedback', (feedbackMessage) => {
+Livewire.on('laraveltable:action:feedback', (feedbackMessage) => {
     // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
     window.alert(feedbackMessage);
 });

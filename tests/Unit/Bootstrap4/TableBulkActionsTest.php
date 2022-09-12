@@ -161,15 +161,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         // Verify Email
         $component->call('bulkAction', 'verify_email', true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'bulkAction',
                 'verify_email',
                 null,
                 'Are you sure you want to execute the action Verify Email on the line #' . $users->first()->id . '?'
             )
-            ->emit('table:action:confirmed', 'bulkAction', 'verify_email', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'verify_email', null)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Verify Email has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
@@ -184,16 +184,16 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         User::query()->update(['email_verified_at' => Date::now()]);
         $component->call('bulkAction', 'cancel_email_verification', true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'bulkAction',
                 'cancel_email_verification',
                 null,
                 'Are you sure you want to execute the action Unverify Email on the line #'
                 . $users->first()->id . '?'
             )
-            ->emit('table:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Unverify Email has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
@@ -207,15 +207,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         // Activate
         $component->call('bulkAction', 'activate', true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'bulkAction',
                 'activate',
                 null,
                 'Are you sure you want to execute the action Activate on the line #' . $users->first()->id . '?'
             )
-            ->emit('table:action:confirmed', 'bulkAction', 'activate', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'activate', null)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Activate has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
@@ -230,15 +230,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         User::query()->update(['active' => true]);
         $component->call('bulkAction', 'deactivate', true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'bulkAction',
                 'deactivate',
                 null,
                 'Are you sure you want to execute the action Deactivate on the line #' . $users->first()->id . '?',
             )
-            ->emit('table:action:confirmed', 'bulkAction', 'deactivate', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'deactivate', null)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Deactivate has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseHas(app(User::class)->getTable(), [
@@ -252,15 +252,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         // Destroy
         $component->call('bulkAction', 'destroy', true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'bulkAction',
                 'destroy',
                 null,
                 'Are you sure you want to execute the action Destroy on the line #' . $users->first()->id . '?'
             )
-            ->emit('table:action:confirmed', 'bulkAction', 'destroy', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'destroy', null)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Destroy has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseMissing(app(User::class)->getTable(), ['id' => $users->first()->id]);
@@ -344,16 +344,16 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
             ])
             ->call('bulkAction', 'destroy', true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'bulkAction',
                 'destroy',
                 null,
                 'Are you sure you want to execute the action Destroy on the 2 selected lines? The line #' . $user1->id
                 . ' does not allow the action Destroy and will not be affected.'
             )
-            ->emit('table:action:confirmed', 'bulkAction', 'destroy', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'destroy', null)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Destroy has been executed on the 2 selected lines. The line #' . $user1->id
                 . ' does not allow the action Destroy and was not affected.',
             );

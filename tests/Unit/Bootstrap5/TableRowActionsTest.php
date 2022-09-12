@@ -111,22 +111,22 @@ class TableRowActionsTest extends TestCase
                 '</tbody>',
             ])
             ->call('rowAction', 'show', $users->first()->id, false)
-            ->assertNotEmitted('table:action:feedback')
+            ->assertNotEmitted('laraveltable:action:feedback')
             ->assertRedirect(route('user.show', $users->first()))
             ->call('rowAction', 'edit', $users->last()->id, false)
-            ->assertNotEmitted('table:action:feedback')
+            ->assertNotEmitted('laraveltable:action:feedback')
             ->assertRedirect(route('user.edit', $users->last()))
             ->call('rowAction', 'destroy', $users->first()->id, true)
             ->assertEmitted(
-                'table:action:confirm',
+                'laraveltable:action:confirm',
                 'rowAction',
                 'destroy',
                 (string) $users->first()->id,
                 'Are you sure you want to execute the action Destroy on the line #' . $users->first()->id . '?'
             )
-            ->emit('table:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
+            ->emit('laraveltable:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
             ->assertEmitted(
-                'table:action:feedback',
+                'laraveltable:action:feedback',
                 'The action Destroy has been executed on the line #' . $users->first()->id . '.'
             );
         $this->assertDatabaseMissing('users', ['id' => $users->first()->id]);
@@ -216,8 +216,8 @@ class TableRowActionsTest extends TestCase
                 '</tbody>',
             ])
             ->call('rowAction', 'destroy', $user->id, false)
-            ->assertNotEmitted('table:action:confirm')
-            ->assertNotEmitted('table:action:feedback');
+            ->assertNotEmitted('laraveltable:action:confirm')
+            ->assertNotEmitted('laraveltable:action:feedback');
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 }
