@@ -114,7 +114,6 @@ And display it in a view:
   * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
   * [Override native selects behaviour on your tables](#override-native-selects-behaviour-on-your-tables)
   * [Add query instructions on tables](#add-query-instructions-on-tables)
-  * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
   * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
   * [Set conditional row class](#set-conditional-row-class)
   * [Setup table filters](#setup-table-filters)
@@ -129,6 +128,8 @@ And display it in a view:
   * [Allow columns to be reordered from drag and drop action](#allow-columns-to-be-reordered-from-drag-and-drop-action)
   * [Declare results on tables](#declare-results-on-tables)
   * [Set up a few lines of JavaScript](#set-up-a-few-lines-of-javascript)
+  * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
+  * [Interact with your tables from events](#interact-with-your-tables-from-events)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -308,34 +309,6 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->query(fn(Builder $query) => $query->where('category_id', 1));
-    }   
-}
-```
-
-### Trigger Livewire events on table load
-
-You may want to trigger some events on table load, in order to load UI third party JS libraries for example.
-
-You can do it using the table `emitEventsOnLoad` method, that will await an array of events.
-
-```php
-namespace App\Tables;
-
-use App\Models\User;
-use Okipa\LaravelTable\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
-
-class UsersTable extends AbstractTableConfiguration
-{
-    protected function table(): Table
-    {
-        return Table::make()
-            ->model(User::class)
-            // This event will be loaded each time your table will be rendered
-            // in order to keep your UI third party libraries rendering,
-            // even when its HTML is refreshed.
-            ->emitEventsOnLoad(['js:selector:init' => ['some', 'params']]);
     }   
 }
 ```
@@ -1211,6 +1184,39 @@ Livewire.on('laraveltable:action:feedback', (feedbackMessage) => {
     window.alert(feedbackMessage);
 });
 ```
+
+### Trigger Livewire events on table load
+
+You may want to trigger some events on table load, in order to load UI third party JS libraries for example.
+
+You can do it using the table `emitEventsOnLoad` method, that will await an array of events.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            // This event will be loaded each time your table will be rendered
+            // in order to keep your UI third party libraries rendering,
+            // even when its HTML is refreshed.
+            ->emitEventsOnLoad(['js:selector:init' => ['some', 'params']]);
+    }   
+}
+```
+
+### Interact with your tables from events
+
+you will able to send the following Livewire events to your tables:
+* `laraveltable:refresh`: refresh the tables displayed on the page
 
 ## Testing
 
