@@ -67,7 +67,7 @@ class Table extends Component
     protected $listeners = [
         'laraveltable:filters:wire:ignore:cancel' => 'cancelWireIgnoreOnFilters',
         'laraveltable:action:confirmed' => 'actionConfirmed',
-        'laraveltable:refresh' => 'refresh',
+        'laraveltable:refresh' => '$refresh',
     ];
 
     public function init(): void
