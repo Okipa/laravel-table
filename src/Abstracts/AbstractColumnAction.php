@@ -46,8 +46,12 @@ abstract class AbstractColumnAction
         $this->attribute = $attribute;
     }
 
-    public static function retrieve(array $columnActions, string $modelKey, string $attribute): array|null
+    public static function retrieve(array $columnActions, string|null $modelKey, string $attribute): array|null
     {
+        if (! $modelKey) {
+            return null;
+        }
+
         return Arr::first($columnActions, static fn (array $columnAction) => $columnAction['modelKey'] === $modelKey
             && $columnAction['attribute'] === $attribute);
     }
