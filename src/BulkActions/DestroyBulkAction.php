@@ -11,7 +11,7 @@ class DestroyBulkAction extends AbstractBulkAction
 {
     protected function identifier(): string
     {
-        return 'destroy';
+        return 'destroy_bulk_action';
     }
 
     protected function label(array $allowedModelKeys): string

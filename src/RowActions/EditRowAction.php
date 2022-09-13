@@ -17,7 +17,7 @@ class EditRowAction extends AbstractRowAction
 
     protected function identifier(): string
     {
-        return 'edit';
+        return 'edit_row_action';
     }
 
     protected function class(Model $model): array

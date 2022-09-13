@@ -14,7 +14,7 @@ class BooleanFilter extends AbstractFilter
 
     protected function identifier(): string
     {
-        return 'boolean_' . $this->attribute;
+        return 'boolean_filter_' . $this->attribute;
     }
 
     protected function label(): string

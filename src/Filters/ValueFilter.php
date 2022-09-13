@@ -20,7 +20,7 @@ class ValueFilter extends AbstractFilter
 
     protected function identifier(): string
     {
-        return 'value_' . $this->attribute;
+        return 'value_filter_' . $this->attribute;
     }
 
     protected function label(): string

@@ -17,7 +17,7 @@ class VerifyEmailBulkAction extends AbstractBulkAction
 
     protected function identifier(): string
     {
-        return 'verify_email';
+        return 'verify_email_bulk_action';
     }
 
     protected function label(array $allowedModelKeys): string

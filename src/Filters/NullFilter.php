@@ -14,7 +14,7 @@ class NullFilter extends AbstractFilter
 
     protected function identifier(): string
     {
-        return 'null_' . $this->attribute;
+        return 'null_filter_' . $this->attribute;
     }
 
     protected function label(): string

@@ -16,7 +16,7 @@ class ActivateBulkAction extends AbstractBulkAction
 
     protected function identifier(): string
     {
-        return 'activate';
+        return 'activate_bulk_action';
     }
 
     protected function label(array $allowedModelKeys): string

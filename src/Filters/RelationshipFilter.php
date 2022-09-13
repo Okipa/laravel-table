@@ -19,7 +19,7 @@ class RelationshipFilter extends AbstractFilter
 
     protected function identifier(): string
     {
-        return 'relationship_' . $this->relationship;
+        return 'relationship_filter_' . $this->relationship;
     }
 
     protected function label(): string
