@@ -307,7 +307,7 @@ class Table
     public function paginateRows(Builder $query, int $numberOfRowsPerPage): void
     {
         $this->rows = $query->paginate($numberOfRowsPerPage);
-        $this->rows->transform(function(Model $model) {
+        $this->rows->transform(function (Model $model) {
             $model->laravel_table_unique_identifier = Str::uuid()->getInteger()->toString();
 
             return $model;
