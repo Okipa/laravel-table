@@ -45,7 +45,7 @@
                                 {{-- Search --}}
                                 <div class="flex-fill">
                                     @if($searchableLabels)
-                                        <div class="flex-fill pr-xl-3 py-1">
+                                        <div class="flex-fill pe-xl-3 py-1">
                                             <form wire:submit.prevent="$refresh">
                                                 <div class="input-group">
                                                     <span id="search-for-rows" class="input-group-text">
@@ -80,7 +80,7 @@
                                 <div class="d-flex justify-content-between">
                                     {{-- Number of rows per page --}}
                                     @if($numberOfRowsPerPageChoiceEnabled)
-                                        <div wire:ignore class="px-xl-3 py-1">
+                                        <div wire:ignore @class(['px-xl-3' => $headActionArray, 'ps-xl-3' => ! $headActionArray, 'py-1'])>
                                             <div class="input-group">
                                                 <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
@@ -103,7 +103,7 @@
                                     @endif
                                     {{-- Head action --}}
                                     @if($headActionArray)
-                                        <div class="d-flex align-items-center pl-3 py-1">
+                                        <div class="d-flex align-items-center ps-3 py-1">
                                             {{ Okipa\LaravelTable\Abstracts\AbstractHeadAction::make($headActionArray)->render() }}
                                         </div>
                                     @endif

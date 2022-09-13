@@ -1215,8 +1215,10 @@ class UsersTable extends AbstractTableConfiguration
 
 ### Interact with your tables from events
 
-you will able to send the following Livewire events to your tables:
+You will able to send the following Livewire events to your tables to interact with them:
 * `laraveltable:refresh`: refresh the tables displayed on the page
+  * Allows optional `array $configParams = []`, and `array $targetedConfigs = []` arguments
+  * Refreshes your tables and (optionaly) set [external table config data](#pass-external-data-to-your-tables) with (optional) table targeting to only refresh specific ones (empty `$targetedConfigs` array will refresh all tables one page) 
 
 ## Testing
 

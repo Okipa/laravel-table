@@ -86,7 +86,7 @@
                                 <div class="d-flex justify-content-between">
                                     {{-- Number of rows per page --}}
                                     @if($numberOfRowsPerPageChoiceEnabled)
-                                        <div wire:ignore class="px-xl-3 py-1">
+                                        <div wire:ignore @class(['px-xl-3' => $headActionArray, 'pl-xl-3' => ! $headActionArray, 'py-1'])>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span id="rows-number-per-page-icon" class="input-group-text text-secondary">

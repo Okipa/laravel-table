@@ -21,13 +21,13 @@ class DummyClass extends AbstractBulkAction
     protected function defaultConfirmationQuestion(array $allowedModelKeys, array $disallowedModelKeys): string|null
     {
         // The default bulk action confirmation question that will be asked before execution.
-        // Set `null` if you do not want any confirmation question to be asked by default.
+        // Return `null` if you do not want any confirmation question to be asked by default.
     }
 
     protected function defaultFeedbackMessage(array $allowedModelKeys, array $disallowedModelKeys): string|null
     {
         // The default bulk action feedback message that will be triggered on execution.
-        // Set `null` if you do not want any feedback message to be triggered by default.
+        // Return `null` if you do not want any feedback message to be triggered by default.
     }
 
     /** @return mixed|void */

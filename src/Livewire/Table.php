@@ -67,7 +67,7 @@ class Table extends Component
     protected $listeners = [
         'laraveltable:filters:wire:ignore:cancel' => 'cancelWireIgnoreOnFilters',
         'laraveltable:action:confirmed' => 'actionConfirmed',
-        'laraveltable:refresh' => '$refresh',
+        'laraveltable:refresh' => 'refresh',
     ];
 
     public function init(): void
@@ -332,5 +332,14 @@ class Table extends Component
         }
 
         return $columnActionInstance->action($model, $identifier, $this);
+    }
+
+    public function refresh(array $configParams = [], array $targetedConfigs = []): void
+    {
+        if($targetedConfigs && ! in_array($this->config, $targetedConfigs, true)){
+            return;
+        }
+        $this->configParams = [...$this->configParams, ...$configParams];
+        $this->emitSelf('$refresh');
     }
 }
