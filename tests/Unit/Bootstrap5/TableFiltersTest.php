@@ -65,10 +65,10 @@ class TableFiltersTest extends TestCase
                 '<thead>',
                 '<tr>',
                 '<td class="px-0 pb-0" colspan="2">',
-                '<div class="d-flex flex-wrap align-items-center justify-content-end">',
+                '<div class="d-flex flex-wrap align-items-center justify-content-end mt-n2">',
                 // Email
                 '<div wire:ignore>',
-                '<div wire:key="filter-value-email" class="ms-3">',
+                '<div wire:key="filter-value-email" class="ms-3 mt-2">',
                 '<select wire:model="selectedFilters.value_email"',
                 'class="form-select"',
                 'placeholder="Email"',
@@ -88,7 +88,7 @@ class TableFiltersTest extends TestCase
                 '</div>',
                 // Email Verified
                 '<div wire:ignore>',
-                '<div wire:key="filter-null-email-verified-at" class="ms-3">',
+                '<div wire:key="filter-null-email-verified-at" class="ms-3 mt-2">',
                 '<select wire:model="selectedFilters.null_email_verified_at"',
                 'class="form-select"',
                 'placeholder="Email Verified"',
@@ -101,7 +101,7 @@ class TableFiltersTest extends TestCase
                 '</div>',
                 // Companies
                 '<div wire:ignore>',
-                '<div wire:key="filter-relationship-companies" class="ms-3">',
+                '<div wire:key="filter-relationship-companies" class="ms-3 mt-2">',
                 '<select wire:model="selectedFilters.relationship_companies"',
                 'class="form-select"',
                 'placeholder="Companies"',
@@ -121,7 +121,7 @@ class TableFiltersTest extends TestCase
                 '</div>',
                 // Categories
                 '<div wire:ignore>',
-                '<div wire:key="filter-relationship-categories" class="ms-3">',
+                '<div wire:key="filter-relationship-categories" class="ms-3 mt-2">',
                 '<select wire:model="selectedFilters.relationship_categories"',
                 'class="form-select"',
                 'placeholder="Categories"',
@@ -141,7 +141,7 @@ class TableFiltersTest extends TestCase
                 '</div>',
                 // Active
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ms-3 mt-2">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
                 'placeholder="Active"',
@@ -294,7 +294,7 @@ class TableFiltersTest extends TestCase
             ->set('selectedFilters', ['boolean_active' => true])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ms-3 mt-2">',
                 '<a wire:click.prevent="resetFilters()"',
                 'class="btn btn-outline-secondary ms-3"',
                 'title="Reset filters"',
@@ -305,7 +305,7 @@ class TableFiltersTest extends TestCase
             ->set('selectedFilters', ['boolean_active' => false])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ms-3 mt-2">',
                 '<a wire:click.prevent="resetFilters()"',
                 'class="btn btn-outline-secondary ms-3"',
                 'title="Reset filters"',
@@ -316,7 +316,7 @@ class TableFiltersTest extends TestCase
             ->set('selectedFilters', ['boolean_active' => 0])
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ms-3 mt-2">',
                 '<a wire:click.prevent="resetFilters()"',
                 'class="btn btn-outline-secondary ms-3"',
                 'title="Reset filters"',
@@ -336,7 +336,7 @@ class TableFiltersTest extends TestCase
             ->assertSet('resetFilters', false)
             ->assertSeeHtmlInOrder([
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ms-3 mt-2">',
             ])
             ->assertDontSeeHtml(['<a wire:click.prevent="resetFilters()"']);
     }
@@ -367,9 +367,9 @@ class TableFiltersTest extends TestCase
                 '<thead>',
                 '<tr>',
                 '<td class="px-0 pb-0">',
-                '<div class="d-flex flex-wrap align-items-center justify-content-end">',
+                '<div class="d-flex flex-wrap align-items-center justify-content-end mt-n2">',
                 '<div wire:ignore>',
-                '<div wire:key="filter-boolean-active" class="ms-3">',
+                '<div wire:key="filter-boolean-active" class="ms-3 mt-2">',
                 '<select wire:model="selectedFilters.boolean_active"',
                 'class="form-select"',
                 'placeholder="Active"',

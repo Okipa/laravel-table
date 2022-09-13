@@ -13,8 +13,8 @@
                     @if($filtersArray)
                         <tr>
                             <td class="px-0 pb-0"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
-                                <div class="d-flex flex-wrap align-items-center justify-content-end">
-                                    <div class="text-secondary">
+                                <div class="d-flex flex-wrap align-items-center justify-content-end mt-n2">
+                                    <div class="text-secondary mt-2">
                                         {!! config('laravel-table.icon.filter') !!}
                                     </div>
                                     @foreach($filtersArray as $filterArray)
@@ -238,7 +238,7 @@
                         <td class="align-middle"{!! $columnsCount > 1 ? ' colspan="' . $columnsCount . '"' : null !!}>
                             <div class="d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center p-2">
-                                    <div>{!! $navigationStatus !!}</div>
+                                    <div wire:key="navigation-status">{!! $navigationStatus !!}</div>
                                 </div>
                                 <div class="d-flex align-items-center mb-n3 p-2">
                                     {!! $rows->links() !!}
