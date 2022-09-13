@@ -186,7 +186,7 @@
                 <tbody{!! $orderColumn ? ' wire:sortable="reorder"' : null !!}>
                     {{-- Rows --}}
                     @forelse($rows as $model)
-                        <tr wire:key="row-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.item="' . $model->getKey() . '"' : null !!} @class(array_merge(Arr::get($tableRowClass, $model->getKey(), []), ['border-bottom']))>
+                        <tr wire:key="row-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.item="' . $model->getKey() . '"' : null !!} @class(array_merge(Arr::get($tableRowClass, $model->laravel_table_unique_identifier, []), ['border-bottom']))>
                             {{-- Row bulk action selector --}}
                             @if($tableBulkActionsArray)
                                 <td class="align-middle">

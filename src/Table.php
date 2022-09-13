@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
@@ -306,6 +307,11 @@ class Table
     public function paginateRows(Builder $query, int $numberOfRowsPerPage): void
     {
         $this->rows = $query->paginate($numberOfRowsPerPage);
+        $this->rows->transform(function(Model $model) {
+            $model->laravel_table_unique_identifier = Str::uuid()->getInteger()->toString();
+
+            return $model;
+        });
     }
 
     public function computeResults(Collection $displayedRows): void
@@ -360,7 +366,7 @@ class Table
             return $tableRowClass;
         }
         foreach ($this->rows->getCollection() as $model) {
-            $tableRowClass[$model->getKey()] = ($this->rowClassesClosure)($model);
+            $tableRowClass[$model->laravel_table_unique_identifier] = ($this->rowClassesClosure)($model);
         }
 
         return $tableRowClass;
