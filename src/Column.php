@@ -142,11 +142,13 @@ class Column
 
     public function getValue(Model $model, array $tableColumnActionsArray): HtmlString|string|null
     {
-        $columnActionArray = AbstractColumnAction::retrieve(
-            $tableColumnActionsArray,
-            $model->getKey(),
-            $this->getAttribute()
-        );
+        $columnActionArray = $tableColumnActionsArray
+            ? AbstractColumnAction::retrieve(
+                $tableColumnActionsArray,
+                $model->getKey(),
+                $this->getAttribute()
+            )
+            : null;
         if ($columnActionArray) {
             $columnActionInstance = AbstractColumnAction::make($columnActionArray);
 

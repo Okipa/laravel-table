@@ -12,10 +12,15 @@ class DateFormatter extends AbstractFormatter
         //
     }
 
-    public function format(Model $model, string $attribute): string
+    public function format(Model $model, string $attribute): string|null
     {
+        $date = $model->{$attribute};
+        if (! $date) {
+            return null;
+        }
+
         return $this->timezone
-            ? $model->{$attribute}->timezone($this->timezone)->format($this->format)
-            : $model->{$attribute}->format($this->format);
+            ? $date->timezone($this->timezone)->format($this->format)
+            : $date->format($this->format);
     }
 }

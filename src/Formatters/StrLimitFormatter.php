@@ -13,9 +13,12 @@ class StrLimitFormatter extends AbstractFormatter
         //
     }
 
-    public function format(Model $model, string $attribute): string
+    public function format(Model $model, string $attribute): string|null
     {
         $string = $model->{$attribute};
+        if (! $string) {
+            return null;
+        }
         $truncatedString = Str::limit($model->{$attribute}, $this->limit, $this->end);
 
         return <<<HTML
