@@ -336,7 +336,7 @@ class Table extends Component
 
     public function refresh(array $configParams = [], array $targetedConfigs = []): void
     {
-        if($targetedConfigs && ! in_array($this->config, $targetedConfigs, true)){
+        if ($targetedConfigs && ! in_array($this->config, $targetedConfigs, true)) {
             return;
         }
         $this->configParams = [...$this->configParams, ...$configParams];

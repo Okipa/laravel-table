@@ -136,7 +136,7 @@ class TableNumberOfRowsPerPageTest extends TestCase
             ->assertSet('numberOfRowsPerPage', 1)
             ->assertSeeHtmlInOrder([
                 '<thead>',
-                '<div wire:ignore class="px-xl-3 py-1">',
+                '<div wire:ignore class="ps-xl-3 py-1">',
                 '<div class="input-group">',
                 '<span id="rows-number-per-page-icon" class="input-group-text text-secondary">',
                 'rows-number-icon',

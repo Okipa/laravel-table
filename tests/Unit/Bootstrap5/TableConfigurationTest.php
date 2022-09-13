@@ -98,7 +98,7 @@ class TableConfigurationTest extends TestCase
                     ->model(User::class)
                     ->query(fn (Builder $query) => $query->when(
                         $this->userIdToExclude,
-                        fn($subWhenQuery) => $subWhenQuery->where('id', '!=', $this->userIdToExclude)
+                        fn ($subWhenQuery) => $subWhenQuery->where('id', '!=', $this->userIdToExclude)
                     ));
             }
 
