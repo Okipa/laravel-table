@@ -292,6 +292,9 @@ class Table extends Component
     public function rowAction(string $identifier, string $modelKey, bool $requiresConfirmation): mixed
     {
         $rowActionsArray = AbstractRowAction::retrieve($this->tableRowActionsArray, $modelKey);
+        if (! $rowActionsArray) {
+            return null;
+        }
         $rowActionArray = collect($rowActionsArray)->where('identifier', $identifier)->first();
         $rowActionInstance = AbstractRowAction::make($rowActionArray);
         $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
@@ -315,6 +318,9 @@ class Table extends Component
     public function columnAction(string $identifier, string $modelKey, bool $requiresConfirmation): mixed
     {
         $columnActionArray = AbstractColumnAction::retrieve($this->tableColumnActionsArray, $modelKey, $identifier);
+        if (! $columnActionArray) {
+            return null;
+        }
         $columnActionInstance = AbstractColumnAction::make($columnActionArray);
         $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
         if ($requiresConfirmation) {

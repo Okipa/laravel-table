@@ -133,7 +133,7 @@ class TableRowActionsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_display_row_action_conditionally(): void
+    public function it_can_allow_row_action_conditionally(): void
     {
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();
@@ -171,9 +171,12 @@ class TableRowActionsTest extends TestCase
                 '</td>',
                 '</tr>',
                 '</tbody>',
-            ])->assertDontSeeHtml([
+            ])
+            ->assertDontSeeHtml([
                 '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
-            ]);
+            ])
+            ->call('rowAction', 'destroy', $users->first()->id, false);
+        $this->assertDatabaseHas('users', ['id' => $users->first()->id]);
     }
 
     /** @test */

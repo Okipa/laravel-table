@@ -106,7 +106,7 @@ class ColumnActionTest extends TestCase
     }
 
     /** @test */
-    public function it_can_display_row_action_conditionally(): void
+    public function it_can_allow_column_action_conditionally(): void
     {
         app('router')->get('/user/{user}/show', ['as' => 'user.show']);
         $users = User::factory()->count(2)->state(new Sequence(
@@ -129,22 +129,24 @@ class ColumnActionTest extends TestCase
                 ];
             }
         };
-        Livewire::actingAs($users->first())
+        Livewire::actingAs($users->last())
             ->test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
+                '<a wire:click.prevent="columnAction(\'active\', \'' . $users->first()->id . '\', 0)"',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
-                '<a wire:click.prevent="columnAction(\'active\', \'' . $users->last()->id . '\', 0)"',
                 '</tr>',
                 '</tbody>',
             ])
             ->assertDontSeeHtml([
-                '<a wire:click.prevent="columnAction(\'active\', \'' . $users->first()->id . '\', 0)"',
+                '<a wire:click.prevent="columnAction(\'active\', \'' . $users->last()->id . '\', 0)"',
                 '<td class="align-middle">1</td>',
-            ]);
+            ])
+            ->call('columnAction', 'active', $users->last()->id, false);
+        $this->assertFalse($users->last()->fresh()->active);
     }
 
     /** @test */

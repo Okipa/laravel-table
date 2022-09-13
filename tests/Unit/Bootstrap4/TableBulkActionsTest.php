@@ -268,7 +268,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
     }
 
     /** @test */
-    public function it_can_display_bulk_action_conditionally(): void
+    public function it_can_allow_bulk_action_conditionally(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();

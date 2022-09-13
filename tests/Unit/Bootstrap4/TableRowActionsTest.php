@@ -129,7 +129,7 @@ class TableRowActionsTest extends \Tests\Unit\Bootstrap5\TableRowActionsTest
     }
 
     /** @test */
-    public function it_can_display_row_action_conditionally(): void
+    public function it_can_allow_row_action_conditionally(): void
     {
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();

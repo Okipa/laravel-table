@@ -449,6 +449,9 @@ class Table
                 ->filter();
             foreach ($columnActions as $attribute => $columnAction) {
                 $columnAction->setup($model, $attribute);
+                if (! $columnAction->isAllowed()) {
+                    continue;
+                }
                 $tableColumnActionsArray[] = json_decode(json_encode(
                     $columnAction,
                     JSON_THROW_ON_ERROR
