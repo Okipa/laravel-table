@@ -15,6 +15,7 @@ parameters:
         - '#Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Factories\\Factory<Illuminate\\Database\\Eloquent\\Model>::afterCreating\(\)#'
         - '#Access to an undefined property Tests\\Models\\User::\$active#'
         - '#Call to an undefined method Faker\\Generator::catchphrase\(\)#'
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_table_unique_identifier#'
 
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php
