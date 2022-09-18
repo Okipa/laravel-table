@@ -35,7 +35,7 @@ class LaravelTableServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-table.php', 'laravel-table');
-        $this->app->bind('laravel_testable_table', fn () => new Manager());
+        $this->app->bind('laravel_table_testable', fn () => new Manager());
         $this->commands([
             MakeTable::class,
             MakeFilter::class,

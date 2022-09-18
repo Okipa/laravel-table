@@ -16,6 +16,6 @@ class TestableTable extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return 'laravel_testable_table';
+        return 'laravel_table_testable';
     }
 }
