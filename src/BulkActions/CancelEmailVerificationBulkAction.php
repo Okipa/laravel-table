@@ -16,7 +16,7 @@ class CancelEmailVerificationBulkAction extends AbstractBulkAction
 
     protected function identifier(): string
     {
-        return 'cancel_email_verification_bulk_action';
+        return 'bulk_action_cancel_email_verification';
     }
 
     protected function label(array $allowedModelKeys): string

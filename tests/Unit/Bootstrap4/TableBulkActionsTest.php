@@ -102,7 +102,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</a>',
                 '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
                 '<li wire:key="bulk-action-verify-email">',
-                '<button wire:click.prevent="bulkAction(\'verify_email\', 1)"',
+                '<button wire:click.prevent="bulkAction(\'bulk_action_verify_email\', 1)"',
                 'class="dropdown-item"',
                 'title="Verify Email (1)"',
                 'type="button">',
@@ -110,7 +110,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</button>',
                 '</li>',
                 '<li wire:key="bulk-action-cancel-email-verification">',
-                '<button wire:click.prevent="bulkAction(\'cancel_email_verification\', 1)"',
+                '<button wire:click.prevent="bulkAction(\'bulk_action_cancel_email_verification\', 1)"',
                 'class="dropdown-item"',
                 'title="Unverify Email (1)"',
                 'type="button">',
@@ -118,7 +118,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</button>',
                 '</li>',
                 '<li wire:key="bulk-action-activate">',
-                '<button wire:click.prevent="bulkAction(\'activate\', 1)"',
+                '<button wire:click.prevent="bulkAction(\'bulk_action_activate\', 1)"',
                 'class="dropdown-item"',
                 'title="Activate (1)"',
                 'type="button">',
@@ -126,7 +126,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</button>',
                 '</li>',
                 '<li wire:key="bulk-action-deactivate">',
-                '<button wire:click.prevent="bulkAction(\'deactivate\', 1)"',
+                '<button wire:click.prevent="bulkAction(\'bulk_action_deactivate\', 1)"',
                 'class="dropdown-item"',
                 'title="Deactivate (1)"',
                 'type="button">',
@@ -134,7 +134,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</button>',
                 '</li>',
                 '<li wire:key="bulk-action-destroy">',
-                '<button wire:click.prevent="bulkAction(\'destroy\', 1)"',
+                '<button wire:click.prevent="bulkAction(\'bulk_action_destroy\', 1)"',
                 'class="dropdown-item"',
                 'title="Destroy (1)"',
                 'type="button">',
@@ -159,15 +159,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</tbody>',
             ]);
         // Verify Email
-        $component->call('bulkAction', 'verify_email', true)
+        $component->call('bulkAction', 'bulk_action_verify_email', true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'bulkAction',
-                'verify_email',
+                'bulk_action_verify_email',
                 null,
                 'Are you sure you want to execute the action Verify Email on the line #' . $users->first()->id . '?'
             )
-            ->emit('laraveltable:action:confirmed', 'bulkAction', 'verify_email', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'bulk_action_verify_email', null)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Verify Email has been executed on the line #' . $users->first()->id . '.'
@@ -182,16 +182,16 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         ]);
         // Unverify Email
         User::query()->update(['email_verified_at' => Date::now()]);
-        $component->call('bulkAction', 'cancel_email_verification', true)
+        $component->call('bulkAction', 'bulk_action_cancel_email_verification', true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'bulkAction',
-                'cancel_email_verification',
+                'bulk_action_cancel_email_verification',
                 null,
                 'Are you sure you want to execute the action Unverify Email on the line #'
                 . $users->first()->id . '?'
             )
-            ->emit('laraveltable:action:confirmed', 'bulkAction', 'cancel_email_verification', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'bulk_action_cancel_email_verification', null)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Unverify Email has been executed on the line #' . $users->first()->id . '.'
@@ -205,15 +205,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
             'email_verified_at' => Date::now(),
         ]);
         // Activate
-        $component->call('bulkAction', 'activate', true)
+        $component->call('bulkAction', 'bulk_action_activate', true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'bulkAction',
-                'activate',
+                'bulk_action_activate',
                 null,
                 'Are you sure you want to execute the action Activate on the line #' . $users->first()->id . '?'
             )
-            ->emit('laraveltable:action:confirmed', 'bulkAction', 'activate', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'bulk_action_activate', null)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Activate has been executed on the line #' . $users->first()->id . '.'
@@ -228,15 +228,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         ]);
         // Deactivate
         User::query()->update(['active' => true]);
-        $component->call('bulkAction', 'deactivate', true)
+        $component->call('bulkAction', 'bulk_action_deactivate', true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'bulkAction',
-                'deactivate',
+                'bulk_action_deactivate',
                 null,
                 'Are you sure you want to execute the action Deactivate on the line #' . $users->first()->id . '?',
             )
-            ->emit('laraveltable:action:confirmed', 'bulkAction', 'deactivate', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'bulk_action_deactivate', null)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Deactivate has been executed on the line #' . $users->first()->id . '.'
@@ -250,15 +250,15 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
             'active' => true,
         ]);
         // Destroy
-        $component->call('bulkAction', 'destroy', true)
+        $component->call('bulkAction', 'bulk_action_destroy', true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'bulkAction',
-                'destroy',
+                'bulk_action_destroy',
                 null,
                 'Are you sure you want to execute the action Destroy on the line #' . $users->first()->id . '?'
             )
-            ->emit('laraveltable:action:confirmed', 'bulkAction', 'destroy', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'bulk_action_destroy', null)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Destroy has been executed on the line #' . $users->first()->id . '.'
@@ -314,7 +314,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</a>',
                 '<ul class="dropdown-menu" aria-labelledby="bulk-actions-dropdown">',
                 '<li wire:key="bulk-action-destroy">',
-                '<button wire:click.prevent="bulkAction(\'destroy\', 1)"',
+                '<button wire:click.prevent="bulkAction(\'bulk_action_destroy\', 1)"',
                 'class="dropdown-item"',
                 'title="Destroy (2)"',
                 'type="button">',
@@ -342,16 +342,16 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
                 '</tr>',
                 '</tbody>',
             ])
-            ->call('bulkAction', 'destroy', true)
+            ->call('bulkAction', 'bulk_action_destroy', true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'bulkAction',
-                'destroy',
+                'bulk_action_destroy',
                 null,
                 'Are you sure you want to execute the action Destroy on the 2 selected lines? The line #' . $user1->id
                 . ' does not allow the action Destroy and will not be affected.'
             )
-            ->emit('laraveltable:action:confirmed', 'bulkAction', 'destroy', null)
+            ->emit('laraveltable:action:confirmed', 'bulkAction', 'bulk_action_destroy', null)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Destroy has been executed on the 2 selected lines. The line #' . $user1->id

@@ -16,7 +16,7 @@ class DeactivateBulkAction extends AbstractBulkAction
 
     protected function identifier(): string
     {
-        return 'deactivate_bulk_action';
+        return 'bulk_action_deactivate';
     }
 
     protected function label(array $allowedModelKeys): string

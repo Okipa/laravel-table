@@ -10,7 +10,7 @@ class DestroyRowAction extends AbstractRowAction
 {
     protected function identifier(): string
     {
-        return 'destroy_row_action';
+        return 'row_action_destroy';
     }
 
     protected function class(Model $model): array

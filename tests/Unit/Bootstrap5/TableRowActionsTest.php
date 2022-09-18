@@ -61,24 +61,27 @@ class TableRowActionsTest extends TestCase
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
                 '<a wire:key="row-action-show-' . $users->first()->id . '"',
-                'wire:click.prevent="rowAction(\'show\', \'' . $users->first()->id . '\', 0)"',
-                'class="link-info p-1"',
-                'title="Show"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_show\', \'' . $users->first()->id . '\', 0)"',
+                ' class="link-info p-1"',
+                ' href=""',
+                ' title="Show"',
+                ' data-bs-toggle="tooltip">',
                 'show-icon',
                 '</a>',
                 '<a wire:key="row-action-edit-' . $users->first()->id . '"',
-                'wire:click.prevent="rowAction(\'edit\', \'' . $users->first()->id . '\', 0)"',
-                'class="link-primary p-1"',
-                'title="Edit"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_edit\', \'' . $users->first()->id . '\', 0)"',
+                ' class="link-primary p-1"',
+                ' href=""',
+                ' title="Edit"',
+                ' data-bs-toggle="tooltip">',
                 'edit-icon',
                 '</a>',
                 '<a wire:key="row-action-destroy-' . $users->first()->id . '"',
-                'wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
-                'class="link-danger p-1"',
-                'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_destroy\', \'' . $users->first()->id . '\', 1)"',
+                ' class="link-danger p-1"',
+                ' href=""',
+                ' title="Destroy"',
+                ' data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -88,21 +91,27 @@ class TableRowActionsTest extends TestCase
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
                 '<a wire:key="row-action-show-' . $users->last()->id . '"',
-                'wire:click.prevent="rowAction(\'show\', \'' . $users->last()->id . '\', 0)"',
-                'title="Show"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_show\', \'' . $users->last()->id . '\', 0)"',
+                ' class="link-info p-1"',
+                ' href=""',
+                ' title="Show"',
+                ' data-bs-toggle="tooltip">',
                 'show-icon',
                 '</a>',
                 '<a wire:key="row-action-edit-' . $users->last()->id . '"',
-                'wire:click.prevent="rowAction(\'edit\', \'' . $users->last()->id . '\', 0)"',
-                'title="Edit"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_edit\', \'' . $users->last()->id . '\', 0)"',
+                ' class="link-primary p-1"',
+                ' href=""',
+                ' title="Edit"',
+                ' data-bs-toggle="tooltip">',
                 'edit-icon',
                 '</a>',
                 '<a wire:key="row-action-destroy-' . $users->last()->id . '"',
-                'wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
-                'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_destroy\', \'' . $users->last()->id . '\', 1)"',
+                ' class="link-danger p-1"',
+                ' href=""',
+                ' title="Destroy"',
+                ' data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -110,21 +119,21 @@ class TableRowActionsTest extends TestCase
                 '</tr>',
                 '</tbody>',
             ])
-            ->call('rowAction', 'show', $users->first()->id, false)
+            ->call('rowAction', 'row_action_show', $users->first()->id, false)
             ->assertNotEmitted('laraveltable:action:feedback')
             ->assertRedirect(route('user.show', $users->first()))
-            ->call('rowAction', 'edit', $users->last()->id, false)
+            ->call('rowAction', 'row_action_edit', $users->last()->id, false)
             ->assertNotEmitted('laraveltable:action:feedback')
             ->assertRedirect(route('user.edit', $users->last()))
-            ->call('rowAction', 'destroy', $users->first()->id, true)
+            ->call('rowAction', 'row_action_destroy', $users->first()->id, true)
             ->assertEmitted(
                 'laraveltable:action:confirm',
                 'rowAction',
-                'destroy',
+                'row_action_destroy',
                 (string) $users->first()->id,
                 'Are you sure you want to execute the action Destroy on the line #' . $users->first()->id . '?'
             )
-            ->emit('laraveltable:action:confirmed', 'rowAction', 'destroy', $users->first()->id)
+            ->emit('laraveltable:action:confirmed', 'rowAction', 'row_action_destroy', $users->first()->id)
             ->assertEmitted(
                 'laraveltable:action:feedback',
                 'The action Destroy has been executed on the line #' . $users->first()->id . '.'
@@ -162,9 +171,9 @@ class TableRowActionsTest extends TestCase
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
                 '<a wire:key="row-action-destroy-' . $users->last()->id . '"',
-                'wire:click.prevent="rowAction(\'destroy\', \'' . $users->last()->id . '\', 1)"',
-                'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_destroy\', \'' . $users->last()->id . '\', 1)"',
+                ' title="Destroy"',
+                ' data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -173,9 +182,9 @@ class TableRowActionsTest extends TestCase
                 '</tbody>',
             ])
             ->assertDontSeeHtml([
-                '<a wire:click.prevent="rowAction(\'destroy\', \'' . $users->first()->id . '\', 1)"',
+                '<a wire:click.prevent="rowAction(\'row_action_destroy\', \'' . $users->first()->id . '\', 1)"',
             ])
-            ->call('rowAction', 'destroy', $users->first()->id, false);
+            ->call('rowAction', 'row_action_destroy', $users->first()->id, false);
         $this->assertDatabaseHas('users', ['id' => $users->first()->id]);
     }
 
@@ -208,9 +217,9 @@ class TableRowActionsTest extends TestCase
                 '<td class="align-middle text-end">',
                 '<div class="d-flex align-items-center justify-content-end">',
                 '<a wire:key="row-action-destroy-' . $user->id . '"',
-                'wire:click.prevent="rowAction(\'destroy\', \'' . $user->id . '\', 0)"',
-                'title="Destroy"',
-                'data-bs-toggle="tooltip">',
+                ' wire:click.prevent="rowAction(\'row_action_destroy\', \'' . $user->id . '\', 0)"',
+                ' title="Destroy"',
+                ' data-bs-toggle="tooltip">',
                 'destroy-icon',
                 '</a>',
                 '</div>',
@@ -218,7 +227,7 @@ class TableRowActionsTest extends TestCase
                 '</tr>',
                 '</tbody>',
             ])
-            ->call('rowAction', 'destroy', $user->id, false)
+            ->call('rowAction', 'row_action_destroy', $user->id, false)
             ->assertNotEmitted('laraveltable:action:confirm')
             ->assertNotEmitted('laraveltable:action:feedback');
         $this->assertDatabaseMissing('users', ['id' => $user->id]);

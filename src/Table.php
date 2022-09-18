@@ -65,6 +65,11 @@ class Table
         return $this;
     }
 
+    public function getModel(): Model
+    {
+        return $this->model;
+    }
+
     public function emitEventsOnLoad(array $eventsToEmitOnLoad): self
     {
         $this->eventsToEmitOnLoad = $eventsToEmitOnLoad;

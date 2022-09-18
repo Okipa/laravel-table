@@ -176,6 +176,14 @@ You'll have to add [a few lines of JavaScript to your project](../../README.md#s
 
 You'll also have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable) on your project to allow the [built-in columns drag-and-drop-reordering](../../README.md#allow-columns-to-be-reordered-from-drag-and-drop-action) to work properly.
 
+## Take advantage of the new provided features
+
+You have now completed upgrading your tables and all features from v4 should be migrated.
+
+However, new features are now available for you to use.
+
+Make sur you have read the [new provided documentation](../../README.md#how-to) to take advantage of them!
+
 ## See all changes
 
 See all change with the [comparison tool](https://github.com/Okipa/laravel-table/compare/4.0.7...5.0.0).

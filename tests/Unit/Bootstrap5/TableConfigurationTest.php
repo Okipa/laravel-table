@@ -111,29 +111,29 @@ class TableConfigurationTest extends TestCase
         };
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
-//            // No config targeting
-//            ->emit('laraveltable:refresh', ['userIdToExclude' => $users->first()->id])
-//            ->assertSet('configParams', ['userIdToExclude' => $users->first()->id])
-//            ->assertSeeHtmlInOrder([
-//                '<th wire:key="cell-name-' . $users->last()->id . '" class="align-middle" scope="row">',
-//                $users->last()->name,
-//                '</th>',
-//            ])
-//            ->assertDontSeeHtml([
-//                '<th wire:key="cell-name-' . $users->first()->id . '" class="align-middle" scope="row">',
-//            ])
-//            // With not existing config targeting
-//            ->set('configParams', [])
-//            ->emit('laraveltable:refresh', ['userIdToExclude' => $users->first()->id], ['NotExistingNamespace'])
-//            ->assertSet('configParams', [])
-//            ->assertSeeHtmlInOrder([
-//                '<th wire:key="cell-name-' . $users->first()->id . '" class="align-middle" scope="row">',
-//                $users->first()->name,
-//                '</th>',
-//                '<th wire:key="cell-name-' . $users->last()->id . '" class="align-middle" scope="row">',
-//                $users->last()->name,
-//                '</th>',
-//            ])
+            // No config targeting
+            ->emit('laraveltable:refresh', ['userIdToExclude' => $users->first()->id])
+            ->assertSet('configParams', ['userIdToExclude' => $users->first()->id])
+            ->assertSeeHtmlInOrder([
+                '<th wire:key="cell-name-' . $users->last()->id . '" class="align-middle" scope="row">',
+                $users->last()->name,
+                '</th>',
+            ])
+            ->assertDontSeeHtml([
+                '<th wire:key="cell-name-' . $users->first()->id . '" class="align-middle" scope="row">',
+            ])
+            // With not existing config targeting
+            ->set('configParams', [])
+            ->emit('laraveltable:refresh', ['userIdToExclude' => $users->first()->id], ['NotExistingNamespace'])
+            ->assertSet('configParams', [])
+            ->assertSeeHtmlInOrder([
+                '<th wire:key="cell-name-' . $users->first()->id . '" class="align-middle" scope="row">',
+                $users->first()->name,
+                '</th>',
+                '<th wire:key="cell-name-' . $users->last()->id . '" class="align-middle" scope="row">',
+                $users->last()->name,
+                '</th>',
+            ])
             // With existing config targeting
             ->set('configParams', [])
             ->emit('laraveltable:refresh', ['userIdToExclude' => $users->first()->id], [$config::class])

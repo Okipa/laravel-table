@@ -130,6 +130,7 @@ And display it in a view:
   * [Set up a few lines of JavaScript](#set-up-a-few-lines-of-javascript)
   * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
   * [Interact with your tables from events](#interact-with-your-tables-from-events)
+  * [Test table configurations with assertions](#test-table-configurations-with-assertions)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -1216,9 +1217,54 @@ class UsersTable extends AbstractTableConfiguration
 ### Interact with your tables from events
 
 You will able to send the following Livewire events to your tables to interact with them:
-* `laraveltable:refresh`: refresh the tables displayed on the page
+* `laraveltable:refresh`
   * Allows optional `array $configParams = []`, and `array $targetedConfigs = []` arguments
   * Refreshes your tables and (optionaly) set [external table config data](#pass-external-data-to-your-tables) with (optional) table targeting to only refresh specific ones (empty `$targetedConfigs` array will refresh all tables one page) 
+
+### Test table configurations with assertions
+
+This package provides useful assertions that will allow you to ensure that your table configurations are locked and secured.
+
+To use the provided assertions, you'll have to use the `Okipa\LaravelTable\Facades\TestableTable` Facade with the following methods:
+* `actingAs(Authenticatable $user, string|null $driver = null)`
+  * Authenticate the given user before running your tests
+* `test(string $config, array $configParams = [])`
+  * Pass the table configuration you want to test and its optionals
+
+Here are the provided assertions you will be able to chain to the Facade methods listed above:
+* `usesModel(string $assertedModelClass)`
+  * Make sure the given model is the one configured on the table
+* `bulkActionAllowsModels(string $rowActionClass, array $modelPrimaries)`
+  * Make sure the given models are allowed to perform the given bulk action
+* `bulkActionDisallowsModels(string $rowActionClass, array $modelPrimaries)`
+  * Make sure the given models are not allowed to perform the given bulk action
+* `rowActionAllowsModels(string $rowActionClass, array $modelPrimaries)`
+  * Make sure the given models are allowed to perform the given row action
+* `rowActionDisallowsModels(string $rowActionClass, array $modelPrimaries)`
+  * Make sure the given models are not allowed to perform the given row action
+* `columnActionAllowsModels(string $columnActionClass, array $modelPrimaries)`
+  * Make sure the given models are allowed to perform the given column action
+* `columnActionDisallowsModels(string $columnActionClass, array $modelPrimaries)`
+  * Make sure the given models are not allowed to perform the given column action
+
+here is an example about how you'll have to use those assertions.
+
+This example assumes that you have a `UsersTable` table configuration where a `DestroyBulkAction` is configured and forbid the authenticated user to destroy himself (see [Bulk Actions part for details](#define-table-bulk-actions)).
+
+```php
+// 
+
+/** @test */
+public function it_can_prevent_auth_user_to_destroy_himself(): void
+{
+    $users = User::factory()->count(2)->create();
+    TestableTable::actingAs($users->first())
+        ->test(UsersTable::class)
+        ->usesModel(App\Models\User::class)
+        ->bulkActionAllowsModels(DestroyBulkAction::class, [$users->last()->id])
+        ->bulkActionDisallowsModels(DestroyBulkAction::class, [$users->first()->id]);
+}
+```
 
 ## Testing
 

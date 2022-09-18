@@ -17,7 +17,7 @@ class ShowRowAction extends AbstractRowAction
 
     protected function identifier(): string
     {
-        return 'show_row_action';
+        return 'row_action_show';
     }
 
     protected function class(Model $model): array
