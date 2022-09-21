@@ -26,8 +26,6 @@ Tables can be generated under the following UI frameworks:
 * Bootstrap 4
 * TailwindCSS 3 (upcoming feature)
 
-**DISCLAIMER: PACKAGE IN DEVELOPMENT, DO NOT USE IN PRODUCTION.**
-
 Found this package helpful? Please consider supporting my work!
 
 [![Donate](https://img.shields.io/badge/Buy_me_a-Ko--fi-ff5f5f.svg)](https://ko-fi.com/arthurlorent)
@@ -405,12 +403,12 @@ This package provides the following built-in filters:
 * `RelationshipFilter`:
   * Requires `string $label`, `string $relationship`, `array $options` and `bool $multiple = true` arguments on instantiation
   * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given relationship
-* `BooleanFilter`
-  * Requires `string $label` and `string $attribute` arguments on instantiation
-  * Filters the table based on whether the value of the given attribute is `true` or `false`
 * `NullFilter`
   * Requires a `string $attribute` argument on instantiation
   * Filters the table based on whether the value of the given attribute is `null` or not
+* `BooleanFilter`
+  * Requires `string $label` and `string $attribute` arguments on instantiation
+  * Filters the table based on whether the value of the given attribute is `true` or `false`
 
 To use them, you'll have to pass an array to the `filters` method, containing the filter instances to declare.
 
@@ -420,6 +418,7 @@ namespace App\Tables;
 use App\Models\User;
 use Okipa\LaravelTable\Table;
 use Okipa\LaravelTable\Filters\NullFilter;
+use Okipa\LaravelTable\Filters\ValueFilter;
 use Okipa\LaravelTable\Filters\BooleanFilter;
 use Okipa\LaravelTable\Filters\RelationshipFilter;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -431,8 +430,9 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             ->filters([
-                new NullFilter('Email Verified', 'email_verified_at'),
+                new ValueFilter('Email', 'email', User::pluck('email', 'email')->toArray()),
                 new RelationshipFilter('Categories', 'categories', UserCategory::pluck('name', 'id')->toArray()),
+                new NullFilter('Email Verified', 'email_verified_at'),
                 new BooleanFilter('Active', 'active'),
             ]);
     }
@@ -1215,7 +1215,7 @@ class UsersTable extends AbstractTableConfiguration
 
 ### Interact with your tables from events
 
-You will able to send the following Livewire events to your tables to interact with them:
+You will be able to interact with your tables by sending them the following Livewire events:
 * `laraveltable:refresh`
   * Allows optional `array $configParams = []`, and `array $targetedConfigs = []` arguments
   * Refreshes your tables and (optionaly) set [external table config data](#pass-external-data-to-your-tables) with (optional) table targeting to only refresh specific ones (empty `$targetedConfigs` array will refresh all tables one page) 
