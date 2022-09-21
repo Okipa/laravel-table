@@ -1,5 +1,30 @@
 # Changelog
 
+## [5.0.0](https://github.com/Okipa/laravel-table/compare/4.0.4...5.0.0)
+
+2022-09-21
+
+* Added support for Laravel 9
+* Dropped support for Laravel 7 and earlier versions
+* Added support for PHP 8.1
+* Dropped support for PHP 8.0 and earlier versions
+* Added `livewire/livewire` dependency as the package is now based on it
+* Removed `okipa/laravel-html-helper` dependency
+* Replaced `phpcs/phpcbf` by `laravel/pint`
+* Added several features :
+  * New SPA behaviour
+  * New filters ability
+  * Head actions (replacing routes declarations)
+  * New bulk actions ability
+  * Row actions (replacing routes declarations)
+  * New ability to search from closure
+  * New ability to sort from closure
+  * New column actions ability
+  * New ability to use built-in column formatters and to create custom ones
+  * New drag-and-drop reordering ability
+
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v4-to-v5.md)
+
 ## [4.0.7](https://github.com/Okipa/laravel-table/compare/4.0.6...4.0.7)
 
 2022-05-17
@@ -338,7 +363,7 @@ route('user.edit', ['id' => $user->id, 'foo' => 'bar']);
 
 2019-02-15
 
-* Fixed searching queries process on regular table columns fields when aliased tables are declared in the the `->query()` table method
+* Fixed searching queries process on regular table columns fields when aliased tables are declared in the `->query()` table method
 
 ## [1.0.1](https://github.com/Okipa/laravel-table/releases/tag/1.0.1)
 

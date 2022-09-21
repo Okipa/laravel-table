@@ -2,41 +2,28 @@
 
 namespace DummyNamespace;
 
-use Okipa\LaravelTable\Abstracts\AbstractTable;
 use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-class DummyClass extends AbstractTable
+class DummyClass extends AbstractTableConfiguration
 {
-    /**
-     * Configure the table itself.
-     *
-     * @return \Okipa\LaravelTable\Table
-     * @throws \ErrorException
-     */
     protected function table(): Table
     {
-        //
+        // The table configuration.
     }
 
-    /**
-     * Configure the table columns.
-     *
-     * @param \Okipa\LaravelTable\Table $table
-     *
-     * @throws \ErrorException
-     */
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        //
+        return [
+            // The table columns configuration.
+        ];
     }
 
-    /**
-     * Configure the table result lines.
-     *
-     * @param \Okipa\LaravelTable\Table $table
-     */
-    protected function resultLines(Table $table): void
+    protected function results(): array
     {
-        //
+        return [
+            // The table results configuration.
+            // As results are optional on tables, you may delete this method if you do not use it.
+        ];
     }
 }

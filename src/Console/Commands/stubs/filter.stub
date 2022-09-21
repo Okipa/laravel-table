@@ -1,0 +1,54 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractFilter;
+
+class DummyClass extends AbstractFilter
+{
+    protected function identifier(): string
+    {
+        // The unique identifier that is required to retrieve the filter.
+    }
+
+    protected function class(): array
+    {
+        return [
+            // The CSS class that will be merged to the existent ones on the filter select.
+            // As class are optional on filters, you may delete this method if you don't declare any specific class.
+            // Note: you can use conditional class merging as specified here: https://laravel.com/docs/blade#conditionally-merge-classes
+            ...parent::class(),
+        ];
+    }
+
+    protected function attributes(): array
+    {
+        return [
+            // The HTML attributes that will be merged to the existent ones on the filter select.
+            // As attributes are optional on filters, you may delete this method if you do declare any specific attributes.
+            ...parent::attributes(),
+        ];
+    }
+
+    protected function label(): string
+    {
+        // The label that will appear in the filter select.
+    }
+
+    protected function multiple(): bool
+    {
+        // Whether the filter select should allow multiple option to be selected.
+    }
+
+    protected function options(): array
+    {
+        // The options that will be available in the filter select.
+    }
+
+    public function filter(Builder $query, mixed $selected): void
+    {
+        // The filtering treatment that will be executed on option selection.
+        // The $selected attribute will provide an array in multiple mode and a value in single mode.
+    }
+}

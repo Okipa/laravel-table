@@ -1,0 +1,10 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "concat_space": {
+            "spacing": "one"
+        },
+        "heredoc_to_nowdoc": false,
+        "Laravel/laravel_phpdoc_alignment": false
+    }
+}

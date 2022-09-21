@@ -2,55 +2,46 @@
 
 return [
 
-    /** Set the default classes for each part of the table. */
-    'classes' => [
-        'container' => ['table-responsive'],
-        'table' => ['table-borderless'],
-        'tr' => ['border-bottom'],
-        'th' => ['align-middle'],
-        'td' => ['align-middle'],
-        'results' => ['table-secondary'],
-        'disabled' => ['table-danger', 'disabled'],
-    ],
+    /**
+     * The UI framework that should be used to generate the components.
+     * Can be set to:
+     * - bootstrap-5
+     * - bootstrap-4
+     * - tailwind-3 (upcoming feature)
+     */
+    'ui' => 'bootstrap-5',
 
-    /** Set all the action icons that are used on the table templates. */
+    /** Set all the displayed action icons. */
     'icon' => [
-        'rows_number' => '<i class="fas fa-list-ol"></i>',
-        'sort' => '<i class="fas fa-sort fa-fw"></i>',
-        'sort_asc' => '<i class="fas fa-sort-up fa-fw"></i>',
-        'sort_desc' => '<i class="fas fa-sort-down fa-fw"></i>',
-        'search' => '<i class="fas fa-search"></i>',
-        'validate' => '<i class="fas fa-check"></i>',
-        'info' => '<i class="fas fa-info-circle fa-fw"></i>',
-        'reset' => '<i class="fas fa-undo fa-fw"></i>',
-        'create' => '<i class="fas fa-plus-circle fa-fw "></i>',
-        'show' => '<i class="fas fa-eye fa-fw"></i>',
-        'edit' => '<i class="fas fa-edit fa-fw"></i>',
-        'destroy' => '<i class="fas fa-trash fa-fw"></i>',
+        'filter' => '<i class="fa-solid fa-filter fa-2x"></i>',
+        'rows_number' => '<i class="fa-solid fa-list-ol"></i>',
+        'sort' => '<i class="fa-solid fa-sort fa-fw"></i>',
+        'sort_asc' => '<i class="fa-solid fa-sort-up fa-fw"></i>',
+        'sort_desc' => '<i class="fa-solid fa-sort-down fa-fw"></i>',
+        'search' => '<i class="fa-solid fa-magnifying-glass"></i>',
+        'validate' => '<i class="fa-solid fa-check"></i>',
+        'info' => '<i class="fa-solid fa-circle-info"></i>',
+        'reset' => '<i class="fa-solid fa-rotate-left"></i>',
+        'drag_drop' => '<i class="fa-solid fa-grip-vertical"></i>',
+        'create' => '<i class="fa-solid fa-circle-plus fa-fw"></i>',
+        'show' => '<i class="fa-solid fa-eye fa-fw"></i>',
+        'edit' => '<i class="fa-solid fa-pencil fa-fw"></i>',
+        'destroy' => '<i class="fa-solid fa-trash-can fa-fw"></i>',
+        'active' => '<i class="fa-solid fa-check text-success fa-fw"></i>',
+        'inactive' => '<i class="fa-solid fa-xmark text-danger fa-fw"></i>',
+        'email_verified' => '<i class="fa-solid fa-envelope-circle-check fa-fw"></i>',
+        'email_unverified' => '<i class="fa-solid fa-envelope fa-fw"></i>',
+        'toggle_on' => '<i class="fa-solid fa-toggle-on fa-fw"></i>',
+        'toggle_off' => '<i class="fa-solid fa-toggle-off fa-fw"></i>',
     ],
 
-    /** Set the table default behavior. */
-    'behavior' => [
-        'rows_number' => 20,
-        'activate_rows_number_definition' => true,
-    ],
+    /** The default table select HTML components attributes. */
+    'html_select_components_attributes' => [],
 
-    /** Set the default view path for each component of the table. */
-    'template' => [
-        'table' => 'bootstrap.table',
-        'thead' => 'bootstrap.thead',
-        'rows_searching' => 'bootstrap.rows-searching',
-        'rows_number_definition' => 'bootstrap.rows-number-definition',
-        'create_action' => 'bootstrap.create-action',
-        'column_titles' => 'bootstrap.column-titles',
-        'tbody' => 'bootstrap.tbody',
-        'show_action' => 'bootstrap.show-action',
-        'edit_action' => 'bootstrap.edit-action',
-        'destroy_action' => 'bootstrap.destroy-action',
-        'results' => 'bootstrap.results',
-        'tfoot' => 'bootstrap.tfoot',
-        'navigation_status' => 'bootstrap.navigation-status',
-        'pagination' => 'bootstrap.pagination',
-    ],
+    /** Whether the select allowing to choose the number of rows per page should be displayed by default. */
+    'enable_number_of_rows_per_page_choice' => true,
+
+    /** The default number-of-rows-per-page-select options. */
+    'number_of_rows_per_page_default_options' => [10, 25, 50, 75, 100],
 
 ];

@@ -2,55 +2,38 @@
 
 namespace DummyNamespace;
 
-use Okipa\LaravelTable\Abstracts\AbstractTable;
-use Okipa\LaravelTable\Table;
 use DummyFullModelClass;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\RowActions\EditRowAction;
+use Okipa\LaravelTable\RowActions\DestroyRowAction;
+use Okipa\LaravelTable\Formatters\DateFormatter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-class DummyClass extends AbstractTable
+class DummyClass extends AbstractTableConfiguration
 {
-    /**
-     * Configure the table itself.
-     *
-     * @return \Okipa\LaravelTable\Table
-     * @throws \ErrorException
-     */
     protected function table(): Table
     {
-        return (new Table())->model(DummyModelClass::class)
-            ->routes([
-                'index'   => ['name' => 'dummyRoutes.index'],
-                'create'  => ['name' => 'dummyRoute.create'],
-                'edit'    => ['name' => 'dummyRoute.edit'],
-                'destroy' => ['name' => 'dummyRoute.destroy'],
-            ])
-            ->destroyConfirmationHtmlAttributes(fn(DummyModelClass $dummyModel) => [
-                'data-confirm' => __('Are you sure you want to delete the entry :entry?', [
-                    'entry' => $dummyModel->database_attribute,
-                ]),
+        return Table::make()->model(DummyModelClass::class)
+            ->rowActions(fn(DummyModelClass $dummyModel) => [
+                new EditRowAction(route('dummyRoute.edit', $dummyModel)),
+                new DestroyRowAction(),
             ]);
     }
 
-    /**
-     * Configure the table columns.
-     *
-     * @param \Okipa\LaravelTable\Table $table
-     *
-     * @throws \ErrorException
-     */
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('id')->sortable();
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i')->sortable(true, 'desc');
+        return [
+            Column::make('id')->sortable();
+            Column::make('created_at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
+            Column::make('updated_at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+        ];
     }
 
-    /**
-     * Configure the table result lines.
-     *
-     * @param \Okipa\LaravelTable\Table $table
-     */
-    protected function resultLines(Table $table): void
+    protected function results(): array
     {
-        //
+        return [
+            // The table results configuration.
+            // As results are optional on tables, you may delete this method if you do not use it.
+        ];
     }
 }

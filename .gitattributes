@@ -12,3 +12,4 @@
 /phpmd.xml          export-ignore
 /phpstan.neon.dist  export-ignore
 /phpunit.xml.dist   export-ignore
+/pint.json          export-ignore

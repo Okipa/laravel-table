@@ -1,0 +1,50 @@
+<?php
+
+namespace DummyNamespace;
+
+use Livewire\Component;
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractColumnAction;
+
+class DummyClass extends AbstractColumnAction
+{
+    protected function class(Model $model, string $attribute): array
+    {
+        // The CSS class that will be added to the column action link.
+        // Note: you can use conditional class merging as specified here: https://laravel.com/docs/blade#conditionally-merge-classes
+    }
+
+    protected function title(Model $model, string $attribute): string
+    {
+        // The title that will be set to the column action link.
+    }
+
+    protected function icon(Model $model, string $attribute): string
+    {
+        // The icon that will appear in the column action link.
+    }
+
+    protected function label(Model $model, string $attribute): string|null
+    {
+        // The label that will appear in the column action link.
+    }
+
+    protected function defaultConfirmationQuestion(Model $model, string $attribute): string|null
+    {
+        // The default column action confirmation question that will be asked before execution.
+        // Return `null` if you do not want any confirmation question to be asked by default.
+    }
+
+    protected function defaultFeedbackMessage(Model $model, string $attribute): string|null
+    {
+        // The default column action feedback message that will be triggered on execution.
+        // Return `null` if you do not want any feedback message to be triggered by default.
+    }
+
+    /** @return mixed|void */
+    public function action(Model $model, string $attribute, Component $livewire)
+    {
+        // The treatment that will be executed on click on the column action link.
+        // Use the `$livewire` param to interact with the Livewire table component and emit events for example.
+    }
+}

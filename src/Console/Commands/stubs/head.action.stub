@@ -1,0 +1,32 @@
+<?php
+
+namespace DummyNamespace;
+
+use Livewire\Component;
+use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
+
+class DummyClass extends AbstractHeadAction
+{
+    protected function class(): array
+    {
+        // The CSS class that will be added to the head action button.
+        // Note: you can use conditional class merging as specified here: https://laravel.com/docs/blade#conditionally-merge-classes
+    }
+
+    protected function icon(): string
+    {
+        // The icon that will be displayed in the head action button.
+    }
+
+    protected function title(): string
+    {
+        // The title that will be displayed in the head action button.
+    }
+
+    /** @return mixed|void */
+    public function action(Component $livewire)
+    {
+        // The treatment that will be executed on click on the head action button.
+        // Use the `$livewire` param to interact with the Livewire table component and emit events for example.
+    }
+}

@@ -9,32 +9,15 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MakeTable extends GeneratorCommand
 {
-    /**
-     * The type of class being generated.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $type = 'Table';
 
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $name = 'make:table';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a new table configuration';
+    /** @var string */
+    protected $description = 'Create a new table configuration.';
 
-    /**
-     * Get the stub file for the generator.
-     *
-     * @return string
-     */
     protected function getStub(): string
     {
         if ($this->option('model')) {
@@ -45,27 +28,13 @@ class MakeTable extends GeneratorCommand
         return __DIR__ . $stub;
     }
 
-    /**
-     * Get the default namespace for the class.
-     *
-     * @param string $rootNamespace
-     *
-     * @return string
-     */
+    /** @param string $rootNamespace */
     protected function getDefaultNamespace($rootNamespace): string
     {
         return $rootNamespace . '\Tables';
     }
 
-    /**
-     * Build the class with the given name.
-     * Remove the base controller import if we are already in base namespace.
-     *
-     * @param string $name
-     *
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
+    /** @throws \Illuminate\Contracts\Filesystem\FileNotFoundException */
     protected function buildClass($name): string
     {
         $replace = [];
@@ -80,13 +49,6 @@ class MakeTable extends GeneratorCommand
         );
     }
 
-    /**
-     * Build the model replacement values.
-     *
-     * @param array $replace
-     *
-     * @return array
-     */
     protected function buildModelReplacements(array $replace): array
     {
         $modelClass = $this->parseModel($this->option('model'));
@@ -95,18 +57,10 @@ class MakeTable extends GeneratorCommand
             'DummyFullModelClass' => $modelClass,
             'DummyModelClass' => class_basename($modelClass),
             '$dummyModel' => '$' . Str::camel(class_basename($modelClass)),
-            'dummyRoutes' => Str::plural(Str::camel(class_basename($modelClass))),
             'dummyRoute' => Str::camel(class_basename($modelClass)),
         ]);
     }
 
-    /**
-     * Get the fully-qualified model class name.
-     *
-     * @param string $model
-     *
-     * @return string
-     */
     protected function parseModel(string $model): string
     {
         $result = preg_match('([^A-Za-z0-9_/\\\\])', $model);
@@ -122,11 +76,6 @@ class MakeTable extends GeneratorCommand
         return $model;
     }
 
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
     protected function getOptions(): array
     {
         return [

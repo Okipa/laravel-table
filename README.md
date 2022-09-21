@@ -1,5 +1,5 @@
 ![Laravel Table](/docs/laravel-table.png)
-<p align="center">
+<p style="text-align: center">
     <a href="https://github.com/Okipa/laravel-table/releases" title="Latest Stable Version">
         <img src="https://img.shields.io/github/release/Okipa/laravel-table.svg?style=flat-square" alt="Latest Stable Version">
     </a>
@@ -17,11 +17,14 @@
     </a>
 </p>
 
-![Generate tables from Eloquent models](docs/laravel-table-preview.png)
+![Generate tables from Eloquent models](docs/screenshot.png)
 
-Easily render tables from Eloquent models in your views.
-  
-This package is shipped with a pre-configuration for `Bootstrap 4.*` and `FontAwesome 5` but can be fully reconfigured to work with any UI framework.
+Save time and easily render tables in your views from Eloquent models.
+
+Tables can be generated under the following UI frameworks:
+* Bootstrap 5
+* Bootstrap 4
+* TailwindCSS 3 (upcoming feature)
 
 Found this package helpful? Please consider supporting my work!
 
@@ -30,88 +33,70 @@ Found this package helpful? Please consider supporting my work!
 
 ## Compatibility
 
-| Laravel version | PHP version | Package version |
-|---|---|---|
-| ^7.0 | ^7.4 | ^4.0 |
-| ^7.0 | ^7.4 | ^3.0 |
-| ^6.0 | ^7.4 | ^2.0 |
-| ^5.8 | ^7.2 | ^1.3 |
-| ^5.5 | ^7.1 | ^1.0 |
+| Laravel version | Livewire version | PHP version | Package version |
+|---|---|---|---|
+| ^8.0 &#124; ^9.0 | ^2.0 | ^8.1 | ^5.0 |
+| ^7.0 &#124; ^8.0 | X | ^7.4 &#124; ^8.0 | ^4.0 |
+| ^7.0 &#124; ^8.0 | X | ^7.4 &#124; ^8.0 | ^3.0 |
+| ^6.0 &#124; ^7.0 | X | ^7.4 &#124; ^8.0 | ^2.0 |
+| ^5.8 &#124; ^6.0 &#124; ^7.0 | X | ^7.2 &#124; ^7.3 &#124; ^7.4 | ^1.3 |
+| ^5.5 &#124; ^5.6 &#124; ^5.7 &#124; ^5.8 &#124; ^6.0 | X | ^5.8 &#124; ^7.1 | ^1.0 |
 
 ## Upgrade guide
 
+* [From V4 to V5](/docs/upgrade-guides/from-v4-to-v5.md)
 * [From V3 to V4](/docs/upgrade-guides/from-v3-to-v4.md)
 * [From V2 to V3](/docs/upgrade-guides/from-v2-to-v3.md)
 * [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
 
 ## Usage
 
-Create your table class with the following command:
+Create your table with the following command:
 
 ```bash
 php artisan make:table UsersTable --model=App/Models/User
 ```
 
-Set your table configuration in the generated file, which can be found in the `app\Tables` directory:
+Configure your table in the `UsersTable` generated class, which can be found in the `app\Tables` directory:
 
 ```php
 namespace App\Tables;
 
-use Okipa\LaravelTable\Abstracts\AbstractTable;
-use Okipa\LaravelTable\Table;
 use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipe\LaravelTable\Formatters\Date;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-class UsersTable extends AbstractTable
+class UsersTable extends AbstractTableConfiguration
 {
     protected function table(): Table
     {
-        return (new Table())->model(User::class)
-            ->routes([
-                'index' => ['name' => 'users.index'],
-                'create' => ['name' => 'user.create'],
-                'edit' => ['name' => 'user.edit'],
-                'destroy' => ['name' => 'user.destroy'],
-            ])
-            ->destroyConfirmationHtmlAttributes(fn(User $user) => [
-                'data-confirm' => __('Are you sure you want to delete the user :name ?', [
-                    'name' => $user->name
-                ])
-            ]);
+        return Table::make()->model(User::class);
     }
 
-    protected function columns(Table $table): void
+    protected function columns(): array
     {
-        $table->column('id')->sortable(true);
-        $table->column('name')->sortable()->searchable();
-        $table->column('email')->sortable()->searchable();
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
+        return [
+            Column::make('id')->sortable(),
+            Column::make('name')->searchable()->sortable(),
+            Column::make('email')->searchable()->sortable(),
+            Column::make('created_at')
+                ->format(new DateFormatter('d/m/Y H:i', 'Europe/Paris'))
+                ->sortable(),
+            Column::make('updated_at')
+                ->format(new DateFormatter('d/m/Y H:i', 'Europe/Paris'))
+                ->sortable()
+                ->sortByDefault('desc'),
+        ];
     }
 }
 ```
 
-Send the table to your view:
-
-```php
-use \Illuminate\View\View;
-use \App\Tables\UsersTable;
-
-class UsersController
-{
-    public function index(): View
-    {
-        $table = (new UsersTable())->setup();
-    
-        return view('templates.users.index', compact('table'));
-    }
-}
-
-```
-
-Finally, display it in the view:
+And display it in a view:
 
 ```blade
-{{ $table }}
+<livewire:table :config="App\Tables\UsersTable::class"/>
 ```
 
 ## Table of contents
@@ -120,58 +105,29 @@ Finally, display it in the view:
 * [Configuration](#configuration)
 * [Templates](#templates)
 * [Translations](#translations)
-* [Advanced configuration example](#advanced-configuration-example)
-* [Tips](#tips)
-* [Table API](#table-api)
-  * [model](#table-model)
-  * [identifier](#table-identifier)
-  * [request](#table-request)
-  * [routes](#table-routes)
-  * [destroyConfirmationHtmlAttributes](#table-destroyConfirmationHtmlAttributes)
-  * [rowsNumber](#table-rowsNumber)
-  * [activateRowsNumberDefinition](#table-activateRowsNumberDefinition)
-  * [query](#table-query)
-  * [appendData](#table-appendData)
-  * [containerClasses](#table-containerClasses)
-  * [tableClasses](#table-tableClasses)
-  * [trClasses](#table-trClasses)
-  * [thClasses](#table-thClasses)
-  * [tdClasses](#table-tdClasses)
-  * [rowsConditionalClasses](#table-rowsConditionalClasses)
-  * [disableRows](#table-disableRows)
-  * [tableTemplate](#table-tableTemplate)
-  * [theadTemplate](#table-theadTemplate)
-  * [rowsSearchingTemplate](#table-rowsSearchingTemplate)
-  * [rowsNumberDefinitionTemplate](#table-rowsNumberDefinitionTemplate)
-  * [createActionTemplate](#table-createActionTemplate)
-  * [columnTitlesTemplate](#table-columnTitlesTemplate)
-  * [tbodyTemplate](#table-tbodyTemplate)
-  * [showActionTemplate](#table-showActionTemplate)
-  * [editActionTemplate](#table-editActionTemplate)
-  * [destroyActionTemplate](#table-destroyActionTemplate)
-  * [resultsTemplate](#table-resultsTemplate)
-  * [tfootTemplate](#table-tfootTemplate)
-  * [navigationStatusTemplate](#table-navigationStatusTemplate)
-  * [paginationTemplate](#table-paginationTemplate)
-  * [column](#table-column)
-  * [result](#table-result)
-* [Column API](#column-api)
-  * [classes](#column-classes)
-  * [title](#column-title)
-  * [sortable](#column-sortable)
-  * [searchable](#column-searchable)
-  * [dateTimeFormat](#column-dateTimeFormat)
-  * [button](#column-button)
-  * [link](#column-link)
-  * [prependHtml](#column-prependHtml)
-  * [appendsHtml](#column-appendsHtml)
-  * [stringLimit](#column-stringLimit)
-  * [value](#column-value)
-  * [html](#column-html)
-* [Result API](#result-api)
-  * [title](#result-title)
-  * [html](#result-html)
-  * [classes](#result-classes)
+* [How to](#how-to)
+  * [Create table configuration](#create-table-configurations)
+  * [Display tables in views](#display-tables-in-views)
+  * [Pass external data to your tables](#pass-external-data-to-your-tables)
+  * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
+  * [Override native selects behaviour on your tables](#override-native-selects-behaviour-on-your-tables)
+  * [Add query instructions on tables](#add-query-instructions-on-tables)
+  * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Set conditional row class](#set-conditional-row-class)
+  * [Setup table filters](#setup-table-filters)
+  * [Define table head action](#define-table-head-action)
+  * [Define table bulk actions](#define-table-bulk-actions)
+  * [Define table row actions](#define-table-row-actions)
+  * [Declare columns on tables](#declare-columns-on-tables)
+  * [Format column values](#format-column-values)
+  * [Define column actions](#define-column-actions)
+  * [Configure columns searching](#configure-columns-searching)
+  * [Configure columns sorting](#configure-columns-sorting)
+  * [Allow columns to be reordered from drag and drop action](#allow-columns-to-be-reordered-from-drag-and-drop-action)
+  * [Declare results on tables](#declare-results-on-tables)
+  * [Set up a few lines of JavaScript](#set-up-a-few-lines-of-javascript)
+  * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
+  * [Interact with your tables from events](#interact-with-your-tables-from-events)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -185,6 +141,10 @@ Finally, display it in the view:
 ```bash
 composer require okipa/laravel-table
 ```
+
+This package uses [Livewire](https://laravel-livewire.com) under the hood and its installation is required.
+
+You'll have to follow the [installation instructions](https://laravel-livewire.com/docs/installation) if Livewire is not already installed on your project.
 
 ## Configuration
 
@@ -210,1055 +170,1055 @@ See how to translate them on the Laravel official documentation: https://laravel
 
 Here is the list of the words and sentences available for translation:
 
+Status
+* `Loading in progress...`
+* `No results were found.`
+* `You can rearrange the order of the items in this list using a drag and drop action.`
+* `Reset filters`
+* `Yes`
+* `No`
+* `Search by:`
+* `Reset research`
+* `Number of rows per page`
+* `Sort ascending`
+* `Sort descending`
+* `Actions`
+* `Bulk Actions`
 * `Create`
 * `Show`
 * `Edit`
 * `Destroy`
-* `Number of rows`
-* `Search by:`
-* `Reset research`
-* `Actions`
-* `No results were found.`
+* `Activate`
+* `Deactivate`
+* `Verify Email`
+* `Unverify Email`
+* `Toggle On`
+* `Toggle Off`
+* `Are you sure you want to execute the action :action on the line #:primary?`
+* `Are you sure you want to execute the action :action on the field :attribute from the line #:primary?`
+* `Are you sure you want to execute the action :action on the :count selected lines?`
+* `The line #:primary does not allow the action :action and will not be affected.`
+* `:count selected lines do not allow the action :action and will not be affected.`
+* `The action :action has been executed on the line #:primary.`
+* `The action :action has been executed on the field :attribute from the line #:primary.`
+* `The action :action has been executed on the :count selected lines.`
+* `The line #:primary does not allow the action :action and was not affected.`
+* `:count selected lines do not allow the action :action and were not affected.`
+* `The list has been reordered.`
 * `Showing results <b>:start</b> to <b>:stop</b> on <b>:total</b>`
 
-## Advanced configuration example
+## How to
+
+### Create table configurations
+
+Generate a table configuration by executing this command : `php artisan make:table UsersTable`.
+
+If you want to generate a configuration with a predefined model, just add this option at the end: `--model=App/Models/User`.
+
+You'll find all your generated table configurations in the `app/Tables` directory.
+
+### Display tables in views
+
+Just call this Livewire component in your view with your configuration class name passed in the `config` parameter.
+
+```blade
+<livewire:table :config="App\Tables\UsersTable::class"/>
+```
+
+### Pass external data to your tables
+
+In case you have specific attributes to transmit to your table configuration, you should pass them to the `configParams` parameter.
+
+This could be useful when you have to transmit external information to your table.
+
+```blade
+<livewire:table :config="App\Tables\UsersTable::class" :configParams="['categoryId' => 1]"/>
+```
+
+You should then declare the passed attributes as `public` attributes your table configuration.
 
 ```php
 namespace App\Tables;
 
-use App\News;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\Abstracts\AbstractTable;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-class NewsTable extends AbstractTable
+class UsersTable extends AbstractTableConfiguration
 {
-    protected Request $request;
-
-    protected int $categoryId;
-
-    public function __construct(Request $request, int $categoryId)
-    {
-        $this->request = $request;
-        $this->categoryId = $categoryId;
-    }
-
-    protected function table(): Table
-    {
-        return (new Table())->model(News::class)
-            ->identifier('news-table')
-            ->request($this->request)
-            ->routes([
-                'index' => ['name' => 'news.index'],
-                'create' => ['name' => 'news.create'],
-                'edit' => ['name' => 'news.edit'],
-                'destroy' => ['name' => 'news.destroy'],
-                'show' => ['name' => 'news.show'],
-            ])
-            ->rowsNumber(50) // Or set `null` to display all the items contained in database
-            ->activateRowsNumberDefinition(false)
-            ->query(function (Builder $query) {
-                // Some examples of what you can do
-                $query->select('news.*');
-                // Add a constraint
-                $query->where('category_id', $this->categoryId);
-                // Get value stored in a json field
-                $query->addSelect('news.json_field->>json_attribute as json_attribute');
-                // Get a formatted value from a pivot table
-                $query->selectRaw('count(comments.id) as comments_count');
-                $query->leftJoin('news_commment', 'news_commment.news_id', '=', 'news.id');
-                $query->leftJoin('comments', 'comments.id', '=', 'news_commment.comment_id');
-                $query->groupBy('comments.id');
-                // Alias a value to make it available from the column model
-                $query->addSelect('users.name as author');
-                $query->join('users', 'users.id', '=', 'news.author_id');
-            })
-            ->disableRows(fn(News $news) => in_array($news->id, [1, 2]), ['disabled', 'bg-secondary', 'text-white'])
-            ->rowsConditionalClasses(fn(News $news) => $news->id === 3, ['highlighted', 'bg-success'])
-            ->rowsConditionalClasses(
-                fn(News $news) => $news->category,
-                fn(News $news) => 'category-' . Str::snake($news->category)
-            )
-            // Append all request params to the paginator
-            ->appendData($this->request->all());
-    }
-    
-    protected function columns(Table $table): void
-    {
-        $table->column('id')->sortable(true);
-        $table->column()->title(__('Illustration'))->html(fn(News $news) => $news->image_src
-            ? '<img src="' . $news->image_src . '" alt="' .  $news->title . '">'
-            : null);
-        $table->column('title')->sortable()->searchable();
-        $table->column('content')->stringLimit(30);
-        $table->column('author')->sortable(true)->searchable('user', ['name']);
-        $table->column('category_id')
-            ->title(__('Category'))
-            ->prependHtml('<i class="fas fa-hand-point-right"></i>')
-            ->appendsHtml('<i class="fas fa-hand-point-left"></i>')
-            ->button(['btn', 'btn-sm', 'btn-outline-primary'])
-            ->value(fn(News $news) => config('news.category.' . $news->category_id))
-        $table->column()
-            ->title(__('Display'))
-            ->link(fn(News $news) => route('news.show', $news))
-            ->button(['btn', 'btn-sm', 'btn-primary']);
-        $table->column('created_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
-        $table->column('updated_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable();
-        $table->column('published_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris')->sortable(true, 'desc');
-    }
-
-    protected function resultLines(Table $table): void
-    {
-        $table->result()
-            ->title('Total of comments')
-            ->html(fn(Collection $paginatedRows) => $paginatedRows->sum('comments_count'));
-    }
-}
-```
-
-## Tips
-* **Columns displaying combination:** The following table column methods can be chained to display a result as wished. If you can't get the wanted result, you should use the `html` method to build a custom display.
-  * `button`
-  * `link`
-  * `prependHtml`
-  * `appendsHtml`
-  * `stringLimit`
-  * `value`
-
-## Table API
-
-:warning: All the following methods are chainable with `\Okipa\LaravelTable\Table` object **except the [column](#table-column) and the [result](#table-result) methods** (returning respectively `\Okipa\LaravelTable\Column` and `\Okipa\LaravelTable\Result` objects).
-
-<h3 id="table-model">model</h3>
-
-> Set the model used during the table generation.
-
-**Notes:**
-
-* Signature: `model(string $tableModelNamespace): \Okipa\LaravelTable\Table`
-* Required
-
-**Use case example:**
-
-```php
-(new Table())->model(User::class);
-```
-
-<h3 id="table-identifier">identifier</h3>
-
-> Set the table identifier, in order to automatically generate its id and to customize all the interaction fields in case of multiple tables used on a single view: the interactions with the table like sorting, searching an more will only have an impact on the identified table.
-
-**Notes:**
-
-* Signature: `identifier(string $identifier): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->identifier('users-table');
-```
-
-<h3 id="table-request">request</h3>
-
-> Set the request used for the table generation.
-
-**Notes:**
-
-* Signature: `request(Request $request): \Okipa\LaravelTable\Table`
-* Optional: by default the table uses the current request given by the `request()` helper to get the number of lines to show and the searching, sorting or pagination data. However, if you need to pass a particular request, this method is for you.
-
-**Use case example:**
-
-Pass the request to your table:
-
-```php
-class UsersController
-{
-    public function index(\Illuminate\Http\Request $request)
-    {
-        $table = new UsersTable($request);
-        // ...
-    }
-}
-```
-
-Then, use the custom request in your table:
-
-```php
-namespace App\Tables;
-
-use App\Models\Users;
-use Illuminate\Http\Request;
-use Okipa\LaravelTable\Abstracts\AbstractTable;
-use Okipa\LaravelTable\Table;
-
-class UsersTable extends AbstractTable
-{
-    protected Request $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    protected function table(): Table
-    {
-        return (new Table())->model(User::class)->request($this->request);
-    }
+    // You will now be able to use the provided `$this->categoryId` category ID in your table configuration.
+    public int $categoryId;
 
     // ...
 }
 ```
 
-<h3 id="table-routes">routes</h3>
+### Generate tables from Eloquent models
 
-> Set the routes used during the table generation.  
-> The routes declarations will be used for the following features:
->
-> * `index` (required): this is where you will be redirected when you will change the number of displayed rows, when you will sort the table on a specific column, or when you will execute a search request.
-> * `create` (optional): if declared, the **create** button will be displayed and will trigger this route on click.
-> * `show` (optional): if declared, the **show** button will be displayed on each row (unless it is a disabled row) and will trigger this route on click.
-> * `edit` (optional): if declared, the **edit** button will be displayed for each row (unless it is a disabled row) and will trigger this route on click.
-> * `destroy` (optional): if declared, the **destroy** button will be displayed on each row (unless it is a disabled row) and will trigger this route on click.
-
-**Note:**
-
-* Signature: `routes(array $routes): \Okipa\LaravelTable\Table`
-* Required
-* Routes have to be defined with the following structure:
+To generate a table from an Eloquent model, you'll just have to call the `model` method on your table.
 
 ```php
-// Example
-[
-    'index' => [
-        // Required
-        'name' => 'users.index',
-        // Optional
-        'params' => [
-            // Set route params (or not)
-        ]
-    ]
-    // You will have to respect the same structure for any declared route.
-];
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+}
 ```
 
-* As the current model instance is always provided as a param to the `show`, `edit` and `destroy` routes, you do not have to pass it to the params.
-* You also should declare your routes carefully to avoid errors. See the examples bellow:
+### Override native selects behaviour on your tables
+
+You may want to override native HTML select components behaviour on your tables.
+
+You will be able to add a data attribute (which is known as the best practice to add extra features to a HTML component) to all the HTML select components displayed on your tables by defining an array of HTML attribute as value for the `laravel-table.html_select_components_attributes` config key.
 
 ```php
-    // Assuming your declared your route with implicit binding:
-    Route::get('parent/{$parent}/user/edit/{$user}/child/{$child}', 'UsersController@edit')->name('user.edit');
-    // You will have to declare your params with keys as following:
-    (new Table())->model(User::class)->routes([
-        // ...
-        'edit'    => ['name'=> 'user.edit', 'params' => ['parent' => $parent, 'child' => $child]],
-        // ...
-    ]);
-    // Because the route will be generated with the table related model as first param (the params order differs from the declaration):
-    route('user.edit', [$user, 'parent' => $parent, 'child' => $child]);
+// `data-selector` HTML attribute will be appended to all tables HTML select components.
+'html_select_components_attributes' => ['data-selector' => true],
 ```
+
+### Add query instructions on tables
+
+To add specific query instructions on tables, use the available `query` method.
+
+You'll be able to set specific Eloquent instructions by passing a closure parameter to the `query` method on your table.
+
+This closure will allow you to manipulate a `\Illuminate\Database\Eloquent\Builder $query` argument.
 
 ```php
-    // Now imagine your route is declared with the table related model as first param like this:
-    Route::get('/user/edit/{$user}/child/{$child}/{otherParam}', 'UsersController@edit')->name('user.edit');
-    // In this case only, you will be able to declare your routes without keys:
-    (new Table())->model(User::class)->routes([
-        // ...
-        'edit'    => ['name'=> 'user.edit', 'params' => [$child, 'otherParam']],
-        // ...
-    ]);
-    // Because the route params are given in the same order as the route declaration:
-    route('user.edit', [$user, $child, 'otherParam']);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->query(fn(Builder $query) => $query->where('category_id', 1));
+    }   
+}
 ```
 
-**Use case example:**
+### Handle tables number of rows per page, pagination and navigation status
+
+You have two ways to allow or disallow users to choose the number of rows that will be displayed per page:
+* Activate or deactivate it globally from the `laravel-table.enable_number_of_rows_per_page_choice` config boolean value
+* Override global activation status by executing the `enableNumberOfRowsPerPageChoice()` method on your table
 
 ```php
-(new Table())->routes([
-    'index' => ['name' => 'news.index'],
-    'create' => ['name' => 'news.create', 'params' => ['param1' => 'value1']],
-    'edit' => ['name' => 'news.edit', 'params' => ['param2' => 'value2']],
-    'destroy' => ['name' => 'news.destroy'],
-    'show' => ['name' => 'news.show'],
-]);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->enableNumberOfRowsPerPageChoice(false);
+    }
+}
 ```
 
-<h3 id="table-rowsNumber">rowsNumber</h3>
+Following the same logic, you'll be able to define the number of rows per page options that will be available for selection:
+* Set options globally from the `laravel-table.number_of_rows_per_page_default_options` config array value
+* Override global options by executing the `numberOfRowsPerPageOptions()` method on your table
 
-> Override the config default number of rows displayed on the table.  
-> The default number of displayed rows is defined in the `config('laravel-table.behavior.rows_number')` config value.  
-> Set `null` to display all the models contained in database.
-
-**Note:**
-
-* Signature: `rowsNumber(?int $rowsNumber): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
+The first available option will be automatically selected and applied on table initialization.
 
 ```php
-(new Table())->rowsNumber(50);
-// Or
-(new Table())->rowsNumber(null);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            // Table will display 5 rows on initialization and will allow displaying 10, 15, 20 or 25 rows.
+            ->numberOfRowsPerPageOptions([5, 10, 15, 20, 25]);
+    }
+}
 ```
 
-<h3 id="table-activateRowsNumberDefinition">activateRowsNumberDefinition</h3>
+Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as well as a navigation status.
 
-> Override the default rows number definition activation status.  
-> Calling this method displays a rows number input that enable the user to choose how much rows to show.  
-> The default rows number definition activation status is managed by the `config('laravel-table.behavior.activate_rows_number_definition')` value.
+Both of them will be displayed in the table footer.
 
-**Note:**`
+### Set conditional row class
 
-* Signature: `activateRowsNumberDefinition($activate = true): \Okipa\LaravelTable\Table`
-* Optional
+Define conditional row class on tables by passing a closure argument to the `rowClass` method.
 
-**Use case example:**
+This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array of classes where the array key contains the class or classes you wish to add, while the value is a boolean expression.
 
 ```php
-(new Table())->activateRowsNumberDefinition(false);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowClass(fn(User $user) => [
+                'table-danger' => ! $user->active,
+            ]);
+    }
+}
 ```
 
-<h3 id="table-query">query</h3>
+### Setup table filters
 
-> Set the query closure that will be executed during the table generation.  
-> For example, you can define your joined tables here.  
-> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Builder $query`.
+Configuring table filters will make them appear as `select` HTML components on a dedicated bar above the table.
 
-**Note:**
+The filters bar will not appear if no filter is declared.
 
-* Signature: `query(Closure $additionalQueriesClosure): \Okipa\LaravelTable\Table`
-* Optional
+This package provides the following built-in filters:
+* `ValueFilter`:
+  * Requires `string $label`, `string $attribute`, `array $options` and `bool $multiple = true` arguments on instantiation
+  * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given attribute
+* `RelationshipFilter`:
+  * Requires `string $label`, `string $relationship`, `array $options` and `bool $multiple = true` arguments on instantiation
+  * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given relationship
+* `NullFilter`
+  * Requires a `string $attribute` argument on instantiation
+  * Filters the table based on whether the value of the given attribute is `null` or not
+* `BooleanFilter`
+  * Requires `string $label` and `string $attribute` arguments on instantiation
+  * Filters the table based on whether the value of the given attribute is `true` or `false`
 
-**Use case example:**
+To use them, you'll have to pass an array to the `filters` method, containing the filter instances to declare.
 
 ```php
-(new Table())->query(function(Builder $query){
-    $query->select('users.*');
-    $query->addSelect('companies.name as company');
-    $query->join('users', 'users.id', '=', 'companies.owner_id');
-});
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Filters\NullFilter;
+use Okipa\LaravelTable\Filters\ValueFilter;
+use Okipa\LaravelTable\Filters\BooleanFilter;
+use Okipa\LaravelTable\Filters\RelationshipFilter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->filters([
+                new ValueFilter('Email', 'email', User::pluck('email', 'email')->toArray()),
+                new RelationshipFilter('Categories', 'categories', UserCategory::pluck('name', 'id')->toArray()),
+                new NullFilter('Email Verified', 'email_verified_at'),
+                new BooleanFilter('Active', 'active'),
+            ]);
+    }
+}
 ```
 
-<h3 id="table-appendData">appendData</h3>
+You may need to create your own filters. To do so, execute the following command: `php artisan make:table:filter MyNewFilter`.
 
-> Add an array of arguments that will be appended to the paginator and to the following table actions:
->
-> * row number definition
-> * searching
-> * search cancelling
-> * sorting.
+You'll find your generated table filter in the `app/Tables/Filters` directory.
 
-**Note:**
-
-* Signature: `appendData(array $appendedToPaginator): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
+You will now be able to use your new filter in your tables.
 
 ```php
-(new Table())->appendData(request()->only('status'));
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\Filters\MyNewFilter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->filters([
+                new MyNewFilter(),
+            ]);
+    }
+}
 ```
 
-<h3 id="table-containerClasses">containerClasses</h3>
+### Define table head action
 
-> Override default table container classes.  
-> The default container classes are defined in the `config('laravel-table.classes.container')` config value.
+Configure a table action that will be displayed as a button positioned at the right of the table head.
 
-**Note:**
+If no head action is declared, the dedicated slot for it in the table head will remain empty.
 
-* Signature: `containerClasses(array $containerClasses): \Okipa\LaravelTable\Table`
-* Optional
+This package provides the following built-in head actions:
+* `CreateHeadAction`:
+    * Requires a `string $createUrl` argument on instantiation
+    * Redirects to the model create page from a click on a `Create` button
 
-**Use case example:**
+To use it, you'll have to pass an instance of it to the `headAction` method.
 
 ```php
-(new Table())->containerClasses(['set', 'your', 'classes']);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\HeadActions\CreateHeadAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->headAction(new CreateHeadAction(route('user.create')));
+    }
+}
 ```
 
-<h3 id="table-tableClasses">tableClasses</h3>
+You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action MyNewHeadAction`.
 
-> Override default table classes.  
-> The default table classes are defined in the `config('laravel-table.classes.table')` config value.
+You'll find your generated table head action in the `app/Tables/HeadActions` directory.
 
-**Note:**
-
-* Signature: `tableClasses(array $tableClasses): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
+You will now be able to use your new head action in your tables.
 
 ```php
-(new Table())->tableClasses(['set', 'your', 'classes']);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\HeadActions\MyNewHeadAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->headAction(new MyNewHeadAction());
+    }
+}
 ```
 
-<h3 id="table-trClasses">trClasses</h3>
+### Define table bulk actions
 
-> Override default table tr classes.  
-> The default tr classes are defined in the `config('laravel-table.classes.tr')` config value.
+Configure table bulk actions that will be available in a dropdown positioned at the left of the table head.
 
-**Note:**
+If no bulk action is declared on your table, the dedicated column will not be displayed.
 
-* Signature: `trClasses(array $trClasses): \Okipa\LaravelTable\Table`
-* Optional
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow bulk actions confirmation requests and feedback to be working properly.
 
-**Use case example:**
+This package provides the built-in following bulk actions:
+* `VerifyEmailBulkAction`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute with the current datetime for all selected lines
+* `CancelEmailVerificationBulkAction`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute to `null` for all selected lines
+* `ActivateBulkAction`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute to `true` for all selected lines
+* `DeactivateBulkAction`:
+    * Requires a `string $attribute` argument on instantiation
+    * Update the given attribute to `false` for all selected lines
+* `DestroyBulkAction`:
+    * Destroys all the selected lines
+
+To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
+
+You'll ben able to chain the following methods to your bulk actions:
+* `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
+    * Determines if action should be available on table rows
+* `confirmationQuestion(string|false $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
+    * Overrides the default action confirmation message
+* `feedbackMessage(string|false $feedbackMessage): Okipa\LaravelTable\Abstracts\AbstractBulkAction`:
+    * Overrides the default action feedback message
 
 ```php
-(new Table())->trClasses(['set', 'your', 'classes']);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\BulkActions\DestroyBulkAction;
+use Okipa\LaravelTable\BulkActions\ActivateBulkAction;
+use Okipa\LaravelTable\BulkActions\DeactivateBulkAction;
+use Okipa\LaravelTable\BulkActions\VerifyEmailBulkAction;
+use Okipa\LaravelTable\BulkActions\CancelEmailVerificationBulkAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->bulkActions(fn(User $user) => [
+                new VerifyEmailBulkAction('email_verified_at'),
+                new CancelEmailVerificationBulkAction('email_verified_at'),
+                new ActivateBulkAction('active'),
+                new DeactivateBulkAction('active'),
+                (new DestroyBulkAction())
+                    // Destroy action will not be available for authenticated user
+                    ->when(Auth::user()->isNot($user))
+                    // Override the action default confirmation question
+                    // Or set `false` if you do not want to require any confirmation for this action
+                    ->confirmationQuestion('Are you sure you want to delete selected users ?')
+                    // Override the action default feedback message
+                    // Or set `false` if you do not want to trigger any feedback message for this action
+                    ->feedbackMessage('Selected users have been deleted.'),
+            ]);
+    }
+}
 ```
 
-<h3 id="table-thClasses">thClasses</h3>
+You may need to create your own bulk actions. To do so, execute the following command: `php artisan make:table:bulk:action MyNewBulkAction`.
 
-> Override default table tr classes.  
-> The default th classes are defined in the `config('laravel-table.classes.th')` config value.
+You'll find your generated table bulk actions in the `app/Tables/BulkActions` directory.
 
-**Note:**
-
-* Signature: `thClasses(array $thClasses): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
+You will now be able to use your new bulk action in your tables.
 
 ```php
-(new Table())->thClasses(['set', 'your', 'classes']);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\BulkActions\MyNewBulkAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->bulkActions(fn(User $user) => [
+                new MyNewBulkAction(),
+            ]);
+    }
+}
 ```
 
-<h3 id="table-tdClasses">tdClasses</h3>
+### Define table row actions
 
-> Override default table td classes.  
-> The default td classes are defined in the `config('laravel-table.classes.td')` config value.
+Configure row actions on your table that will be displayed at the end of each row.
 
-**Note:**
+If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be displayed.
 
-* Signature: `tdClasses(array $tdClasses): \Okipa\LaravelTable\Table`
-* Optional
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow row actions confirmation requests and feedback to be working properly.
 
-**Use case example:**
+This package provides the built-in following row actions:
+* `ShowRowAction`:
+  * Requires a `string $showUrl` argument on instantiation
+  * Redirects to the model edit page on click
+* `EditRowAction`:
+  * Requires a `string $editUrl` argument on instantiation
+  * Redirects to the model edit page on click
+* `DestroyRowAction`:
+  * Destroys the line after being asked to confirm
+
+To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
+
+You'll be able to chain the same methods as for a bulk action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
-(new Table())->tdClasses(['set', 'your', 'classes']);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\RowActions\EditRowAction;
+use Okipa\LaravelTable\RowActions\ShowRowAction;
+use Okipa\LaravelTable\RowActions\DestroyRowAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowActions(fn(User $user) => [
+                new ShowRowAction(route('user.show', $user)),
+                new EditRowAction(route('user.edit', $user)),
+                (new DestroyRowAction())
+                    // Destroy action will not be available for authenticated user
+                    ->when(Auth::user()->isNot($user))
+                    // Override the action default confirmation question
+                    // Or set `false` if you do not want to require any confirmation for this action
+                    ->confirmationQuestion('Are you sure you want to delete user ' . $user->name . '?')
+                    // Override the action default feedback message
+                    // Or set `false` if you do not want to trigger any feedback message for this action
+                    ->feedbackMessage('User ' . $user->name . ' has been deleted.'),
+            ]);
+    }
+}
 ```
 
-<h3 id="table-rowsConditionalClasses">rowsConditionalClasses</h3>
+You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action MyNewRowAction`.
 
-> Set rows classes when the given conditions are respected.  
-> The closures let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
+You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
-**Note:**
-
-* Signature: `rowsConditionalClasses(Closure $rowClassesClosure, array|Closure $rowClasses): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
+You will now be able to use your new row action in your tables.
 
 ```php
-(new Table())->rowsConditionalClasses(fn(User $user) => $model->hasParticularAttribute, ['set', 'your', 'classes']);
+namespace App\Tables;
 
-// Or
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\RowActions\MyNewRowAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
-(new Table())->rowsConditionalClasses(
-    fn(User $user) => $model->hasParticularAttribute,
-    fn(User $user) => 'dynamic-class-name-' . $model->particularAttribute
-);
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            ->rowActions(fn(User $user) => [
+                new MyNewRowAction(),
+            ]);
+    }
+}
 ```
 
-<h3 id="table-destroyConfirmationHtmlAttributes">destroyConfirmationHtmlAttributes</h3>
+You may need your row actions to be confirmed before they'll be executed and to trigger feedback messages.
 
-> Define html attributes on the destroy buttons to handle dynamic javascript destroy confirmations.  
-> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.  
-> **Beware:** the management of the destroy confirmation is on you, if you do not setup a javascript treatment to ask a confirmation, the destroy action will be directly executed.
+You'll have to configure them in the same way you did for [bulk actions](#define-table-bulk-actions).
 
-**Note:**
+### Declare columns on tables
 
-* Signature: `destroyConfirmationHtmlAttributes(Closure $destroyConfirmationClosure): \Okipa\LaravelTable\Table`
-* Optional (but strongly recommended !)
+Declare columns on tables with the `columns` method available in your generated table configuration, from which you'll have to return an array of column instances.
 
-**Use case example:**
+To declare columns, just use the static `make` method that will await a `string $attribute` argument. This attribute will be used to get the default cell value.
+
+By default, the column title will be defined to `__('validation.attributes.<attribute>')` in order to reuse attributes translations.
+
+If you need to, you may use the `title` method that will await a `string $title` argument to set a specific column title that will override the default one.
 
 ```php
-(new Table())->destroyHtmlAttributes(fn(User $user) => ['data-confirm' => __('Are you sure you want to delete the user :name ?', ['name' => $user->name])]);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Column attribute set to `id`, column value set from `$user->id` and colum title set to `__('validation.attributes.id')`
+            Column::make('id'),
+            // Column attribute set to `name`, value set from `$user->name` and column title set to `Username`
+            Column::make('name')->title('Username'),
+        ];
+    }
+}
 ```
 
-**Javascript snippet example:**
+### Format column values
+
+You'll sometimes need to apply specific formatting for your columns. There are a few ways to achieve this.
+
+For specific cases, you should pass a closure parameter to the `format` method on your column.
+
+This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Value set from `$user->id`
+            Column::make('id'),
+            // Value set from closure
+            Column::make('username')
+                ->format(fn(User $user) => '<b> ' . $user->companies->implode('name', ', ') . '</b>'),
+        ];
+    }
+}
+```
+
+If you want to apply the same formatting treatment repeatedly, you should create a formatter with the following command: `php artisan make:table:formatter NewFormatter`.
+
+You'll find the generated formatter in the `app\Table\Formatters` directory.
+
+You'll be able to reuse this formatter in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use App\Tables\Formatters\NewFormatter;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            Column::make('id'),
+            Column::make('name')->format(new NewFormatter()),
+        ];
+    }
+}
+```
+
+This package provides the following built-in formatters :
+* `BooleanFormatter`:
+  * Displays a yes/no status from a `boolean` value
+* `DateFormatter`:
+  * Requires `string $format` and `string $timezone` arguments on instantiation
+  * Displays a formatted string from a `date` or `datetime` value
+* `StrLimitFormatter`:
+  * Allows optional `int $limit` and `string $end` arguments on instantiation
+  * Displays a truncated string with a title allowing to see the full string on hover
+
+### Define column actions
+
+Configure column actions on your table that will be displayed on their own cells.
+
+Column actions have a lot in common with row actions.
+
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow column actions confirmation requests and feedback to be working properly.
+
+This package provides the built-in following actions:
+* `ToggleBooleanColumnAction`:
+  * Toggles the email verification status
+* `ToggleBooleanColumnAction`:
+  * Toggles a boolean value
+
+To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
+
+You'll be able to chain the same methods as for a bulk action => [See bulk actions configuration](#define-table-bulk-actions).
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\ColumnActions\ToggleBooleanColumnAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+use Okipa\LaravelTable\ColumnActions\ToggleBooleanColumnAction;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            Column::make('id'),
+            Column::make('email_verified_at')
+                // ToggleBooleanColumnAction action will not trigger any feedback message
+                ->action(fn(User $user) => (new ToggleBooleanColumnAction()->feedbackMessage(false))
+            Column::make('active')
+                // ToggleBooleanColumnAction action will not be available for authenticated user
+                ->action(fn(User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
+        ];
+    }
+}
+```
+
+You may need to create your own column actions. To do so, execute the following command: `php artisan make:table:column:action MyNewColumnAction`.
+
+You'll find your generated table column actions in the `app/Tables/ColumnActions` directory.
+
+You will now be able to use your new column action in your tables.
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use App\Tables\ColumnActions\MyNewColumnAction;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+
+    protected function columns(): array
+    {
+        return [
+            Column::make('id'),
+            Column::make('action')->action(fn() => new MyNewColumnAction()),
+        ];
+    }
+}
+```
+
+You may need your column actions to be confirmed before they'll be executed and to trigger feedback messages.
+
+You'll have to configure them in the same way you did for [bulk actions](#define-table-bulk-actions). 
+
+### Configure columns searching
+
+Allow searching on columns by calling the `searching` method.
+
+When searchable fields are set, a search input will appear in the table head.
+
+Searchable column titles will be used to indicate which field can be searched on the search input placeholder.
+
+By default, searching will be applied to columns defined keys.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Column will not be searchable
+            Column::make('id'),
+            // Table will be searchable from `$user->name`
+            Column::make('name')->searchable(),
+        ];
+    }
+}
+```
+
+You will be able to set up a custom searching behaviour by passing a closure to the `searchable` method.
+
+This closure will be executed when searching will be triggered on the table and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` argument.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Column will not be searchable
+            Column::make('id'),
+            // Column will be searchable using this closure
+            Column::make('owned_companies')
+                // ... Your custom formatting here
+                ->searchable(fn(Builder $query, string $searchBy) => $query->whereRelation(
+                    'companies',
+                    'name',
+                    'LIKE',
+                    '%' . $searchBy . '%'
+                ),
+        ];
+    }
+}
+```
+
+### Configure columns sorting
+
+Allow sorting on columns by calling the `sortable` method.
+
+Sortable columns will display clickable sort icons before their titles that will trigger ascending or descending sorting.
+
+By default, sorting will be applied to columns defined keys.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Column will not be sortable
+            Column::make('id'),
+            // Column will be sortable from `$user->name`
+            Column::make('name')->sortable(),
+        ];
+    }
+}
+```
+
+To sort a column by default, use the `sortByDefault` column method, which will allow you to pass a `string $direction` argument.
+
+You can sort by default a column that is not sortable.
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Column will not be sortable
+            Column::make('id'),
+            // Column will be sorted descending by default on `$user->name`
+            Column::make('name')->sortByDefault('desc'),
+        ];
+    }
+}
+```
+
+You will be able to set up a custom sorting behaviour by passing a closure to the `sortable` method.
+
+This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `string $sortDir` arguments (`asc` or `desc`).
+
+```php
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            // Column will not be sortable
+            Column::make('id'),
+            // Column will be sortable from this closure
+            Column::make('companies_count') 
+                // Custom formatting...
+                ->sortable(fn(Builder $query, string $sortDir) => $query
+                    ->withCount('companies')
+                    ->orderBy('companies_count', $sortDir)),
+        ];
+    }
+}
+```
+
+### Allow columns to be reordered from drag and drop action
+
+Allow columns to be reordered from drag and drop action by calling the `reorderable` method on your table.
+
+This method will await a first `string $attribute` argument, an optional second `string $title` argument, and an optional third `string $sortDirByDefault` argument (accepting `asc` or `desc` values).
+
+**Important notes:**
+* [You'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow reorder action feedback to be working properly
+* You'll have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable), that will handle the drag and drop utility for us
+
+Activating this feature will:
+* Prepend a new column that will display the drag-and-drop icon defined in the `laravel-table.icon.drag_drop` config value, followed by the defined model order attribute value
+* Sort the rows from the defined model order attribute (`asc` by default)
+* Disable all other columns sorting as it is not compatible with drag-and-drop reordering
+* And of course, enable the drag-and-drop columns reordering by adding all the **Livewire Sortable Plugin** necessary markup
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            // A new column will display the drag-and-drop icon, followed by the `position` attribute value
+            // Rows will be sorted from the `position` model attribute and all other columns sorting will be disable
+            ->reorderable('position');
+    }
+}
+```
+
+### Declare results on tables
+
+To display results, you'll have to return an array of result instances from the `results` method available in your generated table configuration.
+
+If no result is declared, their dedicated space will remain empty.
+
+Results should be declared this way:
+1. Create a `Result` instance with the static `make` method
+2. Chain the `title` method that will await a `string $title` argument
+3. Chain the `format` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
+
+```php
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Result;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()->model(User::class);
+    }
+    
+    protected function columns(): array
+    {
+        return [
+            Column::make('id'),
+        ];
+    }
+    
+    protected function results(): array
+    {
+        return [
+            // This result uses the first $totalRowsQuery closure param to compute its value.
+            // In this example, all users contained in database with unverified email will be count.
+            Result::make()
+                ->title('Total of users with unverified email')
+                ->format(static fn(Builder $totalRowsQuery) => $totalRowsQuery
+                    ->whereNull('email_verified_at')
+                    ->count()),
+            // This result uses the second $displayedRowsCollection closure param to compute its value.
+            // In this example, all displayed inactive users will be count.
+            Result::make()
+                ->title('Displayed inactive users')
+                ->format(static fn(
+                    Builder $totalRowsQuery,
+                    Collection $displayedRowsCollection
+                ) => $displayedRowsCollection->where('active', false)->count()),
+        ];
+    }
+}
+```
+
+### Set up a few lines of JavaScript
+
+You'll have to add few Javascript lines to your project once this package is installed, in order to allow confirmation requests and actions feedback to be working properly. 
+
+When an action is requesting the user confirmation, it will not be directly executed. A `table:action:confirm` Livewire event will be emitted instead with the following parameters:
+1. The action type
+2. The action identifier
+3. The model primary key related to your action
+4. The `$confirmationQuestion` attribute from your action
+
+As you will see on the provided snippet below, the 4th param of this event is the only one you'll have to use in order to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is confirmed by the user. Just ignore them in your treatment.
+
+You will have to intercept this event from your own JS script and prompt a confirmation request.
+
+When the action is confirmed by the user, you'll have to emit a new `laraveltable:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
+1. The action type
+2. The action identifier
+3. The model primary key related to your action
+
+Here is an JS snippet to show you how to proceed:
 
 ```javascript
-// Example of javascript snippet to ask a confirmation before executing the destroy action
-// This js snippet uses the `data-confirm` attribute value provided in the use case example above
-const destroyButtons = $('table form.destroy-action button[data-confirm]');
-destroyButtons.click((event) => {
-    event.preventDefault();
-    const $this = $(event.target);
-    const $destroyButton = $this.is('button') ? $this : $this.closest('button');
-    const message = $destroyButton.data('confirm');
-    const form = $destroyButton.closest('form');
-    if (message && confirm(message)) {
-        form.submit();
+// Listen to the action confirmation request
+Livewire.on('laraveltable:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
+    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
+    if (window.confirm(confirmationQuestion)) {
+        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
+        Livewire.emit('laraveltable:action:confirmed', actionType, actionIdentifier, modelPrimary);
     }
 });
 ```
 
-<h3 id="table-disableRows">disableRows</h3>
+Once an action is executed, a `table:action:feedback` Livewire event is triggered (it sometimes depends on the configuration of a feedback message).
 
-> Set the disableRows closure that will be executed during the table generation.  
-> The optional second param let you override the classes that will be applied for the disabled rows.  
-> By default, the « config('laravel-table.classes.disabled') » config value is applied.  
-> For example, you can disable the current logged user to prevent him being edited or deleted from the table.  
-> The closure let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.
+Following the same logic, you'll have to intercept it from a JS script as shown on the snippet below to provide an immediate feedback to the user:
 
-**Note:**
-
-* Signature: `disableRows(Closure $rowDisableClosure, array $classes = []): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->disableRows(fn(User $user) => $user->id = auth()->id(), ['bg-danger', 'text-primary']);
-```
-
-<h3 id="table-tableTemplate">tableTemplate</h3>
-
-> Set a custom view path for the table template.  
-> The default view path is defined in the `config('laravel-table.template.table')` config value.
-
-**Note:**
-
-* Signature: `tableTemplate(string $tableTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->tableTemplate('tailwindCss.table');
-```
-
-<h3 id="table-theadTemplate">theadTemplate</h3>
-
-> Set a custom view path for the thead template.  
-> The default view path is defined in the `config('laravel-table.template.thead')` config value.
-
-**Note:**
-
-* Signature: `theadTemplate(string $theadTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->theadTemplate('tailwindCss.thead');
-```
-
-<h3 id="table-rowsSearchingTemplate">rowsSearchingTemplate</h3>
-
-> Set a custom view path for the rows searching template.  
-> The default view path is defined in the `config('laravel-table.template.rows_searching')` config value.
-
-**Note:**
-
-* Signature: `rowsSearchingTemplate(string $rowsSearchingTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->rowsSearchingTemplate('tailwindCss.rows-searching');
-```
-
-<h3 id="table-rowsNumberDefinitionTemplate">rowsNumberDefinitionTemplate</h3>
-
-> Set a custom view path for the rows number definition template.  
-> The default view path is defined in the `config('laravel-table.template.rows_number_definition')` config value.
-
-**Note:**
-
-* Signature: `rowsNumberDefinitionTemplate(string $rowsNumberDefinitionTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->rowsSearchingTemplate('tailwindCss.rows-number-definition');
-```
-
-<h3 id="table-createActionTemplate">createActionTemplate</h3>
-
-> Set a custom view path for the create action template.  
-> The default view path is defined in the `config('laravel-table.template.create_action')` config value.
-
-**Note:**
-
-* Signature: `createActionTemplate(string $createActionTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->createActionTemplate('tailwindCss.create-action');
-```
-
-<h3 id="table-columnTitlesTemplate">columnTitlesTemplate</h3>
-
-> Set a custom view path for the column titles template.  
-> The default view path is defined in the `config('laravel-table.template.column_titles')` config value.
-
-**Note:**
-
-* Signature: `columnTitlesTemplate(string $columnTitlesTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->columnTitlesTemplate('tailwindCss.column-titles');
-```
-
-<h3 id="table-tbodyTemplate">tbodyTemplate</h3>
-
-> Set a custom view path for the tbody template.  
-> The default view path is defined in the `config('laravel-table.template.tbody')` config value.
-
-**Note:**
-
-* Signature: `tbodyTemplate(string $tbodyTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->tbodyTemplate('tailwindCss.tbody');
-```
-
-<h3 id="table-showActionTemplate">showActionTemplate</h3>
-
-> Set a custom view path for the show template.  
-> The default view path is defined in the `config('laravel-table.template.show_action')` config value.
-
-**Note:**
-
-* Signature: `showActionTemplate(string $showActionTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->showActionTemplate('tailwindCss.show-action');
-```
-
-<h3 id="table-editActionTemplate">editActionTemplat</h3>
-
-> Set a custom view path for the edit template.  
-> The default view path is defined in the `config('laravel-table.template.edit_action')` config value.
-
-**Note:**
-
-* Signature: `editActionTemplate(string $editActionTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->editActionTemplate('tailwindCss.edit-action');
-```
-
-<h3 id="table-destroyActionTemplate">destroyActionTemplate</h3>
-
-> Set a custom view path for the destroy template.  
-> The default view path path is defined in the `config('laravel-table.template.destroy_action')` config value.
-
-**Note:**
-
-* Signature: `destroyActionTemplate(string $destroyActionTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->destroyActionTemplate('tailwindCss.destroy-action');
-```
-
-<h3 id="table-resultsTemplate">resultsTemplate</h3>
-
-> Set a custom view path for the results template.  
-> The default results template path is defined in the `config('laravel-table.template.results')` config value.
-
-**Note:**
-
-* Signature: `resultsTemplate(string $resultsTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->resultsTemplate('tailwindCss.results');
-```
-
-<h3 id="table-tfootTemplate">tfootTemplate</h3>
-
-> Set a custom view path for the tfoot template.  
-> The default tfoot template path is defined in the `config('laravel-table.template.tfoot')` config value.
-
-**Note:**
-
-* Signature: `tfootTemplate(string $tfootTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->tfootTemplate('tailwindCss.tfoot');
-```
-
-<h3 id="table-navigationStatusTemplate">navigationStatusTemplate</h3>
-
-> Set a custom view path for the navigation status template.  
-> The default tfoot template path is defined in the `config('laravel-table.template.navigation_status')` config value.
-
-**Note:**
-
-* Signature: `navigationStatusTemplate(string $navigationStatusTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->navigationStatusTemplate('tailwindCss.navigation-status');
-```
-
-<h3 id="table-paginationTemplate">paginationTemplate</h3>
-
-> Set a custom view path for the pagination template.  
-> The default tfoot template path is defined in the `config('laravel-table.template.pagination')` config value.
-
-**Note:**
-
-* Signature: `paginationTemplate(string $paginationTemplatePath): \Okipa\LaravelTable\Table`
-* Optional
-
-**Use case example:**
-
-```php
-(new Table())->paginationTemplate('tailwindCss.pagination');
-```
-
-<h3 id="table-column">column</h3>
-
-> Add a column that will be displayed in the table.  
-> The column key is optional if the column is not declared as sortable or searchable.
-
-**Note:**
-
-* Signature: `column(string $dbField = null): \Okipa\LaravelTable\Column`
-* Required
-* **Warning:** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Column` object. See the use case examples to check how to use this method.
-
-**Use case example:**
-
-```php
-$table->column('name');
-```
-
-<h3 id="table-result">result</h3>
-
-> Add a result row that will be displayed at the bottom of the table.
-
-**Note:**
-
-* Signature: `result(): Result`
-* Optional
-* **Warning:** this method should not be chained with the other `\Okipa\LaravelTable\Table` methods because it returns a `\Okipa\LaravelTable\Result` object. See the use case examples to check how to use this method.
-
-**Use case example:**
-
-```php
-$table->result();
-```
-
-## Column API
-
-:warning: All the column methods are chainable with `\Okipa\LaravelTable\Column` object.
-
-<h3 id="column-classes">classes</h3>
-
-> Set the custom classes that will be applied on this column only.
-
-**Note:**
-
-* Signature: `classes(array $classes): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column()->classes(['font-weight-bold']);
-```
-
-<h3 id="column-title">title</h3>
-
-> Set a custom column title and override the default `__('validation.attributes.[$database_column])` one.
-
-**Note:**
-
-* Signature: `title(string $title = null): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column()->title('E-mail');
-```
-
-<h3 id="column-sortable">sortable</h3>
-
-> Make the column sortable.  
-> You also can choose to set the column sorted by default.  
-> If no column is sorted by default, the first one will be automatically sorted.
-
-**Note:**
-
-* Signature: `sortable(bool $sortByDefault = false, $sortDirection = 'asc'): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column('email')->sortable();
-
-// Alternative
-$table->column('email')->sortable(true, 'desc');
-```
-
-<h3 id="column-searchable">searchable</h3>
-
-> Make the column searchable.  
-> The first param allows you to precise the searched database table (can references a database table alias).  
-> The second param allows you to precise the searched database attributes (if not precised, the table database column is searched).
-
-**Note:**
-
-* Signature: `searchable(string $dbSearchedTable = null, array $dbSearchedFields = []): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-// Example 1
-$table->column('email')->searchable();
-
-// Example 2
-$table = (new Table())->model(User::class)->query(function(Builder $query) {
-    $query->select('users.*');
-    $query->addSelect('companies.name as company');
-    $query->join('companies', 'companies.owner_id', '=', 'users.id');
-});
-$table->column('company')->searchable('companies', ['name']);
-
-// Example 3
-$table = (new Table())->model(User::class)->query(function(Builder $query) {
-    $query->select('users.*');
-    $query->addSelect(\DB::raw('CONCAT(companies.name, " ", companies.activity) as company'));
-    $query->join('companies as companiesAliasedTable', 'companies.owner_id', '=', 'users.id');
-});
-$table->column('company')->searchable('companiesAliasedTable', ['name', 'activity']);
-```
-
-<h3 id="column-dateTimeFormat">dateTimeFormat</h3>
-
-> Set the format for a datetime, date or time database column (optional).  
-> (Carbon::parse($value)->timezone($timezone)->format($format) method is used under the hood).
-
-**Note:**
-
-* Signature: `dateTimeFormat(string $dateTimeFormat, string $timezone = null): \Okipa\LaravelTable\Column`
-* Optional
-* If no timezone is set, the default one, defined in `config('app.timezone')` is used
-
-**Use case example:**
-
-```php
-$table->column('created_at')->dateTimeFormat('d/m/Y H:i', 'Europe/Paris');
-```
-
-<h3 id="column-button">button</h3>
-
-> Display the column as a button with the given classes.
-
-**Note:**
-
-* Signature: `button(array $buttonClasses = []): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column('email')->button(['btn', 'btn-sm', 'btn-primary']);
-```
-
-<h3 id="column-link">link</h3>
-
-> Wrap the column value into a `<a></a>` HTML tag.  
-> You can declare the link as a string or as a closure which will let you manipulate the following attribute: `\Illuminate\Database\Eloquent\Model $model`.  
-> If no url is declared, the url will be generated using the column value.
-
-**Note:**
-
-* Signature: `link($url = null): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-// Example 1
-$table->column('url')->link();
-
-// Example 2
-$table->column()->link(route('news.index'));
-
-// Example 3
-$table->column()->link(function(News $news) {
-    return route('news.show', $news);
+```javascript
+Livewire.on('laraveltable:action:feedback', (feedbackMessage) => {
+    // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
+    window.alert(feedbackMessage);
 });
 ```
 
-<h3 id="column-prependHtml">prependHtml</h3>
+### Trigger Livewire events on table load
 
-> Prepend HTML to the displayed value.  
-> Set the second param as true if you want the prepended HTML to be displayed even if the column has no value.
+You may want to trigger some events on table load, in order to load UI third party JS libraries for example.
 
-**Note:**
-
-* Signature: `prependHtml(string $prependedHtml, bool $forcePrependedHtmlDisplay = false): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
+You can do it using the table `emitEventsOnLoad` method, that will await an array of events.
 
 ```php
-$table->column('email')->prependHtml('<i class="fas fa-envelope"></i>', true);
+namespace App\Tables;
+
+use App\Models\User;
+use Okipa\LaravelTable\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
+
+class UsersTable extends AbstractTableConfiguration
+{
+    protected function table(): Table
+    {
+        return Table::make()
+            ->model(User::class)
+            // This event will be loaded each time your table will be rendered
+            // in order to keep your UI third party libraries rendering,
+            // even when its HTML is refreshed.
+            ->emitEventsOnLoad(['js:selector:init' => ['some', 'params']]);
+    }   
+}
 ```
 
-<h3 id="column-appendsHtml">appendsHtml</h3>
+### Interact with your tables from events
 
-> Append HTML to the displayed value.  
-> Set the second param as true if you want the appended HTML to be displayed even if the column has no value.
-
-**Note:**
-
-* Signature: `appendsHtml(string $appendedHtml, bool $forceAppendedHtmlDisplay = false): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column('email')->appendsHtml('<i class="fas fa-envelope"></i>', true);
-```
-
-<h3 id="column-stringLimit">stringLimit</h3>
-
-> Set the string value display limitation.  
-> Shows "..." when the limit is reached.
-
-**Note:**
-
-* Signature: `stringLimit(int $stringLimit): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column('email')->stringLimit(30);
-```
-
-<h3 id="column-value">value</h3>
-
-> Display a custom value for the column.  
-> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`.
-
-**Note:**
-
-* Signature: `value(Closure $customValueClosure): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column()->value(function(User $user) {
-    return config('users.type.' . $user->type_id);
-});
-```
-
-<h3 id="column-html">html</h3>
-
-> Display a custom HTML for the column.  
-> The closure let you manipulate the following attributes: `\Illuminate\Database\Eloquent\Model $model`.
-
-**Note:**
-
-* Signature: `html(Closure $customHtmlClosure): \Okipa\LaravelTable\Column`
-* Optional
-
-**Use case example:**
-
-```php
-$table->column()->html(function(User $user) {
-    return '<div>' . $user->first_name . '</div>';
-});
-```
-
-## Result API
-
-:warning: All the result methods are chainable with `\Okipa\LaravelTable\Result` object.
-
-<h3 id="result-title">title</h3>
-
-> Set the result row title.
-
-**Note:**
-
-* Signature: `title(string $title): \Okipa\LaravelTable\Result`
-* Optional
-
-**Use case example:**
-
-```php
-$table->result()->title('Turnover total');
-```
-
-<h3 id="result-html">html</h3>
-
-> Display a HTML output for the result row.  
-> The closure let you manipulate the following attributes: `\Illuminate\Support\Collection $paginatedRows`.
-
-**Note:**
-
-* Signature: `html(Closure $customHtmlClosure): \Okipa\LaravelTable\Result`
-* Optional
-
-**Use case example:**
-
-```php
-$table->result()->html(function(Collection $paginatedRows) {
-    return $paginatedRows->sum('turnover');
-});
-```
-
-<h3 id="result-classes">classes</h3>
-
-> Override the default results classes and apply the given classes only on this result row.  
-> The default result classes are managed by the `config('laravel-table.classes.results')` value.
-
-**Note:**
-
-* Signature: `classes(array $classes): \Okipa\LaravelTable\Result`
-* Optional
-
-**Use case example:**
-
-```php
-$table->result()->classes(['bg-dark', 'text-white', 'font-weight-bold']);
-```
+You will be able to interact with your tables by sending them the following Livewire events:
+* `laraveltable:refresh`
+  * Allows optional `array $configParams = []`, and `array $targetedConfigs = []` arguments
+  * Refreshes your tables and (optionaly) set [external table config data](#pass-external-data-to-your-tables) with (optional) table targeting to only refresh specific ones (empty `$targetedConfigs` array will refresh all tables one page) 
 
 ## Testing
 

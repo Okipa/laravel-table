@@ -1,0 +1,14 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelTable\Abstracts\AbstractFormatter;
+
+class DummyClass extends AbstractFormatter
+{
+    public function format(Model $model, string $attribute): string
+    {
+        // The formatting that will be displayed in column cells.
+    }
+}

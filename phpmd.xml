@@ -13,12 +13,15 @@
     </rule>
     <!-- Code size rules -->
     <rule ref="rulesets/codesize.xml">
+        <exclude name="CyclomaticComplexity" pattern="tests/*"/>
         <exclude name="TooManyPublicMethods" pattern="tests/*"/>
         <exclude name="TooManyMethods" pattern="tests/*"/>
+        <exclude name="ExcessiveMethodLength" pattern="tests/*"/>
     </rule>
     <!-- Controversial rules -->
     <rule ref="rulesets/controversial.xml">
         <exclude name="CamelCaseMethodName" pattern="tests/*"/>
+        <exclude name="CamelCasePropertyName" pattern="src/Livewire/*"/>
     </rule>
     <!-- Design rules -->
     <rule ref="rulesets/design.xml">
