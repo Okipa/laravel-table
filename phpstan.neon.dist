@@ -16,9 +16,6 @@ parameters:
         - '#Access to an undefined property Tests\\Models\\User::\$active#'
         - '#Call to an undefined method Faker\\Generator::catchphrase\(\)#'
         - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_table_unique_identifier#'
-        - '#Access to an undefined property Livewire\\Testing\\TestableLivewire::\$tableBulkActionsArray#'
-        - '#Access to an undefined property Livewire\\Testing\\TestableLivewire::\$tableRowActionsArray#'
-        - '#Access to an undefined property Livewire\\Testing\\TestableLivewire::\$tableColumnActionsArray#'
 
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php

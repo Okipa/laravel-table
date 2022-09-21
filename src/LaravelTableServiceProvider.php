@@ -11,7 +11,6 @@ use Okipa\LaravelTable\Console\Commands\MakeFormatter;
 use Okipa\LaravelTable\Console\Commands\MakeHeadAction;
 use Okipa\LaravelTable\Console\Commands\MakeRowAction;
 use Okipa\LaravelTable\Console\Commands\MakeTable;
-use Okipa\LaravelTable\Testing\Manager;
 
 class LaravelTableServiceProvider extends ServiceProvider
 {
@@ -35,7 +34,6 @@ class LaravelTableServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-table.php', 'laravel-table');
-        $this->app->bind('laravel_table_testable', fn () => new Manager());
         $this->commands([
             MakeTable::class,
             MakeFilter::class,
