@@ -2,7 +2,7 @@
 
 ## [5.0.0](https://github.com/Okipa/laravel-table/compare/4.0.4...5.0.0)
 
-2022-09-01
+2022-09-21
 
 * Added support for Laravel 9
 * Dropped support for Laravel 7 and earlier versions
