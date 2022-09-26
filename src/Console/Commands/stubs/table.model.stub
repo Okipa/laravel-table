@@ -4,6 +4,7 @@ namespace DummyNamespace;
 
 use DummyFullModelClass;
 use Okipa\LaravelTable\Table;
+use Okipa\LaravelTable\Column;
 use Okipa\LaravelTable\RowActions\EditRowAction;
 use Okipa\LaravelTable\RowActions\DestroyRowAction;
 use Okipa\LaravelTable\Formatters\DateFormatter;
@@ -23,9 +24,9 @@ class DummyClass extends AbstractTableConfiguration
     protected function columns(): array
     {
         return [
-            Column::make('id')->sortable();
-            Column::make('created_at')->format(new DateFormatter('d/m/Y H:i'))->sortable();
-            Column::make('updated_at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc');
+            Column::make('id')->sortable(),
+            Column::make('created_at')->format(new DateFormatter('d/m/Y H:i'))->sortable(),
+            Column::make('updated_at')->format(new DateFormatter('d/m/Y H:i'))->sortable()->sortByDefault('desc'),
         ];
     }
 

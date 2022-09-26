@@ -1,5 +1,11 @@
 # Changelog
 
+## [5.0.1](https://github.com/Okipa/laravel-table/compare/5.0.0...5.0.1)
+
+2022-09-26
+
+* Fixed `make:table <TableName> --model=<ModelNamespace>` command
+
 ## [5.0.0](https://github.com/Okipa/laravel-table/compare/4.0.4...5.0.0)
 
 2022-09-21
