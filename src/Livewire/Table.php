@@ -318,10 +318,13 @@ class Table extends Component
     public function columnAction(string $identifier, string $modelKey, bool $requiresConfirmation): mixed
     {
         $columnActionArray = AbstractColumnAction::retrieve($this->tableColumnActionsArray, $modelKey, $identifier);
-        if (! $columnActionArray) {
+//        if (! $columnActionArray) {
+//            return null;
+//        }
+        $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+        if (! $columnActionInstance->isAllowed()) {
             return null;
         }
-        $columnActionInstance = AbstractColumnAction::make($columnActionArray);
         $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
         if ($requiresConfirmation) {
             return $this->emit(

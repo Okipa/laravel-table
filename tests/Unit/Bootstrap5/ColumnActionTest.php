@@ -55,14 +55,20 @@ class ColumnActionTest extends TestCase
             ->assertSeeHtmlInOrder([
                 '<tbody>',
                 '<tr wire:key="row-' . $users->first()->id . '" class="border-bottom">',
+                '<th wire:key="cell-name-' . $users->first()->id . '" class="align-middle" scope="row">',
+                $users->first()->name,
+                '</th>',
+                '<td wire:key="cell-email-verified-at-' . $users->first()->id . '" class="align-middle">',
                 '<a wire:key="column-action-email-verified-at-' . $users->first()->id . '"',
                 ' wire:click.prevent="columnAction(\'email_verified_at\', \'' . $users->first()->id . '\', 1)"',
-                ' class="link-success p-' . $users->first()->id . '"',
+                ' class="link-success p-1"',
                 ' href=""',
                 ' title="Unverify Email"',
                 ' data-bs-toggle="tooltip">',
                 'email-verified-icon',
                 '</a>',
+                '</td>',
+                '<td wire:key="cell-active-' . $users->first()->id . '" class="align-middle">',
                 '<a wire:key="column-action-active-' . $users->first()->id . '"',
                 ' wire:click.prevent="columnAction(\'active\', \'' . $users->first()->id . '\', 0)"',
                 ' class="link-success p-1"',
@@ -71,8 +77,13 @@ class ColumnActionTest extends TestCase
                 ' data-bs-toggle="tooltip">',
                 'toggle-on-icon',
                 '</a>',
+                '</td>',
                 '</tr>',
                 '<tr wire:key="row-' . $users->last()->id . '" class="border-bottom">',
+                '<th wire:key="cell-name-' . $users->last()->id . '" class="align-middle" scope="row">',
+                $users->last()->name,
+                '</th>',
+                '<td wire:key="cell-email-verified-at-' . $users->last()->id . '" class="align-middle">',
                 '<a wire:key="column-action-email-verified-at-' . $users->last()->id . '"',
                 ' wire:click.prevent="columnAction(\'email_verified_at\', \'' . $users->last()->id . '\', 1)"',
                 ' class="link-danger p-1"',
@@ -81,6 +92,8 @@ class ColumnActionTest extends TestCase
                 ' data-bs-toggle="tooltip">',
                 'email-unverified-icon',
                 '</a>',
+                '</td>',
+                '<td wire:key="cell-active-' . $users->last()->id . '" class="align-middle">',
                 '<a wire:key="column-action-active-' . $users->last()->id . '"',
                 ' wire:click.prevent="columnAction(\'active\', \'' . $users->last()->id . '\', 0)"',
                 ' class="link-danger p-1"',
@@ -89,6 +102,7 @@ class ColumnActionTest extends TestCase
                 ' data-bs-toggle="tooltip">',
                 'toggle-off-icon',
                 '</a>',
+                '</td>',
                 '</tr>',
                 '</tbody>',
             ])
@@ -137,7 +151,8 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('name'),
                     Column::make('active')
-                        ->action(fn (User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()->isNot($user))),
+                        ->action(fn (User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()
+                            ->isNot($user))),
                 ];
             }
         };
@@ -206,5 +221,42 @@ class ColumnActionTest extends TestCase
             ->assertNotEmitted('laraveltable:action:confirm')
             ->assertNotEmitted('laraveltable:action:feedback');
         $this->assertNull($user->fresh()->email_verified_at);
+    }
+
+    /** @test */
+    public function it_cant_display_original_column_value_when_column_action_is_not_allowed(): void
+    {
+        $user = User::factory()->create(['active' => true]);
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('email_verified_at')
+                        ->action(fn () => (new ToggleEmailVerifiedColumnAction())->when(false)),
+                    Column::make('active')
+                        ->action(fn () => (new ToggleBooleanColumnAction())->when(false)),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtml([
+                '<th wire:key="cell-email-verified-at-' . $user->id . '" class="align-middle" scope="row">',
+                PHP_EOL,
+                '</th>',
+                '<td wire:key="cell-active-' . $user->id . '" class="align-middle">',
+                PHP_EOL,
+                '</td>',
+            ])
+            ->assertDontSeeHtml([
+                $user->email_verified_at,
+                //'1', => Can't assert that
+            ]);
     }
 }
