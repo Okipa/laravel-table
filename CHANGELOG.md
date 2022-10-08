@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.0.2](https://github.com/Okipa/laravel-table/compare/5.0.1...5.0.2)
+
+2022-10-07
+
+* Fixed wrong `form-select` class uses for Bootstrap 4 template selects: replaced them by `custom-select`
+* Fixed Column action still displays original column value with ->when(false) : #103
+
 ## [5.0.1](https://github.com/Okipa/laravel-table/compare/5.0.0...5.0.1)
 
 2022-09-26

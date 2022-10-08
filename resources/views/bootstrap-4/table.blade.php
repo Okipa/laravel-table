@@ -93,7 +93,7 @@
                                                         {!! config('laravel-table.icon.rows_number') !!}
                                                     </span>
                                                 </div>
-                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
+                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="custom-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
                                                     'placeholder' => __('Number of rows per page'),
                                                     'aria-label' => __('Number of rows per page'),
                                                     'aria-describedby' => 'rows-number-per-page-icon',
@@ -196,11 +196,11 @@
                             {{-- Row columns values --}}
                             @foreach($columns as $column)
                                 @if($loop->first)
-                                    <th wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.handle style="cursor: move;"' : null !!} class="align-middle" scope="row">
+                                    <th wire:key="cell-{{ Str::of($column->getAttribute())->snake('-')->slug() }}-{{ $model->getKey() }}"{!! $orderColumn ? ' wire:sortable.handle style="cursor: move;"' : null !!} class="align-middle" scope="row">
                                         {!! $orderColumn ? '<span class="mr-2">' . config('laravel-table.icon.drag_drop') . '</span>' : null !!}{{ $column->getValue($model, $tableColumnActionsArray) }}
                                     </th>
                                 @else
-                                    <td wire:key="cell-{{ $column->getAttribute() }}-{{ $model->getKey() }}" class="align-middle">
+                                    <td wire:key="cell-{{ Str::of($column->getAttribute())->snake('-')->slug() }}-{{ $model->getKey() }}" class="align-middle">
                                         {{ $column->getValue($model, $tableColumnActionsArray) }}
                                     </td>
                                 @endif

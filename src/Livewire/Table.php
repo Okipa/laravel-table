@@ -297,6 +297,9 @@ class Table extends Component
         }
         $rowActionArray = collect($rowActionsArray)->where('identifier', $identifier)->first();
         $rowActionInstance = AbstractRowAction::make($rowActionArray);
+        if (! $rowActionInstance->isAllowed()) {
+            return null;
+        }
         $model = app($rowActionArray['modelClass'])->findOrFail($modelKey);
         if ($requiresConfirmation) {
             return $this->emit(
@@ -322,6 +325,9 @@ class Table extends Component
             return null;
         }
         $columnActionInstance = AbstractColumnAction::make($columnActionArray);
+        if (! $columnActionInstance->isAllowed()) {
+            return null;
+        }
         $model = app($columnActionArray['modelClass'])->findOrFail($modelKey);
         if ($requiresConfirmation) {
             return $this->emit(
