@@ -151,8 +151,8 @@ class ColumnActionTest extends TestCase
                 return [
                     Column::make('name'),
                     Column::make('active')
-                        ->action(fn (User $user) => (new ToggleBooleanColumnAction())->when(Auth::user()
-                            ->isNot($user))),
+                        ->action(fn (User $user) => (new ToggleBooleanColumnAction())
+                            ->when(Auth::user()->isNot($user))),
                 ];
             }
         };
