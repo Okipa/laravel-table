@@ -118,14 +118,17 @@ class Table
         if (! $this->getOrderColumn()) {
             return [];
         }
+        $query = $this->model->query();
+        if ($this->queryClosure) {
+            $query->where(fn ($subQueryQuery) => ($this->queryClosure)($query));
+        }
 
         return [
             'modelClass' => $this->model::class,
             'modelPrimaryAttribute' => $this->model->getKeyName(),
             'reorderAttribute' => $this->getOrderColumn()->getAttribute(),
             'sortDir' => $sortDir,
-            'beforeReorderAllModelKeys' => $this->model
-                ->query()
+            'beforeReorderAllModelKeys' => $query
                 ->get()
                 ->mapWithKeys(fn (Model $model) => [
                     $model->{$this->getOrderColumn()->getAttribute()} => (string) $model->getKey(),
