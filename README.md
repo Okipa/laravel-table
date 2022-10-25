@@ -480,7 +480,7 @@ This package provides the following built-in head actions:
     * Requires `string $createUrl` and `bool $openInNewWindow = false` arguments on instantiation
     * Instantiate a pre-configured `RedirectHeadAction` with the given `$createUrl` as URL, `__('Create')` as label and `config('laravel-table.icon.create')` as icon
 
-To use on of them, you'll have to pass an instance of it to the `headAction` method.
+To use one of them, you'll have to pass an instance of it to the `headAction` method.
 
 You'll ben able to chain the following method to your head action:
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractHeadAction`
