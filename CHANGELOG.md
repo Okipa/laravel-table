@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.1.0](https://github.com/Okipa/laravel-table/compare/5.0.2...5.1.0)
+
+2022-10-25
+ 
+* Added ability to chain a `->when(bool $condition)` method to an instantiated head action, in order to enable it conditionally
+* Added a new built-in `RedirectHeadAction`, that will be used by the pre-configured `CreateHeadAction`
+* Added an optional `bool $openInNewWindow = false` to the `CreateHeadAction`
+* Added a new [JavaScript snippet](/README.md#set-up-a-few-lines-of-javascript) to handle head action link opening in tab: you'll have to add it if you want to benefit from this new ability
+
 ## [5.0.2](https://github.com/Okipa/laravel-table/compare/5.0.1...5.0.2)
 
 2022-10-07

@@ -59,8 +59,6 @@ jobs:
       - name: Code analysis
         if: matrix.php == '8.1' && matrix.laravel == '9.*'
         run: |
-          # Remove this line once Larastan and Livewire are working well together
-          sed -i -e 's#.*protected \$enablesPackageDiscoveries.*#&\nprotected function overrideApplicationBindings($app){return["livewire"=>"Livewire\\\\LivewireManager"];}#' vendor/nunomaduro/larastan/src/ApplicationResolver.php
           vendor/bin/pint --test -vvv
           vendor/bin/phpmd config,src,tests text phpmd.xml
           vendor/bin/phpstan analyse

@@ -354,16 +354,20 @@ class Table
         return $filterClosures;
     }
 
-    public function getHeadActionArray(): array|null
+    public function getHeadActionArray(): array
     {
         if (! $this->headAction) {
-            return null;
+            return [];
         }
         $this->headAction->setup();
+        if (! $this->headAction->isAllowed()) {
+            return [];
+        }
 
         return (array) $this->headAction;
     }
 
+    /** @throws \JsonException */
     public function getRowClass(): array
     {
         $tableRowClass = [];
@@ -374,7 +378,10 @@ class Table
             $tableRowClass[$model->laravel_table_unique_identifier] = ($this->rowClassesClosure)($model);
         }
 
-        return $tableRowClass;
+        return json_decode(json_encode(
+            $tableRowClass,
+            JSON_THROW_ON_ERROR
+        ), true, 512, JSON_THROW_ON_ERROR);
     }
 
     /** @throws \JsonException */

@@ -473,11 +473,18 @@ Configure a table action that will be displayed as a button positioned at the ri
 If no head action is declared, the dedicated slot for it in the table head will remain empty.
 
 This package provides the following built-in head actions:
-* `CreateHeadAction`:
-    * Requires a `string $createUrl` argument on instantiation
+* `RedirectHeadAction`:
+    * Requires `string $url`, `string $label`, `string $icon`, `array $class = ['btn', 'btn-success']` and `bool $openInNewWindow = false` arguments on instantiation
     * Redirects to the model create page from a click on a `Create` button
+* `CreateHeadAction`:
+    * Requires `string $createUrl` and `bool $openInNewWindow = false` arguments on instantiation
+    * Instantiate a pre-configured `RedirectHeadAction` with the given `$createUrl` as URL, `__('Create')` as label and `config('laravel-table.icon.create')` as icon
 
-To use it, you'll have to pass an instance of it to the `headAction` method.
+To use on of them, you'll have to pass an instance of it to the `headAction` method.
+
+You'll ben able to chain the following method to your head action:
+* `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractHeadAction`
+    * Determines whether the head action should be enabled
 
 ```php
 namespace App\Tables;
@@ -493,7 +500,8 @@ class UsersTable extends AbstractTableConfiguration
     {
         return Table::make()
             ->model(User::class)
-            ->headAction(new CreateHeadAction(route('user.create')));
+            // Create head action will not be available when authenticated user is not allowed to create users
+            ->headAction((new CreateHeadAction(route('user.create')))->when(Auth::user()->cannot('create_users')));
     }
 }
 ```
@@ -551,7 +559,7 @@ To use them, you'll have to pass a closure parameter to the `bulkActions` method
 
 You'll ben able to chain the following methods to your bulk actions:
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
-    * Determines if action should be available on table rows
+    * Determines whether the bulk action should be enabled on the table rows
 * `confirmationQuestion(string|false $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
     * Overrides the default action confirmation message
 * `feedbackMessage(string|false $feedbackMessage): Okipa\LaravelTable\Abstracts\AbstractBulkAction`:
@@ -1182,6 +1190,14 @@ Following the same logic, you'll have to intercept it from a JS script as shown 
 Livewire.on('laraveltable:action:feedback', (feedbackMessage) => {
     // Replace this native JS alert by your favorite modal/alert/toast library implementation. Or keep it this way!
     window.alert(feedbackMessage);
+});
+```
+
+Finally, in order to allow head `RedirectHeadAction` and `CreateHeadAction` to open link in new tab, you'll also have to add the following JS snippet:
+
+```javascript
+Livewire.on('laraveltable:link:open:newtab', (url) => {
+    window.open(url, '_blank').focus();
 });
 ```
 

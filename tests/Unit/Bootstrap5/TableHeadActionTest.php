@@ -49,4 +49,38 @@ class TableHeadActionTest extends TestCase
             ->call('headAction')
             ->assertRedirect(route('user.create'));
     }
+
+    /** @test */
+    public function it_can_allow_head_action_conditionally(): void
+    {
+        app('router')->get('/user/create', ['as' => 'user.create']);
+        Config::set('laravel-table.icon.create', 'create-icon');
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class)
+                    ->headAction((new CreateHeadAction(route('user.create'), true))->when(false));
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('name'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertDontSeeHtml([
+                '<a wire:click.prevent="headAction()"',
+                ' class="btn btn-success"',
+                ' href=""',
+                ' title="Create">',
+                'create-icon Create',
+                '</a>',
+            ])
+            ->call('headAction')
+            ->assertNotEmitted('laraveltable:link:open:newtab');
+    }
 }
