@@ -482,7 +482,7 @@ This package provides the following built-in head actions:
 
 To use one of them, you'll have to pass an instance of it to the `headAction` method.
 
-You'll ben able to chain the following method to your head action:
+You'll be able to chain the following method to your head action:
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractHeadAction`
     * Determines whether the head action should be enabled
 
@@ -557,7 +557,7 @@ This package provides the built-in following bulk actions:
 
 To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
 
-You'll ben able to chain the following methods to your bulk actions:
+You'll be able to chain the following methods to your bulk actions:
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
     * Determines whether the bulk action should be enabled on the table rows
 * `confirmationQuestion(string|false $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
