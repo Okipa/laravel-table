@@ -9,11 +9,25 @@ abstract class AbstractHeadAction
 {
     public string $rowActionClass;
 
+    protected bool $isAllowed = true;
+
     abstract protected function class(): array;
 
     abstract protected function icon(): string;
 
     abstract protected function title(): string;
+
+    public function when(bool $condition): self
+    {
+        $this->isAllowed = $condition;
+
+        return $this;
+    }
+
+    public function isAllowed(): bool
+    {
+        return $this->isAllowed;
+    }
 
     /** @return mixed|void */
     abstract public function action(Component $livewire);

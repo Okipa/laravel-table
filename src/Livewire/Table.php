@@ -52,7 +52,7 @@ class Table extends Component
 
     public bool $resetFilters = false;
 
-    public array|null $headActionArray;
+    public array $headActionArray;
 
     public bool $selectAll = false;
 
@@ -233,7 +233,15 @@ class Table extends Component
 
     public function headAction(): mixed
     {
-        return AbstractHeadAction::make($this->headActionArray)->action($this);
+        if (! $this->headActionArray) {
+            return null;
+        }
+        $headActionInstance = AbstractHeadAction::make($this->headActionArray);
+        if (! $headActionInstance->isAllowed()) {
+            return null;
+        }
+
+        return $headActionInstance->action($this);
     }
 
     public function updatedSelectAll(): void
