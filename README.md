@@ -1091,6 +1091,8 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
+Tip: if you are using packages like [spatie/eloquent-sortable](https://github.com/spatie/eloquent-sortable) to handle your Eloquent models sorting behaviour with a [grouping query](https://github.com/spatie/eloquent-sortable#grouping), you'll have to also set this grouping query in the [table query instruction](#add-query-instructions-on-tables).
+
 ### Declare results on tables
 
 To display results, you'll have to return an array of result instances from the `results` method available in your generated table configuration.
