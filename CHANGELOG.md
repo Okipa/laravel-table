@@ -1,5 +1,11 @@
 # Changelog
 
+## [5.1.1](https://github.com/Okipa/laravel-table/compare/5.1.0...5.1.1)
+
+2022-10-26
+
+* Fixed [reordering feature](/README.md#allow-columns-to-be-reordered-from-drag-and-drop-action) that was not compatible with packages like [spatie/eloquent-sortable](https://github.com/spatie/eloquent-sortable) (which authorize several model entries to have the same position when the sorting does group models from a query => [example](https://github.com/spatie/eloquent-sortable#grouping))
+
 ## [5.1.0](https://github.com/Okipa/laravel-table/compare/5.0.2...5.1.0)
 
 2022-10-25
