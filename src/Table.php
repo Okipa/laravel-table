@@ -113,7 +113,7 @@ class Table
         return $this->columns;
     }
 
-    public function getReorderConfig(string|null $sortDir): array
+    public function getReorderConfig(Collection $rows, string|null $sortDir): array
     {
         if (! $this->getOrderColumn()) {
             return [];
@@ -121,15 +121,10 @@ class Table
 
         return [
             'modelClass' => $this->model::class,
-            'modelPrimaryAttribute' => $this->model->getKeyName(),
             'reorderAttribute' => $this->getOrderColumn()->getAttribute(),
             'sortDir' => $sortDir,
-            'beforeReorderAllModelKeys' => $this->model
-                ->query()
-                ->get()
-                ->mapWithKeys(fn (Model $model) => [
-                    $model->{$this->getOrderColumn()->getAttribute()} => (string) $model->getKey(),
-                ])
+            'beforeReorderModelKeysWithPosition' => $rows
+                ->pluck($this->model->getKeyName(), $this->getOrderColumn()->getAttribute())
                 ->toArray(),
         ];
     }
@@ -311,7 +306,7 @@ class Table
 
     public function paginateRows(Builder $query, int $numberOfRowsPerPage): void
     {
-        $this->rows = $query->paginate($numberOfRowsPerPage);
+        $this->rows = $query->paginate(perPage: $numberOfRowsPerPage);
         $this->rows->transform(function (Model $model) {
             $model->laravel_table_unique_identifier = Str::uuid()->getInteger()->toString();
 

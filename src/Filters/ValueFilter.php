@@ -5,7 +5,6 @@ namespace Okipa\LaravelTable\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
-use Tests\Models\User;
 
 class ValueFilter extends AbstractFilter
 {
@@ -41,6 +40,5 @@ class ValueFilter extends AbstractFilter
     public function filter(Builder $query, mixed $selected): void
     {
         $query->whereIn($this->attribute, Arr::wrap($selected));
-//        dd($query->toSql(), $selected, User::pluck('name')->toArray());
     }
 }

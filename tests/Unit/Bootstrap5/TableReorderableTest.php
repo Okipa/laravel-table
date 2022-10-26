@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\Filters\RelationshipFilter;
 use Okipa\LaravelTable\Table;
 use Tests\Models\Company;
 use Tests\Models\User;
@@ -148,7 +149,10 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('position');
+                return Table::make()
+                    ->model(UserCategory::class)
+                    ->numberOfRowsPerPageOptions([3])
+                    ->reorderable('position');
             }
 
             protected function columns(): array
@@ -173,15 +177,18 @@ class TableReorderableTest extends TestCase
             ->call('reorder', $reorderedList)
             ->assertEmitted('laraveltable:action:feedback', 'The list has been reordered.');
         $reorderedCategories = UserCategory::orderBy('position')->get();
-        $page1SearchedCategoryIds = $reorderedCategories->pluck('id')->take(3)->toArray();
+        $page1CategoryIds = $reorderedCategories->pluck('id')->take(3)->toArray();
         // Searched categories from page 1 have been reordered
-        $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page1SearchedCategoryIds);
-        // All other occurrences have not been reordered
-        foreach ($reorderedCategories as $index => $reorderedCategory) {
-            if (in_array($reorderedCategory->id, $page1SearchedCategoryIds, true)) {
+        $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page1CategoryIds);
+        // All other categories have not been reordered
+        foreach ($reorderedCategories as $reorderedCategory) {
+            if (in_array($reorderedCategory->id, $page1CategoryIds, true)) {
                 continue;
             }
-            $this->assertEquals($categories->get($index)->id, $reorderedCategory->id);
+            $this->assertEquals(
+                $categories->firstWhere('id', $reorderedCategory->id)->position,
+                $reorderedCategory->position
+            );
         }
     }
 
@@ -193,7 +200,10 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('position', sortDirByDefault: 'desc');
+                return Table::make()
+                    ->model(UserCategory::class)
+                    ->numberOfRowsPerPageOptions([3])
+                    ->reorderable(attribute: 'position', sortDirByDefault: 'desc');
             }
 
             protected function columns(): array
@@ -213,20 +223,105 @@ class TableReorderableTest extends TestCase
             'order' => $index + 1,
             'value' => $category->id,
         ])->toArray();
-        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+        Livewire::withQueryParams(['page' => 2])
+            ->test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
             ->call('reorder', $reorderedList)
             ->assertEmitted('laraveltable:action:feedback', 'The list has been reordered.');
         $reorderedCategories = UserCategory::orderBy('position', 'desc')->get();
-        $page2SearchedCategoryIds = $reorderedCategories->pluck('id')->slice(3)->take(3)->values()->toArray();
+        $page2CategoryIds = $reorderedCategories->pluck('id')->slice(3)->take(3)->values()->toArray();
         // Searched categories from page 2 have been reordered
-        $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page2SearchedCategoryIds);
-        // All other occurrences have not been reordered
-        foreach ($reorderedCategories as $index => $reorderedCategory) {
-            if (in_array($reorderedCategory->id, $page2SearchedCategoryIds, true)) {
+        $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page2CategoryIds);
+        // All other categories have not been reordered
+        foreach ($reorderedCategories as $reorderedCategory) {
+            if (in_array($reorderedCategory->id, $page2CategoryIds, true)) {
                 continue;
             }
-            $this->assertEquals($categories->get($index)->id, $reorderedCategory->id);
+            $this->assertEquals(
+                $categories->firstWhere('id', $reorderedCategory->id)->position,
+                $reorderedCategory->position
+            );
+        }
+    }
+
+    /** @test */
+    public function it_can_reorder_table_when_applying_query(): void
+    {
+        $categories = UserCategory::factory()
+            ->count(18)
+            ->state(new Sequence(
+                ['name' => 'Name test 1'],
+                ['name' => 'Name test 2'],
+                ['name' => 'Name test 3'],
+            ))
+            ->create()
+            ->sortBy('position')
+            ->values();
+        // Categories are gathered by name and positioned
+        // which means that several categories will have the same position
+        // (replicates the spatie/eloquent-sortable package behaviour)
+        $name1Categories = $categories->where('name', 'Name test 1')->values();
+        foreach ($name1Categories as $position => $category) {
+            $category->position = $position + 1;
+            $category->save();
+        }
+        $name2Categories = $categories->where('name', 'Name test 2')->values();
+        foreach ($name2Categories as $position => $category) {
+            $category->position = $position + 1;
+            $category->save();
+        }
+        $name3Categories = $categories->where('name', 'Name test 3')->values();
+        foreach ($name3Categories as $position => $category) {
+            $category->position = $position + 1;
+            $category->save();
+        }
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()
+                    ->model(UserCategory::class)
+                    ->numberOfRowsPerPageOptions([3])
+                    // Filtering on `Name test 2` from SQL query
+                    ->query(fn (Builder $query) => $query->where('name', 'Name test 2'))
+                    ->reorderable('position');
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('name')->searchable(),
+                ];
+            }
+        };
+        // Simulate applying query on `Name test 2` with pagination of 3 items on page 1
+        $categories->fresh();
+        $paginatedCategories = $categories->where('name', 'Name test 2')->take(3);
+        // Move last category from page 1 at first position
+        $lastCategory = $paginatedCategories->pop();
+        $paginatedCategories->prepend($lastCategory);
+        // Simulate array returned by Livewire sortable
+        $reorderedList = $paginatedCategories->values()->map(fn (UserCategory $category, int $index) => [
+            'order' => $index + 1,
+            'value' => $category->id,
+        ])->toArray();
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->call('reorder', $reorderedList)
+            ->assertEmitted('laraveltable:action:feedback', 'The list has been reordered.');
+        $reorderedCategories = UserCategory::orderBy('position')->get();
+        $page1QueryCategoryIds = $reorderedCategories->where('name', 'Name test 2')->pluck('id')->take(3)->toArray();
+        // Searched categories from page 1 have been reordered
+        $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page1QueryCategoryIds);
+        // All other categories have not been reordered
+        foreach ($reorderedCategories as $index => $reorderedCategory) {
+            if (in_array($reorderedCategory->id, $page1QueryCategoryIds, true)) {
+                continue;
+            }
+            $this->assertEquals(
+                $categories->firstWhere('id', $reorderedCategory->id)->position,
+                $reorderedCategory->position
+            );
         }
     }
 
@@ -247,7 +342,10 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(UserCategory::class)->reorderable('position');
+                return Table::make()
+                    ->model(UserCategory::class)
+                    ->numberOfRowsPerPageOptions([3])
+                    ->reorderable('position');
             }
 
             protected function columns(): array
@@ -257,7 +355,7 @@ class TableReorderableTest extends TestCase
                 ];
             }
         };
-        // Simulate searching on `Name test 1` with pagination of 3 items on page 1
+        // Simulate searching on `Name test 2` with pagination of 3 items on page 1
         $paginatedCategories = $categories->where('name', 'Name test 2')->take(3);
         // Move last category from page 1 at first position
         $lastCategory = $paginatedCategories->pop();
@@ -267,8 +365,10 @@ class TableReorderableTest extends TestCase
             'order' => $index + 1,
             'value' => $category->id,
         ])->toArray();
+
         Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
+            ->set('searchBy', 'Name test 2')
             ->call('reorder', $reorderedList)
             ->assertEmitted('laraveltable:action:feedback', 'The list has been reordered.');
         $reorderedCategories = UserCategory::orderBy('position')->get();
@@ -280,7 +380,10 @@ class TableReorderableTest extends TestCase
             if (in_array($reorderedCategory->id, $page1SearchedCategoryIds, true)) {
                 continue;
             }
-            $this->assertEquals($categories->get($index)->id, $reorderedCategory->id);
+            $this->assertEquals(
+                $categories->firstWhere('id', $reorderedCategory->id)->position,
+                $reorderedCategory->position
+            );
         }
     }
 
@@ -297,13 +400,19 @@ class TableReorderableTest extends TestCase
         {
             protected function table(): Table
             {
-                return Table::make()->model(Company::class)->reorderable('position');
+                return Table::make()
+                    ->model(Company::class)
+                    ->filters([
+                        new RelationshipFilter('Owner', 'owner', User::pluck('name', 'id')->toArray(), false),
+                    ])
+                    ->numberOfRowsPerPageOptions([3])
+                    ->reorderable('position');
             }
 
             protected function columns(): array
             {
                 return [
-                    Column::make('name')->searchable(),
+                    Column::make('name'),
                 ];
             }
         };
@@ -317,13 +426,21 @@ class TableReorderableTest extends TestCase
             'order' => $index + 1,
             'value' => $company->id,
         ])->toArray();
-        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+        Livewire::withQueryParams(['page' => 2])
+            ->test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
             ->call('init')
+            ->set('selectedFilters', [
+                'filter_relationship_owner' => $user2->id,
+            ])
             ->call('reorder', $reorderedList)
             ->assertEmitted('laraveltable:action:feedback', 'The list has been reordered.');
         $reorderedCompanies = Company::orderBy('position')->get();
-        $page2Filtered3CompanyIds =
-            $reorderedCompanies->where('owner_id', $user2->id)->pluck('id')->slice(3)->take(3)->values()->toArray();
+        $page2Filtered3CompanyIds = $reorderedCompanies->where('owner_id', $user2->id)
+            ->pluck('id')
+            ->slice(3)
+            ->take(3)
+            ->values()
+            ->toArray();
         // Filtered companies from page 2 have been reordered
         $this->assertEquals($paginatedCompanies->pluck('id')->toArray(), $page2Filtered3CompanyIds);
         // All other occurrences have not been reordered
@@ -331,11 +448,15 @@ class TableReorderableTest extends TestCase
             ->merge($companiesUser3)
             ->sortBy('position')
             ->values();
-        foreach ($reorderedCompanies as $index => $reorderedCompany) {
+        // All other categories have not been reordered
+        foreach ($reorderedCompanies as $reorderedCompany) {
             if (in_array($reorderedCompany->id, $page2Filtered3CompanyIds, true)) {
                 continue;
             }
-            $this->assertEquals($beforeReorderCompanies->get($index)->id, $reorderedCompany->id);
+            $this->assertEquals(
+                $beforeReorderCompanies->firstWhere('id', $reorderedCompany->id)->position,
+                $reorderedCompany->position
+            );
         }
     }
 }
