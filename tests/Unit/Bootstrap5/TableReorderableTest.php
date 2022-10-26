@@ -180,7 +180,7 @@ class TableReorderableTest extends TestCase
         $page1CategoryIds = $reorderedCategories->pluck('id')->take(3)->toArray();
         // Searched categories from page 1 have been reordered
         $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page1CategoryIds);
-        // All other categories have not been reordered
+        // All other occurrences have not been reordered
         foreach ($reorderedCategories as $reorderedCategory) {
             if (in_array($reorderedCategory->id, $page1CategoryIds, true)) {
                 continue;
@@ -232,7 +232,7 @@ class TableReorderableTest extends TestCase
         $page2CategoryIds = $reorderedCategories->pluck('id')->slice(3)->take(3)->values()->toArray();
         // Searched categories from page 2 have been reordered
         $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page2CategoryIds);
-        // All other categories have not been reordered
+        // All other occurrences have not been reordered
         foreach ($reorderedCategories as $reorderedCategory) {
             if (in_array($reorderedCategory->id, $page2CategoryIds, true)) {
                 continue;
@@ -313,7 +313,7 @@ class TableReorderableTest extends TestCase
         $page1QueryCategoryIds = $reorderedCategories->where('name', 'Name test 2')->pluck('id')->take(3)->toArray();
         // Searched categories from page 1 have been reordered
         $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page1QueryCategoryIds);
-        // All other categories have not been reordered
+        // All other occurrences have not been reordered
         foreach ($reorderedCategories as $index => $reorderedCategory) {
             if (in_array($reorderedCategory->id, $page1QueryCategoryIds, true)) {
                 continue;
@@ -375,7 +375,7 @@ class TableReorderableTest extends TestCase
         $page1SearchedCategoryIds = $reorderedCategories->where('name', 'Name test 2')->pluck('id')->take(3)->toArray();
         // Searched categories from page 1 have been reordered
         $this->assertEquals($paginatedCategories->pluck('id')->toArray(), $page1SearchedCategoryIds);
-        // All other categories have not been reordered
+        // All other occurrences have not been reordered
         foreach ($reorderedCategories as $index => $reorderedCategory) {
             if (in_array($reorderedCategory->id, $page1SearchedCategoryIds, true)) {
                 continue;
@@ -448,7 +448,6 @@ class TableReorderableTest extends TestCase
             ->merge($companiesUser3)
             ->sortBy('position')
             ->values();
-        // All other categories have not been reordered
         foreach ($reorderedCompanies as $reorderedCompany) {
             if (in_array($reorderedCompany->id, $page2Filtered3CompanyIds, true)) {
                 continue;
