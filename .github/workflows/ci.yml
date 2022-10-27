@@ -70,7 +70,7 @@ jobs:
           vendor/bin/testbench package:test --parallel --coverage-text --coverage-clover build/logs/clover.xml
 
       - name: Code coverage upload to Coveralls
-        if: matrix.php == '8.1' && matrix.laravel == '9.*'
+        if: env.COVERALLS_REPO_TOKEN && matrix.php == '8.1' && matrix.laravel == '9.*'
         env:
           COVERALLS_RUN_LOCALLY: 1
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
