@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.1.2](https://github.com/Okipa/laravel-table/compare/5.1.1...5.1.2)
+
+2022-10-27
+
+* Improved CI by @szepeviktor in https://github.com/Okipa/laravel-table/pull/110
+* Improved PHPStan config by @szepeviktor in https://github.com/Okipa/laravel-table/pull/109
+
 ## [5.1.1](https://github.com/Okipa/laravel-table/compare/5.1.0...5.1.1)
 
 2022-10-26
