@@ -14,7 +14,7 @@ class UserCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->catchphrase(),
+            'name' => $this->faker->catchPhrase(),
             'position' => $this->faker->unique()->numberBetween(1, 100),
         ];
     }
