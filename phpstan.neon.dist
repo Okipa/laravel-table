@@ -12,7 +12,6 @@ parameters:
     level: 5
 
     databaseMigrationsPath:
-        - vendor/orchestra/testbench-core/laravel/migrations/
         - tests/database/migrations/
 
     ignoreErrors:
