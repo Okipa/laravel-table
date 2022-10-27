@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tests\Database\Factories\UserFactory;
 
+/**
+ * @phpstan-property bool $active
+ */
 class User extends Authenticatable
 {
     use HasFactory;
