@@ -185,6 +185,7 @@ Status
 * `Actions`
 * `Bulk Actions`
 * `Create`
+* `Add`
 * `Show`
 * `Edit`
 * `Destroy`
@@ -475,10 +476,10 @@ If no head action is declared, the dedicated slot for it in the table head will 
 This package provides the following built-in head actions:
 * `RedirectHeadAction`:
     * Requires `string $url`, `string $label`, `string $icon`, `array $class = ['btn', 'btn-success']` and `bool $openInNewWindow = false` arguments on instantiation
-    * Redirects to the model create page from a click on a `Create` button
+    * Redirects to the given URL from a click on the button
 * `CreateHeadAction`:
     * Requires `string $createUrl` and `bool $openInNewWindow = false` arguments on instantiation
-    * Instantiate a pre-configured `RedirectHeadAction` with the given `$createUrl` as URL, `__('Create')` as label and `config('laravel-table.icon.create')` as icon
+    * Instantiate a pre-configured `RedirectHeadAction` with `$createUrl` as URL, `__('Create')` as label and `config('laravel-table.icon.create')` as icon
 
 To use one of them, you'll have to pass an instance of it to the `headAction` method.
 
@@ -491,7 +492,7 @@ namespace App\Tables;
 
 use App\Models\User;
 use Okipa\LaravelTable\Table;
-use Okipa\LaravelTable\HeadActions\CreateHeadAction;
+use Okipa\LaravelTable\HeadActions\AddHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 
 class UsersTable extends AbstractTableConfiguration
@@ -501,7 +502,7 @@ class UsersTable extends AbstractTableConfiguration
         return Table::make()
             ->model(User::class)
             // Create head action will not be available when authenticated user is not allowed to create users
-            ->headAction((new CreateHeadAction(route('user.create')))->when(Auth::user()->cannot('create_users')));
+            ->headAction((new AddHeadAction(route('user.create')))->when(Auth::user()->cannot('create_users')));
     }
 }
 ```
@@ -638,9 +639,12 @@ If no row action is declared on your table, the dedicated `Actions` column at th
 **Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow row actions confirmation requests and feedback to be working properly.
 
 This package provides the built-in following row actions:
+* `RedirectRowAction`:
+    * Requires `string $url`, `string $title`, `string $icon`, `array $class = ['link-info']`, `string|null $defaultConfirmationQuestion = null`, `string|null $defaultFeedbackMessage = null` and `bool $openInNewWindow = false` arguments on instantiation
+    * Redirects to the given URL from a click on the link
 * `ShowRowAction`:
-  * Requires a `string $showUrl` argument on instantiation
-  * Redirects to the model edit page on click
+  * Requires `string $showUrl` and `bool $openInNewWindow = false` arguments on instantiation
+  * Instantiate a pre-configured `RedirectRowAction` with `$showUrl` as URL, `__('Show')` as label and `config('laravel-table.icon.show')` as icon
 * `EditRowAction`:
   * Requires a `string $editUrl` argument on instantiation
   * Redirects to the model edit page on click

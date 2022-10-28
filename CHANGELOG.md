@@ -1,5 +1,14 @@
 # Changelog
 
+All notable changes to this package will be documented in this file.
+
+## [5.2.0](https://github.com/Okipa/laravel-table/compare/5.1.2...5.2.0)
+
+2022-10-28
+
+* Added a new built-in `RedirectShowAction`, that will be used by the pre-configured `ShowRowAction`
+* 
+
 ## [5.1.2](https://github.com/Okipa/laravel-table/compare/5.1.1...5.1.2)
 
 2022-10-27
