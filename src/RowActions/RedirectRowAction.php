@@ -3,10 +3,8 @@
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class RedirectRowAction extends AbstractRowAction
@@ -19,8 +17,7 @@ class RedirectRowAction extends AbstractRowAction
         public string|null $defaultConfirmationQuestion = null,
         public string|null $defaultFeedbackMessage = null,
         public bool $openInNewWindow = false,
-    )
-    {
+    ) {
         //
     }
 

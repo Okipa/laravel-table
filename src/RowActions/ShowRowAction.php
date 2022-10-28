@@ -3,9 +3,7 @@
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
-use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class ShowRowAction extends AbstractRowAction

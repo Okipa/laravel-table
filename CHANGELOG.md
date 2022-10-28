@@ -6,7 +6,10 @@ All notable changes to this package will be documented in this file.
 
 2022-10-28
 
-* Added a new built-in `RedirectShowAction`, that will be used by the pre-configured `ShowRowAction`
+* Added a new built-in `RedirectRowAction`, that is now used to render the pre-configured `ShowRowAction`
+* Added a new pre-configured `AddHeadAction`, that is using the built-in `RedirectHeadAction`
+  * Added a new `Add` translation for it that you'll have to add to [your own translations](/README.md#translations)
+  * Added a new `config('laravel-table.icon.add')` config for it with the `<i class="fa-solid fa-circle-plus fa-fw"></i>` default value that you'll also have to add to [your published configuration file](/README.md#configuration)
 * 
 
 ## [5.1.2](https://github.com/Okipa/laravel-table/compare/5.1.1...5.1.2)
@@ -27,7 +30,7 @@ All notable changes to this package will be documented in this file.
 2022-10-25
  
 * Added ability to chain a `->when(bool $condition)` method to an instantiated head action, in order to enable it conditionally
-* Added a new built-in `RedirectHeadAction`, that will be used by the pre-configured `CreateHeadAction`
+* Added a new built-in `RedirectHeadAction`, that is now used to render the pre-configured `CreateHeadAction`
 * Added an optional `bool $openInNewWindow = false` to the `CreateHeadAction`
 * Added a new [JavaScript snippet](/README.md#set-up-a-few-lines-of-javascript) to handle head action link opening in tab: you'll have to add it if you want to benefit from this new ability
 
