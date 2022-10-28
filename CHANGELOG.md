@@ -10,7 +10,6 @@ All notable changes to this package will be documented in this file.
 * Added a new pre-configured `AddHeadAction`, that is using the built-in `RedirectHeadAction`
   * Added a new `Add` translation for it that you'll have to add to [your own translations](/README.md#translations)
   * Added a new `config('laravel-table.icon.add')` config for it with the `<i class="fa-solid fa-circle-plus fa-fw"></i>` default value that you'll also have to add to [your published configuration file](/README.md#configuration)
-* 
 
 ## [5.1.2](https://github.com/Okipa/laravel-table/compare/5.1.1...5.1.2)
 
