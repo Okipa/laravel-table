@@ -123,6 +123,7 @@ class Table
         if ($this->queryClosure) {
             $query->where(fn ($subQueryQuery) => ($this->queryClosure)($query));
         }
+        // Sort
         $query->orderBy($this->getOrderColumn()->getAttribute(), $sortDir);
 
         return [
