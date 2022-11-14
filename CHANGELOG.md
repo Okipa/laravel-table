@@ -2,6 +2,12 @@
 
 All notable changes to this package will be documented in this file.
 
+## [5.2.1](https://github.com/Okipa/laravel-table/compare/5.2.0...5.2.1)
+
+2022-11-14
+
+* Added the ability to redefine the entire table positioning when reordering instead of just reversing some possibly incorrect positions
+
 ## [5.2.0](https://github.com/Okipa/laravel-table/compare/5.1.2...5.2.0)
 
 2022-10-28
