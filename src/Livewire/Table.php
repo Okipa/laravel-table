@@ -145,7 +145,7 @@ class Table extends Component
             $this->sortDir,
         );
         // Rows generation
-        $table->paginateRows($query->clone(), $this->numberOfRowsPerPage);
+        $table->paginateRows($query, $this->numberOfRowsPerPage);
         // Results computing
         $table->computeResults($table->getRows()->getCollection());
         // Head action
