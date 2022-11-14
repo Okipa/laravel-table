@@ -113,18 +113,28 @@ class Table
         return $this->columns;
     }
 
-    public function getReorderConfig(Collection $rows, string|null $sortDir): array
+    public function getReorderConfig(string|null $sortDir): array
     {
         if (! $this->getOrderColumn()) {
             return [];
         }
+        $query = $this->model->query();
+        // Query
+        if ($this->queryClosure) {
+            $query->where(fn ($subQueryQuery) => ($this->queryClosure)($query));
+        }
+        $query->orderBy($this->getOrderColumn()->getAttribute(), $sortDir);
 
         return [
             'modelClass' => $this->model::class,
             'reorderAttribute' => $this->getOrderColumn()->getAttribute(),
             'sortDir' => $sortDir,
-            'beforeReorderModelKeysWithPosition' => $rows
-                ->pluck($this->model->getKeyName(), $this->getOrderColumn()->getAttribute())
+            'beforeReorderAllModelKeysWithPosition' => $query
+                ->get()
+                ->map(fn (Model $model) => [
+                    'modelKey' => (string) $model->getKey(),
+                    'position' => $model->getAttribute($this->getOrderColumn()->getAttribute()),
+                ])
                 ->toArray(),
         ];
     }
