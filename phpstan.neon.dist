@@ -4,18 +4,20 @@ includes:
 parameters:
 
     paths:
-        - config
-        - src
-        - tests
+        - config/
+        - src/
+        - tests/
 
-    # The level 9 is the highest level
+    # Level 9 is the highest level
     level: 5
 
+    databaseMigrationsPath:
+        - tests/database/migrations/
+
     ignoreErrors:
-        - '#Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Factories\\Factory<Illuminate\\Database\\Eloquent\\Model>::afterCreating\(\)#'
-        - '#Access to an undefined property Tests\\Models\\User::\$active#'
-        - '#Call to an undefined method Faker\\Generator::catchphrase\(\)#'
-        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_table_unique_identifier#'
+        - '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Factories\\Factory<Illuminate\\Database\\Eloquent\\Model>::afterCreating\(\)#'
+        - '#^Call to an undefined method Faker\\Generator::catchPhrase\(\)#'
+        - '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$laravel_table_unique_identifier#'
 
 #    excludePaths:
 #        - ./*/*/FileToBeExcluded.php

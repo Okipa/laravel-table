@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
+use Okipa\LaravelTable\HeadActions\AddHeadAction;
 use Okipa\LaravelTable\HeadActions\CreateHeadAction;
 use Okipa\LaravelTable\Table;
 use Tests\Models\User;
@@ -20,13 +21,13 @@ class TableHeadActionTest extends TestCase
     public function it_can_set_table_head_action(): void
     {
         app('router')->get('/user/create', ['as' => 'user.create']);
-        Config::set('laravel-table.icon.create', 'create-icon');
+        Config::set('laravel-table.icon.add', 'add-icon');
         $config = new class extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
                 return Table::make()->model(User::class)
-                    ->headAction(new CreateHeadAction(route('user.create')));
+                    ->headAction(new AddHeadAction(route('user.create')));
             }
 
             protected function columns(): array
@@ -42,8 +43,8 @@ class TableHeadActionTest extends TestCase
                 '<a wire:click.prevent="headAction()"',
                 ' class="btn btn-success"',
                 ' href=""',
-                ' title="Create">',
-                'create-icon Create',
+                ' title="Add">',
+                'add-icon Add',
                 '</a>',
             ])
             ->call('headAction')

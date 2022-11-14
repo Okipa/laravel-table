@@ -17,7 +17,7 @@ abstract class AbstractRowAction
 
     public string $identifier;
 
-    protected string|null $class;
+    protected array $class;
 
     protected string $icon;
 

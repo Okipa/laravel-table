@@ -3,50 +3,55 @@
 namespace Okipa\LaravelTable\RowActions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
-use Livewire\Redirector;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
 
 class ShowRowAction extends AbstractRowAction
 {
-    public function __construct(public string $showUrl)
+    protected RedirectRowAction $redirectRowAction;
+
+    public function __construct(public string $showUrl, public bool $openInNewWindow = false)
     {
-        //
+        $this->redirectRowAction = new RedirectRowAction(
+            url: $showUrl,
+            title: __('Show'),
+            icon: config('laravel-table.icon.show'),
+            openInNewWindow: $openInNewWindow
+        );
     }
 
     protected function identifier(): string
     {
-        return 'row_action_show';
+        return $this->redirectRowAction->identifier();
     }
 
     protected function class(Model $model): array
     {
-        return ['link-info'];
+        return $this->redirectRowAction->class($model);
     }
 
     protected function icon(Model $model): string
     {
-        return config('laravel-table.icon.show');
+        return $this->redirectRowAction->icon($model);
     }
 
     protected function title(Model $model): string
     {
-        return __('Show');
+        return $this->redirectRowAction->title($model);
     }
 
     protected function defaultConfirmationQuestion(Model $model): string|null
     {
-        return null;
+        return $this->redirectRowAction->defaultConfirmationQuestion($model);
     }
 
     protected function defaultFeedbackMessage(Model $model): string|null
     {
-        return null;
+        return $this->redirectRowAction->defaultFeedbackMessage($model);
     }
 
-    public function action(Model $model, Component $livewire): RedirectResponse|Redirector
+    public function action(Model $model, Component $livewire): void
     {
-        return redirect()->to($this->showUrl);
+        $this->redirectRowAction->action($model, $livewire);
     }
 }
