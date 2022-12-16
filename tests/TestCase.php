@@ -29,17 +29,6 @@ class TestCase extends Orchestra
         Config::set('laravel-table.ui', 'bootstrap-5');
     }
 
-    protected function getEnvironmentSetUp($app): void
-    {
-        // Setup default database to use in-memory sqlite.
-        $app['config']->set('database.default', 'testing');
-        $app['config']->set('database.connections.testing', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
-    }
-
     protected function getPackageProviders($app): array
     {
         return [
