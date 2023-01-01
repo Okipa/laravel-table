@@ -2,6 +2,12 @@
 
 All notable changes to this package will be documented in this file.
 
+## [5.2.1](https://github.com/Okipa/laravel-table/compare/5.2.0...5.2.1)
+
+2023-01-01
+
+* Fixed filter reset button missing margin-top for Bootstrap 4 & 5 templates
+
 ## [5.2.0](https://github.com/Okipa/laravel-table/compare/5.1.2...5.2.0)
 
 2022-10-28
