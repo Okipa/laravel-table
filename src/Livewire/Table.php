@@ -162,7 +162,7 @@ class Table extends Component
         // Column actions
         $this->tableColumnActionsArray = $table->generateColumnActionsArray();
         // Reorder config
-        $this->reorderConfig = $table->getReorderConfig($table->getRows()->getCollection(), $this->sortDir);
+        $this->reorderConfig = $table->getReorderConfig($this->sortDir);
 
         return [
             'columns' => $table->getColumns(),
@@ -180,33 +180,54 @@ class Table extends Component
         ];
     }
 
-    public function reorder(array $list): void
+    public function reorder(array $newPositions): void
     {
         [
             'modelClass' => $modelClass,
             'reorderAttribute' => $reorderAttribute,
             'sortDir' => $sortDir,
-            'beforeReorderModelKeysWithPosition' => $beforeReorderModelKeysWithPosition,
+            'beforeReorderAllModelKeysWithPosition' => $beforeReorderAllModelKeysWithPositionRawArray,
         ] = $this->reorderConfig;
-        $beforeReorderPaginatedModelKeysWithPosition = collect($beforeReorderModelKeysWithPosition)
-            ->sortKeys(descending: $sortDir === 'desc');
-        $afterReorderPaginatedModelKeysWithPosition = collect($list)
+        $beforeReorderAllModelKeysWithPositionCollection = collect($beforeReorderAllModelKeysWithPositionRawArray)
+            ->sortBy(callback: 'position', descending: $sortDir === 'desc');
+        $afterReorderModelKeysWithPositionCollection = collect($newPositions)
             ->sortBy('order')
-            ->pluck('value', 'order')
-            ->mapWithKeys(fn ($modelKey) => [
-                array_search($modelKey, $beforeReorderModelKeysWithPosition, true) => $modelKey,
+            ->map(fn (array $newPosition) => [
+                'modelKey' => $newPosition['value'],
+                'position' => $beforeReorderAllModelKeysWithPositionCollection->firstWhere(
+                    'modelKey',
+                    $newPosition['value']
+                )['position'],
             ]);
-        $beforeReorderPaginatedModelKeysWithIndex = $beforeReorderPaginatedModelKeysWithPosition->values();
-        $afterReorderPaginatedModelKeysWithIndex = $afterReorderPaginatedModelKeysWithPosition->values();
-        $reorderedPaginatedModelKeys = collect();
-        foreach ($beforeReorderPaginatedModelKeysWithIndex as $beforeReorderPaginatedModelKey) {
-            $afterReorderModelKeyIndex = $afterReorderPaginatedModelKeysWithIndex->search($beforeReorderPaginatedModelKey);
-            $beforeReorderModelKeyIndex = $beforeReorderPaginatedModelKeysWithIndex->get($afterReorderModelKeyIndex);
-            $modelKeyNewPosition = $beforeReorderPaginatedModelKeysWithPosition->search($beforeReorderModelKeyIndex);
-            $reorderedPaginatedModelKeys->put($modelKeyNewPosition, $beforeReorderPaginatedModelKey);
+        $beforeReorderModelKeysWithPositionCollection = $afterReorderModelKeysWithPositionCollection
+            ->map(fn (array $afterReorderModelKeyWithPosition) => $beforeReorderAllModelKeysWithPositionCollection
+                ->firstWhere('modelKey', $afterReorderModelKeyWithPosition['modelKey']))
+            ->sortBy(callback: 'position', descending: $sortDir === 'desc');
+        $beforeReorderModelKeysWithIndexCollection = $beforeReorderModelKeysWithPositionCollection->pluck('modelKey');
+        $afterReorderModelKeysWithIndexCollection = $afterReorderModelKeysWithPositionCollection->pluck('modelKey');
+        $reorderedPositions = collect();
+        foreach ($beforeReorderAllModelKeysWithPositionCollection as $beforeReorderModelKeysWithPosition) {
+            $modelKey = $beforeReorderModelKeysWithPosition['modelKey'];
+            $indexAfterReordering = $afterReorderModelKeysWithIndexCollection->search($modelKey);
+            if ($indexAfterReordering === false) {
+                $currentPosition = $beforeReorderAllModelKeysWithPositionCollection->firstWhere(
+                    'modelKey',
+                    $modelKey
+                )['position'];
+                $reorderedPositions->push(['modelKey' => $modelKey, 'position' => $currentPosition]);
+
+                continue;
+            }
+            $modelKeyCurrentOneWillReplace = $beforeReorderModelKeysWithIndexCollection->get($indexAfterReordering);
+            $newPosition = $beforeReorderAllModelKeysWithPositionCollection->firstWhere(
+                'modelKey',
+                $modelKeyCurrentOneWillReplace
+            )['position'];
+            $reorderedPositions->push(['modelKey' => $modelKey, 'position' => $newPosition]);
         }
-        foreach ($reorderedPaginatedModelKeys as $position => $modelKey) {
-            app($modelClass)->find($modelKey)->update([$reorderAttribute => $position]);
+        $startOrder = 1;
+        foreach ($reorderedPositions->sortBy('position') as $reorderedPosition) {
+            app($modelClass)->find($reorderedPosition['modelKey'])->update([$reorderAttribute => $startOrder++]);
         }
         $this->emit('laraveltable:action:feedback', __('The list has been reordered.'));
     }
