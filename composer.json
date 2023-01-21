@@ -36,7 +36,7 @@
         "laravel/pint": "^1.1",
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^2.0",
-        "orchestra/testbench": "^8.0",
+        "orchestra/testbench": "^8.0|^7.0",
         "phpmd/phpmd": "^2.11"
     },
     "autoload": {
