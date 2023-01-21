@@ -2,7 +2,7 @@
 
 All notable changes to this package will be documented in this file.
 
-## [5.3.0](https://github.com/Okipa/laravel-table/compare/5.2.1...5.3.0)
+## [5.3.0](https://github.com/Okipa/laravel-table/compare/5.2.2...5.3.0)
 
 2022-12-23
 
