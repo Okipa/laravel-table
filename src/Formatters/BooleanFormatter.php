@@ -14,7 +14,7 @@ class BooleanFormatter extends AbstractFormatter
             return null;
         }
 
-        return $model->{$attribute}
+        return $boolean
             ? '<span class="text-success">' . config('laravel-table.icon.active') . '</span>'
             : '<span class="text-danger">' . config('laravel-table.icon.inactive') . '</span>';
     }

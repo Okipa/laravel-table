@@ -6,8 +6,9 @@ All notable changes to this package will be documented in this file.
 
 2022-12-23
 
-* Added PHP 8.2 support
-* Dropped PHP 8.0 support
+* Locked package to PHP 8.1 and 8.2 support
+* Dropped Laravel 8 support
+* Added Laravel 10 support
 
 ## [5.2.1](https://github.com/Okipa/laravel-table/compare/5.2.0...5.2.1)
 
