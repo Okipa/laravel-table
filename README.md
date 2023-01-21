@@ -22,7 +22,6 @@
 Save time and easily render tables in your views from Eloquent models.
 
 Tables can be generated under the following UI frameworks:
-
 * Bootstrap 5
 * Bootstrap 4
 * TailwindCSS 3 (upcoming feature)
@@ -108,28 +107,28 @@ And display it in a view:
 * [Templates](#templates)
 * [Translations](#translations)
 * [How to](#how-to)
-    * [Create table configuration](#create-table-configurations)
-    * [Display tables in views](#display-tables-in-views)
-    * [Pass external data to your tables](#pass-external-data-to-your-tables)
-    * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
-    * [Override native selects behaviour on your tables](#override-native-selects-behaviour-on-your-tables)
-    * [Add query instructions on tables](#add-query-instructions-on-tables)
-    * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
-    * [Set conditional row class](#set-conditional-row-class)
-    * [Setup table filters](#setup-table-filters)
-    * [Define table head action](#define-table-head-action)
-    * [Define table bulk actions](#define-table-bulk-actions)
-    * [Define table row actions](#define-table-row-actions)
-    * [Declare columns on tables](#declare-columns-on-tables)
-    * [Format column values](#format-column-values)
-    * [Define column actions](#define-column-actions)
-    * [Configure columns searching](#configure-columns-searching)
-    * [Configure columns sorting](#configure-columns-sorting)
-    * [Allow columns to be reordered from drag and drop action](#allow-columns-to-be-reordered-from-drag-and-drop-action)
-    * [Declare results on tables](#declare-results-on-tables)
-    * [Set up a few lines of JavaScript](#set-up-a-few-lines-of-javascript)
-    * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
-    * [Interact with your tables from events](#interact-with-your-tables-from-events)
+  * [Create table configuration](#create-table-configurations)
+  * [Display tables in views](#display-tables-in-views)
+  * [Pass external data to your tables](#pass-external-data-to-your-tables)
+  * [Generate tables from Eloquent models](#generate-tables-from-eloquent-models)
+  * [Override native selects behaviour on your tables](#override-native-selects-behaviour-on-your-tables)
+  * [Add query instructions on tables](#add-query-instructions-on-tables)
+  * [Handle tables number of rows per page, pagination and navigation status](#handle-tables-number-of-rows-per-page-pagination-and-navigation-status)
+  * [Set conditional row class](#set-conditional-row-class)
+  * [Setup table filters](#setup-table-filters)
+  * [Define table head action](#define-table-head-action)
+  * [Define table bulk actions](#define-table-bulk-actions)
+  * [Define table row actions](#define-table-row-actions)
+  * [Declare columns on tables](#declare-columns-on-tables)
+  * [Format column values](#format-column-values)
+  * [Define column actions](#define-column-actions)
+  * [Configure columns searching](#configure-columns-searching)
+  * [Configure columns sorting](#configure-columns-sorting)
+  * [Allow columns to be reordered from drag and drop action](#allow-columns-to-be-reordered-from-drag-and-drop-action)
+  * [Declare results on tables](#declare-results-on-tables)
+  * [Set up a few lines of JavaScript](#set-up-a-few-lines-of-javascript)
+  * [Trigger Livewire events on table load](#trigger-livewire-events-on-table-load)
+  * [Interact with your tables from events](#interact-with-your-tables-from-events)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -146,8 +145,7 @@ composer require okipa/laravel-table
 
 This package uses [Livewire](https://laravel-livewire.com) under the hood and its installation is required.
 
-You'll have to follow the [installation instructions](https://laravel-livewire.com/docs/installation) if Livewire is not
-already installed on your project.
+You'll have to follow the [installation instructions](https://laravel-livewire.com/docs/installation) if Livewire is not already installed on your project.
 
 ## Configuration
 
@@ -169,13 +167,11 @@ php artisan vendor:publish --tag=laravel-table:views
 
 All words and sentences used in this package are translatable.
 
-See how to translate them on the Laravel official
-documentation: https://laravel.com/docs/localization#using-translation-strings-as-keys.
+See how to translate them on the Laravel official documentation: https://laravel.com/docs/localization#using-translation-strings-as-keys.
 
 Here is the list of the words and sentences available for translation:
 
 Status
-
 * `Loading in progress...`
 * `No results were found.`
 * `You can rearrange the order of the items in this list using a drag and drop action.`
@@ -219,8 +215,7 @@ Status
 
 Generate a table configuration by executing this command : `php artisan make:table UsersTable`.
 
-If you want to generate a configuration with a predefined model, just add this option at the
-end: `--model=App/Models/User`.
+If you want to generate a configuration with a predefined model, just add this option at the end: `--model=App/Models/User`.
 
 You'll find all your generated table configurations in the `app/Tables` directory.
 
@@ -234,8 +229,7 @@ Just call this Livewire component in your view with your configuration class nam
 
 ### Pass external data to your tables
 
-In case you have specific attributes to transmit to your table configuration, you should pass them to the `configParams`
-parameter.
+In case you have specific attributes to transmit to your table configuration, you should pass them to the `configParams` parameter.
 
 This could be useful when you have to transmit external information to your table.
 
@@ -285,9 +279,7 @@ class UsersTable extends AbstractTableConfiguration
 
 You may want to override native HTML select components behaviour on your tables.
 
-You will be able to add a data attribute (which is known as the best practice to add extra features to a HTML component)
-to all the HTML select components displayed on your tables by defining an array of HTML attribute as value for
-the `laravel-table.html_select_components_attributes` config key.
+You will be able to add a data attribute (which is known as the best practice to add extra features to a HTML component) to all the HTML select components displayed on your tables by defining an array of HTML attribute as value for the `laravel-table.html_select_components_attributes` config key.
 
 ```php
 // `data-selector` HTML attribute will be appended to all tables HTML select components.
@@ -324,7 +316,6 @@ class UsersTable extends AbstractTableConfiguration
 ### Handle tables number of rows per page, pagination and navigation status
 
 You have two ways to allow or disallow users to choose the number of rows that will be displayed per page:
-
 * Activate or deactivate it globally from the `laravel-table.enable_number_of_rows_per_page_choice` config boolean value
 * Override global activation status by executing the `enableNumberOfRowsPerPageChoice()` method on your table
 
@@ -346,9 +337,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-Following the same logic, you'll be able to define the number of rows per page options that will be available for
-selection:
-
+Following the same logic, you'll be able to define the number of rows per page options that will be available for selection:
 * Set options globally from the `laravel-table.number_of_rows_per_page_default_options` config array value
 * Override global options by executing the `numberOfRowsPerPageOptions()` method on your table
 
@@ -373,8 +362,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as
-well as a navigation status.
+Pagination will automatically be handled, according to the number of rows to display and the total number of rows, as well as a navigation status.
 
 Both of them will be displayed in the table footer.
 
@@ -382,8 +370,7 @@ Both of them will be displayed in the table footer.
 
 Define conditional row class on tables by passing a closure argument to the `rowClass` method.
 
-This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array of
-classes where the array key contains the class or classes you wish to add, while the value is a boolean expression.
+This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array of classes where the array key contains the class or classes you wish to add, while the value is a boolean expression.
 
 ```php
 namespace App\Tables;
@@ -412,23 +399,18 @@ Configuring table filters will make them appear as `select` HTML components on a
 The filters bar will not appear if no filter is declared.
 
 This package provides the following built-in filters:
-
 * `ValueFilter`:
-    * Requires `string $label`, `string $attribute`, `array $options` and `bool $multiple = true` arguments on
-      instantiation
-    * Filters the table based on whether the value of the selected options (or single option if multiple mode is
-      disabled) is found in the given attribute
+  * Requires `string $label`, `string $attribute`, `array $options` and `bool $multiple = true` arguments on instantiation
+  * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given attribute
 * `RelationshipFilter`:
-    * Requires `string $label`, `string $relationship`, `array $options` and `bool $multiple = true` arguments on
-      instantiation
-    * Filters the table based on whether the value of the selected options (or single option if multiple mode is
-      disabled) is found in the given relationship
+  * Requires `string $label`, `string $relationship`, `array $options` and `bool $multiple = true` arguments on instantiation
+  * Filters the table based on whether the value of the selected options (or single option if multiple mode is disabled) is found in the given relationship
 * `NullFilter`
-    * Requires a `string $attribute` argument on instantiation
-    * Filters the table based on whether the value of the given attribute is `null` or not
+  * Requires a `string $attribute` argument on instantiation
+  * Filters the table based on whether the value of the given attribute is `null` or not
 * `BooleanFilter`
-    * Requires `string $label` and `string $attribute` arguments on instantiation
-    * Filters the table based on whether the value of the given attribute is `true` or `false`
+  * Requires `string $label` and `string $attribute` arguments on instantiation
+  * Filters the table based on whether the value of the given attribute is `true` or `false`
 
 To use them, you'll have to pass an array to the `filters` method, containing the filter instances to declare.
 
@@ -459,8 +441,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own filters. To do so, execute the following
-command: `php artisan make:table:filter MyNewFilter`.
+You may need to create your own filters. To do so, execute the following command: `php artisan make:table:filter MyNewFilter`.
 
 You'll find your generated table filter in the `app/Tables/Filters` directory.
 
@@ -494,20 +475,16 @@ Configure a table action that will be displayed as a button positioned at the ri
 If no head action is declared, the dedicated slot for it in the table head will remain empty.
 
 This package provides the following built-in head actions:
-
 * `RedirectHeadAction`:
-    * Requires `string $url`, `string $label`, `string $icon`, `array $class = ['btn', 'btn-success']`
-      and `bool $openInNewWindow = false` arguments on instantiation
+    * Requires `string $url`, `string $label`, `string $icon`, `array $class = ['btn', 'btn-success']` and `bool $openInNewWindow = false` arguments on instantiation
     * Redirects to the given URL from a click on the button
 * `CreateHeadAction`:
     * Requires `string $createUrl` and `bool $openInNewWindow = false` arguments on instantiation
-    * Instantiate a pre-configured `RedirectHeadAction` with `$createUrl` as URL, `__('Create')` as label
-      and `config('laravel-table.icon.create')` as icon
+    * Instantiate a pre-configured `RedirectHeadAction` with `$createUrl` as URL, `__('Create')` as label and `config('laravel-table.icon.create')` as icon
 
 To use one of them, you'll have to pass an instance of it to the `headAction` method.
 
 You'll be able to chain the following method to your head action:
-
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractHeadAction`
     * Determines whether the head action should be enabled
 
@@ -531,8 +508,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own head actions. To do so, execute the following
-command: `php artisan make:table:head:action MyNewHeadAction`.
+You may need to create your own head actions. To do so, execute the following command: `php artisan make:table:head:action MyNewHeadAction`.
 
 You'll find your generated table head action in the `app/Tables/HeadActions` directory.
 
@@ -563,11 +539,9 @@ Configure table bulk actions that will be available in a dropdown positioned at 
 
 If no bulk action is declared on your table, the dedicated column will not be displayed.
 
-**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow bulk
-actions confirmation requests and feedback to be working properly.
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow bulk actions confirmation requests and feedback to be working properly.
 
 This package provides the built-in following bulk actions:
-
 * `VerifyEmailBulkAction`:
     * Requires a `string $attribute` argument on instantiation
     * Update the given attribute with the current datetime for all selected lines
@@ -583,11 +557,9 @@ This package provides the built-in following bulk actions:
 * `DestroyBulkAction`:
     * Destroys all the selected lines
 
-To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to
-manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
+To use them, you'll have to pass a closure parameter to the `bulkActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing bulk action instances.
 
 You'll be able to chain the following methods to your bulk actions:
-
 * `when(bool $condition): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
     * Determines whether the bulk action should be enabled on the table rows
 * `confirmationQuestion(string|false $confirmationQuestion): Okipa\LaravelTable\Abstracts\AbstractBulkAction`
@@ -632,8 +604,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own bulk actions. To do so, execute the following
-command: `php artisan make:table:bulk:action MyNewBulkAction`.
+You may need to create your own bulk actions. To do so, execute the following command: `php artisan make:table:bulk:action MyNewBulkAction`.
 
 You'll find your generated table bulk actions in the `app/Tables/BulkActions` directory.
 
@@ -664,34 +635,26 @@ class UsersTable extends AbstractTableConfiguration
 
 Configure row actions on your table that will be displayed at the end of each row.
 
-If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be
-displayed.
+If no row action is declared on your table, the dedicated `Actions` column at the right of the table will not be displayed.
 
-**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow row
-actions confirmation requests and feedback to be working properly.
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow row actions confirmation requests and feedback to be working properly.
 
 This package provides the built-in following row actions:
-
 * `RedirectRowAction`:
-    *
-  Requires `string $url`, `string $title`, `string $icon`, `array $class = ['link-info']`, `string|null $defaultConfirmationQuestion = null`, `string|null $defaultFeedbackMessage = null`
-  and `bool $openInNewWindow = false` arguments on instantiation
+    * Requires `string $url`, `string $title`, `string $icon`, `array $class = ['link-info']`, `string|null $defaultConfirmationQuestion = null`, `string|null $defaultFeedbackMessage = null` and `bool $openInNewWindow = false` arguments on instantiation
     * Redirects to the given URL from a click on the link
 * `ShowRowAction`:
-    * Requires `string $showUrl` and `bool $openInNewWindow = false` arguments on instantiation
-    * Instantiate a pre-configured `RedirectRowAction` with `$showUrl` as URL, `__('Show')` as label
-      and `config('laravel-table.icon.show')` as icon
+  * Requires `string $showUrl` and `bool $openInNewWindow = false` arguments on instantiation
+  * Instantiate a pre-configured `RedirectRowAction` with `$showUrl` as URL, `__('Show')` as label and `config('laravel-table.icon.show')` as icon
 * `EditRowAction`:
-    * Requires a `string $editUrl` argument on instantiation
-    * Redirects to the model edit page on click
+  * Requires a `string $editUrl` argument on instantiation
+  * Redirects to the model edit page on click
 * `DestroyRowAction`:
-    * Destroys the line after being asked to confirm
+  * Destroys the line after being asked to confirm
 
-To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to
-manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
+To use them, you'll have to pass a closure parameter to the `rowActions` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an array containing row action instances.
 
-You'll be able to chain the same methods as for a bulk
-action => [See bulk actions configuration](#define-table-bulk-actions).
+You'll be able to chain the same methods as for a bulk action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
 namespace App\Tables;
@@ -726,8 +689,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own row actions. To do so, execute the following
-command: `php artisan make:table:row:action MyNewRowAction`.
+You may need to create your own row actions. To do so, execute the following command: `php artisan make:table:row:action MyNewRowAction`.
 
 You'll find your generated table row actions in the `app/Tables/RowActions` directory.
 
@@ -760,17 +722,13 @@ You'll have to configure them in the same way you did for [bulk actions](#define
 
 ### Declare columns on tables
 
-Declare columns on tables with the `columns` method available in your generated table configuration, from which you'll
-have to return an array of column instances.
+Declare columns on tables with the `columns` method available in your generated table configuration, from which you'll have to return an array of column instances.
 
-To declare columns, just use the static `make` method that will await a `string $attribute` argument. This attribute
-will be used to get the default cell value.
+To declare columns, just use the static `make` method that will await a `string $attribute` argument. This attribute will be used to get the default cell value.
 
-By default, the column title will be defined to `__('validation.attributes.<attribute>')` in order to reuse attributes
-translations.
+By default, the column title will be defined to `__('validation.attributes.<attribute>')` in order to reuse attributes translations.
 
-If you need to, you may use the `title` method that will await a `string $title` argument to set a specific column title
-that will override the default one.
+If you need to, you may use the `title` method that will await a `string $title` argument to set a specific column title that will override the default one.
 
 ```php
 namespace App\Tables;
@@ -835,8 +793,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-If you want to apply the same formatting treatment repeatedly, you should create a formatter with the following
-command: `php artisan make:table:formatter NewFormatter`.
+If you want to apply the same formatting treatment repeatedly, you should create a formatter with the following command: `php artisan make:table:formatter NewFormatter`.
 
 You'll find the generated formatter in the `app\Table\Formatters` directory.
 
@@ -869,15 +826,14 @@ class UsersTable extends AbstractTableConfiguration
 ```
 
 This package provides the following built-in formatters :
-
 * `BooleanFormatter`:
-    * Displays a yes/no status from a `boolean` value
+  * Displays a yes/no status from a `boolean` value
 * `DateFormatter`:
-    * Requires `string $format` and `string $timezone` arguments on instantiation
-    * Displays a formatted string from a `date` or `datetime` value
+  * Requires `string $format` and `string $timezone` arguments on instantiation
+  * Displays a formatted string from a `date` or `datetime` value
 * `StrLimitFormatter`:
-    * Allows optional `int $limit` and `string $end` arguments on instantiation
-    * Displays a truncated string with a title allowing to see the full string on hover
+  * Allows optional `int $limit` and `string $end` arguments on instantiation
+  * Displays a truncated string with a title allowing to see the full string on hover
 
 ### Define column actions
 
@@ -885,21 +841,17 @@ Configure column actions on your table that will be displayed on their own cells
 
 Column actions have a lot in common with row actions.
 
-**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow column
-actions confirmation requests and feedback to be working properly.
+**Important note:** [you'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow column actions confirmation requests and feedback to be working properly.
 
 This package provides the built-in following actions:
-
 * `ToggleBooleanColumnAction`:
-    * Toggles the email verification status
+  * Toggles the email verification status
 * `ToggleBooleanColumnAction`:
-    * Toggles a boolean value
+  * Toggles a boolean value
 
-To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate
-a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
+To use them, you'll have to pass a closure parameter to the `action` method. This closure will allow you to manipulate a `Illuminate\Database\Eloquent $model` argument and has to return an `AbstractColumnAction` instance.
 
-You'll be able to chain the same methods as for a bulk
-action => [See bulk actions configuration](#define-table-bulk-actions).
+You'll be able to chain the same methods as for a bulk action => [See bulk actions configuration](#define-table-bulk-actions).
 
 ```php
 namespace App\Tables;
@@ -932,8 +884,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-You may need to create your own column actions. To do so, execute the following
-command: `php artisan make:table:column:action MyNewColumnAction`.
+You may need to create your own column actions. To do so, execute the following command: `php artisan make:table:column:action MyNewColumnAction`.
 
 You'll find your generated table column actions in the `app/Tables/ColumnActions` directory.
 
@@ -966,7 +917,7 @@ class UsersTable extends AbstractTableConfiguration
 
 You may need your column actions to be confirmed before they'll be executed and to trigger feedback messages.
 
-You'll have to configure them in the same way you did for [bulk actions](#define-table-bulk-actions).
+You'll have to configure them in the same way you did for [bulk actions](#define-table-bulk-actions). 
 
 ### Configure columns searching
 
@@ -1000,8 +951,7 @@ class UsersTable extends AbstractTableConfiguration
 
 You will be able to set up a custom searching behaviour by passing a closure to the `searchable` method.
 
-This closure will be executed when searching will be triggered on the table and will allow you to manipulate
-a `Illuminate\Database\Eloquent\Builder $query` argument.
+This closure will be executed when searching will be triggered on the table and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` argument.
 
 ```php
 class UsersTable extends AbstractTableConfiguration
@@ -1034,8 +984,7 @@ class UsersTable extends AbstractTableConfiguration
 
 Allow sorting on columns by calling the `sortable` method.
 
-Sortable columns will display clickable sort icons before their titles that will trigger ascending or descending
-sorting.
+Sortable columns will display clickable sort icons before their titles that will trigger ascending or descending sorting.
 
 By default, sorting will be applied to columns defined keys.
 
@@ -1059,8 +1008,7 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-To sort a column by default, use the `sortByDefault` column method, which will allow you to pass a `string $direction`
-argument.
+To sort a column by default, use the `sortByDefault` column method, which will allow you to pass a `string $direction` argument.
 
 You can sort by default a column that is not sortable.
 
@@ -1086,8 +1034,7 @@ class UsersTable extends AbstractTableConfiguration
 
 You will be able to set up a custom sorting behaviour by passing a closure to the `sortable` method.
 
-This closure will be executed when sorting will be triggered on the column and will allow you to manipulate
-a `Illuminate\Database\Eloquent\Builder $query` and a `string $sortDir` arguments (`asc` or `desc`).
+This closure will be executed when sorting will be triggered on the column and will allow you to manipulate a `Illuminate\Database\Eloquent\Builder $query` and a `string $sortDir` arguments (`asc` or `desc`).
 
 ```php
 class UsersTable extends AbstractTableConfiguration
@@ -1117,24 +1064,17 @@ class UsersTable extends AbstractTableConfiguration
 
 Allow columns to be reordered from drag and drop action by calling the `reorderable` method on your table.
 
-This method will await a first `string $attribute` argument, an optional second `string $title` argument, and an
-optional third `string $sortDirByDefault` argument (accepting `asc` or `desc` values).
+This method will await a first `string $attribute` argument, an optional second `string $title` argument, and an optional third `string $sortDirByDefault` argument (accepting `asc` or `desc` values).
 
 **Important notes:**
-
-* [You'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow reorder action feedback
-  to be working properly
-* You'll have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable), that will handle the drag
-  and drop utility for us
+* [You'll have to set up a few lines of javascript](#set-up-a-few-lines-of-javascript) to allow reorder action feedback to be working properly
+* You'll have to install the [Livewire Sortable Plugin](https://github.com/livewire/sortable), that will handle the drag and drop utility for us
 
 Activating this feature will:
-
-* Prepend a new column that will display the drag-and-drop icon defined in the `laravel-table.icon.drag_drop` config
-  value, followed by the defined model order attribute value
+* Prepend a new column that will display the drag-and-drop icon defined in the `laravel-table.icon.drag_drop` config value, followed by the defined model order attribute value
 * Sort the rows from the defined model order attribute (`asc` by default)
 * Disable all other columns sorting as it is not compatible with drag-and-drop reordering
-* And of course, enable the drag-and-drop columns reordering by adding all the **Livewire Sortable Plugin** necessary
-  markup
+* And of course, enable the drag-and-drop columns reordering by adding all the **Livewire Sortable Plugin** necessary markup
 
 ```php
 namespace App\Tables;
@@ -1156,24 +1096,18 @@ class UsersTable extends AbstractTableConfiguration
 }
 ```
 
-Tip: if you are using packages like [spatie/eloquent-sortable](https://github.com/spatie/eloquent-sortable) to handle
-your Eloquent models sorting behaviour with a [grouping query](https://github.com/spatie/eloquent-sortable#grouping),
-you'll have to also set this grouping query in the [table query instruction](#add-query-instructions-on-tables).
+Tip: if you are using packages like [spatie/eloquent-sortable](https://github.com/spatie/eloquent-sortable) to handle your Eloquent models sorting behaviour with a [grouping query](https://github.com/spatie/eloquent-sortable#grouping), you'll have to also set this grouping query in the [table query instruction](#add-query-instructions-on-tables).
 
 ### Declare results on tables
 
-To display results, you'll have to return an array of result instances from the `results` method available in your
-generated table configuration.
+To display results, you'll have to return an array of result instances from the `results` method available in your generated table configuration.
 
 If no result is declared, their dedicated space will remain empty.
 
 Results should be declared this way:
-
 1. Create a `Result` instance with the static `make` method
 2. Chain the `title` method that will await a `string $title` argument
-3. Chain the `format` method that will await a closure, letting you
-   manipulate `Illuminate\Database\Query\Builder $totalRowsQuery`
-   and `Illuminate\Support\Collection $displayedRowsCollection` params
+3. Chain the `format` method that will await a closure, letting you manipulate `Illuminate\Database\Query\Builder $totalRowsQuery` and `Illuminate\Support\Collection $displayedRowsCollection` params
 
 ```php
 namespace App\Tables;
@@ -1225,27 +1159,19 @@ class UsersTable extends AbstractTableConfiguration
 
 ### Set up a few lines of JavaScript
 
-You'll have to add few Javascript lines to your project once this package is installed, in order to allow confirmation
-requests and actions feedback to be working properly.
+You'll have to add few Javascript lines to your project once this package is installed, in order to allow confirmation requests and actions feedback to be working properly. 
 
-When an action is requesting the user confirmation, it will not be directly executed. A `table:action:confirm` Livewire
-event will be emitted instead with the following parameters:
-
+When an action is requesting the user confirmation, it will not be directly executed. A `table:action:confirm` Livewire event will be emitted instead with the following parameters:
 1. The action type
 2. The action identifier
 3. The model primary key related to your action
 4. The `$confirmationQuestion` attribute from your action
 
-As you will see on the provided snippet below, the 4th param of this event is the only one you'll have to use in order
-to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is
-confirmed by the user. Just ignore them in your treatment.
+As you will see on the provided snippet below, the 4th param of this event is the only one you'll have to use in order to request the user confirmation. The 3 first params are only there to be sent back to a new event when the action is confirmed by the user. Just ignore them in your treatment.
 
 You will have to intercept this event from your own JS script and prompt a confirmation request.
 
-When the action is confirmed by the user, you'll have to emit a new `laraveltable:action:confirmed` Livewire event that
-will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm`
-event:
-
+When the action is confirmed by the user, you'll have to emit a new `laraveltable:action:confirmed` Livewire event that will trigger the action execution. You'll have to pass it the 3 first arguments provided in the `table:action:confirm` event:
 1. The action type
 2. The action identifier
 3. The model primary key related to your action
@@ -1263,11 +1189,9 @@ Livewire.on('laraveltable:action:confirm', (actionType, actionIdentifier, modelP
 });
 ```
 
-Once an action is executed, a `table:action:feedback` Livewire event is triggered (it sometimes depends on the
-configuration of a feedback message).
+Once an action is executed, a `table:action:feedback` Livewire event is triggered (it sometimes depends on the configuration of a feedback message).
 
-Following the same logic, you'll have to intercept it from a JS script as shown on the snippet below to provide an
-immediate feedback to the user:
+Following the same logic, you'll have to intercept it from a JS script as shown on the snippet below to provide an immediate feedback to the user:
 
 ```javascript
 Livewire.on('laraveltable:action:feedback', (feedbackMessage) => {
@@ -1276,8 +1200,7 @@ Livewire.on('laraveltable:action:feedback', (feedbackMessage) => {
 });
 ```
 
-Finally, in order to allow head `RedirectHeadAction` and `CreateHeadAction` to open link in new tab, you'll also have to
-add the following JS snippet:
+Finally, in order to allow head `RedirectHeadAction` and `CreateHeadAction` to open link in new tab, you'll also have to add the following JS snippet:
 
 ```javascript
 Livewire.on('laraveltable:link:open:newtab', (url) => {
@@ -1316,12 +1239,9 @@ class UsersTable extends AbstractTableConfiguration
 ### Interact with your tables from events
 
 You will be able to interact with your tables by sending them the following Livewire events:
-
 * `laraveltable:refresh`
-    * Allows optional `array $configParams = []`, and `array $targetedConfigs = []` arguments
-    * Refreshes your tables and (optionaly) set [external table config data](#pass-external-data-to-your-tables) with (
-      optional) table targeting to only refresh specific ones (empty `$targetedConfigs` array will refresh all tables
-      one page)
+  * Allows optional `array $configParams = []`, and `array $targetedConfigs = []` arguments
+  * Refreshes your tables and (optionaly) set [external table config data](#pass-external-data-to-your-tables) with (optional) table targeting to only refresh specific ones (empty `$targetedConfigs` array will refresh all tables one page) 
 
 ## Testing
 
