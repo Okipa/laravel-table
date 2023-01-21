@@ -826,7 +826,7 @@ class UsersTable extends AbstractTableConfiguration
 
 This package provides the following built-in formatters :
 * `BooleanFormatter`:
-  * Displays a yes/no status from a `boolean` value
+  * Displays your configured `active` and `inactive` settings value when the column data returned is a `boolean` value
 * `DateFormatter`:
   * Requires `string $format` and `string $timezone` arguments on instantiation
   * Displays a formatted string from a `date` or `datetime` value
