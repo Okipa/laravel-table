@@ -28,7 +28,7 @@
                                     @endforeach
                                     @if(collect($this->selectedFilters)->filter(fn(mixed $filter) => isset($filter) && $filter !== '' && $filter !== [])->isNotEmpty())
                                         <a wire:click.prevent="resetFilters()"
-                                           class="btn btn-outline-secondary ml-3"
+                                           class="btn btn-outline-secondary ml-3 mt-2"
                                            title="{{ __('Reset filters') }}"
                                            data-toggle="tooltip">
                                             {!! config('laravel-table.icon.reset') !!}
