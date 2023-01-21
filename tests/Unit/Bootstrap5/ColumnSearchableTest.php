@@ -354,9 +354,8 @@ class ColumnSearchableTest extends TestCase
     public function it_can_search_with_insensitive_case_with_postgres(): void
     {
         $this->expectException(PDOException::class);
-        $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: '
-            . 'select count(*) as aggregate from "users" where (LOWER(name) ILIKE %test%))');
-        // SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error (SQL: select count(*) as aggregate from "users" where (LOWER(name) ILIKE %test%))
+        $this->expectExceptionMessage('SQLSTATE[HY000]: General error: 1 near "ILIKE": syntax error '
+            . '(Connection: testing, SQL: select count(*) as aggregate from "users" where (LOWER(name) ILIKE %test%))');
         $config = new class extends AbstractTableConfiguration
         {
             protected function table(): Table
