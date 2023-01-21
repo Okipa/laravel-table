@@ -6,8 +6,7 @@ All notable changes to this package will be documented in this file.
 
 2022-12-23
 
-* Added PHP 8.2 support
-* Locked package to PHP 8.2 and 8.1 support
+* Added PHP 8.2 support and locked PHP versions to 8.1 and 8.2
 * Dropped Laravel 8 support
 * Added Laravel 10 support
 
