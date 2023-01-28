@@ -827,7 +827,7 @@ class UsersTable extends AbstractTableConfiguration
 
 This package provides the following built-in formatters :
 * `BooleanFormatter`:
-  * Displays a yes/no status from a `boolean` value
+  * Displays the `config('laravel-table.icon.active')` active icon or the `config('laravel-table.icon.inactive')` inactive icon from a `boolean` value
 * `DateFormatter`:
   * Requires `string $format` and `string $timezone` arguments on instantiation
   * Displays a formatted string from a `date` or `datetime` value
