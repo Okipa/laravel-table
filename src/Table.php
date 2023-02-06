@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
@@ -53,11 +52,6 @@ class Table
         $this->results = collect();
     }
 
-    public static function make(): self
-    {
-        return new self();
-    }
-
     public function model(string $modelClass): self
     {
         $this->model = app($modelClass);
@@ -87,6 +81,11 @@ class Table
         $this->orderColumn = $orderColumn;
 
         return $this;
+    }
+
+    public static function make(): self
+    {
+        return new self();
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
@@ -140,6 +139,13 @@ class Table
         ];
     }
 
+    public function query(Closure $queryClosure): self
+    {
+        $this->queryClosure = $queryClosure;
+
+        return $this;
+    }
+
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function prepareQuery(
         array $filterClosures,
@@ -150,11 +156,11 @@ class Table
         $query = $this->model->query();
         // Query
         if ($this->queryClosure) {
-            $query->where(fn ($subQueryQuery) => ($this->queryClosure)($query));
+            $query->where(fn (Builder $subQueryQuery) => ($this->queryClosure)($query));
         }
         // Filters
         if ($filterClosures) {
-            $query->where(function ($subFiltersQuery) use ($filterClosures) {
+            $query->where(function (Builder $subFiltersQuery) use ($filterClosures) {
                 foreach ($filterClosures as $filterClosure) {
                     $filterClosure($subFiltersQuery);
                 }
@@ -162,7 +168,7 @@ class Table
         }
         // Search
         if ($searchBy) {
-            $query->where(function ($subSearchQuery) use ($searchBy) {
+            $query->where(function (Builder $subSearchQuery) use ($searchBy) {
                 $this->getSearchableColumns()
                     ->each(function (Column $searchableColumn) use ($subSearchQuery, $searchBy) {
                         $searchableClosure = $searchableColumn->getSearchableClosure();
@@ -171,10 +177,10 @@ class Table
                                 $orWhereQuery,
                                 $searchBy
                             ))
-                            : $subSearchQuery->orWhere(
-                                DB::raw('LOWER(' . $searchableColumn->getAttribute() . ')'),
-                                $this->getCaseInsensitiveSearchingLikeOperator(),
-                                '%' . mb_strtolower($searchBy) . '%'
+                            : $subSearchQuery->orWhereRaw(
+                                'LOWER(' . $searchableColumn->getAttribute() . ') '
+                                . $this->getCaseInsensitiveSearchingLikeOperator() . ' ?',
+                                ['%' . Str::of($searchBy)->trim()->lower() . '%']
                             );
                     });
             });
@@ -306,13 +312,6 @@ class Table
     public function getColumn(string $attribute): Column
     {
         return $this->getColumns()->filter(fn (Column $column) => $column->getAttribute() === $attribute)->first();
-    }
-
-    public function query(Closure $queryClosure): self
-    {
-        $this->queryClosure = $queryClosure;
-
-        return $this;
     }
 
     public function paginateRows(Builder $query, int $numberOfRowsPerPage): void

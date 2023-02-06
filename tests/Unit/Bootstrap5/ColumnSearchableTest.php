@@ -5,6 +5,7 @@ namespace Tests\Unit\Bootstrap5;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
 use Okipa\LaravelTable\Column;
@@ -262,6 +263,57 @@ class ColumnSearchableTest extends TestCase
                 $company2->name,
                 $company3->name,
                 $company4->name,
+            ]);
+    }
+
+    /** @test */
+    public function it_can_search_case_insensitively(): void
+    {
+        $users = User::factory()->count(2)->create();
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('id'),
+                    Column::make('name')->searchable(),
+                    Column::make('email')->searchable(),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSet('searchBy', '')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $users->first()->name,
+                $users->last()->name,
+                '</tbody>',
+            ])
+            ->set('searchBy', Str::lower($users->first()->name))
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $users->first()->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml([
+                $users->last()->name,
+            ])
+            ->set('searchBy', Str::upper($users->last()->email))
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $users->last()->name,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml([
+                $users->first()->name,
             ]);
     }
 
