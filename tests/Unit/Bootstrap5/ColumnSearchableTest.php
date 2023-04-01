@@ -5,6 +5,7 @@ namespace Tests\Unit\Bootstrap5;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -399,6 +400,46 @@ class ColumnSearchableTest extends TestCase
                 $users->first()->name,
                 $users->last()->name,
                 '</tbody>',
+            ]);
+    }
+
+    /** @test */
+    public function it_can_search_from_model_date_field(): void
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create(['created_at' => Date::now()->subHour()]);
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('created_at')->searchable(),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSet('searchBy', '')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $user1->created_at,
+                $user2->created_at,
+                '</tbody>',
+            ])
+            ->set('searchBy', $user1->created_at)
+            ->call('$refresh')
+            ->assertSeeHtmlInOrder([
+                '<tbody>',
+                $user1->created_at,
+                '</tbody>',
+            ])
+            ->assertDontSeeHtml([
+                $user2->created_at,
             ]);
     }
 
