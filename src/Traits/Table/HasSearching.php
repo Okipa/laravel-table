@@ -55,14 +55,22 @@ trait HasSearching
             $whereOperator = $searchedDatabaseColumnKey > 0 ? 'orWhere' : $whereOperator;
             $query->{$whereOperator}(
                 // Allow to keep the case insensitive search with MySQL in case of JSON database field
-                DB::raw('LOWER(' . $dbSearchedTable . '.' . $searchedDatabaseColumn . ')'),
-                $this->getCaseInsensitiveSearchingLikeOperator(),
+                DB::raw($this->getSqlLowerFunction($dbSearchedTable . '.' . $searchedDatabaseColumn)),
+                $this->getSqlCaseInsensitiveSearchingLikeOperator(),
                 '%' . mb_strtolower($searchedValue) . '%'
             );
         }
     }
 
-    protected function getCaseInsensitiveSearchingLikeOperator(): string
+    protected function getSqlLowerFunction(string $attribute)
+    {
+        $connection = config('database.default');
+        $driver = config('database.connections.' . $connection . '.driver');
+
+        return $driver === 'pgsql' ? 'LOWER(CAST' . $attribute . ' AS TEXT))' : 'LOWER(' . $attribute . ')';
+    }
+
+    protected function getSqlCaseInsensitiveSearchingLikeOperator(): string
     {
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
