@@ -178,8 +178,7 @@ class Table
                                 $searchBy
                             ))
                             : $subSearchQuery->orWhereRaw(
-                                'LOWER(' . $searchableColumn->getAttribute() . ') '
-                                . $this->getCaseInsensitiveSearchingLikeOperator() . ' ?',
+                                $this->getSearchSqlStatement($searchableColumn->getAttribute()),
                                 ['%' . Str::of($searchBy)->trim()->lower() . '%']
                             );
                     });
@@ -201,7 +200,21 @@ class Table
         return $this->getColumns()->filter(fn (Column $column) => $column->isSearchable());
     }
 
-    protected function getCaseInsensitiveSearchingLikeOperator(): string
+    protected function getSearchSqlStatement(string $attribute): string
+    {
+        return $this->getSqlLowerFunction($attribute) . ' '
+            . $this->getSqlCaseInsensitiveSearchingLikeOperator() . ' ?';
+    }
+
+    protected function getSqlLowerFunction(string $attribute): string
+    {
+        $connection = config('database.default');
+        $driver = config('database.connections.' . $connection . '.driver');
+
+        return $driver === 'pgsql' ? 'LOWER(CAST(' . $attribute . ' AS TEXT))' : 'LOWER(' . $attribute . ')';
+    }
+
+    protected function getSqlCaseInsensitiveSearchingLikeOperator(): string
     {
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
