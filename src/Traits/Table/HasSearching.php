@@ -67,7 +67,7 @@ trait HasSearching
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
 
-        return $driver === 'pgsql' ? 'LOWER(CAST' . $attribute . ' AS TEXT))' : 'LOWER(' . $attribute . ')';
+        return $driver === 'pgsql' ? 'LOWER(CAST(' . $attribute . ' AS TEXT))' : 'LOWER(' . $attribute . ')';
     }
 
     protected function getSqlCaseInsensitiveSearchingLikeOperator(): string
