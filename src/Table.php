@@ -174,13 +174,13 @@ class Table
                         $searchableClosure = $searchableColumn->getSearchableClosure();
                         $searchableClosure
                             ? $subSearchQuery->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)(
-                                $orWhereQuery,
-                                $searchBy
-                            ))
+                            $orWhereQuery,
+                            $searchBy
+                        ))
                             : $subSearchQuery->orWhereRaw(
-                                $this->getSearchSqlStatement($searchableColumn->getAttribute()),
-                                ['%' . Str::of($searchBy)->trim()->lower() . '%']
-                            );
+                            $this->getSearchSqlStatement($searchableColumn->getAttribute()),
+                            ['%' . Str::of($searchBy)->trim()->lower() . '%']
+                        );
                     });
             });
         }
@@ -202,23 +202,20 @@ class Table
 
     protected function getSearchSqlStatement(string $attribute): string
     {
-        return $this->getSqlLowerFunction($attribute) . ' '
-            . $this->getSqlCaseInsensitiveSearchingLikeOperator() . ' ?';
-    }
-
-    protected function getSqlLowerFunction(string $attribute): string
-    {
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
 
+        return $this->getSqlLowerFunction($driver, $attribute) . ' '
+            . $this->getSqlCaseInsensitiveSearchingLikeOperator($driver) . ' ?';
+    }
+
+    protected function getSqlLowerFunction(string $driver, string $attribute): string
+    {
         return $driver === 'pgsql' ? 'LOWER(CAST(' . $attribute . ' AS TEXT))' : 'LOWER(' . $attribute . ')';
     }
 
-    protected function getSqlCaseInsensitiveSearchingLikeOperator(): string
+    protected function getSqlCaseInsensitiveSearchingLikeOperator(string $driver): string
     {
-        $connection = config('database.default');
-        $driver = config('database.connections.' . $connection . '.driver');
-
         return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 
