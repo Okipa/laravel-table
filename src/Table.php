@@ -182,11 +182,6 @@ class Table
                                 . $this->getCaseInsensitiveSearchingLikeOperator() . ' ?',
                                 ['%' . Str::of($searchBy)->trim()->lower() . '%']
                             );
-//                            $subSearchQuery->orWhere(
-//                                DB::raw('LOWER(' . $searchableColumn->getAttribute() . ')'),
-//                                $this->getCaseInsensitiveSearchingLikeOperator(),
-//                                '%' . mb_strtolower($searchBy) . '%'
-//                            )
                     });
             });
         }
