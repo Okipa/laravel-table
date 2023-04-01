@@ -62,7 +62,7 @@ trait HasSearching
         }
     }
 
-    protected function getSqlLowerFunction(string $attribute)
+    protected function getSqlLowerFunction(string $attribute): string
     {
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
@@ -75,6 +75,6 @@ trait HasSearching
         $connection = config('database.default');
         $driver = config('database.connections.' . $connection . '.driver');
 
-        return in_array($driver, ['pgsql']) ? 'ILIKE' : 'LIKE';
+        return $driver === 'pgsql' ? 'ILIKE' : 'LIKE';
     }
 }
