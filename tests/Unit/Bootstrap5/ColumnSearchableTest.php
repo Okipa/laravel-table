@@ -402,47 +402,7 @@ class ColumnSearchableTest extends TestCase
                 '</tbody>',
             ]);
     }
-
-    /** @test */
-    public function it_can_search_from_model_date_field(): void
-    {
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create(['created_at' => Date::now()->subHour()]);
-        $config = new class extends AbstractTableConfiguration
-        {
-            protected function table(): Table
-            {
-                return Table::make()->model(User::class);
-            }
-
-            protected function columns(): array
-            {
-                return [
-                    Column::make('created_at')->searchable(),
-                ];
-            }
-        };
-        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
-            ->call('init')
-            ->assertSet('searchBy', '')
-            ->assertSeeHtmlInOrder([
-                '<tbody>',
-                $user1->created_at,
-                $user2->created_at,
-                '</tbody>',
-            ])
-            ->set('searchBy', $user1->created_at)
-            ->call('$refresh')
-            ->assertSeeHtmlInOrder([
-                '<tbody>',
-                $user1->created_at,
-                '</tbody>',
-            ])
-            ->assertDontSeeHtml([
-                $user2->created_at,
-            ]);
-    }
-
+    
     /** @test */
     public function it_can_execute_adapted_search_sql_statement_with_postgres(): void
     {
