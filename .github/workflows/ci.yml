@@ -50,7 +50,7 @@ jobs:
 
       - name: PHPUnit without code coverage
         if: matrix.php != '8.2' || matrix.laravel != '10.*'
-        run: vendor/bin/testbench package:test --parallel --no-coverage
+        run: vendor/bin/phpunit --no-coverage
 
       # Last PHP and laravel versions.
 
