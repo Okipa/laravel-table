@@ -174,13 +174,13 @@ class Table
                         $searchableClosure = $searchableColumn->getSearchableClosure();
                         $searchableClosure
                             ? $subSearchQuery->orWhere(fn (Builder $orWhereQuery) => ($searchableClosure)(
-                            $orWhereQuery,
-                            $searchBy
-                        ))
+                                $orWhereQuery,
+                                $searchBy
+                            ))
                             : $subSearchQuery->orWhereRaw(
-                            $this->getSearchSqlStatement($searchableColumn->getAttribute()),
-                            ['%' . Str::of($searchBy)->trim()->lower() . '%']
-                        );
+                                $this->getSearchSqlStatement($searchableColumn->getAttribute()),
+                                ['%' . Str::of($searchBy)->trim()->lower() . '%']
+                            );
                     });
             });
         }

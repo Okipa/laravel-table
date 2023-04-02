@@ -5,7 +5,6 @@ namespace Tests\Unit\Bootstrap5;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Okipa\LaravelTable\Abstracts\AbstractTableConfiguration;
@@ -402,7 +401,7 @@ class ColumnSearchableTest extends TestCase
                 '</tbody>',
             ]);
     }
-    
+
     /** @test */
     public function it_can_execute_adapted_search_sql_statement_with_postgres(): void
     {
