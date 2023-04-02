@@ -2,6 +2,12 @@
 
 All notable changes to this package will be documented in this file.
 
+## [5.3.1](https://github.com/Okipa/laravel-table/compare/5.3.0...5.3.1)
+
+2023-04-02
+
+* Fixed searching SQL request for PostgreSQL by casting every values into text (fixes #129)
+
 ## [5.3.0](https://github.com/Okipa/laravel-table/compare/5.2.2...5.3.0)
 
 2023-01-21

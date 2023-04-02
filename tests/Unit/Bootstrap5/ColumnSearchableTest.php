@@ -403,10 +403,10 @@ class ColumnSearchableTest extends TestCase
     }
 
     /** @test */
-    public function it_can_search_with_insensitive_case_with_postgres(): void
+    public function it_can_execute_adapted_search_sql_statement_with_postgres(): void
     {
         $this->expectException(PDOException::class);
-        $this->expectExceptionMessageMatches('/select count\(\*\) as aggregate from "users" where \(LOWER\(name\) ILIKE %test%\)\)/');
+        $this->expectExceptionMessageMatches('/select count\(\*\) as aggregate from "users" where \(LOWER\(CAST\(name AS TEXT\)\) ILIKE %test%\)\)/');
         $config = new class extends AbstractTableConfiguration
         {
             protected function table(): Table
