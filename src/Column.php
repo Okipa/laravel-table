@@ -41,7 +41,6 @@ class Column
         return new static($attribute);
     }
 
-
     public function title(string $title): self
     {
         $this->title = $title;
