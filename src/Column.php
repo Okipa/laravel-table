@@ -36,7 +36,7 @@ class Column
         $this->title = __('validation.attributes.' . $this->attribute);
     }
 
-    public static function make(string $attribute = null)
+    public static function make(string $attribute = null): static
     {
         return new static($attribute);
     }
