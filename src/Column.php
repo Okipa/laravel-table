@@ -23,6 +23,8 @@ class Column
 
     protected bool $searchable = false;
 
+    protected string|null $headerClass = null;
+
     protected Closure|null $searchableClosure = null;
 
     protected Closure|AbstractFormatter|null $formatter = null;
@@ -113,6 +115,18 @@ class Column
     public function isSearchable(): bool
     {
         return $this->searchable;
+    }
+
+    public function headerClass(string $headerClass): self
+    {
+        $this->headerClass = $headerClass;
+
+        return $this;
+    }
+
+    public function getHeaderClass(): string|null
+    {
+        return $this->headerClass;
     }
 
     public function getSearchableClosure(): Closure|null
