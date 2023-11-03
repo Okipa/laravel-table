@@ -71,6 +71,40 @@ class TableColumnsTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_column_header_class(): void
+    {
+        $config = new class extends AbstractTableConfiguration
+        {
+            protected function table(): Table
+            {
+                return Table::make()->model(User::class);
+            }
+
+            protected function columns(): array
+            {
+                return [
+                    Column::make('id'),
+                    Column::make('name')->headerClass('test-header-class'),
+                ];
+            }
+        };
+        Livewire::test(\Okipa\LaravelTable\Livewire\Table::class, ['config' => $config::class])
+            ->call('init')
+            ->assertSeeHtmlInOrder([
+                '<thead>',
+                '<tr',
+                '<th wire:key="column-id" class="align-middle" scope="col">',
+                'validation.attributes.id',
+                '</th>',
+                '<th wire:key="column-name" class="align-middle test-header-class" scope="col">',
+                'validation.attributes.name',
+                '</th>',
+                '</tr>',
+                '</thead>',
+            ]);
+    }
+
+    /** @test */
     public function it_can_display_column_values(): void
     {
         $users = User::factory()->count(2)->create();
