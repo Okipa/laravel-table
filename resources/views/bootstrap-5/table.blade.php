@@ -138,7 +138,7 @@
                         @endif
                         {{-- Sorting/Column titles --}}
                         @foreach($columns as $column)
-                            <th wire:key="column-{{ Str::of($column->getAttribute())->snake('-')->slug() }}" class="align-middle {{ $column->getHeaderClass() }}" scope="col">
+                            <th wire:key="column-{{ Str::of($column->getAttribute())->snake('-')->slug() }}" class="align-middle{{ ($headerClass = $column->getHeaderClass()) ? ' '.$headerClass : '' }}" scope="col">
                                 @if($column->isSortable($orderColumn))
                                     @if($sortBy === $column->getAttribute())
                                         <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
