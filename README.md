@@ -7,7 +7,7 @@ Current roadmap:
 * Livewire 3 compatibility
 * Tailwind 3 compatibility
 
-Please contact me to arthur.lorent@gmail.com to apply.
+Please contact me at arthur[dot]lorent[at]gmail.com to apply.
 
 ------
 
