@@ -20,7 +20,7 @@ Please contact me at arthur[dot]lorent[at]gmail.com to apply.
         <img src="https://img.shields.io/packagist/dt/okipa/laravel-table.svg?style=flat-square" alt="Total Downloads">
     </a>
     <a href="https://github.com/Okipa/laravel-table/actions" title="Build Status">
-        <img src="https://github.com/Okipa/laravel-table/workflows/CI/badge.svg" alt="Build Status">
+        <img src="https://github.com/Okipa/laravel-table/actions/workflows/ci.yml/badge.svg" alt="Build Status">
     </a>
     <a href="https://coveralls.io/github/Okipa/laravel-table?branch=master" title="Coverage Status">
         <img src="https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master" alt="Coverage Status">
@@ -29,8 +29,6 @@ Please contact me at arthur[dot]lorent[at]gmail.com to apply.
         <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
     </a>
 </p>
-
-
 
 ![Generate tables from Eloquent models](docs/screenshot.png)
 
