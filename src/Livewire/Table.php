@@ -6,6 +6,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use JsonException;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Okipa\LaravelTable\Abstracts\AbstractBulkAction;
@@ -42,9 +43,9 @@ class Table extends Component
 
     public int $numberOfRowsPerPage;
 
-    public string|null $sortBy;
+    public null|string $sortBy;
 
-    public string|null $sortDir;
+    public null|string $sortDir;
 
     public array $reorderConfig = [];
 
@@ -86,7 +87,7 @@ class Table extends Component
     /**
      * @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function render(): View
     {
@@ -98,7 +99,7 @@ class Table extends Component
     /** @throws \Okipa\LaravelTable\Exceptions\InvalidTableConfiguration */
     protected function buildConfig(): AbstractTableConfiguration
     {
-        /** @var mixed $config */
+
         $config = app($this->config);
         if (! $config instanceof AbstractTableConfiguration) {
             throw new InvalidTableConfiguration($this->config);
@@ -112,7 +113,7 @@ class Table extends Component
 
     /**
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
-     * @throws \JsonException
+     * @throws JsonException
      */
     protected function buildTable(AbstractTableConfiguration $config): array
     {
@@ -127,13 +128,13 @@ class Table extends Component
         $columnSortedByDefault = $table->getColumnSortedByDefault();
         $this->sortBy = $table->getOrderColumn()?->getAttribute()
             ?: ($this->sortBy ?? $columnSortedByDefault?->getAttribute());
-        $this->sortDir = $this->sortDir ?? $columnSortedByDefault?->getSortDirByDefault();
+        $this->sortDir ??= $columnSortedByDefault?->getSortDirByDefault();
         $sortableClosure = $this->sortBy && ! $table->getOrderColumn()
             ? $table->getColumn($this->sortBy)->getSortableClosure()
             : null;
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
-        $this->numberOfRowsPerPage = $this->numberOfRowsPerPage ?? Arr::first($numberOfRowsPerPageOptions);
+        $this->numberOfRowsPerPage ??= Arr::first($numberOfRowsPerPageOptions);
         // Filters
         $filtersArray = $table->generateFiltersArray();
         $filterClosures = $table->getFilterClosures($filtersArray, $this->selectedFilters);
@@ -276,7 +277,7 @@ class Table extends Component
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\UnrecognizedActionType */
-    public function actionConfirmed(string $actionType, string $identifier, string|null $modelKey): mixed
+    public function actionConfirmed(string $actionType, string $identifier, null|string $modelKey): mixed
     {
         return match ($actionType) {
             'bulkAction' => $this->bulkAction($identifier, false),

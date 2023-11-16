@@ -2,6 +2,13 @@
 
 All notable changes to this package will be documented in this file.
 
+## [5.3.2](https://github.com/Okipa/laravel-table/compare/5.3.1...5.3.2)
+
+2023-11-16
+
+* Bumped dependencies
+* Fixed PHPStan analysis
+
 ## [5.3.1](https://github.com/Okipa/laravel-table/compare/5.3.0...5.3.1)
 
 2023-04-02

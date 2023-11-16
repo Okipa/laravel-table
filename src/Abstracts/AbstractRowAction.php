@@ -17,6 +17,10 @@ abstract class AbstractRowAction
 
     public string $identifier;
 
+    public string|false|null $confirmationQuestion = null;
+
+    public string|false|null $feedbackMessage = null;
+
     protected array $class;
 
     protected string $icon;
@@ -24,25 +28,6 @@ abstract class AbstractRowAction
     protected string $title;
 
     protected bool $isAllowed = true;
-
-    public string|false|null $confirmationQuestion = null;
-
-    public string|false|null $feedbackMessage = null;
-
-    abstract protected function identifier(): string;
-
-    abstract protected function class(Model $model): array;
-
-    abstract protected function icon(Model $model): string;
-
-    abstract protected function title(Model $model): string;
-
-    abstract protected function defaultConfirmationQuestion(Model $model): string|null;
-
-    abstract protected function defaultFeedbackMessage(Model $model): string|null;
-
-    /** @return mixed|void */
-    abstract public function action(Model $model, Component $livewire);
 
     public function setup(Model $model): void
     {
@@ -52,7 +37,22 @@ abstract class AbstractRowAction
         $this->identifier = $this->identifier();
     }
 
-    public static function retrieve(array $rowActions, string|null $modelKey): array
+    abstract protected function identifier(): string;
+
+    abstract protected function class(Model $model): array;
+
+    abstract protected function icon(Model $model): string;
+
+    abstract protected function title(Model $model): string;
+
+    abstract protected function defaultConfirmationQuestion(Model $model): null|string;
+
+    abstract protected function defaultFeedbackMessage(Model $model): null|string;
+
+    /** @return mixed|void */
+    abstract public function action(Model $model, Component $livewire);
+
+    public static function retrieve(array $rowActions, null|string $modelKey): array
     {
         if (! $modelKey) {
             return [];
@@ -104,7 +104,7 @@ abstract class AbstractRowAction
         return $this;
     }
 
-    public function getConfirmationQuestion(Model $model): string|null
+    public function getConfirmationQuestion(Model $model): null|string
     {
         return $this->confirmationQuestion ?? $this->defaultConfirmationQuestion($model);
     }
@@ -116,7 +116,7 @@ abstract class AbstractRowAction
         return $this;
     }
 
-    public function getFeedbackMessage(Model $model): string|null
+    public function getFeedbackMessage(Model $model): null|string
     {
         return $this->feedbackMessage ?? $this->defaultFeedbackMessage($model);
     }

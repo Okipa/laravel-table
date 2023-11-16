@@ -32,7 +32,7 @@ class ColumnActionTest extends TestCase
             ['email_verified_at' => Date::now(), 'active' => true],
             ['email_verified_at' => null, 'active' => false]
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -139,7 +139,7 @@ class ColumnActionTest extends TestCase
             ['active' => true],
             ['active' => false],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -183,7 +183,7 @@ class ColumnActionTest extends TestCase
     {
         Config::set('laravel-table.icon.email_verified', 'email-verified-icon');
         $user = User::factory()->create(['email_verified_at' => Date::now()]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -227,7 +227,7 @@ class ColumnActionTest extends TestCase
     public function it_cant_display_original_column_value_when_column_action_is_not_allowed(): void
     {
         $user = User::factory()->create(['active' => true]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -256,7 +256,7 @@ class ColumnActionTest extends TestCase
             ])
             ->assertDontSeeHtml([
                 $user->email_verified_at,
-                //'1', => Can't assert that
+                // '1', => Can't assert that
             ]);
     }
 }

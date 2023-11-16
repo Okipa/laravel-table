@@ -23,7 +23,7 @@ class MakeTable extends GeneratorCommand
         if ($this->option('model')) {
             $stub = '/stubs/table.model.stub';
         }
-        $stub = $stub ?? '/stubs/table.stub';
+        $stub ??= '/stubs/table.stub';
 
         return __DIR__ . $stub;
     }

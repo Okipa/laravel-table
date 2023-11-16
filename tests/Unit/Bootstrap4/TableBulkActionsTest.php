@@ -21,7 +21,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
     public function it_can_display_bulk_actions_dropdown_and_column_when_none_is_defined(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -58,7 +58,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
             'email_verified_at' => null,
             'active' => false,
         ]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -273,7 +273,7 @@ class TableBulkActionsTest extends \Tests\Unit\Bootstrap5\TableBulkActionsTest
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
         $user3 = User::factory()->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

@@ -19,7 +19,7 @@ class TableConfigurationTest extends TestCase
     /** @test */
     public function it_cant_generate_table_with_wrong_configuration(): void
     {
-        $config = new class
+        $config = new class()
         {
             //
         };
@@ -32,7 +32,7 @@ class TableConfigurationTest extends TestCase
     /** @test */
     public function it_can_trigger_event_on_initialization(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -59,7 +59,7 @@ class TableConfigurationTest extends TestCase
     /** @test */
     public function it_can_display_loader_before_initialization(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -88,7 +88,7 @@ class TableConfigurationTest extends TestCase
     public function it_can_refresh_table(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             public int|null $userIdToExclude = null;
 

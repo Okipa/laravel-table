@@ -1,10 +1,64 @@
 {
     "preset": "laravel",
     "rules": {
+        "Laravel/laravel_phpdoc_alignment": false,
+        "array_push": true,
+        "assign_null_coalescing_to_coalesce_equal": true,
+        "combine_consecutive_issets": true,
         "concat_space": {
             "spacing": "one"
         },
+        "explicit_indirect_variable": true,
+        "explicit_string_variable": true,
+        "global_namespace_import": true,
+        "heredoc_indentation": true,
         "heredoc_to_nowdoc": false,
-        "Laravel/laravel_phpdoc_alignment": false
+        "mb_str_functions": true,
+        "multiline_comment_opening_closing": true,
+        "new_with_braces": true,
+        "no_superfluous_phpdoc_tags": true,
+        "no_useless_else": true,
+        "nullable_type_declaration": {
+            "syntax": "union"
+        },
+        "ordered_class_elements": {
+            "order": [
+                "use_trait",
+                "case",
+                "constant_public",
+                "constant_protected",
+                "constant_private",
+                "property_public",
+                "property_protected",
+                "property_private",
+                "construct",
+                "destruct",
+                "magic",
+                "phpunit"
+            ]
+        },
+        "php_unit_construct": true,
+        "php_unit_method_casing": {
+            "case": "snake_case"
+        },
+        "php_unit_test_annotation": {
+            "style": "annotation"
+        },
+        "phpdoc_align": {
+            "align": "left"
+        },
+        "phpdoc_line_span": {
+            "const": "single",
+            "property": "single",
+            "method": "single"
+        },
+        "random_api_migration": true,
+        "return_assignment": true,
+        "simple_to_complex_string_variable": true,
+        "simplified_if_return": true,
+        "single_line_comment_spacing": true,
+        "single_trait_insert_per_statement": true,
+        "ternary_to_null_coalescing": true,
+        "visibility_required": true
     }
 }

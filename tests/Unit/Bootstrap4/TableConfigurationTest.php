@@ -13,7 +13,7 @@ class TableConfigurationTest extends \Tests\Unit\Bootstrap5\TableConfigurationTe
     /** @test */
     public function it_can_display_loader_before_initialization(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

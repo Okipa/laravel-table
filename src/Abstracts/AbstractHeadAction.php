@@ -11,6 +11,11 @@ abstract class AbstractHeadAction
 
     protected bool $isAllowed = true;
 
+    public function setup(): void
+    {
+        $this->rowActionClass = $this::class;
+    }
+
     abstract protected function class(): array;
 
     abstract protected function icon(): string;
@@ -31,11 +36,6 @@ abstract class AbstractHeadAction
 
     /** @return mixed|void */
     abstract public function action(Component $livewire);
-
-    public function setup(): void
-    {
-        $this->rowActionClass = $this::class;
-    }
 
     public static function make(array $rowActionArray): self
     {

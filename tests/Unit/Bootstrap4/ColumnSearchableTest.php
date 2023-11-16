@@ -17,7 +17,7 @@ class ColumnSearchableTest extends \Tests\Unit\Bootstrap5\ColumnSearchableTest
         Config::set('laravel-table.icon.search', 'icon-search');
         Config::set('laravel-table.icon.reset', 'icon-reset');
         Config::set('laravel-table.icon.validate', 'icon-validate');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -79,7 +79,7 @@ class ColumnSearchableTest extends \Tests\Unit\Bootstrap5\ColumnSearchableTest
         Config::set('laravel-table.icon.validate', 'icon-validate');
         Config::set('laravel-table.icon.reset', 'icon-reset');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

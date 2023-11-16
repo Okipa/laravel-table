@@ -28,7 +28,7 @@ class DestroyRowAction extends AbstractRowAction
         return __('Destroy');
     }
 
-    protected function defaultConfirmationQuestion(Model $model): string|null
+    protected function defaultConfirmationQuestion(Model $model): null|string
     {
         return __('Are you sure you want to execute the action :action on the line #:primary?', [
             'action' => __('Destroy'),
@@ -36,7 +36,7 @@ class DestroyRowAction extends AbstractRowAction
         ]);
     }
 
-    protected function defaultFeedbackMessage(Model $model): string|null
+    protected function defaultFeedbackMessage(Model $model): null|string
     {
         return __('The action :action has been executed on the line #:primary.', [
             'action' => __('Destroy'),

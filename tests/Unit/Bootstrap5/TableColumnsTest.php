@@ -19,7 +19,7 @@ class TableColumnsTest extends TestCase
     /** @test */
     public function it_cant_generate_table_without_columns(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -39,7 +39,7 @@ class TableColumnsTest extends TestCase
     /** @test */
     public function it_can_set_column_titles(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -74,7 +74,7 @@ class TableColumnsTest extends TestCase
     public function it_can_display_column_values(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -113,7 +113,7 @@ class TableColumnsTest extends TestCase
     public function it_can_display_no_results_mention(): void
     {
         Config::set('laravel-table.icon.info', 'info-icon');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

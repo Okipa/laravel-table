@@ -22,7 +22,7 @@ class StrLimitFormatter extends AbstractFormatter
         $truncatedString = Str::limit($model->{$attribute}, $this->limit, $this->end);
 
         return <<<HTML
-        <span title="$string" data-bs-toggle="tooltip">$truncatedString</span>
-        HTML;
+            <span title="{$string}" data-bs-toggle="tooltip">{$truncatedString}</span>
+            HTML;
     }
 }

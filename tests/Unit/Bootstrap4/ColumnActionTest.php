@@ -27,7 +27,7 @@ class ColumnActionTest extends \Tests\Unit\Bootstrap5\ColumnActionTest
             ['email_verified_at' => Date::now(), 'active' => true],
             ['email_verified_at' => null, 'active' => false]
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -131,7 +131,7 @@ class ColumnActionTest extends \Tests\Unit\Bootstrap5\ColumnActionTest
     {
         Config::set('laravel-table.icon.email_verified', 'email-verified-icon');
         $user = User::factory()->create(['email_verified_at' => Date::now()]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

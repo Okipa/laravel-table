@@ -17,6 +17,8 @@
     </a>
 </p>
 
+
+
 ![Generate tables from Eloquent models](docs/screenshot.png)
 
 Save time and easily render tables in your views from Eloquent models.
@@ -31,6 +33,17 @@ Found this package helpful? Please consider supporting my work!
 [![Donate](https://img.shields.io/badge/Buy_me_a-Ko--fi-ff5f5f.svg)](https://ko-fi.com/arthurlorent)
 [![Donate](https://img.shields.io/badge/Donate_on-PayPal-green.svg)](https://paypal.me/arthurlorent)
 
+## Package looking for co-maintainers
+
+I've been quite busy professionally lately and I'm currently looking for one or more co-maintainers to help me to maintain and develop this package.
+
+Current roadmap:
+* PR reviewing
+* Livewire 3 compatibility
+* Tailwind 3 compatibility
+
+Please contact me to arthur.lorent@gmail.com to apply.
+ 
 ## Compatibility
 
 | Laravel version                                      | Livewire version | PHP version                  | Package version |

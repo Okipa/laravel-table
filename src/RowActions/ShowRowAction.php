@@ -40,12 +40,12 @@ class ShowRowAction extends AbstractRowAction
         return $this->redirectRowAction->title($model);
     }
 
-    protected function defaultConfirmationQuestion(Model $model): string|null
+    protected function defaultConfirmationQuestion(Model $model): null|string
     {
         return $this->redirectRowAction->defaultConfirmationQuestion($model);
     }
 
-    protected function defaultFeedbackMessage(Model $model): string|null
+    protected function defaultFeedbackMessage(Model $model): null|string
     {
         return $this->redirectRowAction->defaultFeedbackMessage($model);
     }

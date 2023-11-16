@@ -22,7 +22,7 @@ class TableHeadActionTest extends TestCase
     {
         app('router')->get('/user/create', ['as' => 'user.create']);
         Config::set('laravel-table.icon.add', 'add-icon');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -56,7 +56,7 @@ class TableHeadActionTest extends TestCase
     {
         app('router')->get('/user/create', ['as' => 'user.create']);
         Config::set('laravel-table.icon.create', 'create-icon');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

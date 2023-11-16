@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use JsonException;
 use Okipa\LaravelTable\Abstracts\AbstractFilter;
 use Okipa\LaravelTable\Abstracts\AbstractHeadAction;
 use Okipa\LaravelTable\Abstracts\AbstractRowAction;
@@ -20,7 +21,7 @@ class Table
 
     protected array $eventsToEmitOnLoad = [];
 
-    protected Column|null $orderColumn = null;
+    protected null|Column $orderColumn = null;
 
     protected bool $numberOfRowsPerPageChoiceEnabled;
 
@@ -28,15 +29,15 @@ class Table
 
     protected array $filters = [];
 
-    protected AbstractHeadAction|null $headAction = null;
+    protected null|AbstractHeadAction $headAction = null;
 
-    protected Closure|null $rowActionsClosure = null;
+    protected null|Closure $rowActionsClosure = null;
 
-    protected Closure|null $bulkActionsClosure = null;
+    protected null|Closure $bulkActionsClosure = null;
 
-    protected Closure|null $queryClosure = null;
+    protected null|Closure $queryClosure = null;
 
-    protected Closure|null $rowClassesClosure = null;
+    protected null|Closure $rowClassesClosure = null;
 
     protected Collection $columns;
 
@@ -97,7 +98,7 @@ class Table
         }
     }
 
-    public function getOrderColumn(): Column|null
+    public function getOrderColumn(): null|Column
     {
         return $this->orderColumn;
     }
@@ -112,7 +113,7 @@ class Table
         return $this->columns;
     }
 
-    public function getReorderConfig(string|null $sortDir): array
+    public function getReorderConfig(null|string $sortDir): array
     {
         if (! $this->getOrderColumn()) {
             return [];
@@ -149,9 +150,9 @@ class Table
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
     public function prepareQuery(
         array $filterClosures,
-        string|null $searchBy,
+        null|string $searchBy,
         string|Closure|null $sortBy,
-        string|null $sortDir
+        null|string $sortDir
     ): Builder {
         $query = $this->model->query();
         // Query
@@ -303,7 +304,7 @@ class Table
     }
 
     /** @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared */
-    public function getColumnSortedByDefault(): Column|null
+    public function getColumnSortedByDefault(): null|Column
     {
         $sortableColumns = $this->getColumns()
             ->filter(fn (Column $column) => $column->isSortable($this->getOrderColumn()));
@@ -382,7 +383,7 @@ class Table
         return (array) $this->headAction;
     }
 
-    /** @throws \JsonException */
+    /** @throws JsonException */
     public function getRowClass(): array
     {
         $tableRowClass = [];
@@ -399,7 +400,7 @@ class Table
         ), true, 512, JSON_THROW_ON_ERROR);
     }
 
-    /** @throws \JsonException */
+    /** @throws JsonException */
     public function generateBulkActionsArray(array $selectedModelKeys): array
     {
         $tableBulkActionsArray = [];
@@ -461,7 +462,7 @@ class Table
 
     /**
      * @throws \Okipa\LaravelTable\Exceptions\NoColumnsDeclared
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function generateColumnActionsArray(): array
     {
