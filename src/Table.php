@@ -212,7 +212,7 @@ class Table
 
     protected function getSqlLowerFunction(string $driver, string $attribute): string
     {
-        return $driver === 'pgsql' ? 'LOWER(CAST(' . $attribute . ' AS TEXT))' : 'LOWER(' . $attribute . ')';
+        return $driver === 'pgsql' ? 'CAST(' . $attribute . ' AS TEXT)' : 'LOWER(' . $attribute . ')';
     }
 
     protected function getSqlCaseInsensitiveSearchingLikeOperator(string $driver): string
