@@ -236,6 +236,7 @@ class Table extends Component
     public function changeNumberOfRowsPerPage(int $numberOfRowsPerPage): void
     {
         $this->numberOfRowsPerPage = $numberOfRowsPerPage;
+        $this->resetPage();
     }
 
     public function sortBy(string $columnKey): void
@@ -376,5 +377,11 @@ class Table extends Component
         }
         $this->configParams = [...$this->configParams, ...$configParams];
         $this->emitSelf('$refresh');
+    }
+    
+    public function updating ($name, $value) {
+        if ($name === 'searchBy') {
+            $this->resetPage();
+        }
     }
 }
