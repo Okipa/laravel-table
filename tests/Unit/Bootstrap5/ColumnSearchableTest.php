@@ -22,7 +22,7 @@ class ColumnSearchableTest extends TestCase
     /** @test */
     public function it_cant_display_search_form_when_no_column_is_searchable(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -46,7 +46,7 @@ class ColumnSearchableTest extends TestCase
     {
         Config::set('laravel-table.icon.search', 'icon-search');
         Config::set('laravel-table.icon.validate', 'icon-validate');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -103,7 +103,7 @@ class ColumnSearchableTest extends TestCase
     public function it_can_search_from_model_data(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -156,7 +156,7 @@ class ColumnSearchableTest extends TestCase
         $users = User::factory()->count(2)->create();
         $user1Companies = Company::factory()->withOwner($users->first())->count(3)->create();
         $user2Companies = Company::factory()->withOwner($users->last())->count(3)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -217,7 +217,7 @@ class ColumnSearchableTest extends TestCase
         $company2 = Company::factory()->withOwner($user1)->create();
         $company3 = Company::factory()->withOwner($user2)->create();
         $company4 = Company::factory()->withOwner($user2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             public int $companyOwnerId;
 
@@ -270,7 +270,7 @@ class ColumnSearchableTest extends TestCase
     public function it_can_search_case_insensitively(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -324,7 +324,7 @@ class ColumnSearchableTest extends TestCase
         Config::set('laravel-table.icon.validate', 'icon-validate');
         Config::set('laravel-table.icon.reset', 'icon-reset');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -407,7 +407,7 @@ class ColumnSearchableTest extends TestCase
     {
         $this->expectException(PDOException::class);
         $this->expectExceptionMessageMatches('/select count\(\*\) as aggregate from "users" where \(LOWER\(CAST\(name AS TEXT\)\) ILIKE %test%\)\)/');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

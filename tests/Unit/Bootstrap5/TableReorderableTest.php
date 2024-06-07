@@ -24,7 +24,7 @@ class TableReorderableTest extends TestCase
     public function it_can_disable_all_columns_sorting_when_table_is_reorderable(): void
     {
         $categories = UserCategory::factory()->count(2)->create()->sortBy('position');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -70,7 +70,7 @@ class TableReorderableTest extends TestCase
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.drag_drop', 'icon-drag-drop');
         $categories = UserCategory::factory()->count(2)->create()->sortBy('position');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -155,7 +155,7 @@ class TableReorderableTest extends TestCase
             ['position' => 8],
             ['position' => 9],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -211,7 +211,7 @@ class TableReorderableTest extends TestCase
             ['position' => 8],
             ['position' => 9],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -283,7 +283,7 @@ class TableReorderableTest extends TestCase
             ['name' => 'Name test 2', 'position' => 6],
             ['name' => 'Name test 3', 'position' => 6],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -359,7 +359,7 @@ class TableReorderableTest extends TestCase
             ['name' => 'Name test 2', 'position' => 17],
             ['name' => 'Name test 3', 'position' => 18],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -446,7 +446,7 @@ class TableReorderableTest extends TestCase
             ['owner_id' => $user2->id, 'position' => 26],
             ['owner_id' => $user3->id, 'position' => 27],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -527,7 +527,7 @@ class TableReorderableTest extends TestCase
             ['position' => 10],
             ['position' => 10],
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

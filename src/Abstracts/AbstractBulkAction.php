@@ -20,11 +20,18 @@ abstract class AbstractBulkAction
 
     public array $disallowedModelKeys;
 
-    protected bool $isAllowed = true;
-
     public string|false|null $confirmationQuestion = null;
 
     public string|false|null $feedbackMessage = null;
+
+    protected bool $isAllowed = true;
+
+    public function setup(Model $model): void
+    {
+        $this->bulkActionClass = $this::class;
+        $this->modelClass = $model::class;
+        $this->identifier = $this->identifier();
+    }
 
     abstract protected function identifier(): string;
 
@@ -33,22 +40,15 @@ abstract class AbstractBulkAction
     abstract protected function defaultConfirmationQuestion(
         array $allowedModelKeys,
         array $disallowedModelKeys
-    ): string|null;
+    ): null|string;
 
     abstract protected function defaultFeedbackMessage(
         array $allowedModelKeys,
         array $disallowedModelKeys
-    ): string|null;
+    ): null|string;
 
     /** @return mixed|void */
     abstract public function action(Collection $models, Component $livewire);
-
-    public function setup(Model $model): void
-    {
-        $this->bulkActionClass = $this::class;
-        $this->modelClass = $model::class;
-        $this->identifier = $this->identifier();
-    }
 
     public static function retrieve(array $bulkActions, string $identifier): array
     {
@@ -96,7 +96,7 @@ abstract class AbstractBulkAction
         return $this;
     }
 
-    public function getConfirmationQuestion(): string|null
+    public function getConfirmationQuestion(): null|string
     {
         return $this->confirmationQuestion ?? $this->defaultConfirmationQuestion(
             $this->allowedModelKeys,
@@ -111,7 +111,7 @@ abstract class AbstractBulkAction
         return $this;
     }
 
-    public function getFeedbackMessage(): string|null
+    public function getFeedbackMessage(): null|string
     {
         return $this->feedbackMessage ?? $this->defaultFeedbackMessage(
             $this->allowedModelKeys,

@@ -19,7 +19,7 @@ class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -76,7 +76,7 @@ class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -134,7 +134,7 @@ class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
         Config::set('laravel-table.icon.sort_asc', 'icon-sort-asc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -193,7 +193,7 @@ class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -289,7 +289,7 @@ class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -352,7 +352,7 @@ class ColumnSortableTest extends \Tests\Unit\Bootstrap5\ColumnSortableTest
         Config::set('laravel-table.icon.sort', 'icon-sort');
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

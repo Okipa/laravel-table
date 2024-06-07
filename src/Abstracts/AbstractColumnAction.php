@@ -23,21 +23,6 @@ abstract class AbstractColumnAction
 
     public string|false|null $feedbackMessage = null;
 
-    abstract protected function class(Model $model, string $attribute): array;
-
-    abstract protected function title(Model $model, string $attribute): string;
-
-    abstract protected function icon(Model $model, string $attribute): string;
-
-    abstract protected function label(Model $model, string $attribute): string|null;
-
-    abstract protected function defaultConfirmationQuestion(Model $model, string $attribute): string|null;
-
-    abstract protected function defaultFeedbackMessage(Model $model, string $attribute): string|null;
-
-    /** @return mixed|void */
-    abstract public function action(Model $model, string $attribute, Component $livewire);
-
     public function setup(Model $model, string $attribute): void
     {
         $this->columnActionClass = $this::class;
@@ -46,7 +31,22 @@ abstract class AbstractColumnAction
         $this->attribute = $attribute;
     }
 
-    public static function retrieve(array $columnActions, string|null $modelKey, string $attribute): array|null
+    abstract protected function class(Model $model, string $attribute): array;
+
+    abstract protected function title(Model $model, string $attribute): string;
+
+    abstract protected function icon(Model $model, string $attribute): string;
+
+    abstract protected function label(Model $model, string $attribute): null|string;
+
+    abstract protected function defaultConfirmationQuestion(Model $model, string $attribute): null|string;
+
+    abstract protected function defaultFeedbackMessage(Model $model, string $attribute): null|string;
+
+    /** @return mixed|void */
+    abstract public function action(Model $model, string $attribute, Component $livewire);
+
+    public static function retrieve(array $columnActions, null|string $modelKey, string $attribute): null|array
     {
         if (! $modelKey) {
             return null;
@@ -101,7 +101,7 @@ abstract class AbstractColumnAction
         return $this;
     }
 
-    public function getConfirmationQuestion(Model $model, string $attribute): string|null
+    public function getConfirmationQuestion(Model $model, string $attribute): null|string
     {
         return $this->confirmationQuestion ?? $this->defaultConfirmationQuestion($model, $attribute);
     }
@@ -113,7 +113,7 @@ abstract class AbstractColumnAction
         return $this;
     }
 
-    public function getFeedbackMessage(Model $model, string $attribute): string|null
+    public function getFeedbackMessage(Model $model, string $attribute): null|string
     {
         return $this->feedbackMessage ?? $this->defaultFeedbackMessage($model, $attribute);
     }

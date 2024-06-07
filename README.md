@@ -1,3 +1,16 @@
+## Package looking for co-maintainers
+
+I've been quite busy professionally lately and I'm currently looking for one or more co-maintainers to help me to maintain and develop this package.
+
+Current roadmap:
+* PR reviewing
+* Livewire 3 compatibility
+* Tailwind 3 compatibility
+
+Please contact me at arthur[dot]lorent[at]gmail.com to apply.
+
+------
+
 ![Laravel Table](/docs/laravel-table.png)
 <p style="text-align: center">
     <a href="https://github.com/Okipa/laravel-table/releases" title="Latest Stable Version">
@@ -7,7 +20,7 @@
         <img src="https://img.shields.io/packagist/dt/okipa/laravel-table.svg?style=flat-square" alt="Total Downloads">
     </a>
     <a href="https://github.com/Okipa/laravel-table/actions" title="Build Status">
-        <img src="https://github.com/Okipa/laravel-table/workflows/CI/badge.svg" alt="Build Status">
+        <img src="https://github.com/Okipa/laravel-table/actions/workflows/ci.yml/badge.svg" alt="Build Status">
     </a>
     <a href="https://coveralls.io/github/Okipa/laravel-table?branch=master" title="Coverage Status">
         <img src="https://coveralls.io/repos/github/Okipa/laravel-table/badge.svg?branch=master" alt="Coverage Status">
@@ -30,7 +43,7 @@ Found this package helpful? Please consider supporting my work!
 
 [![Donate](https://img.shields.io/badge/Buy_me_a-Ko--fi-ff5f5f.svg)](https://ko-fi.com/arthurlorent)
 [![Donate](https://img.shields.io/badge/Donate_on-PayPal-green.svg)](https://paypal.me/arthurlorent)
-
+ 
 ## Compatibility
 
 | Laravel version                                      | Livewire version | PHP version                  | Package version |

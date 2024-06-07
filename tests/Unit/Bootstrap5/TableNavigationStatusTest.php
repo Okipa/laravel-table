@@ -18,7 +18,7 @@ class TableNavigationStatusTest extends TestCase
     /** @test */
     public function it_can_display_navigation_status_with_no_result(): void
     {
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -51,7 +51,7 @@ class TableNavigationStatusTest extends TestCase
     {
         Config::set('laravel-table.number_of_rows_per_page', 10);
         User::factory()->count(15)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -84,7 +84,7 @@ class TableNavigationStatusTest extends TestCase
     {
         Config::set('laravel-table.number_of_rows_per_page', 10);
         User::factory()->count(15)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

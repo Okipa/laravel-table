@@ -25,7 +25,7 @@ class TableBulkActionsTest extends TestCase
     public function it_can_display_bulk_actions_dropdown_and_column_when_none_is_defined(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -62,7 +62,7 @@ class TableBulkActionsTest extends TestCase
             'email_verified_at' => null,
             'active' => false,
         ]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -277,7 +277,7 @@ class TableBulkActionsTest extends TestCase
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
         $user3 = User::factory()->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -370,7 +370,7 @@ class TableBulkActionsTest extends TestCase
     public function it_can_override_confirmation_question_and_feedback_message(): void
     {
         $user = User::factory()->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -408,7 +408,7 @@ class TableBulkActionsTest extends TestCase
     public function it_cant_trigger_bulk_action_with_no_selected_line(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -445,7 +445,7 @@ class TableBulkActionsTest extends TestCase
     public function it_can_select_all_lines(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

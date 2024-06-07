@@ -19,7 +19,7 @@ class TableRowClassTest extends TestCase
     {
         $userActive = User::factory()->create(['active' => true]);
         $userInactive = User::factory()->create(['active' => false]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

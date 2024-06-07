@@ -14,7 +14,7 @@ abstract class AbstractFilter
 
     public string $modelKeyName;
 
-    protected string|null $class;
+    protected null|string $class;
 
     protected array $attributes;
 
@@ -23,6 +23,13 @@ abstract class AbstractFilter
     protected array $options;
 
     protected bool $multiple;
+
+    public function setup(string $modelKeyName): void
+    {
+        $this->filterClass = $this::class;
+        $this->identifier = $this->identifier();
+        $this->modelKeyName = $modelKeyName;
+    }
 
     abstract protected function identifier(): string;
 
@@ -48,13 +55,6 @@ abstract class AbstractFilter
     abstract protected function multiple(): bool;
 
     abstract public function filter(Builder $query, mixed $selected): void;
-
-    public function setup(string $modelKeyName): void
-    {
-        $this->filterClass = $this::class;
-        $this->identifier = $this->identifier();
-        $this->modelKeyName = $modelKeyName;
-    }
 
     public static function retrieve(array $filtersArray, string $identifier): array
     {

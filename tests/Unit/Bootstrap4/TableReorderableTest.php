@@ -17,7 +17,7 @@ class TableReorderableTest extends \Tests\Unit\Bootstrap5\TableReorderableTest
         Config::set('laravel-table.icon.sort_desc', 'icon-sort-desc');
         Config::set('laravel-table.icon.drag_drop', 'icon-drag-drop');
         $categories = UserCategory::factory()->count(2)->create()->sortBy('position');
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

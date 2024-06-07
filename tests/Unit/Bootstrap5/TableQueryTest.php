@@ -19,7 +19,7 @@ class TableQueryTest extends TestCase
     public function it_can_set_query(): void
     {
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             public int $userIdToExclude;
 

@@ -26,7 +26,7 @@ class TableResultsTest extends TestCase
             ['email_verified_at' => Date::now(), 'active' => true],
             ['email_verified_at' => null, 'active' => false]
         ))->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

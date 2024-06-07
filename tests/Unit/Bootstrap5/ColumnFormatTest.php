@@ -26,7 +26,7 @@ class ColumnFormatTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -60,7 +60,7 @@ class ColumnFormatTest extends TestCase
         $user1 = User::factory()->create(['active' => true]);
         Date::setTestNow(Date::now()->addMinute());
         $user2 = User::factory()->create(['active' => false]);
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -99,7 +99,7 @@ class ColumnFormatTest extends TestCase
     {
         $users = User::factory()->count(2)->create();
         Company::factory()->count(6)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {

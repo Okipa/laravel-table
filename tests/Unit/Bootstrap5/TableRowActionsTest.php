@@ -28,7 +28,7 @@ class TableRowActionsTest extends TestCase
         Config::set('laravel-table.icon.edit', 'edit-icon');
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -146,7 +146,7 @@ class TableRowActionsTest extends TestCase
     {
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $users = User::factory()->count(2)->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
@@ -193,7 +193,7 @@ class TableRowActionsTest extends TestCase
     {
         Config::set('laravel-table.icon.destroy', 'destroy-icon');
         $user = User::factory()->create();
-        $config = new class extends AbstractTableConfiguration
+        $config = new class() extends AbstractTableConfiguration
         {
             protected function table(): Table
             {
