@@ -1,6 +1,6 @@
 # Upgrade from livewire 2 to livewire 3
 
-The livewire 2 is a major upgrade from livewire 3 with the removal of emit, the removal of @livescripts and @livewirestyles, and wire:model defaults being changed from live to defer.
+Livewire 3 is a major upgrade from livewire 2 with the removal of emit, the removal of @livescripts and @livewirestyles, and wire:model defaults being changed from live to defer.
 
 Follow the steps below to upgrade the package.
 
