@@ -375,6 +375,6 @@ class Table extends Component
             return;
         }
         $this->configParams = [...$this->configParams, ...$configParams];
-        $this->dispatch('$refresh');
+        $this->dispatch->to('$refresh');
     }
 }
