@@ -376,7 +376,7 @@ class Table extends Component
             return;
         }
         $this->configParams = [...$this->configParams, ...$configParams];
-        $this->dispatch->to('$refresh');
+        $this->dispatch('$refresh');
     }
 
     public function updating($name, $value) {
