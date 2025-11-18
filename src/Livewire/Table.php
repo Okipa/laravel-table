@@ -43,7 +43,7 @@ class Table extends Component
 
     public int $numberOfRowsPerPage;
 
-    public null|string $sortBy;
+    public null|string $sortedBy;
 
     public null|string $sortDir;
 
@@ -126,11 +126,11 @@ class Table extends Component
         $this->searchableLabels = $table->getSearchableLabels();
         // Sort
         $columnSortedByDefault = $table->getColumnSortedByDefault();
-        $this->sortBy = $table->getOrderColumn()?->getAttribute()
-            ?: ($this->sortBy ?? $columnSortedByDefault?->getAttribute());
+        $this->sortedBy = $table->getOrderColumn()?->getAttribute()
+            ?: ($this->sortedBy ?? $columnSortedByDefault?->getAttribute());
         $this->sortDir ??= $columnSortedByDefault?->getSortDirByDefault();
-        $sortableClosure = $this->sortBy && ! $table->getOrderColumn()
-            ? $table->getColumn($this->sortBy)->getSortableClosure()
+        $sortableClosure = $this->sortedBy && ! $table->getOrderColumn()
+            ? $table->getColumn($this->sortedBy)->getSortableClosure()
             : null;
         // Paginate
         $numberOfRowsPerPageOptions = $table->getNumberOfRowsPerPageOptions();
@@ -142,7 +142,7 @@ class Table extends Component
         $query = $table->prepareQuery(
             $filterClosures,
             $this->searchBy,
-            $sortableClosure ?: $this->sortBy,
+            $sortableClosure ?: $this->sortedBy,
             $this->sortDir,
         );
         // Rows generation
@@ -190,9 +190,9 @@ class Table extends Component
             'beforeReorderAllModelKeysWithPosition' => $beforeReorderAllModelKeysWithPositionRawArray,
         ] = $this->reorderConfig;
         $beforeReorderAllModelKeysWithPositionCollection = collect($beforeReorderAllModelKeysWithPositionRawArray)
-            ->sortBy(callback: 'position', descending: $sortDir === 'desc');
+            ->sortedBy(callback: 'position', descending: $sortDir === 'desc');
         $afterReorderModelKeysWithPositionCollection = collect($newPositions)
-            ->sortBy('order')
+            ->sortedBy('order')
             ->map(fn (array $newPosition) => [
                 'modelKey' => $newPosition['value'],
                 'position' => $beforeReorderAllModelKeysWithPositionCollection->firstWhere(
@@ -203,7 +203,7 @@ class Table extends Component
         $beforeReorderModelKeysWithPositionCollection = $afterReorderModelKeysWithPositionCollection
             ->map(fn (array $afterReorderModelKeyWithPosition) => $beforeReorderAllModelKeysWithPositionCollection
                 ->firstWhere('modelKey', $afterReorderModelKeyWithPosition['modelKey']))
-            ->sortBy(callback: 'position', descending: $sortDir === 'desc');
+            ->sortedBy(callback: 'position', descending: $sortDir === 'desc');
         $beforeReorderModelKeysWithIndexCollection = $beforeReorderModelKeysWithPositionCollection->pluck('modelKey');
         $afterReorderModelKeysWithIndexCollection = $afterReorderModelKeysWithPositionCollection->pluck('modelKey');
         $reorderedPositions = collect();
@@ -227,7 +227,7 @@ class Table extends Component
             $reorderedPositions->push(['modelKey' => $modelKey, 'position' => $newPosition]);
         }
         $startOrder = 1;
-        foreach ($reorderedPositions->sortBy('position') as $reorderedPosition) {
+        foreach ($reorderedPositions->sortedBy('position') as $reorderedPosition) {
             app($modelClass)->find($reorderedPosition['modelKey'])->update([$reorderAttribute => $startOrder++]);
         }
         $this->dispatch('laraveltable:action:feedback', __('The list has been reordered.'));
@@ -241,10 +241,10 @@ class Table extends Component
 
     public function sortBy(string $columnKey): void
     {
-        $this->sortDir = $this->sortBy !== $columnKey || $this->sortDir === 'desc'
+        $this->sortDir = $this->sortedBy !== $columnKey || $this->sortDir === 'desc'
             ? 'asc'
             : 'desc';
-        $this->sortBy = $columnKey;
+        $this->sortedBy = $columnKey;
     }
 
     public function headAction(): mixed

@@ -151,7 +151,7 @@ class Table
     public function prepareQuery(
         array $filterClosures,
         null|string $searchBy,
-        string|Closure|null $sortBy,
+        string|Closure|null $sortedBy,
         null|string $sortDir
     ): Builder {
         $query = $this->model->query();
@@ -186,10 +186,10 @@ class Table
             });
         }
         // Sort
-        if ($sortBy && $sortDir) {
-            $sortBy instanceof Closure
-                ? $sortBy($query, $sortDir)
-                : $query->orderBy($sortBy, $sortDir);
+        if ($sortedBy && $sortDir) {
+            $sortedBy instanceof Closure
+                ? $sortedBy($query, $sortDir)
+                : $query->orderBy($sortedBy, $sortDir);
         }
 
         return $query;

@@ -140,7 +140,7 @@
                         @foreach($columns as $column)
                             <th wire:key="column-{{ Str::of($column->getAttribute())->snake('-')->slug() }}" class="align-middle" scope="col">
                                 @if($column->isSortable($orderColumn))
-                                    @if($sortBy === $column->getAttribute())
+                                    @if($sortedBy === $column->getAttribute())
                                         <a wire:click.prevent="sortBy('{{ $column->getAttribute() }}')"
                                            class="d-flex align-items-center"
                                            href=""
