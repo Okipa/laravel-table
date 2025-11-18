@@ -85,6 +85,12 @@
                                                 <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
+                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
+                                                    'placeholder' => __('Number of rows per page'),
+                                                    'aria-label' => __('Number of rows per page'),
+                                                    'aria-describedby' => 'rows-number-per-page-icon',
+                                                    ...config('laravel-table.html_select_components_attributes'),
+                                                ])->toHtml() !!}>
                                                     <option wire:key="rows-number-per-page-option-placeholder" value="" disabled>{{ __('Number of rows per page') }}</option>
                                                     @foreach($numberOfRowsPerPageOptions as $numberOfRowsPerPageOption)
                                                         <option wire:key="rows-number-per-page-option-{{ $numberOfRowsPerPageOption }}" value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
