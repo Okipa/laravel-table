@@ -51,7 +51,7 @@
                                                     <span id="search-for-rows" class="input-group-text">
                                                         {!! config('laravel-table.icon.search') !!}
                                                     </span>
-                                                    <input wire:model.defer="searchBy"
+                                                    <input wire:model="searchBy"
                                                            class="form-control"
                                                            placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
@@ -85,12 +85,6 @@
                                                 <span id="rows-number-per-page-icon" class="input-group-text text-secondary">
                                                     {!! config('laravel-table.icon.rows_number') !!}
                                                 </span>
-                                                <select wire:change="changeNumberOfRowsPerPage($event.target.value)" class="form-select" {!! (new \Illuminate\View\ComponentAttributeBag())->merge([
-                                                    'placeholder' => __('Number of rows per page'),
-                                                    'aria-label' => __('Number of rows per page'),
-                                                    'aria-describedby' => 'rows-number-per-page-icon',
-                                                    ...config('laravel-table.html_select_components_attributes'),
-                                                ])->toHtml() !!}>
                                                     <option wire:key="rows-number-per-page-option-placeholder" value="" disabled>{{ __('Number of rows per page') }}</option>
                                                     @foreach($numberOfRowsPerPageOptions as $numberOfRowsPerPageOption)
                                                         <option wire:key="rows-number-per-page-option-{{ $numberOfRowsPerPageOption }}" value="{{ $numberOfRowsPerPageOption }}"{{ $numberOfRowsPerPageOption === $numberOfRowsPerPage ? ' selected' : null}}>
@@ -118,7 +112,7 @@
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
                                 <div class="d-flex align-items-center">
                                     {{-- Bulk actions select all --}}
-                                    <input wire:model="selectAll" class="me-1" type="checkbox" aria-label="Check all displayed lines">
+                                    <input wire:model.live="selectAll" class="me-1" type="checkbox" aria-label="Check all displayed lines">
                                     {{-- Bulk actions dropdown --}}
                                     <div class="dropdown" title="{{ __('Bulk Actions') }}" data-bs-toggle="tooltip">
                                         <a id="bulk-actions-dropdown"
@@ -182,7 +176,7 @@
                             {{-- Row bulk action selector --}}
                             @if($tableBulkActionsArray)
                                 <td class="align-middle">
-                                    <input wire:model="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}" aria-label="Check line {{ $model->getKey() }}">
+                                    <input wire:model.live="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}" aria-label="Check line {{ $model->getKey() }}">
                                 </td>
                             @endif
                             {{-- Row columns values --}}
@@ -241,7 +235,7 @@
                                     <div wire:key="navigation-status">{!! $navigationStatus !!}</div>
                                 </div>
                                 <div class="d-flex align-items-center mb-n3 p-2">
-                                    {!! $rows->links() !!}
+                                    {!! $rows->links(data: ['scrollTo' => false]) !!}
                                 </div>
                             </div>
                         </td>
