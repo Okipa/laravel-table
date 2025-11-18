@@ -53,7 +53,7 @@
                                                             {!! config('laravel-table.icon.search') !!}
                                                         </span>
                                                     </div>
-                                                    <input wire:model.defer="searchBy"
+                                                    <input wire:model="searchBy"
                                                            class="form-control"
                                                            placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
@@ -190,7 +190,7 @@
                             {{-- Row bulk action selector --}}
                             @if($tableBulkActionsArray)
                                 <td class="align-middle">
-                                    <input wire:model="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}" aria-label="Check line {{ $model->getKey() }}">
+                                    <input wire:model.live="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}" aria-label="Check line {{ $model->getKey() }}">
                                 </td>
                             @endif
                             {{-- Row columns values --}}
@@ -249,7 +249,7 @@
                                     <div>{!! $navigationStatus !!}</div>
                                 </div>
                                 <div class="d-flex align-items-center mb-n3 p-2">
-                                    {!! $rows->links() !!}
+                                    {!! $rows->links(data: ['scrollTo' => false]) !!}
                                 </div>
                             </div>
                         </td>

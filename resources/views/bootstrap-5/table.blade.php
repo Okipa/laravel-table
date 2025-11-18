@@ -51,7 +51,7 @@
                                                     <span id="search-for-rows" class="input-group-text">
                                                         {!! config('laravel-table.icon.search') !!}
                                                     </span>
-                                                    <input wire:model.defer="searchBy"
+                                                    <input wire:model="searchBy"
                                                            class="form-control"
                                                            placeholder="{{ __('Search by:') }} {{ $searchableLabels }}"
                                                            aria-label="{{ __('Search by:') }} {{ $searchableLabels }}"
@@ -118,7 +118,7 @@
                             <th wire:key="bulk-actions" class="align-middle" scope="col">
                                 <div class="d-flex align-items-center">
                                     {{-- Bulk actions select all --}}
-                                    <input wire:model="selectAll" class="me-1" type="checkbox" aria-label="Check all displayed lines">
+                                    <input wire:model.live="selectAll" class="me-1" type="checkbox" aria-label="Check all displayed lines">
                                     {{-- Bulk actions dropdown --}}
                                     <div class="dropdown" title="{{ __('Bulk Actions') }}" data-bs-toggle="tooltip">
                                         <a id="bulk-actions-dropdown"
@@ -182,7 +182,7 @@
                             {{-- Row bulk action selector --}}
                             @if($tableBulkActionsArray)
                                 <td class="align-middle">
-                                    <input wire:model="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}" aria-label="Check line {{ $model->getKey() }}">
+                                    <input wire:model.live="selectedModelKeys" type="checkbox" value="{{ $model->getKey() }}" aria-label="Check line {{ $model->getKey() }}">
                                 </td>
                             @endif
                             {{-- Row columns values --}}
@@ -241,7 +241,7 @@
                                     <div wire:key="navigation-status">{!! $navigationStatus !!}</div>
                                 </div>
                                 <div class="d-flex align-items-center mb-n3 p-2">
-                                    {!! $rows->links() !!}
+                                    {!! $rows->links(data: ['scrollTo' => false]) !!}
                                 </div>
                             </div>
                         </td>

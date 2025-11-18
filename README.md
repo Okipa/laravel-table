@@ -4,7 +4,6 @@ I've been quite busy professionally lately and I'm currently looking for one or 
 
 Current roadmap:
 * PR reviewing
-* Livewire 3 compatibility
 * Tailwind 3 compatibility
 
 Please contact me at arthur[dot]lorent[at]gmail.com to apply.
@@ -58,6 +57,7 @@ Found this package helpful? Please consider supporting my work!
 
 ## Upgrade guide
 
+* [From Livewire2 to Livewire3](/docs/upgrade-guides/from-livewire2-to-livewire3.md)
 * [From V4 to V5](/docs/upgrade-guides/from-v4-to-v5.md)
 * [From V3 to V4](/docs/upgrade-guides/from-v3-to-v4.md)
 * [From V2 to V3](/docs/upgrade-guides/from-v2-to-v3.md)
