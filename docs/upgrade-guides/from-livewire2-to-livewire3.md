@@ -11,6 +11,8 @@ If you've published the previous templates with ```php artisan vendor:publish --
 * Change all locations with ```wire:model=``` to ```wire:model.live=```
 * Change all locations with ```wire:model.defer=``` to ```wire:model=```
 * Change ```$rows->links()``` ```to $rows->links(data: ['scrollTo' => false])``` as Livewire3 has a new default scroll behavior that scrolls to the top of the page.
+* Change ```@if($sortBy === $column->getAttribute())``` to ```@if($sortedBy === $column->getAttribute())```
+* Change ```<a wire:click.prevent="$set('searchBy', ''), $refresh"``` to ```<a wire:click.prevent="$set('searchBy', '')"``` as a previous bug fix handles this internally
 * Livewire 3's new bootstrap template includes the ```Showing x to x of y results``` information on the screen, causing duplicate data with this addon. To fix this, you need to publish the livewire pagination templates with ```php artisan livewire:publish --pagination```, and remove the following:
 
 ```

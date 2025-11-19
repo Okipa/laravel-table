@@ -70,7 +70,7 @@
                                                     @if($searchBy)
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
-                                                                <a wire:click.prevent="$set('searchBy', ''), $refresh"
+                                                                <a wire:click.prevent="$set('searchBy', '')"
                                                                    class="btn btn-sm btn-link text-secondary p-0"
                                                                    title="{{ __('Reset research') }}">
                                                                     {!! config('laravel-table.icon.reset') !!}
