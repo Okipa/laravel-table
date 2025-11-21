@@ -298,10 +298,10 @@ class Table extends Component
         if ($requiresConfirmation) {
             return $this->dispatch(
                 'laraveltable:action:confirm',
-                'bulkAction',
-                $identifier,
-                null,
-                $bulkActionInstance->getConfirmationQuestion()
+                actionType: 'bulkAction',
+                actionIdentifier: $identifier,
+                modelPrimary: null,
+                confirmationQuestion: $bulkActionInstance->getConfirmationQuestion()
             );
         }
         $feedbackMessage = $bulkActionInstance->getFeedbackMessage();
@@ -328,10 +328,10 @@ class Table extends Component
         if ($requiresConfirmation) {
             return $this->dispatch(
                 'laraveltable:action:confirm',
-                'rowAction',
-                $identifier,
-                $modelKey,
-                $rowActionInstance->getConfirmationQuestion($model)
+                actionType: 'rowAction',
+                actionIdentifier: $identifier,
+                modelPrimary: $modelKey,
+                confirmationQuestion: $rowActionInstance->getConfirmationQuestion($model)
             );
         }
         $feedbackMessage = $rowActionInstance->getFeedbackMessage($model);

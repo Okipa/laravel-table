@@ -13,6 +13,34 @@ If you've published the previous templates with ```php artisan vendor:publish --
 * Change ```$rows->links()``` ```to $rows->links(data: ['scrollTo' => false])``` as Livewire3 has a new default scroll behavior that scrolls to the top of the page.
 * Change ```@if($sortBy === $column->getAttribute())``` to ```@if($sortedBy === $column->getAttribute())```
 * Change ```<a wire:click.prevent="$set('searchBy', ''), $refresh"``` to ```<a wire:click.prevent="$set('searchBy', '')"``` as a previous bug fix handles this internally
+* Change any javascript actions for ```laraveltable:action:confirm``` and ```laraveltable:action:confirmed``` as livewire 3 only allows sending and receiving multiple dispatch parameters in an array.
+
+#### From
+```javascript
+// Listen to the action confirmation request
+Livewire.on('laraveltable:action:confirm', (actionType, actionIdentifier, modelPrimary, confirmationQuestion) => {
+    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
+    if (window.confirm(confirmationQuestion)) {
+        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
+        Livewire.emit('laraveltable:action:confirmed', actionType, actionIdentifier, modelPrimary);
+    }
+});
+
+```
+#### To
+```javascript
+// Listen to the action confirmation request
+Livewire.on('laraveltable:action:confirm', (data) => {
+    // You can replace this native JS confirm dialog by your favorite modal/alert/toast library implementation. Or keep it this way!
+    // possible data objects are actionType, actionIdentifier, modelPrimary, confirmationQuestion.
+    // ex. data.confirmationQuestion
+    if (window.confirm(confirmationQuestion)) {
+        // As explained above, just send back the 3 first argument from the `table:action:confirm` event when the action is confirmed
+        Livewire.dispatch('laraveltable:action:confirmed', [data.actionType, data.actionIdentifier, data.modelPrimary]);
+    }
+});
+```
+
 * Livewire 3's new bootstrap template includes the ```Showing x to x of y results``` information on the screen, causing duplicate data with this addon. To fix this, you need to publish the livewire pagination templates with ```php artisan livewire:publish --pagination```, and remove the following:
 
 ```
