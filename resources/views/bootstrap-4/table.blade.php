@@ -18,11 +18,11 @@
                                         {!! config('laravel-table.icon.filter') !!}
                                     </div>
                                     @foreach($filtersArray as $filterArray)
-                                        @unless($resetFilters)
+                                        @unless($resetFilter)
                                             <div wire:ignore>
                                         @endif
                                             {!! Okipa\LaravelTable\Abstracts\AbstractFilter::make($filterArray)->render() !!}
-                                        @unless($resetFilters)
+                                        @unless($resetFilter)
                                             </div>
                                         @endif
                                     @endforeach

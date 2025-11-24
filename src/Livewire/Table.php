@@ -51,7 +51,7 @@ class Table extends Component
 
     public array $selectedFilters = [];
 
-    public bool $resetFilters = false;
+    public bool $resetFilter = false;
 
     public array $headActionArray;
 
@@ -269,7 +269,7 @@ class Table extends Component
     {
         $this->selectedFilters = [];
         $this->resetFilters = true;
-        $this->dispatch->to('laraveltable:filters:wire:ignore:cancel');
+        $this->dispatch('laraveltable:filters:wire:ignore:cancel');
     }
 
     public function cancelWireIgnoreOnFilters(): void
